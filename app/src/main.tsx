@@ -7,7 +7,7 @@ import { createRoot } from 'react-dom/client'
 import { gameAnimations } from './animations/GameAnimations'
 import { App } from './App'
 import { Locators } from './locators/Locators'
-import { Material } from './material/Material'
+import { Material, MaterialI18n } from './material/Material'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -17,6 +17,7 @@ createRoot(document.getElementById('root')!).render(
       optionsSpec={GreyluneOptionsSpecV2}
       GameSetup={GreyluneSetup}
       material={Material}
+      materialI18n={MaterialI18n}
       locators={Locators}
       animations={gameAnimations}
     >

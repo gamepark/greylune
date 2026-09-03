@@ -1,1 +1,22 @@
-export enum MaterialType {}
+export enum MaterialType {
+  VillageCard = 1,
+  EncounterCard,
+  EventTile,
+  QuestTile,
+  MainBoard,
+  SeasonBoard,
+  PlayerBoard,
+  Adventurer,
+  Villager,
+  SeasonMarker,
+  ScoreMarker,
+  QuestMarker,
+  StrengthMarker,
+  MagicMarker,
+  BonusToken,
+  Coin,
+  Seal,
+  IncomeToken,
+  VpToken,
+  FirstPlayerToken
+}
