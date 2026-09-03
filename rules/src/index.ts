@@ -1,3 +1,3 @@
-export { GameTemplateRules } from './GameTemplateRules'
-export { GameTemplateOptionsSpecV2 } from './GameTemplateOptions'
-export { GameTemplateSetup } from './GameTemplateSetup'
+export { GreyluneRules } from './GreyluneRules'
+export { GreyluneOptionsSpecV2 } from './GreyluneOptions'
+export { GreyluneSetup } from './GreyluneSetup'

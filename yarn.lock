@@ -589,9 +589,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gamepark/game-template-app@workspace:app":
+"@gamepark/greylune-app@workspace:app":
   version: 0.0.0-use.local
-  resolution: "@gamepark/game-template-app@workspace:app"
+  resolution: "@gamepark/greylune-app@workspace:app"
   dependencies:
     "@dnd-kit/core": "npm:~6.3.1"
     "@emotion/react": "npm:^11.14.0"
@@ -625,9 +625,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gamepark/game-template@workspace:rules":
+"@gamepark/greylune@workspace:rules":
   version: 0.0.0-use.local
-  resolution: "@gamepark/game-template@workspace:rules"
+  resolution: "@gamepark/greylune@workspace:rules"
   dependencies:
     "@eslint/js": "npm:^10.0.1"
     "@gamepark/rules-api": "npm:~7.7.2"
