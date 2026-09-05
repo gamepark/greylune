@@ -35,6 +35,17 @@ export const sealSize = { width: 2.12, height: 2.23 }
 const onBoard = 0.1
 
 /**
+ * How high the Village gaps, and everything standing in them, are drawn. It is not a height on the
+ * table but a matter of what covers what: the areas of the locations are painted before every
+ * component, so a strip left at the height of the board is buried under it where the grid bites into
+ * its edge, and only a frank lift clears it — the one the framework itself gives a drop area it
+ * brings forward. The Villagers ride the same level and keep the strip under their feet, being drawn
+ * after it; an armed strip adds that lift once more and passes over them. Nothing moves on screen:
+ * the table is drawn without perspective, so a height only ever settles an order.
+ */
+export const villageGapLevel = 5
+
+/**
  * Village and Encounter cards are not laid beside the main board but slotted into the notches cut
  * for them along its edges. Each card is pushed this far past the edge, which covers the notch
  * without hiding the outline drawn around it. The same bite as the one the Village grid takes.

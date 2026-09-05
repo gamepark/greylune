@@ -1,8 +1,12 @@
+import { css } from '@emotion/react'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { Villager } from '@gamepark/greylune/material/Villager'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
-import { TokenDescription } from '@gamepark/react-game'
+import { ItemContext, TokenDescription } from '@gamepark/react-game'
+import { MaterialItem } from '@gamepark/rules-api'
+import { isSameGap } from '@gamepark/greylune/material/Village'
+import { gapsToPlaceVillager } from '../village/PlaceVillager'
 import {
   adventurerImages,
   MagicMarker,
@@ -34,7 +38,21 @@ export class VillagerDescription extends TokenDescription<PlayerColor, MaterialT
   height = 3.04
   transparency = true
   images = villagerImages
+
+  /**
+   * While a gap is open to a Villager, the Villagers already standing in it let the pointer through:
+   * the strip under them is a button of its own (see {@link VillageGapArea}), and it is drawn over
+   * them, so a pawn that answered the pointer would only ever be in the way of it.
+   */
+  getItemExtraCss(item: MaterialItem<PlayerColor, LocationType, Villager>, context: ItemContext<PlayerColor, MaterialType, LocationType>) {
+    if (item.location.type !== LocationType.VillageGap) return undefined
+    return gapsToPlaceVillager(context).some((gap) => isSameGap(item.location, { x: gap.x ?? 0, y: gap.y ?? 0 })) ? transparentToPointer : undefined
+  }
 }
+
+const transparentToPointer = css`
+  pointer-events: none;
+`
 
 export class SeasonMarkerDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, PlayerColor> {
   width = 1.88

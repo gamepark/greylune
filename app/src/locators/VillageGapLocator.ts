@@ -4,8 +4,10 @@ import { gapOf, isSameGap } from '@gamepark/greylune/material/Village'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { ComponentSize, DropAreaDescription, ItemContext, MaterialContext } from '@gamepark/react-game'
 import { Coordinates, Location, MaterialItem } from '@gamepark/rules-api'
+import { gapsToPlaceVillager } from '../village/PlaceVillager'
+import { VillageGapArea } from '../village/VillageGapArea'
 import { CenteredListLocator } from './CenteredListLocator'
-import { villageCardBorderRadius, villageGapGap, villageGapSize, villageGridSpot } from './TableLayout'
+import { villageCardBorderRadius, villageGapGap, villageGapSize, villageGapLevel, villageGridSpot } from './TableLayout'
 
 /**
  * What a player aims at when they place a Villager is the space between two cards, not the spot the
@@ -13,6 +15,7 @@ import { villageCardBorderRadius, villageGapGap, villageGapSize, villageGridSpot
  * the cards on either side of it.
  */
 class VillageGapDescription extends DropAreaDescription<PlayerColor, MaterialType, LocationType> {
+  Component = VillageGapArea
   borderRadius = villageCardBorderRadius
 
   getLocationSize(location: Location<PlayerColor, LocationType>): ComponentSize {
@@ -33,8 +36,21 @@ class VillageGapDescription extends DropAreaDescription<PlayerColor, MaterialTyp
 export class VillageGapLocator extends CenteredListLocator<PlayerColor, MaterialType, LocationType> {
   locationDescription = new VillageGapDescription()
 
+  /**
+   * The gaps are drawn on the table only while the player may walk a Villager into one — that is the
+   * whole of what they are for, and an empty gap the rest of the time is one more thing to read on a
+   * board that already carries a lot.
+   */
+  getLocations(context: MaterialContext<PlayerColor, MaterialType, LocationType>): Location<PlayerColor, LocationType>[] {
+    return gapsToPlaceVillager(context)
+  }
+
+  /**
+   * The gap and the Villagers standing in it are drawn at {@link villageGapLevel}, high enough to
+   * clear the main board the right column of the grid bites into.
+   */
   getCenter(location: Location<PlayerColor, LocationType>): Partial<Coordinates> {
-    return villageGridSpot(location.x ?? 0, location.y ?? 0)
+    return { ...villageGridSpot(location.x ?? 0, location.y ?? 0), z: villageGapLevel }
   }
 
   /** The step of a `space-around` line: see {@link villageGapGap}. */
