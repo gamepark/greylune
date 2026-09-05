@@ -12,9 +12,27 @@ import {
 } from '@gamepark/rules-api'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
+import { finalScore } from './material/PlayerState'
 import { PlayerColor } from './PlayerColor'
+import { ActivateCardRule } from './rules/ActivateCardRule'
+import { AutumnRule } from './rules/AutumnRule'
+import { BonusTokenRule } from './rules/BonusTokenRule'
+import { ChooseSkillRule } from './rules/ChooseSkillRule'
+import { DiscardItemRule } from './rules/DiscardItemRule'
+import { EventRule } from './rules/EventRule'
+import { PlaceVillagerRule } from './rules/PlaceVillagerRule'
+import { ReactionRule } from './rules/ReactionRule'
+import { ResolveEffectsRule } from './rules/ResolveEffectsRule'
+import { ResolveEncounterRule } from './rules/ResolveEncounterRule'
+import { ResolveQuestRule } from './rules/ResolveQuestRule'
 import { RuleId } from './rules/RuleId'
-import { TheFirstStepRule } from './rules/TheFirstStepRule'
+import { SpringRule } from './rules/SpringRule'
+import { StraightenCardRule } from './rules/StraightenCardRule'
+import { SummerRule } from './rules/SummerRule'
+import { TellStoryRule } from './rules/TellStoryRule'
+import { TravelRule } from './rules/TravelRule'
+import { UseItemRule } from './rules/UseItemRule'
+import { WinterRule } from './rules/WinterRule'
 
 /**
  * The Event tile of the current year is the one on top of the pile, turned face up: nothing is moved
@@ -32,7 +50,24 @@ export class GreyluneRules
   implements TimeLimit<MaterialGame<PlayerColor, MaterialType, LocationType>, MaterialMove<PlayerColor, MaterialType, LocationType>, PlayerColor>
 {
   rules = {
-    [RuleId.TheFirstStep]: TheFirstStepRule
+    [RuleId.Winter]: WinterRule,
+    [RuleId.Spring]: SpringRule,
+    [RuleId.Summer]: SummerRule,
+    [RuleId.Autumn]: AutumnRule,
+    [RuleId.ActivateCard]: ActivateCardRule,
+    [RuleId.UseItem]: UseItemRule,
+    [RuleId.DiscardItem]: DiscardItemRule,
+    [RuleId.Event]: EventRule,
+    [RuleId.Travel]: TravelRule,
+    [RuleId.ResolveEncounter]: ResolveEncounterRule,
+    [RuleId.ResolveQuest]: ResolveQuestRule,
+    [RuleId.TellStory]: TellStoryRule,
+    [RuleId.StraightenCard]: StraightenCardRule,
+    [RuleId.PlaceVillager]: PlaceVillagerRule,
+    [RuleId.ChooseSkill]: ChooseSkillRule,
+    [RuleId.BonusToken]: BonusTokenRule,
+    [RuleId.Reaction]: ReactionRule,
+    [RuleId.ResolveEffects]: ResolveEffectsRule
   }
 
   /**
@@ -42,15 +77,24 @@ export class GreyluneRules
    * hand out a `x`, in the setup or in a rule.
    *
    * {@link FillGapStrategy} is for the places where the slots are printed and stay: the 3 Quest
-   * marker spaces and the 3 Income token spaces of a personal board, and the 3 Bonus tokens. What
-   * leaves one of those leaves a hole, and what comes back fills it.
+   * marker spaces of a personal board. What leaves one of those leaves a hole, and what comes back
+   * fills it.
    *
-   * {@link StackingStrategy} is for the two shared tracks, where `x` is a value — the score, the
-   * season — and several players sit on the same space as soon as they are level: it leaves `x`
-   * alone and keeps a sequence on `z`, which is the rank in the pile.
+   * A strategy is only ever handed the items of one area — same `id`, same `player`, same `parent`.
+   * {@link StackingStrategy} is what is left when `x` or `y` still names a space inside that area and
+   * several items may share it: it leaves them alone and keeps a sequence on `z`, the rank in the
+   * pile. That is the score track and the season track (`x` is the value, and everybody's markers
+   * lie on one board), the shields of a Quest (`x` tells the first player's from the shared one), and
+   * the {@link LocationType.VillageGap}, where `x` and `y` name the gap and any number of Villagers
+   * stand in it. {@link LocationType.Area} is the same pile without the `x`, so the sequence on `z`
+   * is enough on its own.
+   *
+   * A place that never holds two items at once needs no strategy at all, and has none: the Event
+   * space and the special action space take one Villager per player per year, and an Encounter card
+   * carries a single Income token.
    *
    * The remaining location types are deliberately absent, because what tells their spaces apart is a
-   * value and not a rank: {@link LocationType.QuestTileSpace} (`id` is the {@link Distance} the
+   * value and not a rank: {@link LocationType.QuestTileSpace} (`id` is the {@link Area} the
    * space lies at), {@link LocationType.VillageGrid} (a 3x3 grid, `x` and `y` are the column and the
    * row), {@link LocationType.StrengthTrack} and {@link LocationType.MagicTrack} (`x` is the level,
    * and a track is one player's own). So is {@link LocationType.PlayerCoins}, where coins are money:
@@ -77,10 +121,10 @@ export class GreyluneRules
       [LocationType.ActiveVillagers]: new PositiveSequenceStrategy(),
       [LocationType.VillagerReserve]: new PositiveSequenceStrategy(),
       [LocationType.Camp]: new PositiveSequenceStrategy(),
-      [LocationType.SpecialAction]: new PositiveSequenceStrategy()
+      [LocationType.VillageGap]: new StackingStrategy()
     },
     [MaterialType.Adventurer]: {
-      [LocationType.Village]: new FillGapStrategy()
+      [LocationType.Area]: new PositiveSequenceStrategy()
     },
     [MaterialType.ScoreMarker]: {
       [LocationType.ScoreTrack]: new StackingStrategy()
@@ -89,14 +133,17 @@ export class GreyluneRules
       [LocationType.SeasonTrack]: new StackingStrategy()
     },
     [MaterialType.QuestMarker]: {
-      [LocationType.QuestMarkerSpace]: new FillGapStrategy()
+      [LocationType.QuestMarkerSpace]: new FillGapStrategy(),
+      [LocationType.QuestRewardSpace]: new StackingStrategy()
     },
     [MaterialType.Seal]: {
-      [LocationType.SealStack]: new PositiveSequenceStrategy()
+      [LocationType.SealStack]: new PositiveSequenceStrategy(),
+      [LocationType.SealDiscard]: new PositiveSequenceStrategy(),
+      [LocationType.CardSeal]: new FillGapStrategy()
     },
     [MaterialType.IncomeToken]: {
       [LocationType.IncomeTokenStock]: new PositiveSequenceStrategy(),
-      [LocationType.IncomeTokenSpace]: new FillGapStrategy()
+      [LocationType.IncomeTokenSpace]: new PositiveSequenceStrategy()
     },
     [MaterialType.BonusToken]: {
       [LocationType.BonusTokens]: new FillGapStrategy()
@@ -116,6 +163,14 @@ export class GreyluneRules
     [MaterialType.EncounterCard]: { [LocationType.EncounterDeck]: hideFront },
     [MaterialType.EventTile]: { [LocationType.EventPile]: hideEventTile },
     [MaterialType.Seal]: { [LocationType.SealStack]: hideItemId }
+  }
+
+  /**
+   * Everything a player is worth at the end of the 5th year: the points scored along the way, then
+   * the Heroic Quests, the Companions, the Objects and the two skill tracks (rulebook p.13).
+   */
+  getScore(player: PlayerColor): number {
+    return finalScore(this, player)
   }
 
   giveTime(): number {

@@ -1,34 +1,23 @@
 import { getEnumValues, MaterialGameSetup } from '@gamepark/rules-api'
 import { range, shuffle } from 'es-toolkit'
+import { ACTIVE_VILLAGERS, EVENT_TILES_REMOVED, QUEST_MARKERS, SEALS_PER_VALUE, STARTING_COINS, VILLAGE_CARDS_REMOVED, VILLAGE_GRID_SIDE } from './Constants'
 import { GreyluneOptions } from './GreyluneOptions'
 import { GreyluneRules } from './GreyluneRules'
-import { EncounterCard, EncounterCardId, encounterCardsOfPeriod, encounterDistance, getEncounterCardPeriod } from './material/EncounterCard'
+import { Area } from './material/Area'
+import { EncounterCard, EncounterCardId, encounterCardsOfPeriod, encounterArea, encounterIncomeToken, getEncounterCardPeriod } from './material/EncounterCard'
 import { EventTile } from './material/EventTile'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { Period } from './material/Period'
-import { heroicQuestDistances, QuestTile } from './material/QuestTile'
-import { BonusToken, coins, IncomeToken, Seal } from './material/Tokens'
-import { getVillageCardPeriod, VillageCard, villageCardsOfPeriod } from './material/VillageCard'
+import { heroicQuestAreas, QuestTile } from './material/QuestTile'
+import { BonusToken, coinUnits, IncomeToken, Seal } from './material/Tokens'
+import { getVillageCardPeriod, PLAYERS_MINUS_ONE, VillageCard, VillageCardId, villageCardData, villageCardsOfPeriod } from './material/VillageCard'
 import { playerVillagers } from './material/Villager'
 import { getVpToken, VpTokenValue } from './material/VpToken'
 import { PlayerColor } from './PlayerColor'
 import { RuleId } from './rules/RuleId'
 import { Season } from './Season'
-
-/** Village cards of period I and of period II that go back in the box unseen. */
-const VILLAGE_CARDS_REMOVED = 2
-/** Side of the square of face-up Village cards. */
-const VILLAGE_GRID_SIDE = 3
-/** Event tile that goes back in the box unseen: a year of the game is never played. */
-const EVENT_TILES_REMOVED = 1
-/** Quest markers a player may commit to the Heroic Quests, one per Quest space. */
-const QUEST_MARKERS = 3
-/** How many Seal tokens of each value are punched. */
-const SEALS_PER_VALUE = 8
-/** Of the 7 Villagers of a player, how many may already be used in the first year. */
-const ACTIVE_VILLAGERS = 3
-const STARTING_COINS = 8
+import { encounterRowSize } from './Year'
 
 /**
  * Builds the initial state described in "Mise en place générale" and "Mise en place des joueurs"
@@ -42,11 +31,11 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
   Rules = GreyluneRules
 
   setupMaterial() {
+    this.setupBank()
     this.setupVillageCards()
     this.setupEncounterCards()
     this.setupEventTiles()
     this.setupQuestTiles()
-    this.setupBank()
     for (const player of this.players) this.setupPlayer(player)
     // The last player to have gone adventuring takes the token: the platform already seats players
     // in a random order, so the first seat is as good a draw as any.
@@ -58,7 +47,8 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
   /**
    * Village deck: 9 cards of period III at the bottom, then 18 of period II, then 18 of period I on
    * top — 2 cards of each of the first two periods are removed unseen. The top 9 are revealed at
-   * once to form the 3x3 grid of the first year.
+   * once to form the 3x3 grid of the first year, and the Seals their symbols call for are laid on
+   * them.
    *
    * The grid is the one place that names its own coordinates, and it takes two: `x` is the column
    * and `y` the row, which is what the Villagers placed in the gaps between cards will be read
@@ -70,35 +60,50 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
       ...shuffle(villageCardsOfPeriod[Period.II]).slice(VILLAGE_CARDS_REMOVED),
       ...shuffle(villageCardsOfPeriod[Period.I]).slice(VILLAGE_CARDS_REMOVED)
     ]
-    this.material(MaterialType.VillageCard).createItems(
-      cards.map((card) => ({ id: villageCardId(card), location: { type: LocationType.VillageDeck } }))
-    )
+    this.material(MaterialType.VillageCard).createItems(cards.map((card) => ({ id: villageCardId(card), location: { type: LocationType.VillageDeck } })))
     const deck = this.material(MaterialType.VillageCard).deck()
     for (const slot of range(VILLAGE_GRID_SIDE * VILLAGE_GRID_SIDE)) {
       deck.dealOne({ type: LocationType.VillageGrid, x: slot % VILLAGE_GRID_SIDE, y: Math.floor(slot / VILLAGE_GRID_SIDE) })
     }
-    // TODO the cards showing the Seal symbol must receive Seal tokens here (players - 1, or exactly
-    // 1 depending on the symbol). That needs the per-card data, which is not extracted yet.
+    for (const card of this.material(MaterialType.VillageCard).location(LocationType.VillageGrid).getIndexes()) {
+      this.placeSeals(card)
+    }
+  }
+
+  /**
+   * The `-1` symbol asks for one Seal less than there are players, the `?` for exactly one, whatever the table
+   * seats (rulebook p.6).
+   */
+  private placeSeals(card: number) {
+    const front = this.material(MaterialType.VillageCard).getItem<VillageCardId>(card).id.front as VillageCard
+    const seals = villageCardData[front].seals
+    const count = seals === PLAYERS_MINUS_ONE ? this.players.length - 1 : (seals ?? 0)
+    this.material(MaterialType.Seal).deck().deal({ type: LocationType.CardSeal, parent: card }, count)
   }
 
   /**
    * Encounter deck: 5/6/7 cards of period III at the bottom, then 10/12/14 of period II, then as
    * many of period I, at 2/3/4 players. The top 5/6/7 are revealed and sorted along the right edge
-   * of the main board, each into the row of the Distance it is worth.
+   * of the main board, each into the row of the Area it is worth, and the ones that carry an
+   * Income token receive it face up.
    */
   private setupEncounterCards() {
-    const players = this.players.length
+    const row = encounterRowSize(this.players.length)
     const cards = [
-      ...shuffle(encounterCardsOfPeriod[Period.III]).slice(0, players + 3),
-      ...shuffle(encounterCardsOfPeriod[Period.II]).slice(0, 2 * players + 6),
-      ...shuffle(encounterCardsOfPeriod[Period.I]).slice(0, 2 * players + 6)
+      ...shuffle(encounterCardsOfPeriod[Period.III]).slice(0, row),
+      ...shuffle(encounterCardsOfPeriod[Period.II]).slice(0, 2 * row),
+      ...shuffle(encounterCardsOfPeriod[Period.I]).slice(0, 2 * row)
     ]
-    this.material(MaterialType.EncounterCard).createItems(
-      cards.map((card) => ({ id: encounterCardId(card), location: { type: LocationType.EncounterDeck } }))
-    )
+    this.material(MaterialType.EncounterCard).createItems(cards.map((card) => ({ id: encounterCardId(card), location: { type: LocationType.EncounterDeck } })))
     this.material(MaterialType.EncounterCard)
       .deck()
-      .deal((item) => ({ type: LocationType.EncounterRow, id: encounterDistance[(item.id as EncounterCardId).front!] }), players + 3)
+      .deal((item) => ({ type: LocationType.EncounterRow, id: encounterArea[(item.id as EncounterCardId).front!] }), row)
+    for (const card of this.material(MaterialType.EncounterCard).location(LocationType.EncounterRow).getIndexes()) {
+      const income = encounterIncomeToken(this.material(MaterialType.EncounterCard).getItem<EncounterCardId>(card).id.front!)
+      if (income !== undefined) {
+        this.material(MaterialType.IncomeToken).id(income).moveItem({ type: LocationType.CardIncome, parent: card })
+      }
+    }
   }
 
   /**
@@ -115,9 +120,9 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
   private setupQuestTiles() {
     const quests = shuffle(getEnumValues(QuestTile))
     this.material(MaterialType.QuestTile).createItems(
-      heroicQuestDistances.map((distance, index) => ({
+      heroicQuestAreas.map((area, index) => ({
         id: quests[index],
-        location: { type: LocationType.QuestTileSpace, id: distance }
+        location: { type: LocationType.QuestTileSpace, id: area }
       }))
     )
   }
@@ -129,16 +134,14 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
   private setupBank() {
     const seals = shuffle(getEnumValues(Seal).flatMap((seal) => range(SEALS_PER_VALUE).map(() => seal)))
     this.material(MaterialType.Seal).createItems(seals.map((id) => ({ id, location: { type: LocationType.SealStack } })))
-    this.material(MaterialType.IncomeToken).createItems(
-      getEnumValues(IncomeToken).map((id) => ({ id, location: { type: LocationType.IncomeTokenStock } }))
-    )
+    this.material(MaterialType.IncomeToken).createItems(getEnumValues(IncomeToken).map((id) => ({ id, location: { type: LocationType.IncomeTokenStock } })))
   }
 
   private setupPlayer(player: PlayerColor) {
-    // The Village and the two tracks are spaces everybody shares, so their locations carry no
-    // `player`: with one, each player would be alone in their own area and the Adventurers would
-    // never line up nor the markers ever pile up. Whose piece it is, is its `id`.
-    this.material(MaterialType.Adventurer).createItem({ id: player, location: { type: LocationType.Village } })
+    // The areas and the two shared tracks carry no `player`: with one, each player would be alone
+    // in a location of their own and the Adventurers would never line up nor the markers ever pile
+    // up. Whose piece it is, is its `id`.
+    this.material(MaterialType.Adventurer).createItem({ id: player, location: { type: LocationType.Area, id: Area.Village } })
     this.material(MaterialType.ScoreMarker).createItem({ id: player, location: { type: LocationType.ScoreTrack, x: 0 } })
     this.material(MaterialType.SeasonMarker).createItem({ id: player, location: { type: LocationType.SeasonTrack, x: Season.Spring } })
     this.material(MaterialType.StrengthMarker).createItem({ location: { type: LocationType.StrengthTrack, player, x: 0 } })
@@ -153,19 +156,17 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
       ...villagers.slice(0, ACTIVE_VILLAGERS).map((id) => ({ id, location: { type: LocationType.ActiveVillagers, player } })),
       ...villagers.slice(ACTIVE_VILLAGERS).map((id) => ({ id, location: { type: LocationType.VillagerReserve, player } }))
     ])
-    this.material(MaterialType.BonusToken).createItems(
-      getEnumValues(BonusToken).map((id) => ({ id, location: { type: LocationType.BonusTokens, player } }))
-    )
+    this.material(MaterialType.BonusToken).createItems(getEnumValues(BonusToken).map((id) => ({ id, location: { type: LocationType.BonusTokens, player } })))
     // The 2 victory point tokens are the player's, but they do not start with them: they wait on the
     // 2 shields at the foot of the score track, claimed the first time their owner crosses 25, then 75.
     this.material(MaterialType.VpToken).createItems(
       getEnumValues(VpTokenValue).map((value) => ({ id: getVpToken(player, value), location: { type: LocationType.VpTokenStack, id: value } }))
     )
-    this.material(MaterialType.Coin).money(coins).addMoney(STARTING_COINS, { type: LocationType.PlayerCoins, player })
+    this.material(MaterialType.Coin).money(coinUnits).addMoney(STARTING_COINS, { type: LocationType.PlayerCoins, player })
   }
 
   start() {
-    this.startPlayerTurn(RuleId.TheFirstStep, this.players[0])
+    this.startPlayerTurn(RuleId.Spring, this.players[0])
   }
 }
 

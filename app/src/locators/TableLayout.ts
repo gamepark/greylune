@@ -1,5 +1,6 @@
-import { Distance } from '@gamepark/greylune/material/Distance'
-import { HeroicQuestDistance } from '@gamepark/greylune/material/QuestTile'
+import { Area } from '@gamepark/greylune/material/Area'
+import { HeroicQuestArea } from '@gamepark/greylune/material/QuestTile'
+import { Gap } from '@gamepark/greylune/material/Village'
 import { VpTokenValue } from '@gamepark/greylune/material/VpToken'
 import { Season } from '@gamepark/greylune/Season'
 import { Coordinates, XYCoordinates } from '@gamepark/rules-api'
@@ -68,6 +69,21 @@ export const villageSpot = onMainBoard(8.5, 23.46)
 export const villageGap: Partial<XYCoordinates> = { x: 1.4 }
 
 /**
+ * Where an Adventurer stands in each {@link Area}. Greylune is the Village itself; the 5 others are
+ * drawn as riders on the map, on the stretch of road just before the notch their Encounter cards
+ * are slotted into, so they run anticlockwise: along the bottom edge, up the right one, then along
+ * the top.
+ */
+export const areaSpots: Record<Area, Coordinates> = {
+  [Area.Village]: villageSpot,
+  [Area.Wand]: onMainBoard(10.6, 26.5),
+  [Area.Bow]: onMainBoard(18.65, 26.55),
+  [Area.Hammer]: onMainBoard(19, 18.5),
+  [Area.Swords]: onMainBoard(19, 9.3),
+  [Area.Edge]: onMainBoard(18.5, 1.5)
+}
+
+/**
  * Two markers on the same space of a track are one on top of the other. Each one is set down leaning
  * a little further, so a pile of four still reads as four and the bottom one keeps standing on its
  * space.
@@ -84,18 +100,28 @@ export const stacked = (spot: Coordinates, level = 0): Coordinates => ({
 export const eventSpot = onMainBoard(8.3, 14.5)
 
 /**
- * The 3 Heroic Quest spaces, each on the road just past the banner of its Distance — the farther the
+ * The 3 Heroic Quest spaces, each on the road just past the banner of its Area — the farther the
  * space, the more it pays: 7/5 laurels past the purple banner, 8/6 past the red one, 9/7 past the
  * black one, which lies across the sea in the top-left corner.
  */
-export const questTileSpots: Record<HeroicQuestDistance, Coordinates> = {
-  [Distance.Purple]: onMainBoard(14.88, 14.84),
-  [Distance.Red]: onMainBoard(14.84, 6.5),
-  [Distance.Black]: onMainBoard(7.88, 3.32)
+export const questTileSpots: Record<HeroicQuestArea, Coordinates> = {
+  [Area.Hammer]: onMainBoard(14.88, 14.84),
+  [Area.Swords]: onMainBoard(14.84, 6.5),
+  [Area.Edge]: onMainBoard(7.88, 3.32)
 }
 
 /**
- * Revealed Encounters lie in a row per Distance, and the first card of each row is slotted into the
+ * The 2 shields drawn under each Quest tile: the left one for the player who achieved it first,
+ * which pays more, the right one — marked with an infinity sign — for everybody after them.
+ */
+export const questRewardSpot = (area: HeroicQuestArea, first: boolean): Coordinates => ({
+  ...questTileSpots[area],
+  x: questTileSpots[area].x + (first ? -0.95 : 0.95),
+  y: questTileSpots[area].y + 2.5
+})
+
+/**
+ * Revealed Encounters lie in a row per Area, and the first card of each row is slotted into the
  * notch printed for it. Red, Purple and Green have theirs cut into the right edge, so those 3 rows
  * hang off that edge, one per printed slot. Black and Gold have theirs cut into the top and the
  * bottom edge instead: those 2 rows sit above and below the board, and start well to the left of the
@@ -104,15 +130,15 @@ export const questTileSpots: Record<HeroicQuestDistance, Coordinates> = {
 const rightNotchX = mainBoardSize.width - notchOverlap + encounterCardSize.width / 2
 const topBottomNotchX = 14.67
 
-const encounterRowStart: Record<Distance, XYCoordinates> = {
-  [Distance.Black]: { x: topBottomNotchX, y: notchOverlap - encounterCardSize.height / 2 },
-  [Distance.Red]: { x: rightNotchX, y: 4.91 },
-  [Distance.Purple]: { x: rightNotchX, y: 13.98 },
-  [Distance.Green]: { x: rightNotchX, y: 23.12 },
-  [Distance.Gold]: { x: topBottomNotchX, y: mainBoardSize.height - notchOverlap + encounterCardSize.height / 2 }
+const encounterRowStart: Record<Area, XYCoordinates> = {
+  [Area.Edge]: { x: topBottomNotchX, y: notchOverlap - encounterCardSize.height / 2 },
+  [Area.Swords]: { x: rightNotchX, y: 4.91 },
+  [Area.Hammer]: { x: rightNotchX, y: 13.98 },
+  [Area.Bow]: { x: rightNotchX, y: 23.12 },
+  [Area.Wand]: { x: topBottomNotchX, y: mainBoardSize.height - notchOverlap + encounterCardSize.height / 2 }
 }
 
-export const encounterRowSpot = (distance: Distance): Coordinates => onMainBoard(encounterRowStart[distance].x, encounterRowStart[distance].y)
+export const encounterRowSpot = (area: Area): Coordinates => onMainBoard(encounterRowStart[area].x, encounterRowStart[area].y)
 
 export const encounterRowGap: Partial<XYCoordinates> = { x: 5.8 }
 
@@ -139,6 +165,12 @@ export const villageGridSpot = (x: number, y: number): XYCoordinates => ({
 export const villageDeckSpot: XYCoordinates = villageGridSpot(1, -1)
 
 /**
+ * Villagers standing in the same gap line up across it, so the gap reads as one crowded space: down
+ * the gaps that run between two columns, and across the ones that run between two rows.
+ */
+export const villageGapGap = (gap: Gap): Partial<XYCoordinates> => (Number.isInteger(gap.x) ? { x: 1.5 } : { y: 1.5 })
+
+/**
  * The 2 discards stand past the end of the 2 rows that run along the top and the bottom edge of the
  * main board, the Village one on the line of the decks it belongs to, the Encounter one at the end of
  * the Gold row. The left of the table is packed solid — the Village grid, the row of decks over it
@@ -157,11 +189,14 @@ export const coinReserveSpot: XYCoordinates = villageGridSpot(0, -1)
  * is the exception: it stands at the head of the Gold row it feeds.
  */
 export const encounterDeckSpot: XYCoordinates = {
-  x: encounterRowSpot(Distance.Gold).x - (encounterRowGap.x ?? 0),
-  y: encounterRowSpot(Distance.Gold).y
+  x: encounterRowSpot(Area.Wand).x - (encounterRowGap.x ?? 0),
+  y: encounterRowSpot(Area.Wand).y
 }
-export const encounterDiscardSpot: XYCoordinates = { x: 17, y: encounterRowSpot(Distance.Gold).y }
+export const encounterDiscardSpot: XYCoordinates = { x: 17, y: encounterRowSpot(Area.Wand).y }
 export const sealStackSpot: XYCoordinates = villageGridSpot(2, -1)
+
+/** The Seals already spent lie beside the stack they will be drawn from again. */
+export const sealDiscardSpot: XYCoordinates = { x: sealStackSpot.x + 3.2, y: sealStackSpot.y }
 
 /**
  * The 8 Income tokens wait in the gap the top band leaves open between the Seal stack and the head of
@@ -262,8 +297,7 @@ export const playerColumnHeight = (rows: number, allBands: boolean) => {
   return tops + rows * printedHalf + (rows - 1) * playerRowAir
 }
 
-const playerAreaX =
-  encounterRowSpot(Distance.Purple).x + (encounterRowMaxGap.x ?? 0) + encounterCardSize.width / 2 + tableMargin - playerAreaBox.left
+const playerAreaX = encounterRowSpot(Area.Hammer).x + (encounterRowMaxGap.x ?? 0) + encounterCardSize.width / 2 + tableMargin - playerAreaBox.left
 
 /**
  * Where the middle of a personal board lands. `bandRow` is the row whose band is drawn; leave it out
@@ -332,8 +366,7 @@ export const villagerReserveSpot = (area: XYCoordinates) => besidePlayerBoard(ar
 /** The 2 ends of the row of Objects, on either side of the panel, each wide enough for a token. */
 const bandEndSlot = 3.44 + 2 * 0.315
 
-export const playerVpTokensSpot = (area: XYCoordinates) =>
-  besidePlayerBoard(area, sideRowX + sideRowWidth / 2 - bandEndSlot / 2, bandTokensY)
+export const playerVpTokensSpot = (area: XYCoordinates) => besidePlayerBoard(area, sideRowX + sideRowWidth / 2 - bandEndSlot / 2, bandTokensY)
 
 /**
  * The First player token is not part of the band and not part of that row either: it stands immediately

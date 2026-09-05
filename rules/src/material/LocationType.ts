@@ -8,12 +8,18 @@ export enum LocationType {
 
   /** Face-down Village deck, period I on top. */
   VillageDeck,
-  /** The 3x3 grid of face-up Village cards, `x` and `y` in 0..2. Villagers are placed in the gaps. */
+  /** The 3x3 grid of face-up Village cards, `x` and `y` in 0..2. */
   VillageGrid,
+  /**
+   * The gaps of the Village grid, where the Villagers are placed. A gap lies between two neighbouring
+   * slots of the grid, and is named by the point halfway between them: one of `x` and `y` is a whole
+   * number, the other a half. Any number of Villagers, of any players, may stand in one gap.
+   */
+  VillageGap,
   VillageDiscard,
   /** Face-down Encounter deck, period I on top. */
   EncounterDeck,
-  /** Revealed Encounters, one row per {@link Distance} carried by `id`. */
+  /** Revealed Encounters, one row per {@link Area} carried by `id`. */
   EncounterRow,
   EncounterDiscard,
   /**
@@ -21,13 +27,25 @@ export enum LocationType {
    * turned face up: `rotation` is what says so, and it is what the rest of the pile is hidden by.
    */
   EventPile,
-  /** The 3 Heroic Quest spaces of the main board, `id` being the {@link Distance} each one lies at. */
+  /**
+   * The Event tile of the year, where a Villager is placed to take part in it: `x` is the option the
+   * Villager pays for. On the Festival, and only there, an option taken is taken for the year.
+   */
+  EventSpace,
+  /** The 3 Heroic Quest spaces of the main board, `id` being the {@link Area} each one lies at. */
   QuestTileSpace,
   /**
-   * Greylune itself, where the Adventurers start and return. One space for everybody, so they line
-   * up on it: `x` is the rank in the row, and whose Adventurer it is, is its `id`.
+   * The 2 shields under a Quest space, where the markers of the players who achieved it stand: `id`
+   * is the {@link Area} of the space, and `x` is 0 for the shield of the first player to get
+   * there, which pays more, or 1 for the one everybody after them shares.
    */
-  Village,
+  QuestRewardSpace,
+  /**
+   * The areas of the main board, where the Adventurers stand: `id` is the {@link Area}, Greylune
+   * itself included. One board for everybody, so several Adventurers share an area as soon as they
+   * are level: `z` is the rank in the pile, and whose Adventurer it is, is the item's own `id`.
+   */
+  Area,
   /**
    * The score track, `x` in 0..24. The markers of several players share a space when their scores
    * are equal, so they pile up on it: `z` is the rank in the pile. Whose marker it is, is its `id`.
@@ -41,7 +59,16 @@ export enum LocationType {
   /** The unlimited bank. */
   CoinReserve,
   SealStack,
+  /**
+   * The Seals already spent. The supply is drawn from the stack first and from here when it runs
+   * short, which is what the rulebook does by reshuffling the discard into a new pile (p.6).
+   */
+  SealDiscard,
   IncomeTokenStock,
+  /** The Seal tokens laid on a Village card, `parent` being the card. */
+  CardSeal,
+  /** The Income token laid on an Encounter card, `parent` being the card. */
+  CardIncome,
   /** The 4 Villagers per player that are set aside and not available yet. */
   VillagerReserve,
 
@@ -70,7 +97,7 @@ export enum LocationType {
   MagicTrack,
   /** The 3 Heroic Quest marker spaces of the personal board, `x` in 0..2. */
   QuestMarkerSpace,
-  /** The 3 Income token spaces of the personal board, `x` in 0..2. */
+  /** The Income tokens won, laid along the bottom of the personal board. */
   IncomeTokenSpace,
   /** The special action space of the personal board. */
   SpecialAction,

@@ -19,24 +19,24 @@ import QuestTile9 from './tiles/QuestTile9.png'
 import QuestTileBack from './tiles/QuestTileBack.png'
 
 export const eventTileImages: Record<EventTile, string> = {
-  [EventTile.Event1]: EventTile1,
-  [EventTile.Event2]: EventTile2,
-  [EventTile.Event3]: EventTile3,
-  [EventTile.Event4]: EventTile4,
-  [EventTile.Event5]: EventTile5,
-  [EventTile.Event6]: EventTile6
+  [EventTile.Banquet]: EventTile1,
+  [EventTile.Festival]: EventTile2,
+  [EventTile.GreatFair]: EventTile3,
+  [EventTile.MagicShow]: EventTile4,
+  [EventTile.Gathering]: EventTile5,
+  [EventTile.Tournament]: EventTile6
 }
 
 export const questTileImages: Record<QuestTile, string> = {
-  [QuestTile.Quest1]: QuestTile1,
-  [QuestTile.Quest2]: QuestTile2,
-  [QuestTile.Quest3]: QuestTile3,
-  [QuestTile.Quest4]: QuestTile4,
-  [QuestTile.Quest5]: QuestTile5,
-  [QuestTile.Quest6]: QuestTile6,
-  [QuestTile.Quest7]: QuestTile7,
-  [QuestTile.Quest8]: QuestTile8,
-  [QuestTile.Quest9]: QuestTile9
+  [QuestTile.Giant]: QuestTile1,
+  [QuestTile.Dragon]: QuestTile2,
+  [QuestTile.Wraiths]: QuestTile3,
+  [QuestTile.BardTournament]: QuestTile4,
+  [QuestTile.Donation]: QuestTile5,
+  [QuestTile.Undeads]: QuestTile6,
+  [QuestTile.DeadlyTrap]: QuestTile7,
+  [QuestTile.Ransom]: QuestTile8,
+  [QuestTile.Wedding]: QuestTile9
 }
 
 export { EventTileBack, QuestTileBack }
