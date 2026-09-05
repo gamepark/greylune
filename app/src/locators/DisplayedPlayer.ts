@@ -20,6 +20,10 @@ export const showsAllBandsFor = (players: number): boolean => players <= 2
 
 export const showsAllBands = (context: Context): boolean => showsAllBandsFor(context.rules.players.length)
 
+/** Whether a player has their band out: at 2 players everyone does, past that the read player alone. */
+export const showsBandOf = (context: Context, player?: PlayerColor): boolean =>
+  showsAllBands(context) || player === getDisplayedPlayer(context)
+
 /** The row whose band is drawn, or `undefined` while every row draws its own. */
 export const getBandRow = (context: Context): number | undefined =>
   showsAllBands(context) ? undefined : Math.max(0, context.rules.players.indexOf(getDisplayedPlayer(context) as PlayerColor))

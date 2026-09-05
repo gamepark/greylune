@@ -468,14 +468,8 @@ const bandEndSlot = 3.44 + 2 * 0.315
 
 export const playerVpTokensSpot = (area: XYCoordinates) => besidePlayerBoard(area, sideRowX + sideRowWidth / 2 - bandEndSlot / 2, bandTokensY)
 
-/**
- * The First player token is not part of the band and not part of that row either: it stands immediately
- * to the right of the board, resting on the top edge of the first Object card. It is the one thing a
- * player keeps out of their board that is drawn for all of them, read or not — there is only ever one
- * on the table, and it says whose turn the round starts on.
- */
-export const firstPlayerTokenSpot = (area: XYCoordinates) =>
-  besidePlayerBoard(area, playerBoardSize.width / 2 - playerBoardShadow + 0.3 + 3.44 / 2, -villageCardSize.height / 2 - 5.7 / 2)
+/** Lifted above everything else on the table: a panel is never covered by a card that reaches it. */
+export const panelZ = 20
 
 /**
  * A player's panel is part of the table, over the middle of their own row of Objects: it takes what the
@@ -502,6 +496,25 @@ export const playerPanelSpot = (area: XYCoordinates, hasBand: boolean) =>
      */
     hasBand ? -villageCardSize.height / 2 - playerPanelHeight / 2 - panelAir : -printedHalf + playerPanelHeight / 2
   )
+
+/**
+ * The First player token is not part of the band and not part of that row either: it stands immediately
+ * to the right of the board, on the same line as the panel of the player holding it. It is the one thing
+ * a player keeps out of their board that is drawn for all of them, read or not — there is only ever one
+ * on the table, and it says whose turn the round starts on — so it goes down with the panel when that
+ * player is not read: wherever the panel is, the token is the piece pinned to it.
+ */
+const firstPlayerTokenSize = { width: 3.44, height: 5.7 }
+export const firstPlayerTokenSpot = (area: XYCoordinates, hasBand: boolean): Coordinates => ({
+  ...besidePlayerBoard(
+    area,
+    playerBoardSize.width / 2 - playerBoardShadow + 0.3 + firstPlayerTokenSize.width / 2,
+    /** Its foot on the line the bottom of the panel is drawn on, whichever of the 2 lines that is. */
+    (hasBand ? -villageCardSize.height / 2 : -printedHalf + playerPanelHeight + panelAir) - firstPlayerTokenSize.height / 2
+  ),
+  /** Dropped, it lies over the first Object card, and like the panel it is never the thing covered. */
+  z: panelZ
+})
 
 /**
  * Coins are money: identical pieces merge into one item with a quantity, so they have no rank and no

@@ -11,7 +11,7 @@ import { CenteredFlexLocator } from './CenteredFlexLocator'
 import { CenteredListLocator } from './CenteredListLocator'
 import { playerPanelLocator } from './PlayerPanelLocator'
 import { VillageGapLocator } from './VillageGapLocator'
-import { getBandRow, hideBandOfOtherPlayers } from './DisplayedPlayer'
+import { getBandRow, hideBandOfOtherPlayers, showsBandOf } from './DisplayedPlayer'
 import { companionsDependencies, companionsMaxSpread, encounterRowArea, encounterRowDependencies, encounterRowSpread } from './CrowdedRows'
 import {
   activeVillagersSpot,
@@ -287,9 +287,13 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     getCenter: (location: Location, context: MaterialContext) => toldStoriesSpot(areaOf(context, location.player))
   }),
 
-  /** Always drawn, whoever is read: there is a single token, and it tells who the round starts on. */
+  /**
+   * Always drawn, whoever is read: there is a single token, and it tells who the round starts on. It
+   * follows the panel of its owner down when that player is not read, so it is always found beside it.
+   */
   [LocationType.FirstPlayerTokenSpace]: new Locator({
-    getCoordinates: (location: Location, context: MaterialContext) => firstPlayerTokenSpot(areaOf(context, location.player))
+    getCoordinates: (location: Location, context: MaterialContext) =>
+      firstPlayerTokenSpot(areaOf(context, location.player), showsBandOf(context, location.player as PlayerColor))
   }),
 
   [LocationType.BonusTokens]: new CenteredListLocator({
