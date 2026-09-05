@@ -122,11 +122,14 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     getGap: (location: Location) => villageGapGap(gapOf(location))
   }),
 
-  /** The Seals a card was dealt, laid in a row along its bottom edge. */
+  /**
+   * The Seals a card was dealt, stacked in a column along its right edge: the bottom of the card is
+   * where its effect is printed, and 3 Seals lying there would cover it.
+   */
   [LocationType.CardSeal]: new ListLocator({
     parentItemType: MaterialType.VillageCard,
-    gap: { x: 1.4 },
-    positionOnParent: { x: 30, y: 86 }
+    gap: { y: 1.4 },
+    positionOnParent: { x: 86, y: 30 }
   }),
 
   // ---------------------------------------------------------------- Encounter cards
@@ -145,10 +148,10 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
   }),
 
 
-  /** The Income token an Encounter carries, laid over the reward half of its scroll. */
+  /** The Income token an Encounter carries, laid over the reward half of its scroll, flush with the right edge of the card. */
   [LocationType.CardIncome]: new Locator({
     parentItemType: MaterialType.EncounterCard,
-    positionOnParent: { x: 72, y: 88 }
+    positionOnParent: { x: 79, y: 88 }
   }),
 
   // ---------------------------------------------------------------- Events and Quests
