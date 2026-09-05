@@ -103,14 +103,12 @@ export class GreyluneRules
   locationsStrategies = {
     [MaterialType.VillageCard]: {
       [LocationType.VillageDeck]: new PositiveSequenceStrategy(),
-      [LocationType.VillageDiscard]: new PositiveSequenceStrategy(),
       [LocationType.Companions]: new PositiveSequenceStrategy(),
       [LocationType.Items]: new PositiveSequenceStrategy()
     },
     [MaterialType.EncounterCard]: {
       [LocationType.EncounterDeck]: new PositiveSequenceStrategy(),
       [LocationType.EncounterRow]: new PositiveSequenceStrategy(),
-      [LocationType.EncounterDiscard]: new PositiveSequenceStrategy(),
       [LocationType.UntoldStories]: new PositiveSequenceStrategy(),
       [LocationType.ToldStories]: new PositiveSequenceStrategy()
     },

@@ -44,8 +44,13 @@ const playRandomGame = (players: number, seed = 0): { game: Game; moves: number 
 /** What must hold between any two moves of any game. */
 const check = (game: Game) => {
   const rules = new GreyluneRules(game)
-  // The Encounter deck holds exactly the 5 rows of the 5 years, and never loses a card.
-  expect(rules.material(MaterialType.EncounterCard).length).toBe(YEARS * encounterRowSize(game.players.length))
+  // The 5 rows of the 5 years are all the Encounters there will ever be: none is created along the
+  // way, and one nobody took is deleted in Winter, which leaves its slot behind rather than the game
+  // state. So the slots are counted, and every card still in play is somewhere it belongs.
+  expect(game.items[MaterialType.EncounterCard]!.length).toBe(YEARS * encounterRowSize(game.players.length))
+  for (const item of rules.material(MaterialType.EncounterCard).getItems()) {
+    expect([LocationType.EncounterDeck, LocationType.EncounterRow, LocationType.UntoldStories, LocationType.ToldStories]).toContain(item.location.type)
+  }
   for (const player of game.players) {
     // The 7 figures of a player are somewhere, and only ever in one of the places they belong.
     const villagers = rules.material(MaterialType.Villager).player(player)

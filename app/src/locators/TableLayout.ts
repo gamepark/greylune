@@ -131,7 +131,10 @@ export const questRewardSpot = (area: HeroicQuestArea, first: boolean): Coordina
 const rightNotchX = mainBoardSize.width - notchOverlap + encounterCardSize.width / 2
 const topBottomNotchX = 14.67
 
-const encounterRowStart: Record<Area, XYCoordinates> = {
+/** Every Area but Greylune itself: no Encounter is met in the village, so no row starts there. */
+export type EncounterRowArea = Exclude<Area, Area.Village>
+
+const encounterRowStart: Record<EncounterRowArea, XYCoordinates> = {
   [Area.Edge]: { x: topBottomNotchX, y: notchOverlap - encounterCardSize.height / 2 },
   [Area.Swords]: { x: rightNotchX, y: 4.91 },
   [Area.Hammer]: { x: rightNotchX, y: 13.98 },
@@ -139,7 +142,7 @@ const encounterRowStart: Record<Area, XYCoordinates> = {
   [Area.Wand]: { x: topBottomNotchX, y: mainBoardSize.height - notchOverlap + encounterCardSize.height / 2 }
 }
 
-export const encounterRowSpot = (area: Area): Coordinates => onMainBoard(encounterRowStart[area].x, encounterRowStart[area].y)
+export const encounterRowSpot = (area: EncounterRowArea): Coordinates => onMainBoard(encounterRowStart[area].x, encounterRowStart[area].y)
 
 export const encounterRowGap: Partial<XYCoordinates> = { x: 5.8 }
 
@@ -172,28 +175,19 @@ export const villageDeckSpot: XYCoordinates = villageGridSpot(1, -1)
 export const villageGapGap = (gap: Gap): Partial<XYCoordinates> => (Number.isInteger(gap.x) ? { x: 1.5 } : { y: 1.5 })
 
 /**
- * The 2 discards stand past the end of the 2 rows that run along the top and the bottom edge of the
- * main board, the Village one on the line of the decks it belongs to, the Encounter one at the end of
- * the Gold row. The left of the table is packed solid — the Village grid, the row of decks over it
- * and the Season board leave nothing free.
- */
-export const villageDiscardSpot: XYCoordinates = { x: 17, y: villageDeckSpot.y }
-
-/**
  * The bank, spread to the left of the Village deck. The deck itself leans 1 cm that way once it is
  * full, so the heap starts a centimetre further still, and it lies flat: a scatter far wider than
  * tall, loose change nobody ever counts out rather than 2 neat stacks.
  */
 export const coinReserveSpot: XYCoordinates = villageGridSpot(0, -1)
 /**
- * The general supply: the Encounter discard, the Seal stack and the Income tokens. The Encounter deck
- * is the exception: it stands at the head of the Gold row it feeds.
+ * The general supply: the Seal stack and the Income tokens. The Encounter deck is the exception: it
+ * stands at the head of the Gold row it feeds.
  */
 export const encounterDeckSpot: XYCoordinates = {
   x: encounterRowSpot(Area.Wand).x - (encounterRowGap.x ?? 0),
   y: encounterRowSpot(Area.Wand).y
 }
-export const encounterDiscardSpot: XYCoordinates = { x: 17, y: encounterRowSpot(Area.Wand).y }
 export const sealStackSpot: XYCoordinates = villageGridSpot(2, -1)
 
 /**

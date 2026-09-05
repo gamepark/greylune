@@ -44,9 +44,12 @@ export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, Loc
     return [
       ...this.material(MaterialType.Seal).location(LocationType.CardSeal).moveItems({ type: LocationType.SealDiscard }),
       ...this.material(MaterialType.IncomeToken).location(LocationType.CardIncome).moveItems({ type: LocationType.IncomeTokenStock }),
-      ...grid.moveItems({ type: LocationType.VillageDiscard }),
-      ...row.moveItems({ type: LocationType.EncounterDiscard }),
-      // The Event of the year is over and goes back in the box: the pile only holds the years to come.
+      // Both decks are the calendar of the game and are never shuffled back — they hold exactly the
+      // 5 years and nothing more. So a card nobody took is out of the game for good and goes back in
+      // the box, rather than onto a discard nobody would ever draw from. Same for the Event of the
+      // year: the pile only holds the years to come.
+      ...grid.deleteItems(),
+      ...row.deleteItems(),
       ...this.eventPile.limit(1).deleteItems()
     ]
   }

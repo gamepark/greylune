@@ -77,6 +77,17 @@ const standVillager = (player: PlayerColor, x: number, y: number): number => {
   return villager
 }
 
+/** Puts a chosen Encounter alone in the row of an Area, the ones of the year put away as Winter does. */
+const placeEncounter = (front: EncounterCard, area: Area): number => {
+  for (const item of items(MaterialType.EncounterCard)) {
+    if (item.location.type === LocationType.EncounterRow) item.quantity = 0
+  }
+  const card = encounterCard(front)
+  items(MaterialType.EncounterCard)[card].location = { type: LocationType.EncounterRow, id: area }
+  delete items(MaterialType.EncounterCard)[card].quantity
+  return card
+}
+
 /** The index of an Encounter card, put in the deck when the draw of the game left it out. */
 const encounterCard = (front: EncounterCard): number => {
   const index = items(MaterialType.EncounterCard).findIndex((item) => (item.id as EncounterCardId)?.front === front)
@@ -243,12 +254,8 @@ describe('The areas', () => {
   })
 
   it('pays both sides of an Encounter to a player who satisfies both', () => {
-    for (const item of items(MaterialType.EncounterCard)) {
-      if (item.location.type === LocationType.EncounterRow) item.location = { type: LocationType.EncounterDiscard }
-    }
     // Ours: 2 victory points for 1 Force, and 2 more for 1 Magic.
-    const card = encounterCard(EncounterCard.Bear)
-    items(MaterialType.EncounterCard)[card].location = { type: LocationType.EncounterRow, id: Area.Wand }
+    const card = placeEncounter(EncounterCard.Bear, Area.Wand)
     setSkill(BLUE, 1, 1)
     playCustom(CustomMoveType.ResolveOutcome, (data: { outcomes: number[] }) => data.outcomes.length === 2)
     expect(playerVp(rules(), BLUE)).toBe(4)
@@ -258,12 +265,8 @@ describe('The areas', () => {
 
 describe('An Income token', () => {
   it('is handed over with the Encounter and paid again every Autumn', () => {
-    for (const item of items(MaterialType.EncounterCard)) {
-      if (item.location.type === LocationType.EncounterRow) item.location = { type: LocationType.EncounterDiscard }
-    }
     // Moutons: nothing to satisfy, and a token worth 1 coin a year.
-    const sheep = encounterCard(EncounterCard.Sheep)
-    items(MaterialType.EncounterCard)[sheep].location = { type: LocationType.EncounterRow, id: Area.Bow }
+    const sheep = placeEncounter(EncounterCard.Sheep, Area.Bow)
     const token = items(MaterialType.IncomeToken).findIndex((item) => item.id === IncomeToken.Income7)
     put(MaterialType.IncomeToken, token, { type: LocationType.CardIncome, parent: sheep })
     items(MaterialType.Adventurer).find((item) => item.id === BLUE)!.location = { type: LocationType.Area, id: Area.Bow }
@@ -333,7 +336,7 @@ describe('Winter', () => {
     view.rule = { id: RuleId.Winter, player: BLUE }
     const seen = new GreyluneRules(view)
     expect(() => applyAutomaticMoves(seen, [seen.startRule(RuleId.Winter) as MaterialMove])).not.toThrow()
-    expect(view.items[MaterialType.VillageCard]!.filter((entry) => entry.location.type === LocationType.VillageGrid)).toHaveLength(9)
+    expect(seen.material(MaterialType.VillageCard).location(LocationType.VillageGrid).length).toBe(9)
   })
 
   it('lays out a new Village, turns the next Event up and passes the first player token', () => {
@@ -341,8 +344,8 @@ describe('Winter', () => {
     startRule(RuleId.Winter)
     play(rules().startRule(RuleId.Winter) as MaterialMove)
     expect(currentYear(rules(), 2)).toBe(2)
-    expect(items(MaterialType.VillageCard).filter((entry) => entry.location.type === LocationType.VillageGrid)).toHaveLength(9)
-    expect(items(MaterialType.EncounterCard).filter((entry) => entry.location.type === LocationType.EncounterRow)).toHaveLength(5)
+    expect(count(MaterialType.VillageCard, LocationType.VillageGrid)).toBe(9)
+    expect(count(MaterialType.EncounterCard, LocationType.EncounterRow)).toBe(5)
     const event = items(MaterialType.EventTile).find((entry) => entry.location.rotation === true)!
     expect(event.id).not.toBe(firstEvent)
     expect(items(MaterialType.FirstPlayerToken)[0].location.player).toBe(ORANGE)

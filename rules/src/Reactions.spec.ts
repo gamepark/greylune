@@ -54,6 +54,17 @@ const give = (front: VillageCard, location = LocationType.Companions): number =>
   return index
 }
 
+/** Puts a chosen Encounter alone in the row of an Area, the ones of the year put away as Winter does. */
+const placeEncounter = (front: EncounterCard, area: Area): number => {
+  for (const item of items(MaterialType.EncounterCard)) {
+    if (item.location.type === LocationType.EncounterRow) item.quantity = 0
+  }
+  const index = encounter(front)
+  items(MaterialType.EncounterCard)[index].location = { type: LocationType.EncounterRow, id: area }
+  delete items(MaterialType.EncounterCard)[index].quantity
+  return index
+}
+
 const emptyVillage = () => {
   for (const item of items(MaterialType.VillageCard)) {
     if (item.location.type === LocationType.VillageGrid) item.location = { type: LocationType.VillageDeck, x: 99 }
@@ -202,12 +213,8 @@ describe('Dorian', () => {
 describe('The Potions', () => {
   it('lends 2 Force for the length of an adventure, and is emptied for good', () => {
     const potion = give(VillageCard.StrengthPotion, LocationType.Items)
-    for (const item of items(MaterialType.EncounterCard)) {
-      if (item.location.type === LocationType.EncounterRow) item.location = { type: LocationType.EncounterDiscard }
-    }
     // Meute de loups: 3 victory points for 2 Force.
-    const wolves = encounter(EncounterCard.PackOfWolves)
-    items(MaterialType.EncounterCard)[wolves].location = { type: LocationType.EncounterRow, id: Area.Wand }
+    placeEncounter(EncounterCard.PackOfWolves, Area.Wand)
     setSkill(BLUE, 0, 0)
     game.rule = { id: RuleId.Travel, player: BLUE }
     game.memory[Memory.TravelLeft] = 1

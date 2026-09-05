@@ -21,7 +21,7 @@ import {
   companionsGap,
   companionsSpot,
   encounterDeckSpot,
-  encounterDiscardSpot,
+  EncounterRowArea,
   encounterRowGap,
   encounterRowMaxGap,
   encounterRowSpot,
@@ -56,7 +56,6 @@ import {
   toldStoriesSpot,
   untoldStoriesSpot,
   villageDeckSpot,
-  villageDiscardSpot,
   villageGap,
   villageGapGap,
   villageGridSpot,
@@ -113,7 +112,6 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     getCoordinates: (location: Location) => villageGridSpot(location.x ?? 0, location.y ?? 0)
   }),
 
-  [LocationType.VillageDiscard]: new DeckLocator({ coordinates: villageDiscardSpot }),
 
   /**
    * The gaps between the cards, where any number of Villagers of any players may stand. A gap is
@@ -139,10 +137,9 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
   [LocationType.EncounterRow]: new ListLocator({
     gap: encounterRowGap,
     maxGap: encounterRowMaxGap,
-    getCoordinates: (location: Location) => encounterRowSpot((location.id as Area) ?? Area.Wand)
+    getCoordinates: (location: Location) => encounterRowSpot((location.id as EncounterRowArea) ?? Area.Wand)
   }),
 
-  [LocationType.EncounterDiscard]: new DeckLocator({ coordinates: encounterDiscardSpot }),
 
   /** The Income token an Encounter carries, laid over the reward half of its scroll. */
   [LocationType.CardIncome]: new Locator({

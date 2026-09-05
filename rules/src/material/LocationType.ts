@@ -16,12 +16,10 @@ export enum LocationType {
    * number, the other a half. Any number of Villagers, of any players, may stand in one gap.
    */
   VillageGap,
-  VillageDiscard,
   /** Face-down Encounter deck, period I on top. */
   EncounterDeck,
   /** Revealed Encounters, one row per {@link Area} carried by `id`. */
   EncounterRow,
-  EncounterDiscard,
   /**
    * The Event tiles, stacked. The tile of the current year is the one on top, and it is the only one
    * turned face up: `rotation` is what says so, and it is what the rest of the pile is hidden by.
