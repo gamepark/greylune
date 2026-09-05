@@ -12,6 +12,7 @@ import { CenteredFlexLocator } from './CenteredFlexLocator'
 import { CenteredListLocator } from './CenteredListLocator'
 import { playerPanelLocator } from './PlayerPanelLocator'
 import { getBandRow, hideBandOfOtherPlayers } from './DisplayedPlayer'
+import { companionsDependencies, companionsMaxSpread, encounterRowArea, encounterRowDependencies, encounterRowSpread } from './CrowdedRows'
 import {
   activeVillagersSpot,
   bonusTokensGap,
@@ -21,9 +22,7 @@ import {
   companionsGap,
   companionsSpot,
   encounterDeckSpot,
-  EncounterRowArea,
   encounterRowGap,
-  encounterRowMaxGap,
   encounterRowSpot,
   eventSpot,
   firstPlayerTokenSpot,
@@ -134,10 +133,15 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
 
   [LocationType.EncounterDeck]: new DeckLocator({ coordinates: encounterDeckSpot }),
 
+  /**
+   * The row grows to the right until it runs into the Companions of a player, and only then tightens
+   * up, the cards sliding over one another. See {@link CrowdedRows} for who gives way to whom.
+   */
   [LocationType.EncounterRow]: new ListLocator({
     gap: encounterRowGap,
-    maxGap: encounterRowMaxGap,
-    getCoordinates: (location: Location) => encounterRowSpot((location.id as EncounterRowArea) ?? Area.Wand)
+    getMaxGap: (location: Location, context: MaterialContext) => ({ x: encounterRowSpread(encounterRowArea(location), context) }),
+    getPositionDependencies: (location: Location, context: MaterialContext) => encounterRowDependencies(location, context),
+    getCoordinates: (location: Location) => encounterRowSpot(encounterRowArea(location))
   }),
 
 
@@ -230,11 +234,15 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
    * The 2 rows of cards hang off the board rather than floating beside it: the first card is laid
    * against its edge and the row runs outwards, so a player with a single Companion has it where the
    * board says it belongs, and it does not move when the second one arrives. Past the 3 cards the row
-   * is given, an extra Object tightens it up instead of running out over the table.
+   * is given, an extra card tightens it up instead of running out over the table.
+   *
+   * The Companions run out towards the main board, into the strip the Encounter rows grow down, and
+   * tighten up as well when an Encounter row lays claim to it: see {@link CrowdedRows}.
    */
   [LocationType.Companions]: new ListLocator({
-    maxCount: playerCardsMaxCount,
     gap: companionsGap,
+    getMaxGap: (location: Location, context: MaterialContext) => ({ x: -companionsMaxSpread(location.player as PlayerColor, context) }),
+    getPositionDependencies: (location: Location, context: MaterialContext) => companionsDependencies(location.player as PlayerColor, context),
     getCoordinates: (location: Location, context: MaterialContext) => companionsSpot(areaOf(context, location.player))
   }),
 

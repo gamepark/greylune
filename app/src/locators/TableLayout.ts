@@ -144,13 +144,17 @@ const encounterRowStart: Record<EncounterRowArea, XYCoordinates> = {
 
 export const encounterRowSpot = (area: EncounterRowArea): Coordinates => onMainBoard(encounterRowStart[area].x, encounterRowStart[area].y)
 
+/** The 5 rows, so that a player's Companions can look up which of them run at their own cards. */
+export const encounterRowAreas = Object.keys(encounterRowStart).map(Number) as EncounterRowArea[]
+
 export const encounterRowGap: Partial<XYCoordinates> = { x: 5.8 }
 
 /**
- * A row is given the width of 2 Encounters and no more: past that it tightens up, the cards sliding
- * over one another, rather than eating into the room the player areas need on the right.
+ * The length a row has for free: 2 Encounters, which is what the column of player areas is set clear
+ * of for the 3 rows that start at the right edge of the board. A longer row is not cut off there —
+ * it takes whatever the Companions in its way are not using, see {@link crowdedRowsRoom}.
  */
-export const encounterRowMaxGap: Partial<XYCoordinates> = { x: encounterRowGap.x }
+const encounterRowReserve = encounterRowGap.x ?? 0
 
 // ------------------------------------------------------------------ around the main board
 
@@ -314,7 +318,10 @@ export const playerColumnHeight = (rows: number, allBands: boolean) => {
   return tops + rows * printedHalf + (rows - 1) * playerRowAir
 }
 
-const playerAreaX = encounterRowSpot(Area.Hammer).x + (encounterRowMaxGap.x ?? 0) + encounterCardSize.width / 2 + tableMargin - playerAreaBox.left
+const playerAreaX = encounterRowSpot(Area.Hammer).x + encounterRowReserve + encounterCardSize.width / 2 + tableMargin - playerAreaBox.left
+
+/** Every area sits on the same column, so the Companions of every player start on the same line. */
+const companionsX = playerAreaX - sideRowStart
 
 /**
  * Where the middle of a personal board lands. `bandRow` is the row whose band is drawn; leave it out
@@ -357,6 +364,45 @@ export const itemsGap: Partial<XYCoordinates> = { x: playerCardsGap }
 
 /** A card raising the limit can bring a 4th Object: the row tightens up rather than leaving its space. */
 export const playerCardsMaxCount = 3
+
+/** The 2 ends of a full row of cards: 3 of them, first to last. */
+export const playerCardsFullSpread = playerCardsGap * (playerCardsMaxCount - 1)
+
+/**
+ * However crowded the strip gets, 2 neighbouring Companions never come closer than a quarter of a card
+ * — a quarter is still a card the eye counts, where a perfect stack is one card. The row keeps that
+ * much of itself whatever it holds: it is a place on the table, and the place the next Companion is
+ * going to land, so the Encounters stop short of it rather than of the cards that happen to be in it.
+ */
+export const companionsMinSpread = (villageCardSize.width / 4) * (playerCardsMaxCount - 1)
+
+/**
+ * An Encounter row and a row of Companions run at each other down the same strip: the Encounters grow
+ * to the right from the notch they are slotted into, the Companions grow to the left from the board
+ * they are pushed against. This is the room the two of them share, from the right edge of the first
+ * Encounter to the left edge of the first Companion, less the air between them.
+ *
+ * The 3 rows starting at the right edge of the main board hold exactly 2 Encounters and a full row of
+ * Companions, which is what the column of areas is set on; the Black and the Gold row start further
+ * left along the board and have that much more.
+ */
+export const crowdedRowsRoom = (area: EncounterRowArea): number =>
+  companionsX - villageCardSize.width / 2 - tableMargin - encounterRowSpot(area).x - encounterCardSize.width / 2
+
+/**
+ * The 2 strips of a player area an Encounter row can run into, measured from the middle of the board:
+ * the row of Companions, and the band above it.
+ */
+const companionsStrip = { top: -villageCardSize.height / 2, bottom: villageCardSize.height / 2 }
+const bandStrip = { top: bandTop, bottom: bandTop + encounterCardSize.height }
+
+const crossesStrip = (area: EncounterRowArea, areaY: number, strip: { top: number; bottom: number }): boolean => {
+  const { y } = encounterRowSpot(area)
+  return y + encounterCardSize.height / 2 > areaY + strip.top && y - encounterCardSize.height / 2 < areaY + strip.bottom
+}
+
+export const rowCrossesCompanions = (area: EncounterRowArea, areaY: number): boolean => crossesStrip(area, areaY, companionsStrip)
+export const rowCrossesBand = (area: EncounterRowArea, areaY: number): boolean => crossesStrip(area, areaY, bandStrip)
 
 /**
  * Resolved Encounters fill the middle of the band, over the board, untold on the left half, told on
