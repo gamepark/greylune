@@ -78,5 +78,8 @@ export enum LocationType {
   BonusTokens,
   PlayerCoins,
   PlayerVpTokens,
-  FirstPlayerTokenSpace
+  FirstPlayerTokenSpace,
+
+  /** Not material: where the display puts a player's panel, over their own area. */
+  PlayerPanel
 }

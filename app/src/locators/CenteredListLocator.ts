@@ -1,5 +1,6 @@
 import { ListLocator, MaterialContext } from '@gamepark/react-game'
 import { Coordinates, Location } from '@gamepark/rules-api'
+import { spread } from './spread'
 
 /**
  * A {@link ListLocator} positions its first item on the coordinates it is given, so a list grows to
@@ -31,7 +32,8 @@ export class CenteredListLocator<
   getCoordinates(location: Location<P, L>, context: MaterialContext<P, M, L, R, V>): Partial<Coordinates> {
     const { x = 0, y = 0, z } = this.getCenter(location, context)
     const { x: gapX = 0, y: gapY = 0 } = this.getGap(location, context)
+    const { x: maxGapX, y: maxGapY } = this.getMaxGap(location, context)
     const gaps = Math.max(0, this.countListItems(location, context) - 1)
-    return { x: x - (gapX * gaps) / 2, y: y - (gapY * gaps) / 2, z }
+    return { x: x - spread(gapX, gaps, maxGapX) / 2, y: y - spread(gapY, gaps, maxGapY) / 2, z }
   }
 }

@@ -1,5 +1,6 @@
 import { FlexLocator, MaterialContext } from '@gamepark/react-game'
 import { Coordinates, Location } from '@gamepark/rules-api'
+import { spread } from './spread'
 
 /**
  * A {@link FlexLocator} lays its items out in lines, growing away from the coordinates it is given.
@@ -30,14 +31,16 @@ export class CenteredFlexLocator<
   getCoordinates(location: Location<P, L>, context: MaterialContext<P, M, L, R, V>): Partial<Coordinates> {
     const { x = 0, y = 0, z } = this.getCenter(location, context)
     const { x: gapX = 0, y: gapY = 0 } = this.getGap(location, context)
+    const { x: maxGapX, y: maxGapY } = this.getMaxGap(location, context)
     const { x: lineGapX = 0, y: lineGapY = 0 } = this.getLineGap(location, context)
+    const { x: maxLineGapX, y: maxLineGapY } = this.getMaxLineGap(location, context)
     /** {@link FlexLocator} caps its item count at one line, so these are the gaps within a line... */
     const gaps = Math.max(0, this.countListItems(location, context) - 1)
     /** ...and these the gaps between the lines the whole stock takes. */
     const lineGaps = Math.max(0, Math.ceil(this.countItems(location, context) / this.getLineSize(location, context)) - 1)
     return {
-      x: x - (gapX * gaps + lineGapX * lineGaps) / 2,
-      y: y - (gapY * gaps + lineGapY * lineGaps) / 2,
+      x: x - (spread(gapX, gaps, maxGapX) + spread(lineGapX, lineGaps, maxLineGapX)) / 2,
+      y: y - (spread(gapY, gaps, maxGapY) + spread(lineGapY, lineGaps, maxLineGapY)) / 2,
       z
     }
   }

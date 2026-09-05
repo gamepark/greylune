@@ -1,15 +1,18 @@
 import { css } from '@emotion/react'
-import { DevToolsHub, GameTable, GameTableNavigation } from '@gamepark/react-game'
-import { tableBoundaries } from './locators/TableLayout'
-import { PlayerPanels } from './panels/PlayerPanels'
+import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
+import { DevToolsHub, GameTable, GameTableNavigation, useRules } from '@gamepark/react-game'
+import { showsAllBandsFor } from './locators/DisplayedPlayer'
+import { getTableBoundaries } from './locators/TableLayout'
 
 export function GameDisplay() {
-  const margin = { top: 7, left: 0, right: 30, bottom: 0 }
+  const rules = useRules<GreyluneRules>()
+  /** The column of player areas is what the table is tall enough for, and it depends on the count. */
+  const players = rules?.players.length ?? 4
+  const boundaries = getTableBoundaries(players, showsAllBandsFor(players))
   return (
     <>
-      <GameTable {...tableBoundaries} margin={margin} css={process.env.NODE_ENV === 'development' && tableBorder}>
+      <GameTable {...boundaries} css={process.env.NODE_ENV === 'development' && tableBorder}>
         <GameTableNavigation />
-        <PlayerPanels />
         {process.env.NODE_ENV === 'development' && <DevToolsHub fabBottom="calc(5em)" />}
       </GameTable>
     </>

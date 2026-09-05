@@ -9,8 +9,11 @@ import { DeckLocator, ListLocator, Locator, MaterialContext, PileLocator } from 
 import { Location } from '@gamepark/rules-api'
 import { CenteredFlexLocator } from './CenteredFlexLocator'
 import { CenteredListLocator } from './CenteredListLocator'
+import { playerPanelLocator } from './PlayerPanelLocator'
+import { getBandRow, hideBandOfOtherPlayers } from './DisplayedPlayer'
 import {
   activeVillagersSpot,
+  bonusTokensGap,
   bonusTokensSpot,
   campSpot,
   coinReserveSpot,
@@ -27,6 +30,7 @@ import {
   itemsSpot,
   magicTrackSpot,
   mainBoardSpot,
+  playerAreaSpot,
   playerBoardSpot,
   playerCardsGap,
   playerCoinsRadius,
@@ -41,6 +45,7 @@ import {
   specialActionSpot,
   stacked,
   storiesGap,
+  storiesMaxGap,
   strengthTrackSpot,
   toldStoriesSpot,
   untoldStoriesSpot,
@@ -63,6 +68,10 @@ const seatOf = (context: MaterialContext, player?: number) => Math.max(0, contex
 const fanBySeat = (context: MaterialContext, player: number | undefined, step: number) =>
   (seatOf(context, player) - (context.rules.players.length - 1) / 2) * step
 
+/** The middle of a player's personal board, once the column has settled which row carries the band. */
+const areaOf = (context: MaterialContext, player?: PlayerColor) =>
+  playerAreaSpot(seatOf(context, player), context.rules.players.length, getBandRow(context))
+
 export const Locators: Partial<Record<LocationType, Locator<PlayerColor, MaterialType, LocationType>>> = {
   // ---------------------------------------------------------------- boards
 
@@ -70,8 +79,11 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
 
   [LocationType.SeasonBoard]: new Locator({ coordinates: seasonBoardSpot }),
 
+  /** Not material: a player's panel, laid on the table over their own area. */
+  [LocationType.PlayerPanel]: playerPanelLocator,
+
   [LocationType.PlayerBoard]: new Locator({
-    getCoordinates: (location: Location, context: MaterialContext) => playerBoardSpot(seatOf(context, location.player))
+    getCoordinates: (location: Location, context: MaterialContext) => playerBoardSpot(areaOf(context, location.player))
   }),
 
   // ---------------------------------------------------------------- Village cards
@@ -134,11 +146,6 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     lineGap: { y: 2.3 }
   }),
 
-  [LocationType.VillagerReserve]: new CenteredListLocator({
-    gap: { x: 1.6 },
-    getCenter: (location: Location, context: MaterialContext) => villagerReserveSpot(seatOf(context, location.player))
-  }),
-
   // ---------------------------------------------------------------- season board
 
   [LocationType.SeasonTrack]: new Locator({
@@ -158,56 +165,72 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
   [LocationType.Companions]: new CenteredListLocator({
     limit: 3,
     gap: playerCardsGap,
-    getCenter: (location: Location, context: MaterialContext) => companionsSpot(seatOf(context, location.player))
+    getCenter: (location: Location, context: MaterialContext) => companionsSpot(areaOf(context, location.player))
   }),
 
   [LocationType.Items]: new CenteredListLocator({
     limit: 3,
     gap: playerCardsGap,
-    getCenter: (location: Location, context: MaterialContext) => itemsSpot(seatOf(context, location.player))
-  }),
-
-  [LocationType.UntoldStories]: new ListLocator({
-    gap: storiesGap,
-    getCoordinates: (location: Location, context: MaterialContext) => untoldStoriesSpot(seatOf(context, location.player))
-  }),
-
-  [LocationType.ToldStories]: new ListLocator({
-    gap: storiesGap,
-    getCoordinates: (location: Location, context: MaterialContext) => toldStoriesSpot(seatOf(context, location.player))
+    getCenter: (location: Location, context: MaterialContext) => itemsSpot(areaOf(context, location.player))
   }),
 
   [LocationType.ActiveVillagers]: new CenteredListLocator({
     gap: { x: 1.8 },
-    getCenter: (location: Location, context: MaterialContext) => activeVillagersSpot(seatOf(context, location.player))
+    getCenter: (location: Location, context: MaterialContext) => activeVillagersSpot(areaOf(context, location.player))
   }),
 
   [LocationType.StrengthTrack]: new Locator({
-    getCoordinates: (location: Location, context: MaterialContext) => strengthTrackSpot(seatOf(context, location.player), location.x ?? 0)
+    getCoordinates: (location: Location, context: MaterialContext) => strengthTrackSpot(areaOf(context, location.player), location.x ?? 0)
   }),
 
   [LocationType.MagicTrack]: new Locator({
-    getCoordinates: (location: Location, context: MaterialContext) => magicTrackSpot(seatOf(context, location.player), location.x ?? 0)
+    getCoordinates: (location: Location, context: MaterialContext) => magicTrackSpot(areaOf(context, location.player), location.x ?? 0)
   }),
 
   [LocationType.QuestMarkerSpace]: new Locator({
-    getCoordinates: (location: Location, context: MaterialContext) => questMarkerSpot(seatOf(context, location.player), location.x ?? 0)
+    getCoordinates: (location: Location, context: MaterialContext) => questMarkerSpot(areaOf(context, location.player), location.x ?? 0)
   }),
 
   [LocationType.IncomeTokenSpace]: new Locator({
-    getCoordinates: (location: Location, context: MaterialContext) => incomeTokenSpot(seatOf(context, location.player), location.x ?? 0)
+    getCoordinates: (location: Location, context: MaterialContext) => incomeTokenSpot(areaOf(context, location.player), location.x ?? 0)
   }),
 
   [LocationType.SpecialAction]: new CenteredListLocator({
     gap: { x: 1.2 },
-    getCenter: (location: Location, context: MaterialContext) => specialActionSpot(seatOf(context, location.player))
+    getCenter: (location: Location, context: MaterialContext) => specialActionSpot(areaOf(context, location.player))
   }),
 
-  // ---------------------------------------------------------------- beside the personal board
+  // ------------------------------------------------- the band above the personal board, drawn for one player
+
+  [LocationType.UntoldStories]: new CenteredListLocator({
+    gap: storiesGap,
+    maxGap: storiesMaxGap,
+    hide: hideBandOfOtherPlayers,
+    getCenter: (location: Location, context: MaterialContext) => untoldStoriesSpot(areaOf(context, location.player))
+  }),
+
+  [LocationType.ToldStories]: new CenteredListLocator({
+    gap: storiesGap,
+    maxGap: storiesMaxGap,
+    hide: hideBandOfOtherPlayers,
+    getCenter: (location: Location, context: MaterialContext) => toldStoriesSpot(areaOf(context, location.player))
+  }),
+
+  /** Always drawn, whoever is read: there is a single token, and it tells who the round starts on. */
+  [LocationType.FirstPlayerTokenSpace]: new Locator({
+    getCoordinates: (location: Location, context: MaterialContext) => firstPlayerTokenSpot(areaOf(context, location.player))
+  }),
 
   [LocationType.BonusTokens]: new CenteredListLocator({
-    gap: { x: 2.1 },
-    getCenter: (location: Location, context: MaterialContext) => bonusTokensSpot(seatOf(context, location.player))
+    gap: bonusTokensGap,
+    hide: hideBandOfOtherPlayers,
+    getCenter: (location: Location, context: MaterialContext) => bonusTokensSpot(areaOf(context, location.player))
+  }),
+
+  [LocationType.VillagerReserve]: new CenteredListLocator({
+    gap: { x: 1.6 },
+    hide: hideBandOfOtherPlayers,
+    getCenter: (location: Location, context: MaterialContext) => villagerReserveSpot(areaOf(context, location.player))
   }),
 
   /** Coins carry no rank: they are a quantity, and they are shown as a heap rather than a row. */
@@ -215,15 +238,13 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     radius: playerCoinsRadius,
     maxAngle: 90,
     minimumDistance: 0.5,
-    getCoordinates: (location: Location, context: MaterialContext) => playerCoinsSpot(seatOf(context, location.player))
+    hide: hideBandOfOtherPlayers,
+    getCoordinates: (location: Location, context: MaterialContext) => playerCoinsSpot(areaOf(context, location.player))
   }),
 
   [LocationType.PlayerVpTokens]: new CenteredListLocator({
     gap: { x: 2 },
-    getCenter: (location: Location, context: MaterialContext) => playerVpTokensSpot(seatOf(context, location.player))
-  }),
-
-  [LocationType.FirstPlayerTokenSpace]: new Locator({
-    getCoordinates: (location: Location, context: MaterialContext) => firstPlayerTokenSpot(seatOf(context, location.player))
+    hide: hideBandOfOtherPlayers,
+    getCenter: (location: Location, context: MaterialContext) => playerVpTokensSpot(areaOf(context, location.player))
   })
 }
