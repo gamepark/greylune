@@ -448,14 +448,18 @@ export const firstPlayerTokenSpot = (area: XYCoordinates) =>
 
 /**
  * A player's panel is part of the table, over the middle of their own row of Objects: it takes what the
- * 2 tokens at the ends of that row leave. StyledPlayerPanel is authored as a box 28 em wide whose
- * content, with no counter in it, is 8.1 em tall (its own `min-height`), so the width settles the
- * height, and the panel sits right on top of the cards it belongs to.
+ * 2 tokens at the ends of that row leave. StyledPlayerPanel is authored as a box 28 em wide, so the
+ * width settles the scale, and the panel sits right on top of the cards it belongs to.
+ *
+ * Its height is pinned rather than measured: the name, the line the timer is given and the row of
+ * counters come to 11.81 em of type, whose exact size is the browser's business and not ours, and the
+ * table cannot have a spot that moves with a font. 12 em is that content with a hair to spare.
  */
 const panelAir = 0.2
 export const playerPanelWidth = sideRowWidth - 2 * bandEndSlot
 export const playerPanelScale = playerPanelWidth / 28
-export const playerPanelHeight = 8.1 * playerPanelScale
+export const playerPanelEms = 12
+export const playerPanelHeight = playerPanelEms * playerPanelScale
 export const playerPanelSpot = (area: XYCoordinates, hasBand: boolean) =>
   besidePlayerBoard(
     area,
