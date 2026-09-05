@@ -2,7 +2,6 @@ import { Area } from '@gamepark/greylune/material/Area'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { HeroicQuestArea } from '@gamepark/greylune/material/QuestTile'
-import { gapOf } from '@gamepark/greylune/material/Village'
 import { VpTokenValue } from '@gamepark/greylune/material/VpToken'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
@@ -11,6 +10,7 @@ import { Location, XYCoordinates } from '@gamepark/rules-api'
 import { CenteredFlexLocator } from './CenteredFlexLocator'
 import { CenteredListLocator } from './CenteredListLocator'
 import { playerPanelLocator } from './PlayerPanelLocator'
+import { VillageGapLocator } from './VillageGapLocator'
 import { getBandRow, hideBandOfOtherPlayers } from './DisplayedPlayer'
 import { companionsDependencies, companionsMaxSpread, encounterRowArea, encounterRowDependencies, encounterRowSpread } from './CrowdedRows'
 import {
@@ -56,7 +56,6 @@ import {
   untoldStoriesSpot,
   villageDeckSpot,
   villageGap,
-  villageGapGap,
   villageGridSpot,
   villagerReserveSpot,
   areaSpots,
@@ -111,16 +110,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     getCoordinates: (location: Location) => villageGridSpot(location.x ?? 0, location.y ?? 0)
   }),
 
-
-  /**
-   * The gaps between the cards, where any number of Villagers of any players may stand. A gap is
-   * named by the half coordinates of the point between its two slots, and the grid being evenly
-   * spaced, {@link villageGridSpot} lands on that point on its own.
-   */
-  [LocationType.VillageGap]: new CenteredListLocator({
-    getCenter: (location: Location) => villageGridSpot(location.x ?? 0, location.y ?? 0),
-    getGap: (location: Location) => villageGapGap(gapOf(location))
-  }),
+  [LocationType.VillageGap]: new VillageGapLocator(),
 
   /**
    * The Seals a card was dealt, stacked in a column along its right edge: the bottom of the card is

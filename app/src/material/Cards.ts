@@ -6,7 +6,7 @@ import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { CardDescription } from '@gamepark/react-game'
 import { encounterCardBacks, encounterCardImagesEn, encounterCardImagesFr } from '../images/EncounterCardImages'
 import { villageCardBacks, villageCardImagesEn, villageCardImagesFr } from '../images/VillageCardImages'
-import { encounterCardSize, villageCardSize } from '../locators/TableLayout'
+import { encounterCardSize, villageCardBorderRadius, villageCardSize } from '../locators/TableLayout'
 
 /**
  * Card ids carry both faces: `front` is the card itself, `back` its period. A card in a deck loses
@@ -18,7 +18,7 @@ import { encounterCardSize, villageCardSize } from '../locators/TableLayout'
 export class VillageCardDescription extends CardDescription<PlayerColor, MaterialType, LocationType, VillageCardId> {
   width = villageCardSize.width
   height = villageCardSize.height
-  borderRadius = 0.35
+  borderRadius = villageCardBorderRadius
   images = villageCardImagesEn
   backImages = villageCardBacks
 }

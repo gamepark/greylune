@@ -24,6 +24,8 @@ export const mainBoardSize = { width: 20.98, height: 28 }
 export const seasonBoardSize = { width: 26.54, height: 12.7 }
 export const playerBoardSize = { width: 18.78, height: 13.94 }
 export const villageCardSize = { width: 7, height: 7 }
+/** The rounded corners of a Village card, which the drop areas drawn between them borrow. */
+export const villageCardBorderRadius = 0.35
 export const encounterCardSize = { width: 5.2, height: 8 }
 export const eventTileSize = { width: 7.71, height: 9.94 }
 export const questTileSize = { width: 3.75, height: 4.13 }
@@ -175,8 +177,26 @@ export const villageDeckSpot: XYCoordinates = villageGridSpot(1, -1)
 /**
  * Villagers standing in the same gap line up across it, so the gap reads as one crowded space: down
  * the gaps that run between two columns, and across the ones that run between two rows.
+ *
+ * They share the length of the gap the way `space-around` shares a flex line: it is cut into as many
+ * equal shares as there are Villagers, each standing in the middle of its own. So the step from one
+ * to the next is that length divided by the crowd — the line tightens as it fills instead of growing
+ * out over the cards, and it never leaves the strip between them.
  */
-export const villageGapGap = (gap: Gap): Partial<XYCoordinates> => (Number.isInteger(gap.x) ? { x: 1.5 } : { y: 1.5 })
+export const villageGapGap = (gap: Gap, villagers: number): Partial<XYCoordinates> =>
+  Number.isInteger(gap.x)
+    ? { x: villageCardSize.width / Math.max(1, villagers) }
+    : { y: villageCardSize.height / Math.max(1, villagers) }
+
+/**
+ * The bare strip of table a gap leaves free between its 2 cards: as long as the side of a card, and
+ * as wide as what the grid spacing leaves over once a card is deducted. That strip is exactly what a
+ * Villager is dropped on, so it is exactly what the drop area covers.
+ */
+export const villageGapSize = (gap: Gap): { width: number; height: number } =>
+  Number.isInteger(gap.x)
+    ? { width: villageCardSize.width, height: villageGridGap - villageCardSize.height }
+    : { width: villageGridGap - villageCardSize.width, height: villageCardSize.height }
 
 /**
  * The bank, spread to the left of the Village deck. The deck itself leans 1 cm that way once it is
