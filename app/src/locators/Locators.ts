@@ -18,6 +18,7 @@ import {
   bonusTokensSpot,
   campSpot,
   coinReserveSpot,
+  companionsGap,
   companionsSpot,
   encounterDeckSpot,
   encounterDiscardSpot,
@@ -28,12 +29,13 @@ import {
   firstPlayerTokenSpot,
   incomeTokenSpot,
   incomeTokenStockSpot,
+  itemsGap,
   itemsSpot,
   magicTrackSpot,
   mainBoardSpot,
   playerAreaSpot,
   playerBoardSpot,
-  playerCardsGap,
+  playerCardsMaxCount,
   playerCoinsRadius,
   playerCoinsSpot,
   playerVpTokensSpot,
@@ -227,16 +229,22 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
 
   // ---------------------------------------------------------------- personal board
 
-  [LocationType.Companions]: new CenteredListLocator({
-    limit: 3,
-    gap: playerCardsGap,
-    getCenter: (location: Location, context: MaterialContext) => companionsSpot(areaOf(context, location.player))
+  /**
+   * The 2 rows of cards hang off the board rather than floating beside it: the first card is laid
+   * against its edge and the row runs outwards, so a player with a single Companion has it where the
+   * board says it belongs, and it does not move when the second one arrives. Past the 3 cards the row
+   * is given, an extra Object tightens it up instead of running out over the table.
+   */
+  [LocationType.Companions]: new ListLocator({
+    maxCount: playerCardsMaxCount,
+    gap: companionsGap,
+    getCoordinates: (location: Location, context: MaterialContext) => companionsSpot(areaOf(context, location.player))
   }),
 
-  [LocationType.Items]: new CenteredListLocator({
-    limit: 3,
-    gap: playerCardsGap,
-    getCenter: (location: Location, context: MaterialContext) => itemsSpot(areaOf(context, location.player))
+  [LocationType.Items]: new ListLocator({
+    maxCount: playerCardsMaxCount,
+    gap: itemsGap,
+    getCoordinates: (location: Location, context: MaterialContext) => itemsSpot(areaOf(context, location.player))
   }),
 
   [LocationType.ActiveVillagers]: new CenteredListLocator({

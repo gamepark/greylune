@@ -261,13 +261,27 @@ export const sealDiscardRadius: XYCoordinates = { x: (sealDiscardGap.right - sea
  */
 
 /**
+ * The personal board is drawn inside its own file with a shadow all round it: the ink stops 1.42 short
+ * of the edge of the image and the shadow fades out over the 0.44 beyond it (measured on the alpha
+ * channel of PlayerBoard.png). Two boards set a centimetre apart would therefore read as 3.8 apart, so
+ * the rows overlap by that margin, and the air below is counted between what is actually printed.
+ */
+const playerBoardShadow = 1.42
+
+/**
  * Companions to the left of the board, Objects to the right: 3 cards each, laid side by side, so the
  * margin on either side is 3 Village cards wide. Between the main board and a personal board there is
  * then exactly what has to go there — a row of 2 Encounters, then the 3 Companions.
+ *
+ * Both rows are anchored on the board rather than centred on the space they are given: the first card
+ * is laid against the printed edge, and the row grows away from the board. A player owning one
+ * Companion has it where the second one will not push it, and the cards read as belonging to the board
+ * they are pushed against.
  */
-export const playerCardsGap: Partial<XYCoordinates> = { x: villageCardSize.width + 0.2 }
-const sideRowWidth = villageCardSize.width + 2 * (playerCardsGap.x ?? 0)
-const sideRowX = playerBoardSize.width / 2 + 0.5 + sideRowWidth / 2
+const playerCardsGap = villageCardSize.width + 0.2
+const sideRowStart = playerBoardSize.width / 2 - playerBoardShadow + villageCardSize.width / 2
+const sideRowWidth = villageCardSize.width + 2 * playerCardsGap
+const sideRowX = sideRowStart + playerCardsGap
 
 /**
  * The band above the board is as thin as the material allows, because with 4 areas stacked every
@@ -287,13 +301,6 @@ export const playerAreaBox = {
   bottom: playerBoardSize.height / 2
 }
 
-/**
- * The personal board is drawn inside its own file with a shadow all round it: the ink stops 1.42 short
- * of the edge of the image and the shadow fades out over the 0.44 beyond it (measured on the alpha
- * channel of PlayerBoard.png). Two boards set a centimetre apart would therefore read as 3.8 apart, so
- * the rows overlap by that margin, and the air below is counted between what is actually printed.
- */
-const playerBoardShadow = 1.42
 const printedHalf = playerBoardSize.height / 2 - playerBoardShadow
 const playerRowAir = 1
 
@@ -348,8 +355,14 @@ export const incomeTokenSpot = (area: XYCoordinates, index: number) => onPlayerB
 export const activeVillagersSpot = (area: XYCoordinates) => onPlayerBoard(area, 14.08, 10)
 export const specialActionSpot = (area: XYCoordinates) => onPlayerBoard(area, 13.83, 3.72)
 
-export const companionsSpot = (area: XYCoordinates) => besidePlayerBoard(area, -sideRowX, 0)
-export const itemsSpot = (area: XYCoordinates) => besidePlayerBoard(area, sideRowX, 0)
+/** Where the first card of each row goes, and which way the ones after it run. */
+export const companionsSpot = (area: XYCoordinates) => besidePlayerBoard(area, -sideRowStart, 0)
+export const companionsGap: Partial<XYCoordinates> = { x: -playerCardsGap }
+export const itemsSpot = (area: XYCoordinates) => besidePlayerBoard(area, sideRowStart, 0)
+export const itemsGap: Partial<XYCoordinates> = { x: playerCardsGap }
+
+/** A card raising the limit can bring a 4th Object: the row tightens up rather than leaving its space. */
+export const playerCardsMaxCount = 3
 
 /**
  * Resolved Encounters fill the middle of the band, over the board, untold on the left half, told on
