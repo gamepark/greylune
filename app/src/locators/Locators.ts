@@ -41,6 +41,7 @@ import {
   questRewardSpot,
   questTileSpots,
   scoreTrackSpot,
+  sealDiscardRadius,
   sealDiscardSpot,
   sealStackSpot,
   seasonBoardSpot,
@@ -196,7 +197,11 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
 
   [LocationType.SealStack]: new PileLocator({ coordinates: sealStackSpot, radius: 3 }),
 
-  [LocationType.SealDiscard]: new PileLocator({ coordinates: sealDiscardSpot, radius: 3 }),
+  /**
+   * The strip between the Season board and the Encounter deck is narrower than it is tall, so the
+   * heap is flattened to match: it spreads down the gap instead of over its two neighbours.
+   */
+  [LocationType.SealDiscard]: new PileLocator({ coordinates: sealDiscardSpot, radius: sealDiscardRadius }),
 
   /** The 8 tokens of the stock, symbol side up, in 2 rows of 4. */
   [LocationType.IncomeTokenStock]: new CenteredFlexLocator({

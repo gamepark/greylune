@@ -27,6 +27,7 @@ export const villageCardSize = { width: 7, height: 7 }
 export const encounterCardSize = { width: 5.2, height: 8 }
 export const eventTileSize = { width: 7.71, height: 9.94 }
 export const questTileSize = { width: 3.75, height: 4.13 }
+export const sealSize = { width: 2.12, height: 2.23 }
 
 /** Anything laid on a board has to clear its thickness, or it disappears inside it. */
 const onBoard = 0.1
@@ -195,9 +196,6 @@ export const encounterDeckSpot: XYCoordinates = {
 export const encounterDiscardSpot: XYCoordinates = { x: 17, y: encounterRowSpot(Area.Wand).y }
 export const sealStackSpot: XYCoordinates = villageGridSpot(2, -1)
 
-/** The Seals already spent lie beside the stack they will be drawn from again. */
-export const sealDiscardSpot: XYCoordinates = { x: sealStackSpot.x + 3.2, y: sealStackSpot.y }
-
 /**
  * The 8 Income tokens wait in the gap the top band leaves open between the Seal stack and the head of
  * the Black Encounter row, halfway between the two, in 2 rows of 4.
@@ -231,6 +229,24 @@ const commonZoneBottom = seasonBoardSpot.y + seasonBoardSize.height / 2 + tableM
 
 /** The tents to the left of the Season board, where spent Villagers rest until Autumn. */
 export const campSpot = onSeasonBoard(5.07, 6.34)
+
+/**
+ * The Seals already spent lie in the strip the bottom-left corner of the table leaves open, between
+ * the right edge of the Season board and the Encounter deck: the only room left down there, and the
+ * spent tokens are out of the way of the stack they are drawn from again, up over the Village grid.
+ */
+const sealDiscardGap = { left: seasonBoardSpot.x + seasonBoardSize.width / 2, right: encounterDeckSpot.x - 4 }
+
+export const sealDiscardSpot: XYCoordinates = {
+  x: (sealDiscardGap.left + sealDiscardGap.right) / 2,
+  y: encounterDeckSpot.y
+}
+
+/**
+ * The strip is narrow and there is room to spare down it, so the heap is flattened to what fits
+ * between its 2 neighbours rather than spilling over them: half the gap, less half a Seal.
+ */
+export const sealDiscardRadius: XYCoordinates = { x: (sealDiscardGap.right - sealDiscardGap.left - sealSize.width) / 2, y: 2 }
 
 // ------------------------------------------------------------------ player areas
 

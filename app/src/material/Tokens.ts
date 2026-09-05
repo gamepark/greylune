@@ -17,6 +17,7 @@ import {
   vpTokenBacks,
   vpTokenImages
 } from '../images/TokenImages'
+import { sealSize } from '../locators/TableLayout'
 
 export class CoinDescription extends MoneyDescription<PlayerColor, MaterialType, LocationType, Coin> {
   transparency = true
@@ -41,8 +42,8 @@ export class CoinDescription extends MoneyDescription<PlayerColor, MaterialType,
 }
 
 export class SealDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, Seal> {
-  width = 2.12
-  height = 2.23
+  width = sealSize.width
+  height = sealSize.height
   transparency = true
   images = sealImages
   backImage = SealBack
