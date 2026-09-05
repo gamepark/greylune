@@ -30,10 +30,13 @@ export class CoinDescription extends MoneyDescription<PlayerColor, MaterialType,
     return 0
   }
 
-  /** The bank is unlimited, so it never enters the game state: one stack of each denomination. */
+  /**
+   * The bank is unlimited, so it never enters the game state. What is shown is a heap: enough pieces
+   * of each denomination for the scatter to read as a stock, and not one of them is ever counted.
+   */
   staticItems: MaterialItem<PlayerColor, LocationType, Coin>[] = [
-    { id: Coin.One, location: { type: LocationType.CoinReserve, x: 0 } },
-    { id: Coin.Five, location: { type: LocationType.CoinReserve, x: 1 } }
+    { id: Coin.One, quantity: 10, location: { type: LocationType.CoinReserve } },
+    { id: Coin.Five, quantity: 6, location: { type: LocationType.CoinReserve } }
   ]
 }
 

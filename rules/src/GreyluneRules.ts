@@ -80,7 +80,7 @@ export class GreyluneRules
       [LocationType.SpecialAction]: new PositiveSequenceStrategy()
     },
     [MaterialType.Adventurer]: {
-      [LocationType.Village]: new PositiveSequenceStrategy()
+      [LocationType.Village]: new FillGapStrategy()
     },
     [MaterialType.ScoreMarker]: {
       [LocationType.ScoreTrack]: new StackingStrategy()

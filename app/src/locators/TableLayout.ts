@@ -30,6 +30,13 @@ export const questTileSize = { width: 3.75, height: 4.13 }
 /** Anything laid on a board has to clear its thickness, or it disappears inside it. */
 const onBoard = 0.1
 
+/**
+ * Village and Encounter cards are not laid beside the main board but slotted into the notches cut
+ * for them along its edges. Each card is pushed this far past the edge, which covers the notch
+ * without hiding the outline drawn around it. The same bite as the one the Village grid takes.
+ */
+const notchOverlap = 0.34
+
 // ------------------------------------------------------------------ main board
 
 export const mainBoardSpot: XYCoordinates = { x: 0, y: 0 }
@@ -85,19 +92,24 @@ export const questTileSpots: Record<HeroicQuestDistance, Coordinates> = {
 }
 
 /**
- * Revealed Encounters lie in a row per Distance, just off the right edge of the board. The Red,
- * Purple and Green rows line up with the 3 card slots printed there; Black and Gold continue the
- * same rhythm above and below.
+ * Revealed Encounters lie in a row per Distance, and the first card of each row is slotted into the
+ * notch printed for it. Red, Purple and Green have theirs cut into the right edge, so those 3 rows
+ * hang off that edge, one per printed slot. Black and Gold have theirs cut into the top and the
+ * bottom edge instead: those 2 rows sit above and below the board, and start well to the left of the
+ * other 3, over the notch they belong to. Every row then runs to the right.
  */
-const encounterRowY: Record<Distance, number> = {
-  [Distance.Black]: -3.6,
-  [Distance.Red]: 5,
-  [Distance.Purple]: 13.94,
-  [Distance.Green]: 23.04,
-  [Distance.Gold]: 31.64
+const rightNotchX = mainBoardSize.width - notchOverlap + encounterCardSize.width / 2
+const topBottomNotchX = 14.67
+
+const encounterRowStart: Record<Distance, XYCoordinates> = {
+  [Distance.Black]: { x: topBottomNotchX, y: notchOverlap - encounterCardSize.height / 2 },
+  [Distance.Red]: { x: rightNotchX, y: 4.91 },
+  [Distance.Purple]: { x: rightNotchX, y: 13.98 },
+  [Distance.Green]: { x: rightNotchX, y: 23.12 },
+  [Distance.Gold]: { x: topBottomNotchX, y: mainBoardSize.height - notchOverlap + encounterCardSize.height / 2 }
 }
 
-export const encounterRowSpot = (distance: Distance): Coordinates => onMainBoard(23.78, encounterRowY[distance])
+export const encounterRowSpot = (distance: Distance): Coordinates => onMainBoard(encounterRowStart[distance].x, encounterRowStart[distance].y)
 
 export const encounterRowGap: Partial<XYCoordinates> = { x: 5.8 }
 
@@ -107,31 +119,50 @@ export const encounterRowMaxGap: Partial<XYCoordinates> = { x: 17.4 }
 // ------------------------------------------------------------------ around the main board
 
 /** 3x3 grid, spaced wide enough to slip a Villager between two neighbouring cards. */
-const villageGridCenter: XYCoordinates = { x: -24.2, y: 0 }
-const villageGridGap = 9.2
+const villageGridCenter: XYCoordinates = { x: -22.8, y: 0 }
+const villageGridGap = 9.15
 export const villageGridSpot = (x: number, y: number): XYCoordinates => ({
   x: villageGridCenter.x + (x - 1) * villageGridGap,
   y: villageGridCenter.y + (y - 1) * villageGridGap
 })
 
-/** Village deck and discard, in the left margin, beside the grid they feed. */
-export const villageDeckSpot: XYCoordinates = { x: -46, y: -8 }
+/**
+ * The Village deck stands above the middle column of the grid it feeds, on the theoretical slot
+ * (1, -1): its base card sits where a 4th row would start, and the pile builds up from there. The
+ * discard stays in the left margin.
+ */
+export const villageDeckSpot: XYCoordinates = villageGridSpot(1, -1)
 export const villageDiscardSpot: XYCoordinates = { x: -46, y: 1 }
 
 /**
- * The general supply, in the right margin: the Encounter deck and discard, the bank, the Seal stack,
- * the Income tokens, and the Villagers each player keeps out of the game until they earn them.
+ * The bank, spread to the left of the Village deck. The deck itself leans 1 cm that way once it is
+ * full, so the heap starts a centimetre further still, and it lies flat: a scatter far wider than
+ * tall, loose change nobody ever counts out rather than 2 neat stacks.
  */
-export const encounterDeckSpot: XYCoordinates = { x: 40, y: -20 }
+export const coinReserveSpot: XYCoordinates = villageGridSpot(0, -1)
+/**
+ * The general supply: the Encounter discard, the Seal stack and the Income tokens. The Encounter deck
+ * is the exception: it stands at the head of the Gold row it feeds.
+ */
+export const encounterDeckSpot: XYCoordinates = {
+  x: encounterRowSpot(Distance.Gold).x - (encounterRowGap.x ?? 0),
+  y: encounterRowSpot(Distance.Gold).y
+}
 export const encounterDiscardSpot: XYCoordinates = { x: 40, y: -11 }
-export const coinReserveSpot: XYCoordinates = { x: 38.5, y: 0 }
-export const sealStackSpot: XYCoordinates = { x: 38.5, y: 5 }
-export const incomeTokenStockSpot: XYCoordinates = { x: 38, y: 9 }
-export const villagerReserveSpot = (seat: number): XYCoordinates => ({ x: 41, y: 15 + 4 * seat })
+export const sealStackSpot: XYCoordinates = villageGridSpot(2, -1)
+
+/**
+ * The 8 Income tokens wait in the gap the top band leaves open between the Seal stack and the head of
+ * the Black Encounter row, halfway between the two, in 2 rows of 4.
+ */
+export const incomeTokenStockSpot: XYCoordinates = {
+  x: sealStackSpot.x + 9.5,
+  y: sealStackSpot.y
+}
 
 // ------------------------------------------------------------------ season board
 
-export const seasonBoardSpot: XYCoordinates = { x: -24, y: 21.5 }
+export const seasonBoardSpot: XYCoordinates = { x: -22.75, y: 16.7 }
 
 const onSeasonBoard = (x: number, y: number): Coordinates => ({
   x: seasonBoardSpot.x + x - seasonBoardSize.width / 2,
@@ -183,6 +214,12 @@ export const storiesGap: Partial<XYCoordinates> = { x: 1.4 }
 export const companionsSpot = (seat: number) => besidePlayerBoard(seat, -13.5, -3)
 export const itemsSpot = (seat: number) => besidePlayerBoard(seat, 13.5, -3)
 export const playerCardsGap: Partial<XYCoordinates> = { y: 2.6 }
+
+/**
+ * The 4 Villagers a player has not unlocked yet stand above their board, on the right: out of the way
+ * of the Stories that pile up over the top edge, and of the Objects lined up along the right one.
+ */
+export const villagerReserveSpot = (seat: number) => besidePlayerBoard(seat, 12, -15.5)
 
 export const bonusTokensSpot = (seat: number) => besidePlayerBoard(seat, -6, 9.3)
 export const playerCoinsSpot = (seat: number) => besidePlayerBoard(seat, 1.5, 9.3)

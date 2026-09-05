@@ -2,11 +2,12 @@ import { Distance } from '@gamepark/greylune/material/Distance'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { HeroicQuestDistance } from '@gamepark/greylune/material/QuestTile'
-import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { VpTokenValue } from '@gamepark/greylune/material/VpToken'
+import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
 import { DeckLocator, ListLocator, Locator, MaterialContext, PileLocator } from '@gamepark/react-game'
 import { Location } from '@gamepark/rules-api'
+import { CenteredFlexLocator } from './CenteredFlexLocator'
 import { CenteredListLocator } from './CenteredListLocator'
 import {
   activeVillagersSpot,
@@ -120,11 +121,18 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     getCoordinates: (location: Location) => vpTokenStackSpots[location.id as VpTokenValue]
   }),
 
-  [LocationType.CoinReserve]: new ListLocator({ coordinates: coinReserveSpot, gap: { x: 3 } }),
+  /** The bank is money, like a player's own gold: a heap, not a row of stacks. */
+  [LocationType.CoinReserve]: new PileLocator({ coordinates: coinReserveSpot, radius: 3 }),
 
-  [LocationType.SealStack]: new DeckLocator({ coordinates: sealStackSpot }),
+  [LocationType.SealStack]: new PileLocator({ coordinates: sealStackSpot, radius: 3 }),
 
-  [LocationType.IncomeTokenStock]: new CenteredListLocator({ center: incomeTokenStockSpot, gap: { x: 0.9 } }),
+  /** The 8 tokens of the stock, symbol side up, in 2 rows of 4. */
+  [LocationType.IncomeTokenStock]: new CenteredFlexLocator({
+    center: incomeTokenStockSpot,
+    lineSize: 4,
+    gap: { x: 2.6 },
+    lineGap: { y: 2.3 }
+  }),
 
   [LocationType.VillagerReserve]: new CenteredListLocator({
     gap: { x: 1.6 },
