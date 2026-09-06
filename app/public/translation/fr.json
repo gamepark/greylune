@@ -58,5 +58,307 @@
       "player": "{player} peut réagir"
     },
     "or": "ou"
+  },
+  "help": {
+    "period": "Période {period}",
+    "cost": "Coût",
+    "surcharge": "Surcoût",
+    "immediate": "Effet immédiat",
+    "ability": "Capacité",
+    "reaction": "Réaction",
+    "permanent": "Effet permanent",
+    "score": "PV de fin de partie",
+    "type": {
+      "1": {
+        "name": "Bâtiment",
+        "note": "Un Bâtiment ne s'achète pas : il reste au Village toute l'année et chacun peut l'exploiter, autant de fois qu'il lui reste des villageois voisins."
+      },
+      "2": {
+        "name": "Objet",
+        "note": "Un Objet s'achète et se range à droite de votre plateau. Vous ne pouvez en posséder que 3, sauf carte qui relève cette limite."
+      },
+      "3": {
+        "name": "Compagnon",
+        "note": "Un Compagnon se recrute pour 7 <coin/> et vous fait gagner 1 <villager/>, disponible immédiatement. Vous ne pouvez en recruter que 3."
+      }
+    },
+    "tavern": {
+      "name": "Taverne",
+      "note": "Taverne : racontez une ou plusieurs de vos Rencontres non racontées, sans dépasser une valeur de récit totale de 3. Vous gagnez la 1re récompense pour un total de 1, les 2 premières pour 2, et les 3 pour 3."
+    },
+    "potion": {
+      "name": "Potion",
+      "note": "Potion : elle n'a pas de capacité en été. Elle se boit en réaction, puis se défausse — sauf si Selia vous permet de l'incliner au lieu de la défausser."
+    },
+    "seals": {
+      "label": "Sceaux",
+      "none": "aucun",
+      "spent": "Il ne reste aucun jeton <seal/> sur cette carte : elle ne peut plus être activée cette année.",
+      "note-players": "Cette carte reçoit chaque année autant de jetons <seal/> qu'il y a de joueurs, moins un. Chaque activation en dépense un.",
+      "note-one": "Cette carte reçoit chaque année un seul jeton <seal/>, quel que soit le nombre de joueurs."
+    },
+    "village-deck": {
+      "name": "Deck Village",
+      "left": "Cartes restantes",
+      "note": "Les 9 premières cartes sont révélées chaque hiver et disposées en grille de 3x3. Le dos indique la période : les cartes I sortent les 2 premières années, les II les 2 suivantes, les III la dernière."
+    }
+  },
+  "village-card": {
+    "101": {
+      "name": "Guilde des voyageurs",
+      "ability": "Déplacez votre <adventurer/> jusqu'à 2 cases."
+    },
+    "102": {
+      "name": "Guilde des éclaireurs",
+      "ability": "Défaussez un jeton <seal/> et déplacez votre <adventurer/> jusqu'à un nombre de cases égal à sa valeur."
+    },
+    "103": {
+      "name": "Le chêne fendu",
+      "ability": "Racontez une ou plusieurs histoires : 2 PV + 1 <force/> + 1 <villager/>."
+    },
+    "104": {
+      "name": "Le lion d'or",
+      "ability": "Défaussez un jeton <seal/> et racontez une ou plusieurs histoires : 4 <coin/> + 1 PV + autant de <coin/> que la valeur du jeton."
+    },
+    "105": {
+      "name": "École de magie",
+      "ability": "Défaussez un jeton <seal/>, dépensez autant de <coin/> que sa valeur et gagnez 1 <magic/>."
+    },
+    "106": {
+      "name": "Forge",
+      "ability": "Gagnez 1 <force/>."
+    },
+    "107": {
+      "name": "Guilde des voyageurs",
+      "ability": "Dépensez 2 <coin/> et déplacez votre <adventurer/> jusqu'à 4 cases."
+    },
+    "108": {
+      "name": "Guilde des éclaireurs",
+      "ability": "Défaussez un jeton <seal/> et déplacez votre <adventurer/> jusqu'à un nombre de cases égal à sa valeur."
+    },
+    "109": {
+      "name": "Salle des héros",
+      "ability": "Dépensez 1 <force/> pour gagner 3 PV, et/ou dépensez 1 <magic/> pour gagner 4 PV."
+    },
+    "110": {
+      "name": "Hôtel de ville",
+      "ability": "Défaussez un jeton <seal/>, dépensez autant de <coin/> que sa valeur et gagnez 1 <force/> et 1 <magic/>."
+    },
+    "111": {
+      "name": "Le loup gris",
+      "ability": "Défaussez un jeton <seal/> et racontez une ou plusieurs histoires : 4 <coin/> + autant de PV que la valeur du jeton + redressez une de vos cartes."
+    },
+    "112": {
+      "name": "Le sanglier rieur",
+      "ability": "Racontez une ou plusieurs histoires : 3 PV + 2 <coin/> + 1 <force/> ou 1 <magic/>."
+    },
+    "113": {
+      "name": "Forteresse",
+      "ability": "Défaussez un jeton <seal/>, dépensez autant de <coin/> que sa valeur et gagnez 2 PV par Compagnon que vous possédez."
+    },
+    "114": {
+      "name": "Guilde des voyageurs",
+      "ability": "Dépensez 2 <coin/> et déplacez votre <adventurer/> jusqu'à 5 cases."
+    },
+    "115": {
+      "name": "Bibliothèque",
+      "ability": "Défaussez un jeton <seal/>, dépensez autant de <coin/> que sa valeur et gagnez 1 PV par histoire que vous avez racontée."
+    },
+    "116": {
+      "name": "Le dragon rouge",
+      "ability": "Racontez une ou plusieurs histoires : 3 PV + 2 PV + 1 PV."
+    },
+    "201": {
+      "name": "Statue de jade",
+      "immediate": "Gagnez 1 <force/> ou 1 <magic/>.",
+      "score": "5 PV."
+    },
+    "202": {
+      "name": "Tommy",
+      "ability": "Inclinez cette carte pour déplacer votre <adventurer/> jusqu'à 1 case, ou inclinez-la et dépensez 1 <villager/> pour le déplacer jusqu'à 2 cases.",
+      "score": "1 PV."
+    },
+    "203": {
+      "name": "Bottes de cent lieues",
+      "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
+      "ability": "Inclinez cette carte et défaussez-la pour déplacer votre <adventurer/> jusqu'à 5 cases."
+    },
+    "204": {
+      "name": "Bâton de magicien",
+      "immediate": "Gagnez 1 <magic/>.",
+      "ability": "Inclinez cette carte et dépensez 1 <villager/> pour gagner 1 <magic/>.",
+      "score": "1 PV."
+    },
+    "205": {
+      "name": "Carte mystérieuse",
+      "ability": "Inclinez cette carte pour déplacer votre <adventurer/> jusqu'à 1 case, ou inclinez-la, dépensez 1 <villager/> et défaussez-la pour le déplacer jusqu'à 3 cases.",
+      "score": "1 PV."
+    },
+    "206": {
+      "name": "Potion de mana",
+      "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
+      "reaction": "Quand vous résolvez une Rencontre, vous pouvez défausser cette carte pour augmenter votre Magie de 2. Cette augmentation est temporaire : vous ne déplacez pas votre marqueur de Magie et ne pouvez pas dépenser ces points."
+    },
+    "207": {
+      "name": "Potion de force",
+      "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
+      "reaction": "Quand vous résolvez une Rencontre, vous pouvez défausser cette carte pour augmenter votre Force de 2. Cette augmentation est temporaire : vous ne déplacez pas votre marqueur de Force et ne pouvez pas dépenser ces points."
+    },
+    "208": {
+      "name": "Épée courte",
+      "immediate": "Gagnez 1 <force/>.",
+      "ability": "Inclinez cette carte et dépensez 1 <villager/> pour gagner 1 <force/>.",
+      "score": "1 PV."
+    },
+    "209": {
+      "name": "Statue en or",
+      "immediate": "Gagnez 1 <force/> ou 1 <magic/>.",
+      "score": "5 PV."
+    },
+    "210": {
+      "name": "Crin blanc",
+      "ability": "Inclinez cette carte et dépensez 1 ou 2 <villager/> pour déplacer votre <adventurer/> jusqu'à 3 ou 5 cases.",
+      "score": "2 PV."
+    },
+    "211": {
+      "name": "Cor",
+      "ability": "Inclinez cette carte et dépensez 1 ou 2 <villager/> pour gagner 3 ou 5 PV.",
+      "score": "1 PV."
+    },
+    "212": {
+      "name": "Carte au trésor",
+      "ability": "Inclinez cette carte pour déplacer votre <adventurer/> jusqu'à 2 cases, ou inclinez-la, dépensez 1 <villager/> et défaussez-la pour le déplacer jusqu'à 4 cases.",
+      "score": "1 PV."
+    },
+    "213": {
+      "name": "Potion de charisme",
+      "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
+      "reaction": "Quand vous racontez une histoire, vous pouvez défausser cette carte pour que la valeur de récit d'une de vos cartes Rencontre soit de 3."
+    },
+    "214": {
+      "name": "Potion d'endurance",
+      "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
+      "reaction": "Quand vous partez à l'aventure, vous pouvez défausser cette carte pour placer un <villager/> actif au Village."
+    },
+    "215": {
+      "name": "Potion de vol",
+      "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
+      "reaction": "Quand vous résolvez une Rencontre, vous pouvez défausser cette carte pour augmenter votre Force et votre Magie de 1. Cette augmentation est temporaire : vous ne déplacez pas vos marqueurs et ne pouvez pas dépenser ces points."
+    },
+    "216": {
+      "name": "Chantelame",
+      "ability": "Inclinez cette carte pour gagner 1 <force/> ou 1 <magic/>, ou inclinez-la et dépensez 1 <villager/> pour gagner 1 <force/> et 1 <magic/>.",
+      "score": "1 PV."
+    },
+    "217": {
+      "name": "Potion d'invisibilité",
+      "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
+      "reaction": "Quand vous résolvez une Rencontre, vous pouvez défausser cette carte pour ignorer une de ses conditions."
+    },
+    "218": {
+      "name": "Statue de rubis",
+      "immediate": "Gagnez 1 <force/> ou 1 <magic/>.",
+      "score": "6 PV."
+    },
+    "219": {
+      "name": "Mandoline",
+      "ability": "Inclinez cette carte et dépensez 1 <villager/> pour gagner 1 PV par Rencontre non racontée que vous possédez.",
+      "score": "5 PV."
+    },
+    "220": {
+      "name": "Sac de voyage",
+      "ability": "Inclinez cette carte et dépensez 1 <villager/> pour gagner 1 PV par Objet que vous possédez.",
+      "permanent": "Votre limite d'Objets est augmentée de 1. Cet effet s'applique même si cette carte est inclinée, et même si vous aviez déjà atteint votre limite avant de l'acquérir.",
+      "score": "4 PV."
+    },
+    "221": {
+      "name": "Pierre philosophale",
+      "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
+      "ability": "Inclinez cette carte et dépensez 1 <villager/> pour gagner 5 PV."
+    },
+    "222": {
+      "name": "Anneau magique",
+      "score": "9 PV."
+    },
+    "301": {
+      "name": "Kael",
+      "role": "Guerrier",
+      "immediate": "Gagnez 1 <villager/>.",
+      "reaction": "Quand vous devez dépenser de la Force, vous pouvez incliner cette carte pour en dépenser 1 de moins.",
+      "permanent": "Votre limite d'Objets est augmentée de 1.",
+      "score": "1 PV par niveau de <force/>."
+    },
+    "302": {
+      "name": "Elwen",
+      "role": "Archer",
+      "immediate": "Gagnez 1 <villager/>.",
+      "reaction": "Quand vous partez à l'aventure, vous pouvez incliner cette carte pour déplacer votre <adventurer/> jusqu'à 2 cases supplémentaires.",
+      "score": "1 PV par Rencontre que vous avez résolue à une distance de 3 ou plus du Village."
+    },
+    "303": {
+      "name": "Dorian",
+      "role": "Marchand",
+      "immediate": "Gagnez 1 <villager/>.",
+      "reaction": "Quand vous achetez un Objet, vous pouvez incliner cette carte pour réduire son coût de 1 <coin/> et gagner 1 PV.",
+      "permanent": "Votre limite d'Objets est augmentée de 2.",
+      "score": "1 PV par Objet que vous possédez."
+    },
+    "304": {
+      "name": "Ariok",
+      "role": "Magicien",
+      "immediate": "Gagnez 1 <villager/> et 1 <magic/>.",
+      "reaction": "Quand vous résolvez une Rencontre, vous pouvez incliner cette carte et dépenser 1 <magic/> pour ignorer une de ses conditions.",
+      "score": "1 PV par niveau de <magic/>."
+    },
+    "305": {
+      "name": "Selia",
+      "role": "Alchimiste",
+      "immediate": "Gagnez 1 <villager/>.",
+      "reaction": "Quand vous activez un jeton <seal/>, vous pouvez incliner cette carte pour en choisir la valeur, entre 1 et 3.",
+      "permanent": "Quand vous utilisez une Potion, inclinez-la au lieu de la défausser. Rien ne vous empêche d'en utiliser plusieurs dans le même tour.",
+      "score": "2 PV par Potion que vous possédez."
+    },
+    "306": {
+      "name": "Neris",
+      "role": "Roublarde",
+      "immediate": "Gagnez 1 <villager/>.",
+      "reaction": "Quand vous retirez un <villager/> du Village, vous pouvez incliner cette carte pour gagner 2 <coin/> supplémentaires, ou pour ne pas payer le surcoût.",
+      "score": "1 PV par tranche de 2 <coin/> qu'il vous reste."
+    },
+    "307": {
+      "name": "Bran",
+      "role": "Gardien",
+      "immediate": "Gagnez 1 <villager/>.",
+      "reaction": "Quand vous devez dépenser 1 ou plusieurs <villager/> en activant une de vos cartes, vous pouvez incliner cette carte pour en dépenser 1 de moins.",
+      "score": "1 PV par <villager/> à votre disposition, moins 2."
+    },
+    "308": {
+      "name": "Lucan",
+      "role": "Paladin",
+      "immediate": "Gagnez 1 <villager/>.",
+      "reaction": "Quand vous gagnez de la Magie, vous pouvez incliner cette carte pour gagner 1 <force/> — ou l'inverse.",
+      "score": "1 PV par niveau de la plus basse de vos deux compétences."
+    },
+    "309": {
+      "name": "Isandre",
+      "role": "Clerc",
+      "immediate": "Gagnez 1 <villager/>.",
+      "reaction": "Quand vous inclinez une de vos cartes, vous pouvez incliner cette carte pour la redresser. Vous pouvez alors l'incliner de nouveau aussitôt, et déclencher son effet une seconde fois.",
+      "score": "2 PV par Compagnon que vous possédez."
+    },
+    "310": {
+      "name": "Seren",
+      "role": "Barde",
+      "immediate": "Gagnez 1 <villager/>.",
+      "reaction": "Quand vous racontez une histoire, vous pouvez incliner cette carte pour que la valeur de récit d'une de vos cartes Rencontre soit de 3.",
+      "score": "1 PV par histoire que vous avez racontée."
+    },
+    "311": {
+      "name": "Mira",
+      "role": "Éclaireuse",
+      "immediate": "Gagnez 1 <villager/>.",
+      "reaction": "Après avoir résolu une Rencontre, vous pouvez incliner cette carte pour placer un <villager/> actif au Village.",
+      "score": "1 PV par blason différent parmi les Rencontres que vous avez résolues."
+    }
   }
 }

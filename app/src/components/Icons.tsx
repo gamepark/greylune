@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
-import { BonusToken, Coin } from '@gamepark/greylune/material/Tokens'
+import { BonusToken, Coin, Seal } from '@gamepark/greylune/material/Tokens'
 import { getVillager } from '@gamepark/greylune/material/Villager'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
@@ -9,15 +9,17 @@ import { usePlayerId, useRules } from '@gamepark/react-game'
 import { adventurerImages, MagicMarker, scoreMarkerImages, StrengthMarker, villagerImages } from '../images/PawnImages'
 import { seasonImages } from '../images/SeasonImages'
 import { QuestTileBack } from '../images/TileImages'
-import { bonusTokenImages, coinImages } from '../images/TokenImages'
+import { bonusTokenImages, coinImages, sealImages, SealBack } from '../images/TokenImages'
 
 /**
- * The words the header would otherwise have to spell out, drawn from the material instead.
+ * The words a sentence would otherwise have to spell out, drawn from the material instead.
  *
- * The bar is one line that never wraps and is cut off with an ellipsis (see `Header`), and a sentence
- * that fits in French can still overrun in German: "Dorfbewohner" is 13 letters where "villageois" is
- * 10 and the pawn is 1 em. So everything the box has a piece for is shown as that piece, and only what
- * the material cannot say is left as text.
+ * Written for the header bar, and used by the help dialogs for the same reason. The bar is one line
+ * that never wraps and is cut off with an ellipsis (see `Header`), and a sentence that fits in French
+ * can still overrun in German: "Dorfbewohner" is 13 letters where "villageois" is 10 and the pawn is
+ * 1 em. So everything the box has a piece for is shown as that piece, and only what the material
+ * cannot say is left as text. The help dialogs spell out cards that carry no text at all, and the
+ * same pieces are what tie a sentence back to what the player is looking at.
  *
  * The box prints no icon on its own — Force, Magic, the seasons and the rest are only ever inlaid in
  * the boards and the cards (see `images/README.md`) — so each of these is the smallest real piece that
@@ -72,6 +74,12 @@ export const AdventurerIcon = (props: IconProps) => {
   const player = useIconPlayer()
   return <Icon src={adventurerImages[player]} {...props} />
 }
+
+/**
+ * A Seal token. The blank back is the token as a card names it, before it is known what it is worth;
+ * a value turns it into the very token lying on the card.
+ */
+export const SealIcon = ({ value, ...props }: { value?: Seal } & IconProps) => <Icon src={value ? sealImages[value] : SealBack} {...props} />
 
 /** The back of the Heroic Quest tiles: the crown is what they all have in common. */
 export const QuestIcon = (props: IconProps) => <Icon src={QuestTileBack} {...props} />

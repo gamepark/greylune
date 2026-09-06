@@ -8,6 +8,8 @@ import { Requirement } from './Effect'
  * — 2 Magic, an ignored condition — is only ever worth anything when the Encounter is being
  * resolved, and nothing is learnt between leaving Greylune and arriving. So those are offered on
  * arrival, where the player can see what they are paying for, rather than before the first step.
+ *
+ * See `docs/ecarts-regles.md`, where every divergence from the rulebook is listed.
  */
 export enum TriggerType {
   /** The Adventurer is about to leave: Elwen lengthens the road, the Potion d'endurance fills the Village. */

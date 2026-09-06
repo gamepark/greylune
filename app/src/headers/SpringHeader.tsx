@@ -2,7 +2,7 @@ import { CustomMoveType } from '@gamepark/greylune/rules/CustomMoveType'
 import { Season } from '@gamepark/greylune/Season'
 import { HeaderText, PlayMoveButton, useLegalMove } from '@gamepark/react-game'
 import { isCustomMoveType } from '@gamepark/rules-api'
-import { SeasonIcon, VillagerIcon } from './Icons'
+import { SeasonIcon, VillagerIcon } from '../components/Icons'
 
 /**
  * The turn of a player still in Spring (see {@link SpringRule}).

@@ -5,7 +5,7 @@ import { CustomMoveType } from '@gamepark/greylune/rules/CustomMoveType'
 import { HeaderText, PlayMoveButton, useLegalMoves, useRules } from '@gamepark/react-game'
 import { CustomMove, isCustomMoveType } from '@gamepark/rules-api'
 import { Alternatives } from './Alternatives'
-import { BonusTokenIcon } from './Icons'
+import { BonusTokenIcon } from '../components/Icons'
 
 /**
  * Crossing 8 points, and then 20 (see {@link BonusTokenRule}).

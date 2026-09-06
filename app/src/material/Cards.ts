@@ -7,6 +7,7 @@ import { CardDescription } from '@gamepark/react-game'
 import { encounterCardBacks, encounterCardImagesEn, encounterCardImagesFr } from '../images/EncounterCardImages'
 import { villageCardBacks, villageCardImagesEn, villageCardImagesFr } from '../images/VillageCardImages'
 import { encounterCardSize, villageCardBorderRadius, villageCardSize } from '../locators/TableLayout'
+import { VillageCardHelp } from './help/VillageCardHelp'
 
 /**
  * Card ids carry both faces: `front` is the card itself, `back` its period. A card in a deck loses
@@ -21,6 +22,7 @@ export class VillageCardDescription extends CardDescription<PlayerColor, Materia
   borderRadius = villageCardBorderRadius
   images = villageCardImagesEn
   backImages = villageCardBacks
+  help = VillageCardHelp
 }
 
 export class VillageCardDescriptionFr extends VillageCardDescription {

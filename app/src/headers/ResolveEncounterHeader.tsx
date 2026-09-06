@@ -6,7 +6,7 @@ import { ResolveEncounterRule } from '@gamepark/greylune/rules/ResolveEncounterR
 import { PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { isCustomMoveType } from '@gamepark/rules-api'
 import { Trans, useTranslation } from 'react-i18next'
-import { CoinIcon, QuestIcon, VpIcon } from './Icons'
+import { CoinIcon, QuestIcon, VpIcon } from '../components/Icons'
 
 /**
  * The Adventurer has stopped out of Greylune (see {@link ResolveEncounterRule}). The Encounters of the

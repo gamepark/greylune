@@ -4,7 +4,7 @@ import { CustomMoveType } from '@gamepark/greylune/rules/CustomMoveType'
 import { HeaderText, PlayMoveButton, useLegalMove, useRules } from '@gamepark/react-game'
 import { isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
 import { Alternatives } from './Alternatives'
-import { ForceIcon, MagicIcon } from './Icons'
+import { ForceIcon, MagicIcon } from '../components/Icons'
 
 /** Force, or Magic: the move carries `true` for the one and `false` for the other. */
 const chooses = (isForce: boolean) => (move: MaterialMove) => isCustomMoveType(CustomMoveType.ChooseSkill)(move) && move.data === isForce

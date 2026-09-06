@@ -3,7 +3,7 @@ import { CustomMoveType } from '@gamepark/greylune/rules/CustomMoveType'
 import { TravelRule } from '@gamepark/greylune/rules/TravelRule'
 import { HeaderText, PlayMoveButton, useLegalMove, useRules } from '@gamepark/react-game'
 import { isCustomMoveType } from '@gamepark/rules-api'
-import { AdventurerIcon } from './Icons'
+import { AdventurerIcon } from '../components/Icons'
 
 /**
  * The Adventurer goes, or goes further (see {@link TravelRule}). Every area within reach is a place

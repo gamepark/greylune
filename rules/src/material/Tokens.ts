@@ -33,7 +33,7 @@ export enum IncomeToken {
  * sides are paired by the punchboard. That pairing and the appendix agree on 7 of the 8 tokens; on
  * the 8th they do not. The appendix credits both the Coopery and the Unicorn with 2 victory points,
  * which the punched tokens cannot pay: only one 2 is printed, and two 1s. So the unicorn, which the
- * board pairs with a 1, is worth 1 here.
+ * board pairs with a 1, is worth 1 here. See `docs/ecarts-regles.md`.
  */
 export const incomeTokenGains: Record<IncomeToken, Gain[]> = {
   /** Tree, on the World-tree. */
