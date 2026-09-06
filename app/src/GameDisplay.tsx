@@ -1,3 +1,4 @@
+import { pointerWithin } from '@dnd-kit/core'
 import { css } from '@emotion/react'
 import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import { DevToolsHub, GameTable, GameTableNavigation, useRules } from '@gamepark/react-game'
@@ -11,7 +12,7 @@ export function GameDisplay() {
   const boundaries = getTableBoundaries(players, showsAllBandsFor(players))
   return (
     <>
-      <GameTable {...boundaries} css={process.env.NODE_ENV === 'development' && tableBorder}>
+      <GameTable {...boundaries} collisionAlgorithm={pointerWithin} css={process.env.NODE_ENV === 'development' && tableBorder}>
         <GameTableNavigation />
         {process.env.NODE_ENV === 'development' && <DevToolsHub fabBottom="calc(5em)" />}
       </GameTable>
