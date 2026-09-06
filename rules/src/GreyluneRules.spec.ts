@@ -176,17 +176,42 @@ describe('The score track', () => {
     play(rules().startRule(RuleId.ResolveEffects) as MaterialMove)
   }
 
-  it('takes the 25 token, turns it over at 50 and hands it back for the 75', () => {
-    startRule(RuleId.ResolveEffects)
-    game.memory[Memory.Gains] = [vp(30)]
-    play(rules().startRule(RuleId.ResolveEffects) as MaterialMove)
-    // The two Bonus tokens the way up asked for are chosen at random by the harness below.
+  /** Same as {@link gain}, but any Bonus token the way up asks for is picked at random and got out of the way. */
+  const gainThrough = (amount: number) => {
+    gain(amount)
     while (game.rule?.id === RuleId.BonusToken) playCustom(CustomMoveType.ChooseBonus)
+  }
+
+  /** Through the rules rather than the raw items: a deleted item keeps its slot in the array, with a quantity of 0. */
+  const held = () => rules().material(MaterialType.VpToken).location(LocationType.PlayerVpTokens).getItems()
+  const onTable = (value: VpTokenValue) => rules().material(MaterialType.VpToken).id(getVpToken(BLUE, value)).length
+
+  it('takes the 25 token, turns it over at 50 and hands it back for the 75', () => {
+    gainThrough(30)
     expect(playerVp(rules(), BLUE)).toBe(30)
-    const held = items(MaterialType.VpToken).filter((item) => item.location.type === LocationType.PlayerVpTokens)
-    expect(held).toHaveLength(1)
-    expect(held[0].id).toBe(getVpToken(BLUE, VpTokenValue.Vp25))
-    expect(held[0].location.rotation).toBeFalsy()
+    expect(held()).toHaveLength(1)
+    expect(held()[0].id).toBe(getVpToken(BLUE, VpTokenValue.Vp25))
+    expect(held()[0].location.rotation).toBeFalsy()
+
+    gainThrough(25)
+    expect(playerVp(rules(), BLUE)).toBe(55)
+    expect(held()).toHaveLength(1)
+    expect(held()[0].id).toBe(getVpToken(BLUE, VpTokenValue.Vp25))
+    expect(held()[0].location.rotation).toBe(true)
+
+    /** A player never has 2 tokens in front of them: the 25 leaves the table as the 75 comes out. */
+    gainThrough(25)
+    expect(playerVp(rules(), BLUE)).toBe(80)
+    expect(held()).toHaveLength(1)
+    expect(held()[0].id).toBe(getVpToken(BLUE, VpTokenValue.Vp75))
+    expect(held()[0].location.rotation).toBeFalsy()
+    expect(onTable(VpTokenValue.Vp25)).toBe(0)
+
+    gainThrough(25)
+    expect(playerVp(rules(), BLUE)).toBe(105)
+    expect(held()).toHaveLength(1)
+    expect(held()[0].id).toBe(getVpToken(BLUE, VpTokenValue.Vp75))
+    expect(held()[0].location.rotation).toBe(true)
   })
 
   it('spends a Bonus token at 8 and empties the supply at 20', () => {

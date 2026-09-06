@@ -137,7 +137,6 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     getCoordinates: (location: Location) => encounterRowSpot(encounterRowArea(location))
   }),
 
-
   /** The Income token an Encounter carries, laid over the reward half of its scroll, flush with the right edge of the card. */
   [LocationType.CardIncome]: new Locator({
     parentItemType: MaterialType.EncounterCard,
@@ -317,9 +316,9 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     getCoordinates: (location: Location, context: MaterialContext) => playerCoinsSpot(areaOf(context, location.player))
   }),
 
-  [LocationType.PlayerVpTokens]: new CenteredListLocator({
-    gap: { x: 2 },
+  /** A player holds one point token at a time: the 25 is handed back when the 75 is taken. */
+  [LocationType.PlayerVpTokens]: new Locator({
     hide: hideBandOfOtherPlayers,
-    getCenter: (location: Location, context: MaterialContext) => playerVpTokensSpot(areaOf(context, location.player))
+    getCoordinates: (location: Location, context: MaterialContext) => playerVpTokensSpot(areaOf(context, location.player))
   })
 }

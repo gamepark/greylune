@@ -195,9 +195,7 @@ export const villageDeckSpot: XYCoordinates = villageGridSpot(1, -1)
  * out over the cards, and it never leaves the strip between them.
  */
 export const villageGapGap = (gap: Gap, villagers: number): Partial<XYCoordinates> =>
-  Number.isInteger(gap.x)
-    ? { x: villageCardSize.width / Math.max(1, villagers) }
-    : { y: villageCardSize.height / Math.max(1, villagers) }
+  Number.isInteger(gap.x) ? { x: villageCardSize.width / Math.max(1, villagers) } : { y: villageCardSize.height / Math.max(1, villagers) }
 
 /**
  * The bare strip of table a gap leaves free between its 2 cards: as long as the side of a card, and
@@ -436,51 +434,75 @@ export const rowCrossesCompanions = (area: EncounterRowArea, areaY: number): boo
 export const rowCrossesBand = (area: EncounterRowArea, areaY: number): boolean => crossesStrip(area, areaY, bandStrip)
 
 /**
- * Resolved Encounters fill the middle of the band, over the board, untold on the left half, told on
- * the right half. Each row is a fan centred on its half and tightens up rather than running out over
- * the side rows.
+ * The 2 Companion cards nearest the board, which is all the room the gold and the Villagers are given:
+ * the far end of the row is left clear for the Encounter rows that run into the band.
  */
-export const untoldStoriesSpot = (area: XYCoordinates) => besidePlayerBoard(area, -4.7, bandCenterY)
-export const toldStoriesSpot = (area: XYCoordinates) => besidePlayerBoard(area, 4.7, bandCenterY)
-export const storiesGap: Partial<XYCoordinates> = { x: 1.4 }
-export const storiesMaxGap: Partial<XYCoordinates> = { x: 4.1 }
+const twoCompanionsRight = -sideRowStart + villageCardSize.width / 2
+const twoCompanionsLeft = -sideRowStart - playerCardsGap - villageCardSize.width / 2
 
 /**
- * The 2 ends of the band stand on one line, low enough that the column of 3 Bonus tokens can hang from
- * the very top of the band and no further.
- *
- * Over the Companions, right to left: the Bonus tokens, the gold, then the 4 Villagers held back. They
- * are 1.86, 7.52 and 6.67 wide, which leaves 5.35 of the 21.4 the row is wide, spread as 1.34 of air
- * between them and at both ends.
- *
- * Over the Objects, the 2 point tokens at the far end of the row: the middle of it is the panel, and the
- * near end is left to the First player token, which stands off the board rather than over the cards.
+ * A player holds one point token at a time, and it stands in the very middle of the band, over the
+ * middle of the board, in the gap the 2 rows of Stories leave between them.
  */
-const bandTokensY = bandTop + 3.1
+const vpTokenSlot = 1.86 + 2 * 0.2
 
-export const bonusTokensSpot = (area: XYCoordinates) => besidePlayerBoard(area, -12.16, bandTokensY)
-export const bonusTokensGap: Partial<XYCoordinates> = { y: 2.1 }
-export const playerCoinsSpot = (area: XYCoordinates) => besidePlayerBoard(area, -18.19, bandTokensY)
-export const villagerReserveSpot = (area: XYCoordinates) => besidePlayerBoard(area, -26.63, bandTokensY)
+/**
+ * Resolved Encounters fill the middle of the band, over the board, untold on the left half, told on
+ * the right half. Each row is a fan centred on its half and tightens up rather than running out over
+ * what stands beside it: the gold on the left, the Bonus tokens on the right, and the point token
+ * between the two of them. A fan is given the tighter of the two sides, so both of them read alike.
+ */
+const storiesRoom = -twoCompanionsRight - 0.2 - vpTokenSlot / 2
+const storiesX = vpTokenSlot / 2 + storiesRoom / 2
 
-/** The 2 ends of the row of Objects, on either side of the panel, each wide enough for a token. */
+export const untoldStoriesSpot = (area: XYCoordinates) => besidePlayerBoard(area, -storiesX, bandCenterY)
+export const toldStoriesSpot = (area: XYCoordinates) => besidePlayerBoard(area, storiesX, bandCenterY)
+export const storiesGap: Partial<XYCoordinates> = { x: 1.4 }
+export const storiesMaxGap: Partial<XYCoordinates> = { x: storiesRoom - encounterCardSize.width }
+
+/**
+ * What a player keeps out of their board is not floated in the middle of the band: each pile stands on
+ * the row of cards below it and grows upwards from there, so it reads as belonging to that row rather
+ * than to the empty air above. They all rest on one line, the same the bottom of the panel is drawn on,
+ * and they are 6.2, 4.31 and 3.04 tall — the Bonus tokens, the tallest of them, still clear the top of
+ * the band.
+ *
+ * Over the Companions, the gold and the 4 Villagers held back, and nothing else: 7.52 and 6.67 wide,
+ * which is exactly the 14.2 the 2 Companion cards nearest the board cover. They are pushed against that
+ * pair rather than centred on the row, the gold over the first card and the Villagers over the second.
+ *
+ * Over the Objects, only the 3 Bonus tokens, at the near end of the row: the rest of it is the First
+ * player token and the panel, both pushed against the outer edge of the area.
+ */
+const overCardsAir = 0.2
+const standingOnCards = (height: number) => -villageCardSize.height / 2 - overCardsAir - height / 2
+
+/** The 2 ends of the row of Objects, each wide enough for a token. */
 const bandEndSlot = 3.44 + 2 * 0.315
 
-export const playerVpTokensSpot = (area: XYCoordinates) => besidePlayerBoard(area, sideRowX + sideRowWidth / 2 - bandEndSlot / 2, bandTokensY)
+export const bonusTokensGap: Partial<XYCoordinates> = { y: 2.1 }
+export const bonusTokensSpot = (area: XYCoordinates) =>
+  besidePlayerBoard(area, sideRowX - sideRowWidth / 2 + bandEndSlot / 2, standingOnCards(2 * bonusTokensGap.y! + 2))
+export const playerCoinsSpot = (area: XYCoordinates) => besidePlayerBoard(area, twoCompanionsRight - 7.52 / 2, standingOnCards(4.31))
+export const villagerReserveSpot = (area: XYCoordinates) => besidePlayerBoard(area, twoCompanionsLeft + 6.67 / 2, standingOnCards(3.04))
+
+/** The one point token a player can hold, in the middle of the band, between the 2 rows of Stories. */
+export const playerVpTokensSpot = (area: XYCoordinates) => besidePlayerBoard(area, 0, bandCenterY)
 
 /** Lifted above everything else on the table: a panel is never covered by a card that reaches it. */
 export const panelZ = 20
 
 /**
- * A player's panel is part of the table, over the middle of their own row of Objects: it takes what the
- * 2 tokens at the ends of that row leave. StyledPlayerPanel is authored as a box 28 em wide, so the
- * width settles the scale, and the panel sits right on top of the cards it belongs to.
+ * A player's panel is part of the table, over their own row of Objects, pushed against the outer edge
+ * of the area: its right edge is the right edge of the last Object card, so the only thing between it
+ * and the edge of the table is the margin the table keeps all round. StyledPlayerPanel is authored as a
+ * box 28 em wide, so the width settles the scale, and the panel sits right on top of the cards it
+ * belongs to.
  *
  * Its height is pinned rather than measured: the name, the line the timer is given and the row of
  * counters come to 11.81 em of type, whose exact size is the browser's business and not ours, and the
  * table cannot have a spot that moves with a font. 12 em is that content with a hair to spare.
  */
-const panelAir = 0.2
 export const playerPanelWidth = sideRowWidth - 2 * bandEndSlot
 export const playerPanelScale = playerPanelWidth / 28
 export const playerPanelEms = 12
@@ -488,31 +510,31 @@ export const playerPanelHeight = playerPanelEms * playerPanelScale
 export const playerPanelSpot = (area: XYCoordinates, hasBand: boolean) =>
   besidePlayerBoard(
     area,
-    sideRowX,
+    sideRowX + sideRowWidth / 2 - playerPanelWidth / 2,
     /**
      * The player being read has their material out above the board, and the panel keeps clear of the
      * cards, just over them. A player who is not read has nothing above their board, so the panel drops
      * onto the Objects instead and hangs from the top edge of the board, where the eye picks up the row.
      */
-    hasBand ? -villageCardSize.height / 2 - playerPanelHeight / 2 - panelAir : -printedHalf + playerPanelHeight / 2
+    hasBand ? -villageCardSize.height / 2 - playerPanelHeight / 2 - overCardsAir : -printedHalf + playerPanelHeight / 2
   )
 
 /**
- * The First player token is not part of the band and not part of that row either: it stands immediately
- * to the right of the board, on the same line as the panel of the player holding it. It is the one thing
- * a player keeps out of their board that is drawn for all of them, read or not — there is only ever one
- * on the table, and it says whose turn the round starts on — so it goes down with the panel when that
- * player is not read: wherever the panel is, the token is the piece pinned to it.
+ * The First player token is not part of the band and not part of that row either: it stands in the slot
+ * immediately to the left of the panel, on the same line as the panel of the player holding it. It is
+ * the one thing a player keeps out of their board that is drawn for all of them, read or not — there is
+ * only ever one on the table, and it says whose turn the round starts on — so it goes down with the
+ * panel when that player is not read: wherever the panel is, the token is the piece pinned to it.
  */
 const firstPlayerTokenSize = { width: 3.44, height: 5.7 }
 export const firstPlayerTokenSpot = (area: XYCoordinates, hasBand: boolean): Coordinates => ({
   ...besidePlayerBoard(
     area,
-    playerBoardSize.width / 2 - playerBoardShadow + 0.3 + firstPlayerTokenSize.width / 2,
+    sideRowX + sideRowWidth / 2 - playerPanelWidth - bandEndSlot / 2,
     /** Its foot on the line the bottom of the panel is drawn on, whichever of the 2 lines that is. */
-    (hasBand ? -villageCardSize.height / 2 : -printedHalf + playerPanelHeight + panelAir) - firstPlayerTokenSize.height / 2
+    (hasBand ? -villageCardSize.height / 2 : -printedHalf + playerPanelHeight + overCardsAir) - firstPlayerTokenSize.height / 2
   ),
-  /** Dropped, it lies over the first Object card, and like the panel it is never the thing covered. */
+  /** Dropped, it lies over the Object cards, and like the panel it is never the thing covered. */
   z: panelZ
 })
 

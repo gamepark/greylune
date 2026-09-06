@@ -5,16 +5,7 @@ import { PlayerColor } from '../PlayerColor'
 import { bonusToken, Count, Gain, GainType, placeVillager, Requirement, RequirementType, SEAL } from '../material/Effect'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import {
-  activeVillagers,
-  keepsPotions,
-  playerCoins,
-  playerForce,
-  playerMagic,
-  playerSeason,
-  playerVp,
-  scoreValue
-} from '../material/PlayerState'
+import { activeVillagers, keepsPotions, playerCoins, playerForce, playerMagic, playerSeason, playerVp, scoreValue } from '../material/PlayerState'
 import { Reaction, ReactionEffect, ReactionType, TriggerType } from '../material/Reaction'
 import { Coin, coinUnits } from '../material/Tokens'
 import { isPotion, VillageCard, VillageCardId, villageCardData } from '../material/VillageCard'
@@ -182,7 +173,8 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
 
   /**
    * The score moves on, the marker wrapping round the 25 spaces of the track and the token standing
-   * for the laps: a player holds one token at a time, the 25 handed back for the 75 (rulebook p.13).
+   * for the laps: a player holds one token at a time, the 25 taken off the table for the 75 (rulebook
+   * p.13).
    * Crossing 8, and then 20, is what a Bonus token is spent on, and that jumps the queue.
    */
   gainVp(amount: number): GreyluneMove[] {
@@ -199,20 +191,28 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
     return marker.getItem()?.location.x === x ? [] : [marker.moveItem({ type: LocationType.ScoreTrack, x })]
   }
 
-  /** The token the score calls for, taken out of its pile, turned over, or handed back. */
+  /**
+   * The token the score calls for, taken out of its pile or turned over. A score never comes back down,
+   * so the token it replaces is taken off the table rather than handed back to a pile it would only
+   * leave once: the 25 is gone for good the moment the 75 comes out.
+   */
   private setVpToken(total: number): GreyluneMove[] {
     const value = vpTokenFor(total)
     const held = this.material(MaterialType.VpToken).location(LocationType.PlayerVpTokens).player(this.player).getItem()
-    const heldValue = held ? (getVpTokenValue(held.id as VpToken) === VpTokenValue.Vp25 ? (held.location.rotation ? 50 : 25) : held.location.rotation ? 100 : 75) : 0
+    const heldValue = held
+      ? getVpTokenValue(held.id as VpToken) === VpTokenValue.Vp25
+        ? held.location.rotation
+          ? 50
+          : 25
+        : held.location.rotation
+          ? 100
+          : 75
+      : 0
     if (value === heldValue) return []
     const moves: GreyluneMove[] = []
     const wanted: VpTokenValue = value >= 75 ? VpTokenValue.Vp75 : VpTokenValue.Vp25
     if (held && getVpTokenValue(held.id as VpToken) !== wanted) {
-      moves.push(
-        this.material(MaterialType.VpToken)
-          .index(this.material(MaterialType.VpToken).location(LocationType.PlayerVpTokens).player(this.player).getIndex())
-          .moveItem({ type: LocationType.VpTokenStack, id: getVpTokenValue(held.id as VpToken), rotation: false })
-      )
+      moves.push(this.material(MaterialType.VpToken).location(LocationType.PlayerVpTokens).player(this.player).deleteItem())
     }
     if (value === 0) return moves
     const token = this.material(MaterialType.VpToken).id(getVpToken(this.player, wanted))
@@ -376,9 +376,7 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
   }
 
   get playerCards(): GreyluneMaterial {
-    return this.villageCards
-      .player(this.player)
-      .location((location) => location.type === LocationType.Items || location.type === LocationType.Companions)
+    return this.villageCards.player(this.player).location((location) => location.type === LocationType.Items || location.type === LocationType.Companions)
   }
 
   /**
