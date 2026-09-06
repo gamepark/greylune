@@ -228,6 +228,47 @@ const outcomeArrowCss = css`
 `
 
 /**
+ * The options a piece offers when none of them asks for anything: the two halves of the Banquet, the
+ * five free spaces of the Festival. A table of costs facing rewards would be a column of dashes, so
+ * these are simply listed, and choosing between them is what placing the Villager does.
+ */
+export const HelpList = ({ title, children }: { title: ReactNode; children: ReactNode }) => (
+  <section css={sectionCss}>
+    <h3 css={sectionTitleCss}>{title}</h3>
+    <ul css={listCss}>{children}</ul>
+  </section>
+)
+
+export const HelpListItem = ({ children }: { children: ReactNode }) => <li css={listItemCss}>{children}</li>
+
+const listCss = css`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+`
+
+const listItemCss = css`
+  line-height: 1.5;
+  padding: 0.25em 0 0.25em 1em;
+  position: relative;
+
+  &:not(:last-of-type) {
+    border-bottom: 0.06em solid ${colors.rule};
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0.15em;
+    top: 0.75em;
+    width: 0.35em;
+    height: 0.35em;
+    border-radius: 50%;
+    background: ${colors.gold};
+  }
+`
+
+/**
  * The rule the card is an instance of, rather than the card itself: what a Tavern pays by tiers,
  * how many Objects a player may keep. Set apart so that a player who already knows can skip it.
  */

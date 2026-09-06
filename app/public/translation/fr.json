@@ -121,6 +121,25 @@
       "name": "Deck Rencontre",
       "left": "Cartes restantes",
       "note": "Chaque hiver, 5, 6 ou 7 cartes — à 2, 3 ou 4 joueurs — sont révélées et rangées par distance, à droite du plateau principal. Le dos indique la période : les cartes I sortent les 2 premières années, les II les 2 suivantes, les III la dernière."
+    },
+    "options": "Options",
+    "vp": "{count} PV",
+    "event": {
+      "name": "Événement",
+      "note": "Une fois par année, au printemps ou en été, vous pouvez placer un <villager/> sur la tuile Événement au lieu de votre action habituelle — un <villager/> actif, ou, en été, un <villager/> qui se trouve au Village. Il vous faut pouvoir en payer le coût.",
+      "festival": "Festival : les 5 emplacements libres de la tuile sont ses 5 options. Un <villager/> posé sur l'un d'eux prend les 2 bonus qui l'encadrent, et cet emplacement est pris pour le reste de l'année."
+    },
+    "event-pile": {
+      "name": "Pile d'Événements",
+      "left": "Tuiles à venir",
+      "note": "Une tuile Événement est retirée au hasard à la mise en place et n'est jamais vue : sur les 6, une seule est révélée chaque année, et 5 années sont jouées."
+    },
+    "quest": {
+      "name": "Quête Héroïque",
+      "first": "Au premier",
+      "others": "Aux suivants",
+      "note": "Vous accomplissez une Quête Héroïque quand votre <adventurer/> s'arrête dans sa zone, au lieu de résoudre une Rencontre. Vous engagez alors l'un de vos 3 marqueurs de Quête sur l'un des deux écus de la zone : le premier arrivé prend le plus riche, tous les autres se partagent l'autre.",
+      "score": "Chaque joueur ne peut accomplir une même Quête qu'une seule fois, et ses points ne sont comptés qu'à la fin de la cinquième année."
     }
   },
   "village-card": {
@@ -690,6 +709,109 @@
         "requirement": "Avoir au moins 5 <magic/>",
         "reward": "Redressez une de vos cartes et gagnez 4 PV"
       }
+    }
+  },
+  "event-tile": {
+    "1": {
+      "name": "Banquet",
+      "0": {
+        "reward": "Gagnez 3 <coin/>"
+      },
+      "1": {
+        "reward": "Redressez une de vos cartes inclinées"
+      }
+    },
+    "2": {
+      "name": "Festival",
+      "0": {
+        "reward": "Gagnez 1 <magic/> et 2 PV"
+      },
+      "1": {
+        "reward": "Gagnez 1 <magic/> et 2 <coin/>"
+      },
+      "2": {
+        "reward": "Gagnez 2 PV et déplacez votre <adventurer/> jusqu'à 1 case"
+      },
+      "3": {
+        "reward": "Gagnez 2 <coin/> et 1 <force/>"
+      },
+      "4": {
+        "reward": "Déplacez votre <adventurer/> jusqu'à 1 case et gagnez 1 <force/>"
+      }
+    },
+    "3": {
+      "name": "Grande foire",
+      "0": {
+        "requirement": "Dépensez 3 <coin/>",
+        "reward": "Gagnez 1 <force/> et 1 <magic/>"
+      }
+    },
+    "4": {
+      "name": "Spectacle de magie",
+      "0": {
+        "requirement": "Dépensez 1 <magic/>",
+        "reward": "Déplacez votre <adventurer/> jusqu'à 5 cases"
+      }
+    },
+    "5": {
+      "name": "Rassemblement",
+      "0": {
+        "requirement": "Dépensez 1 <force/>",
+        "reward": "Gagnez 1 <villager/>"
+      },
+      "1": {
+        "requirement": "Dépensez 3 <coin/>",
+        "reward": "Gagnez 1 <villager/>"
+      }
+    },
+    "6": {
+      "name": "Tournoi",
+      "0": {
+        "requirement": "Dépensez 1 <force/>",
+        "reward": "Gagnez 6 <coin/>"
+      },
+      "1": {
+        "requirement": "Dépensez 1 <force/>",
+        "reward": "Gagnez 4 PV"
+      }
+    }
+  },
+  "quest-tile": {
+    "1": {
+      "name": "Géant",
+      "requirement": "Avoir au moins 4 <force/>"
+    },
+    "2": {
+      "name": "Dragon",
+      "requirement": "Avoir un total de <force/> et de <magic/> d'au moins 6"
+    },
+    "3": {
+      "name": "Spectres",
+      "requirement": "Avoir au moins 4 <magic/>"
+    },
+    "4": {
+      "name": "Tournoi des Bardes",
+      "requirement": "Racontez 2 de vos Rencontres, quelle que soit leur valeur de récit"
+    },
+    "5": {
+      "name": "Donation",
+      "requirement": "Défaussez l'un de vos Objets"
+    },
+    "6": {
+      "name": "Morts-vivants",
+      "requirement": "Dépensez 1 <force/> et 1 <magic/>"
+    },
+    "7": {
+      "name": "Piège mortel",
+      "requirement": "Remettez dans la réserve l'un de vos <villager/> disponibles : il est perdu pour le reste de la partie"
+    },
+    "8": {
+      "name": "Rançon",
+      "requirement": "Dépensez 6 <coin/>"
+    },
+    "9": {
+      "name": "Mariage",
+      "requirement": "Dépensez 2 <villager/>"
     }
   }
 }

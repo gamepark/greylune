@@ -12,7 +12,9 @@ aux illustrations françaises — coût, prérequis, récompenses, valeur de ré
 — puis à l'annexe du livret. **Principe retenu : la carte fait foi.** Deux désaccords seulement en
 sont sortis (§ 1). Tout le reste concorde.
 
-Les tuiles Événement et les Hautes Fêtes n'ont pas encore fait l'objet de la même relecture.
+Les 6 tuiles Événement et les 9 Quêtes Héroïques ont été relues de la même façon, et concordent
+elles aussi. Aucune ne porte de titre imprimé : les noms employés dans l'adaptation sont ceux de
+l'annexe (p. 14 et p. 19).
 
 ---
 
@@ -95,7 +97,7 @@ l'**action** de déplacement (p. 4), alors que « résolu » renvoie à la **car
 | Deux Rencontres dans le même tour (Tour isolée, Relais) | oui, à chaque fois |
 | L'Aventurier se déplace et le joueur ne résout aucune Rencontre | non |
 | Le joueur prend le bonus de la case au lieu d'une Rencontre | non |
-| Le joueur accomplit une Haute Fête | non |
+| Le joueur accomplit une Quête Héroïque | non |
 
 Deux arguments ont fait pencher de ce côté : Mira marque, en fin de partie, 1 PV par blason différent
 parmi les **Rencontres résolues** ; et si elle se déclenchait au simple départ à l'aventure, elle
@@ -202,8 +204,11 @@ fond les deux moitiés dans une seule phrase à « et/ou », qui laisse l'appari
 **Chaque type de carte porte un rappel de sa règle** : ce qu'est un Bâtiment, la limite de trois
 Objets, le Villageois offert par un Compagnon, le nombre de jetons Sceau posés chaque année.
 
-**L'aide indique aussi l'état de la carte devant le joueur** — ce qu'aucune annexe imprimée ne peut
-faire : les jetons Sceau qu'il reste dessus, et le surcoût que les Villageois voisins font monter.
+**L'aide indique aussi l'état de la pièce devant le joueur** — ce qu'aucune annexe imprimée ne peut
+faire : les jetons Sceau qu'il reste sur une carte, le surcoût que les Villageois voisins font
+monter, et surtout, sur une Quête Héroïque, ce qu'elle rapporte cette partie-ci. Une Quête ne porte
+que sa condition ; sa valeur — 7/5, 8/6 ou 9/7 — est imprimée sur l'emplacement du plateau où le
+hasard l'a posée, et c'est la première chose que l'aide affiche.
 
 ---
 

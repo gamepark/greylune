@@ -51,7 +51,10 @@ export const cardInk = {
   building: '#774423',
   item: '#9E372F',
   companion: '#116A93',
-  encounter: colors.emerald
+  encounter: colors.emerald,
+  /** The green band of an Event scroll, and the brick frame of a Heroic Quest. */
+  event: '#2AA34C',
+  quest: '#94332C'
 }
 
 /**

@@ -6,6 +6,8 @@ import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { TokenDescription } from '@gamepark/react-game'
 import { eventTileImages, EventTileBack, questTileImages, QuestTileBack } from '../images/TileImages'
 import { eventTileSize, questTileSize } from '../locators/TableLayout'
+import { EventTileHelp } from './help/EventTileHelp'
+import { QuestTileHelp } from './help/QuestTileHelp'
 
 export class EventTileDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, EventTile> {
   width = eventTileSize.width
@@ -14,6 +16,7 @@ export class EventTileDescription extends TokenDescription<PlayerColor, Material
   transparency = true
   images = eventTileImages
   backImage = EventTileBack
+  help = EventTileHelp
 }
 
 export class QuestTileDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, QuestTile> {
@@ -23,4 +26,5 @@ export class QuestTileDescription extends TokenDescription<PlayerColor, Material
   transparency = true
   images = questTileImages
   backImage = QuestTileBack
+  help = QuestTileHelp
 }
