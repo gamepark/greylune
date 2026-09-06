@@ -7,6 +7,7 @@ import { CardDescription } from '@gamepark/react-game'
 import { encounterCardBacks, encounterCardImagesEn, encounterCardImagesFr } from '../images/EncounterCardImages'
 import { villageCardBacks, villageCardImagesEn, villageCardImagesFr } from '../images/VillageCardImages'
 import { encounterCardSize, villageCardBorderRadius, villageCardSize } from '../locators/TableLayout'
+import { EncounterCardHelp } from './help/EncounterCardHelp'
 import { VillageCardHelp } from './help/VillageCardHelp'
 
 /**
@@ -35,6 +36,7 @@ export class EncounterCardDescription extends CardDescription<PlayerColor, Mater
   borderRadius = 0.3
   images = encounterCardImagesEn
   backImages = encounterCardBacks
+  help = EncounterCardHelp
 }
 
 export class EncounterCardDescriptionFr extends EncounterCardDescription {

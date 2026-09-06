@@ -6,10 +6,11 @@ This project uses the **Game Park framework** to create digital board games.
 
 Official documentation: https://gamepark.github.io
 
-Rules of the game: `app/public/rules-fr.pdf` (and `rules-en.pdf`). Every place where this adaptation
-does something the rulebook does not say, and every ambiguity that had to be settled, is listed in
-`docs/ecarts-regles.md` — read it before "fixing" a rule that looks wrong, and add to it when you
-settle a new one.
+Rules of the game: `app/public/rules-fr.pdf` (and `rules-en.pdf`). **The printed cards are the
+authority, not the appendix**: where the two disagree, the card wins. Every such disagreement, and
+every ambiguity that had to be settled, is listed in `docs/ecarts-regles.md` — read it before
+"fixing" a rule that looks wrong, and add to it when you settle a new one. That file is sent to the
+publisher: it holds rules, questions and choices, never file paths or code.
 
 For Claude to read the documentation, use raw GitHub URLs:
 ```

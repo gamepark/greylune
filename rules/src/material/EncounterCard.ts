@@ -144,10 +144,11 @@ const spendVillagers = (count = 1): Requirement => req(RequirementType.SpendVill
 export const encounterCardData: Record<EncounterCard, EncounterCardData> = {
   // ---------------------------------------------------------------- period I
 
+  /** 2 spaces on the printed card, 3 in the appendix: the card is what the players have (see `docs/ecarts-regles.md`). */
   [EncounterCard.Valley]: {
     story: 0,
     outcomes: [
-      { requirements: [have(RequirementType.Force, 1)], gains: [travel(3)] },
+      { requirements: [have(RequirementType.Force, 1)], gains: [travel(2)] },
       { requirements: [spendVillagers()], gains: [vp(3)] }
     ]
   },

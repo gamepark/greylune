@@ -101,6 +101,26 @@
       "name": "Deck Village",
       "left": "Cartes restantes",
       "note": "Les 9 premières cartes sont révélées chaque hiver et disposées en grille de 3x3. Le dos indique la période : les cartes I sortent les 2 premières années, les II les 2 suivantes, les III la dernière."
+    },
+    "distance": "Distance",
+    "story": "Valeur de récit",
+    "income": "Revenu",
+    "requirement": "Prérequis",
+    "reward": "Récompense",
+    "encounter": {
+      "name": "Rencontre",
+      "note": "Une Rencontre se résout quand votre <adventurer/> s'arrête dans la zone où elle se trouve. Elle glisse ensuite au-dessus de votre plateau, en attendant d'être racontée dans une Taverne.",
+      "both": "Cette Rencontre a deux moitiés : satisfaites l'une, l'autre, ou les deux. Dans ce dernier cas, vous payez les deux prérequis et gagnez les deux récompenses.",
+      "story-only": "Cette Rencontre ne rapporte rien sur le moment : elle ne vaut que l'histoire que vous en tirerez.",
+      "untellable": "Valeur de récit 0 : cette Rencontre ne peut pas être racontée, à moins que Seren ou une Potion de charisme ne lui donne la valeur 3."
+    },
+    "income-token": {
+      "note": "Jeton Revenu : en résolvant cette Rencontre, vous prenez le jeton, vous en résolvez l'effet aussitôt, puis vous le résolvez à nouveau à chaque phase de Revenu, en Automne. Le nombre de jetons Revenu que vous possédez n'est pas limité."
+    },
+    "encounter-deck": {
+      "name": "Deck Rencontre",
+      "left": "Cartes restantes",
+      "note": "Chaque hiver, 5, 6 ou 7 cartes — à 2, 3 ou 4 joueurs — sont révélées et rangées par distance, à droite du plateau principal. Le dos indique la période : les cartes I sortent les 2 premières années, les II les 2 suivantes, les III la dernière."
     }
   },
   "village-card": {
@@ -336,7 +356,7 @@
       "name": "Lucan",
       "role": "Paladin",
       "immediate": "Gagnez 1 <villager/>.",
-      "reaction": "Quand vous gagnez de la Magie, vous pouvez incliner cette carte pour gagner 1 <force/> — ou l'inverse.",
+      "reaction": "Quand vous gagnez de la Force ou de la Magie, vous pouvez incliner cette carte pour gagner aussi l'autre.",
       "score": "1 PV par niveau de la plus basse de vos deux compétences."
     },
     "309": {
@@ -359,6 +379,317 @@
       "immediate": "Gagnez 1 <villager/>.",
       "reaction": "Après avoir résolu une Rencontre, vous pouvez incliner cette carte pour placer un <villager/> actif au Village.",
       "score": "1 PV par blason différent parmi les Rencontres que vous avez résolues."
+    }
+  },
+  "encounter-card": {
+    "1": {
+      "name": "Vallée",
+      "0": {
+        "requirement": "Avoir au moins 1 <force/>",
+        "reward": "Déplacez votre <adventurer/> jusqu'à 2 cases"
+      },
+      "1": {
+        "requirement": "Dépensez 1 <villager/>",
+        "reward": "Gagnez 3 PV"
+      }
+    },
+    "2": {
+      "name": "Tigre",
+      "0": {
+        "requirement": "Dépensez 1 <villager/>"
+      }
+    },
+    "3": {
+      "name": "Passe rocheuse",
+      "0": {
+        "reward": "Gagnez 1 <force/>"
+      }
+    },
+    "4": {
+      "name": "Moutons",
+      "0": {
+        "reward": "Prenez le jeton Revenu : 1 <coin/> tout de suite, puis autant à chaque Automne"
+      }
+    },
+    "5": {
+      "name": "Mine",
+      "0": {
+        "requirement": "Dépensez 1 <villager/>",
+        "reward": "Prenez le jeton Revenu : 2 <coin/> tout de suite, puis autant à chaque Automne"
+      }
+    },
+    "6": {
+      "name": "Meute de loups",
+      "0": {
+        "requirement": "Avoir au moins 2 <force/>",
+        "reward": "Gagnez 3 PV"
+      }
+    },
+    "7": {
+      "name": "Maraudeurs",
+      "0": {
+        "requirement": "Avoir un total de <force/> et de <magic/> d'au moins 2",
+        "reward": "Gagnez 4 <coin/>"
+      }
+    },
+    "8": {
+      "name": "Initiation",
+      "0": {
+        "requirement": "Dépensez 4 <coin/>",
+        "reward": "Gagnez 1 <force/> et 1 <magic/>"
+      }
+    },
+    "9": {
+      "name": "Ermite",
+      "0": {
+        "requirement": "Avoir au moins 2 <force/>",
+        "reward": "Gagnez 1 <magic/>"
+      }
+    },
+    "10": {
+      "name": "Embuscade",
+      "0": {
+        "requirement": "Avoir au moins 1 <magic/>",
+        "reward": "Prenez le jeton Revenu : 1 <coin/> tout de suite, puis autant à chaque Automne"
+      }
+    },
+    "11": {
+      "name": "Crâne maudit",
+      "0": {
+        "requirement": "Avoir au moins 2 <magic/>",
+        "reward": "Redressez une de vos cartes"
+      }
+    },
+    "12": {
+      "name": "Cercle de pierres",
+      "0": {
+        "reward": "Gagnez 1 <magic/>"
+      }
+    },
+    "13": {
+      "name": "Campement",
+      "0": {
+        "requirement": "Avoir un total de <force/> et de <magic/> d'au moins 1",
+        "reward": "Gagnez 1 <villager/>"
+      }
+    },
+    "14": {
+      "name": "Auberge",
+      "0": {
+        "requirement": "Dépensez 2 <coin/>",
+        "reward": "Gagnez 1 <villager/>"
+      }
+    },
+    "15": {
+      "name": "Ours",
+      "0": {
+        "requirement": "Avoir au moins 1 <force/>",
+        "reward": "Gagnez 2 PV"
+      },
+      "1": {
+        "requirement": "Avoir au moins 1 <magic/>",
+        "reward": "Gagnez 2 PV"
+      }
+    },
+    "16": {
+      "name": "Arbre-monde",
+      "0": {
+        "reward": "Prenez le jeton Revenu : 1 PV tout de suite, puis autant à chaque Automne"
+      }
+    },
+    "17": {
+      "name": "Trésor",
+      "0": {
+        "requirement": "Avoir au moins 3 <magic/>",
+        "reward": "Gagnez 3 <coin/>"
+      },
+      "1": {
+        "requirement": "Dépensez 1 <magic/>",
+        "reward": "Gagnez 4 <coin/>"
+      }
+    },
+    "18": {
+      "name": "Tour isolée",
+      "0": {
+        "requirement": "Dépensez 1 <magic/>",
+        "reward": "Repartez à l'aventure — déplacez votre <adventurer/> jusqu'à 3 cases — et gagnez 3 PV"
+      }
+    },
+    "19": {
+      "name": "Sorcellerie",
+      "0": {
+        "requirement": "Dépensez 4 <coin/>",
+        "reward": "Gagnez 2 <magic/>"
+      }
+    },
+    "20": {
+      "name": "Incantation",
+      "0": {
+        "requirement": "Dépensez 1 <villager/>",
+        "reward": "Gagnez 1 <magic/>"
+      }
+    },
+    "21": {
+      "name": "Licorne",
+      "0": {
+        "requirement": "Avoir au moins 3 <magic/>",
+        "reward": "Redressez une de vos cartes, et prenez le jeton Revenu : 1 PV tout de suite, puis autant à chaque Automne"
+      }
+    },
+    "22": {
+      "name": "Joute",
+      "0": {
+        "requirement": "Dépensez 1 <villager/>",
+        "reward": "Gagnez 3 PV"
+      },
+      "1": {
+        "requirement": "Avoir au moins 4 <force/>",
+        "reward": "Gagnez 4 PV"
+      }
+    },
+    "23": {
+      "name": "Diamant",
+      "0": {
+        "requirement": "Dépensez 1 <force/>",
+        "reward": "Gagnez 5 <coin/>"
+      }
+    },
+    "24": {
+      "name": "Ferme",
+      "0": {
+        "reward": "Gagnez 1 <villager/>"
+      }
+    },
+    "25": {
+      "name": "Démon",
+      "0": {
+        "requirement": "Avoir au moins 3 <force/>",
+        "reward": "Gagnez 3 PV"
+      },
+      "1": {
+        "requirement": "Avoir au moins 3 <magic/>",
+        "reward": "Gagnez 3 PV"
+      }
+    },
+    "26": {
+      "name": "Épée légendaire",
+      "0": {
+        "requirement": "Dépensez 1 <villager/>",
+        "reward": "Gagnez 3 PV"
+      }
+    },
+    "27": {
+      "name": "Tonnellerie",
+      "0": {
+        "requirement": "Dépensez 4 <coin/>",
+        "reward": "Prenez le jeton Revenu : 2 PV tout de suite, puis autant à chaque Automne"
+      }
+    },
+    "28": {
+      "name": "Entrainement",
+      "0": {
+        "requirement": "Dépensez 4 <coin/>",
+        "reward": "Prenez le jeton Revenu : 1 <force/> tout de suite, puis autant à chaque Automne"
+      }
+    },
+    "29": {
+      "name": "Vagabond",
+      "0": {
+        "requirement": "Avoir un total de <force/> et de <magic/> d'au moins 4",
+        "reward": "Gagnez 1 <villager/>"
+      }
+    },
+    "30": {
+      "name": "Chevalier errant",
+      "0": {
+        "requirement": "Dépensez 2 <coin/>",
+        "reward": "Gagnez 1 <force/> et 2 PV"
+      }
+    },
+    "31": {
+      "name": "Caravane",
+      "0": {
+        "requirement": "Dépensez 2 <villager/>",
+        "reward": "Prenez le jeton Revenu : 4 <coin/> tout de suite, puis autant à chaque Automne"
+      }
+    },
+    "32": {
+      "name": "Bandits",
+      "0": {
+        "requirement": "Avoir au moins 3 <force/>",
+        "reward": "Gagnez 4 <coin/> et 2 PV"
+      }
+    },
+    "33": {
+      "name": "Archerie",
+      "0": {
+        "requirement": "Dépensez 3 <coin/>",
+        "reward": "Gagnez 1 <force/> et 3 PV"
+      }
+    },
+    "34": {
+      "name": "Passe enneigée",
+      "0": {
+        "requirement": "Avoir au moins 5 <force/>",
+        "reward": "Gagnez 5 <coin/> et 3 PV"
+      }
+    },
+    "35": {
+      "name": "Nécromancien",
+      "0": {
+        "requirement": "Avoir un total de <force/> et de <magic/> d'au moins 8",
+        "reward": "Gagnez 9 PV"
+      }
+    },
+    "36": {
+      "name": "Mine d'or",
+      "0": {
+        "requirement": "Dépensez 1 <villager/>",
+        "reward": "Gagnez 7 <coin/>"
+      }
+    },
+    "37": {
+      "name": "Dragon",
+      "0": {
+        "requirement": "Avoir au moins 5 <force/>",
+        "reward": "Gagnez 4 PV"
+      },
+      "1": {
+        "requirement": "Avoir au moins 5 <magic/>",
+        "reward": "Gagnez 4 PV"
+      }
+    },
+    "38": {
+      "name": "Labyrinthe",
+      "0": {
+        "requirement": "Dépensez 1 <villager/>",
+        "reward": "Gagnez 4 PV"
+      },
+      "1": {
+        "requirement": "Dépensez 1 <villager/>",
+        "reward": "Gagnez 4 PV"
+      }
+    },
+    "39": {
+      "name": "Relais",
+      "0": {
+        "requirement": "Dépensez 4 <coin/>",
+        "reward": "Repartez à l'aventure — déplacez votre <adventurer/> jusqu'à 3 cases — et gagnez 2 PV"
+      }
+    },
+    "40": {
+      "name": "Cercle des fées",
+      "0": {
+        "requirement": "Dépensez 1 <villager/>",
+        "reward": "Gagnez 1 <magic/> et 3 PV"
+      }
+    },
+    "41": {
+      "name": "Calice sacré",
+      "0": {
+        "requirement": "Avoir au moins 5 <magic/>",
+        "reward": "Redressez une de vos cartes et gagnez 4 PV"
+      }
     }
   }
 }

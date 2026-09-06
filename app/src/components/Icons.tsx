@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
-import { BonusToken, Coin, Seal } from '@gamepark/greylune/material/Tokens'
+import { BonusToken, Coin, IncomeToken, Seal } from '@gamepark/greylune/material/Tokens'
 import { getVillager } from '@gamepark/greylune/material/Villager'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
@@ -9,7 +9,7 @@ import { usePlayerId, useRules } from '@gamepark/react-game'
 import { adventurerImages, MagicMarker, scoreMarkerImages, StrengthMarker, villagerImages } from '../images/PawnImages'
 import { seasonImages } from '../images/SeasonImages'
 import { QuestTileBack } from '../images/TileImages'
-import { bonusTokenImages, coinImages, sealImages, SealBack } from '../images/TokenImages'
+import { bonusTokenImages, coinImages, incomeTokenImages, sealImages, SealBack } from '../images/TokenImages'
 
 /**
  * The words a sentence would otherwise have to spell out, drawn from the material instead.
@@ -80,6 +80,9 @@ export const AdventurerIcon = (props: IconProps) => {
  * a value turns it into the very token lying on the card.
  */
 export const SealIcon = ({ value, ...props }: { value?: Seal } & IconProps) => <Icon src={value ? sealImages[value] : SealBack} {...props} />
+
+/** The Income token an Encounter carries, on its income face: what it pays is drawn on it. */
+export const IncomeTokenIcon = ({ token, ...props }: { token: IncomeToken } & IconProps) => <Icon src={incomeTokenImages[token]} {...props} />
 
 /** The back of the Heroic Quest tiles: the crown is what they all have in common. */
 export const QuestIcon = (props: IconProps) => <Icon src={QuestTileBack} {...props} />

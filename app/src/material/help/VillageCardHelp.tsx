@@ -22,7 +22,7 @@ import { MaterialItem } from '@gamepark/rules-api'
 import { ReactNode } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { CoinIcon, SealIcon } from '../../components/Icons'
-import { HelpFact, HelpFacts, helpDialogCss, helpIcons, HelpNote, HelpSection, HelpTitle, HelpWarning } from './HelpLayout'
+import { HelpFact, HelpFacts, helpDialogCss, helpIcons, HelpNote, HelpSection, HelpTitle, HelpWarning, romanNumeral } from './HelpLayout'
 
 /**
  * What a Village card says, for a card that says nothing.
@@ -52,8 +52,6 @@ const typeAccent: Record<VillageCardType, string> = {
   [VillageCardType.Item]: '#9c3025',
   [VillageCardType.Companion]: '#1f5a8c'
 }
-
-const romanNumeral: Record<Period, string> = { [Period.I]: 'I', [Period.II]: 'II', [Period.III]: 'III' }
 
 const VillageCardDetails = ({ card, item, itemIndex }: { card: VillageCard; item: Partial<MaterialItem<PlayerColor, LocationType>>; itemIndex?: number }) => {
   const { t } = useTranslation()

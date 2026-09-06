@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { Period } from '@gamepark/greylune/material/Period'
 import { ReactNode } from 'react'
 import { AdventurerIcon, CoinIcon, ForceIcon, MagicIcon, SealIcon, VillagerIcon, VpIcon } from '../../components/Icons'
 
@@ -22,6 +23,9 @@ import { AdventurerIcon, CoinIcon, ForceIcon, MagicIcon, SealIcon, VillagerIcon,
  * `<force/>`, `<villager/>` and the rest are the very images the player is looking at (see
  * {@link Icons}), which is what lets a line stay short and still be unambiguous.
  */
+
+/** The period a card belongs to, as the back of the card and the rulebook write it. */
+export const romanNumeral: Record<Period, string> = { [Period.I]: 'I', [Period.II]: 'II', [Period.III]: 'III' }
 
 /** The pieces a help text may name, as `<coin/>`, `<vp/>`, `<force/>`… in the translation files. */
 export const helpIcons = {
@@ -162,6 +166,61 @@ const sectionTitleCss = css`
 const sectionTextCss = css`
   margin: 0;
   line-height: 1.5;
+`
+
+/**
+ * The two scrolls at the foot of an Encounter card, laid out the way they are printed: what the
+ * Encounter asks for on the left, what it pays on the right, and one row per half of the card.
+ *
+ * A card with two halves is one table of two rows rather than two blocks, because the choice a
+ * player makes there is between the rows — either, or both — and a table is what shows a choice.
+ */
+export const HelpOutcomes = ({ requirement, reward, children }: { requirement: ReactNode; reward: ReactNode; children: ReactNode }) => (
+  <div css={outcomesCss}>
+    <span css={[outcomeHeaderCss, outcomeLeftCss]}>{requirement}</span>
+    <span />
+    <span css={outcomeHeaderCss}>{reward}</span>
+    {children}
+  </div>
+)
+
+export const HelpOutcome = ({ requirement, reward }: { requirement: ReactNode; reward: ReactNode }) => (
+  <>
+    <span css={[outcomeCellCss, outcomeLeftCss]}>{requirement}</span>
+    <span css={outcomeArrowCss}>→</span>
+    <span css={outcomeCellCss}>{reward}</span>
+  </>
+)
+
+const outcomesCss = css`
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: baseline;
+  gap: 0.3em 0.5em;
+`
+
+const outcomeHeaderCss = css`
+  font-size: 0.8em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.6;
+`
+
+const outcomeCellCss = css`
+  line-height: 1.4;
+  padding-top: 0.35em;
+  border-top: 0.06em solid rgba(58, 42, 26, 0.12);
+`
+
+/** The left column is what is given up, and reads as such: quieter than what it buys. */
+const outcomeLeftCss = css`
+  opacity: 0.8;
+`
+
+const outcomeArrowCss = css`
+  padding-top: 0.35em;
+  opacity: 0.45;
 `
 
 /**
