@@ -1,3 +1,62 @@
 {
-  "Place": "Placer"
+  "Place": "Placer",
+  "header": {
+    "winter": "Nouvelle année",
+    "spring": {
+      "you": "Placez un <villager/> ou <summer>passez à l'été <sun/></summer>",
+      "player": "{player} place un villageois"
+    },
+    "summer": {
+      "you": "Activez un <villager/>, un objet, ou <autumn>passez à l'automne <leaf/></autumn>",
+      "player": "{player} joue son action d'été"
+    },
+    "activate-card": {
+      "you": "Choisissez une option de la carte",
+      "player": "{player} active une carte"
+    },
+    "discard-item": {
+      "you": "Défaussez un objet",
+      "player": "{player} défausse un objet"
+    },
+    "travel": {
+      "you": "Déplacez votre <adventurer/> jusqu'à {count, plural, one {# case} other {# cases}} ou <stay>restez sur place</stay>",
+      "player": "{player} part à l'aventure"
+    },
+    "encounter": {
+      "you-none": "Résolvez une rencontre ou <pass>passez</pass>",
+      "you-coin": "Résolvez une rencontre, <take>prenez <coin/></take> ou <pass>passez</pass>",
+      "you-vp": "Résolvez une rencontre, <take>prenez 1 <vp/></take> ou <pass>passez</pass>",
+      "you-quest": "Résolvez une rencontre, <quest>accomplissez une quête <crown/></quest> ou <pass>passez</pass>",
+      "player": "{player} résout une rencontre"
+    },
+    "quest": {
+      "you": "Racontez {count, plural, one {# histoire} other {# histoires}}",
+      "player": "{player} raconte {count, plural, one {# histoire} other {# histoires}}"
+    },
+    "tell-story": {
+      "you": "Racontez une histoire ({value}/{max}) ou <end>terminez votre récit</end>",
+      "player": "{player} raconte une histoire"
+    },
+    "straighten": {
+      "you": "Redressez une carte",
+      "player": "{player} redresse une carte"
+    },
+    "place-villager": {
+      "you": "Placez un <villager/>",
+      "player": "{player} place un villageois"
+    },
+    "skill": {
+      "you": "Gagnez",
+      "player": "{player} choisit Force ou Magie"
+    },
+    "bonus": {
+      "you": "Choisissez",
+      "player": "{player} choisit un jeton bonus"
+    },
+    "reaction": {
+      "you": "Utilisez un compagnon, une potion, ou <pass>passez</pass>",
+      "player": "{player} peut réagir"
+    },
+    "or": "ou"
+  }
 }

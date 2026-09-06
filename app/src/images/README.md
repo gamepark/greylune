@@ -24,6 +24,7 @@ Source : `kDrive/Licences/Sorry We Are French/GREYLUNE`.
 | `tiles` | `EventTile1-6` + `EventTileBack`, `QuestTile1-9` + `QuestTileBack` |
 | `tokens` | pièces, sceaux, jetons Revenu, jetons Bonus, jetons PV, jeton 1er joueur |
 | `pawns` | meeples et marqueurs, par couleur (`Blue`, `Orange`, `Red`, `Purple`) |
+| `seasons` | `Spring`, `Summer`, `Autumn` : bannières découpées dans `boards/SeasonBoard.png` |
 
 ## Répartition des cartes par période
 
@@ -62,5 +63,11 @@ en miroir sur les planches de punchboard.
 - Aucune icône isolée n'existe (saisons, Force, Magie, Sceau, pièce, récit, blasons de Distance,
   types de carte) : elles ne sont qu'incrustées dans les cartes et les plateaux. Il faudra les
   découper ou les redemander pour les `Headers`, l'aide et les `PlayerPanels`.
+- `seasons/*` : premier découpage de ce genre, fait pour les `Headers` (bannières fleur, soleil et
+  feuille du plateau Saisons, fond parchemin rendu transparent au seuil de saturation). Les autres
+  icônes des `Headers` empruntent la pièce réelle qui dit la chose — `pawns/StrengthMarker` pour la
+  Force, `pawns/MagicMarker` pour la Magie, `tokens/Coin1` pour une pièce, `pawns/ScoreMarker*` pour
+  un PV, `pawns/Villager*1` pour un villageois, `tiles/QuestTileBack` pour une Quête héroïque. À
+  remplacer par de vraies icônes quand on les aura.
 - `pawns/*` : rendus vectoriels extraits de `MEEPLES GREYLUNE.ai` (fiche de fabrication).
   L'ombre portée directionnelle du gabarit est incrustée dans le dessin d'origine.
