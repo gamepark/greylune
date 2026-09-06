@@ -22,6 +22,7 @@ import { MaterialItem } from '@gamepark/rules-api'
 import { ReactNode } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { CoinIcon, SealIcon } from '../../components/Icons'
+import { cardInk, colors } from '../../theme/colors'
 import { HelpFact, HelpFacts, helpDialogCss, helpIcons, HelpNote, HelpSection, HelpTitle, HelpWarning, romanNumeral } from './HelpLayout'
 
 /**
@@ -46,11 +47,11 @@ export const VillageCardHelp = ({ item, itemIndex }: MaterialHelpProps<PlayerCol
   return <VillageCardDetails card={front} item={item} itemIndex={itemIndex} />
 }
 
-/** The colour the card itself is framed in, so the dialog reads as the piece it is about. */
+/** The ink the card has its own name printed in, so the dialog reads as the piece it is about. */
 const typeAccent: Record<VillageCardType, string> = {
-  [VillageCardType.Building]: '#b5762a',
-  [VillageCardType.Item]: '#9c3025',
-  [VillageCardType.Companion]: '#1f5a8c'
+  [VillageCardType.Building]: cardInk.building,
+  [VillageCardType.Item]: cardInk.item,
+  [VillageCardType.Companion]: cardInk.companion
 }
 
 const VillageCardDetails = ({ card, item, itemIndex }: { card: VillageCard; item: Partial<MaterialItem<PlayerColor, LocationType>>; itemIndex?: number }) => {
@@ -154,7 +155,7 @@ const VillageDeckHelp = ({ back }: { back?: Period }) => {
   const left = rules?.material(MaterialType.VillageCard).location(LocationType.VillageDeck).length ?? 0
   return (
     <div css={helpDialogCss}>
-      <HelpTitle accent="#6b5a44" name={t('help.village-deck.name')} aside={back ? t('help.period', { period: romanNumeral[back] }) : undefined} />
+      <HelpTitle accent={colors.gold} name={t('help.village-deck.name')} aside={back ? t('help.period', { period: romanNumeral[back] }) : undefined} />
       <HelpFacts>
         <HelpFact label={t('help.village-deck.left')}>{left}</HelpFact>
       </HelpFacts>

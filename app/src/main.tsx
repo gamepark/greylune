@@ -8,6 +8,7 @@ import { gameAnimations } from './animations/GameAnimations'
 import { App } from './App'
 import { Locators } from './locators/Locators'
 import { Material, MaterialI18n } from './material/Material'
+import { theme } from './theme'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')!).render(
       materialI18n={MaterialI18n}
       locators={Locators}
       animations={gameAnimations}
+      theme={theme}
     >
       <App />
     </GameProvider>

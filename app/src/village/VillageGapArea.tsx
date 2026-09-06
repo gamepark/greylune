@@ -7,6 +7,7 @@ import { borderRadiusCss, LocationDescription, sizeCss, transformCss, useLegalMo
 import { Location, MaterialMove } from '@gamepark/rules-api'
 import { HTMLAttributes, MouseEvent, PointerEvent, Ref, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { colors, rgbOf } from '../theme/colors'
 
 type VillageGapAreaProps = {
   location: Location<PlayerColor, LocationType>
@@ -88,13 +89,15 @@ export const VillageGapArea = ({ location, description, ref, ...props }: Village
 
 /**
  * The colours the Village is painted in: the parchment of the cards, the ink they are lettered with
- * and the gold of their frames. A gap is a hole in that grid, so the button drawn in it is cut from
- * the same cloth rather than laid over it — a slip of parchment, lettered in ink, that the light
- * catches once it is aimed at.
+ * and the gold of their frames — the game's own three, taken from the theme. A gap is a hole in that
+ * grid, so the button drawn in it is cut from the same cloth rather than laid over it: a slip of
+ * parchment, lettered in ink, that the light catches once it is aimed at.
  */
-const ink = '58, 38, 18'
-const parchment = '246, 233, 205'
-const gold = '176, 132, 58'
+const ink = rgbOf(colors.ink)
+const parchment = rgbOf(colors.parchment)
+const gold = rgbOf(colors.gold)
+const parchmentDeep = rgbOf(colors.parchmentDeep)
+const parchmentLight = rgbOf(colors.parchmentLight)
 
 /** At rest: a slip of parchment slid into the free space, quiet enough to leave the Village legible. */
 const gapAreaCss = css`
@@ -104,7 +107,7 @@ const gapAreaCss = css`
   justify-content: center;
   box-sizing: border-box;
   border: 0.06em solid rgba(${gold}, 0.7);
-  background: linear-gradient(to bottom, rgba(${parchment}, 0.82), rgba(231, 213, 174, 0.86));
+  background: linear-gradient(to bottom, rgba(${parchment}, 0.82), rgba(${parchmentDeep}, 0.86));
   box-shadow:
     0 0.05em 0.15em rgba(0, 0, 0, 0.35),
     inset 0 0 0.3em rgba(${gold}, 0.3);
@@ -119,7 +122,7 @@ const gapAreaCss = css`
 /** Aimed at: the parchment turns fresh, the gold frame takes the light and the ink goes black. */
 const armedCss = css`
   border-color: rgb(${gold});
-  background: linear-gradient(to bottom, rgba(255, 249, 233, 0.97), rgba(${parchment}, 0.97));
+  background: linear-gradient(to bottom, rgba(${parchmentLight}, 0.97), rgba(${parchment}, 0.97));
   box-shadow:
     0 0 0.5em 0.1em rgba(${gold}, 0.8),
     inset 0 0 0.45em rgba(255, 255, 255, 0.75);

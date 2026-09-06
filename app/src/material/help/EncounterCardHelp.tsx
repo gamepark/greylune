@@ -16,6 +16,7 @@ import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { MaterialHelpProps, useRules } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
 import { IncomeTokenIcon } from '../../components/Icons'
+import { cardInk } from '../../theme/colors'
 import { HelpFact, HelpFacts, HelpNote, HelpOutcome, HelpOutcomes, HelpTitle, helpDialogCss, helpIcons, romanNumeral } from './HelpLayout'
 
 /**
@@ -44,7 +45,7 @@ const EncounterCardDetails = ({ card }: { card: EncounterCard }) => {
   return (
     <div css={helpDialogCss}>
       <HelpTitle
-        accent="#2f6b5a"
+        accent={cardInk.encounter}
         name={t(`encounter-card.${card}.name`)}
         subtitle={t('help.encounter.name')}
         aside={t('help.period', { period: romanNumeral[getEncounterCardPeriod(card)] })}
@@ -97,7 +98,7 @@ const EncounterDeckHelp = ({ back }: { back?: Period }) => {
   const left = rules?.material(MaterialType.EncounterCard).location(LocationType.EncounterDeck).length ?? 0
   return (
     <div css={helpDialogCss}>
-      <HelpTitle accent="#2f6b5a" name={t('help.encounter-deck.name')} aside={back ? t('help.period', { period: romanNumeral[back] }) : undefined} />
+      <HelpTitle accent={cardInk.encounter} name={t('help.encounter-deck.name')} aside={back ? t('help.period', { period: romanNumeral[back] }) : undefined} />
       <HelpFacts>
         <HelpFact label={t('help.encounter-deck.left')}>{left}</HelpFact>
       </HelpFacts>

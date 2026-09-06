@@ -4,6 +4,8 @@ import { css } from '@emotion/react'
 import { Period } from '@gamepark/greylune/material/Period'
 import { ReactNode } from 'react'
 import { AdventurerIcon, CoinIcon, ForceIcon, MagicIcon, SealIcon, VillagerIcon, VpIcon } from '../../components/Icons'
+import { colors } from '../../theme/colors'
+import { fontDisplay } from '../../theme/typography'
 
 /**
  * What every help dialog of the game is built out of.
@@ -44,7 +46,7 @@ export const helpDialogCss = css`
   display: flex;
   flex-direction: column;
   gap: 0.6em;
-  color: #3a2a1a;
+  color: ${colors.ink};
 `
 
 /**
@@ -75,7 +77,9 @@ const titleRowCss = css`
 
 const nameCss = css`
   margin: 0;
-  font-size: 1.4em;
+  font-family: ${fontDisplay};
+  font-size: 1.5em;
+  font-weight: 600;
   line-height: 1.2;
 `
 
@@ -121,7 +125,7 @@ const factCss = css`
   gap: 0.4em;
   padding: 0.25em 0.6em;
   border-radius: 0.3em;
-  background: rgba(58, 42, 26, 0.06);
+  background: ${colors.wash};
 `
 
 const factLabelCss = css`
@@ -149,7 +153,7 @@ export const HelpSection = ({ title, children }: { title: ReactNode; children: R
 
 const sectionCss = css`
   &:not(:first-of-type) {
-    border-top: 0.06em solid rgba(58, 42, 26, 0.12);
+    border-top: 0.06em solid ${colors.rule};
     padding-top: 0.5em;
   }
 `
@@ -210,7 +214,7 @@ const outcomeHeaderCss = css`
 const outcomeCellCss = css`
   line-height: 1.4;
   padding-top: 0.35em;
-  border-top: 0.06em solid rgba(58, 42, 26, 0.12);
+  border-top: 0.06em solid ${colors.rule};
 `
 
 /** The left column is what is given up, and reads as such: quieter than what it buys. */
@@ -244,8 +248,8 @@ const warningCss = css`
   margin: 0;
   padding: 0.35em 0.6em;
   border-radius: 0.3em;
-  background: rgba(156, 48, 37, 0.1);
-  color: #7d2419;
+  background: ${colors.crimsonLight};
+  color: ${colors.crimsonDeep};
   font-size: 0.9em;
   line-height: 1.45;
 `
