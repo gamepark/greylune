@@ -8,6 +8,7 @@ import { EncounterCard, EncounterCardId, getEncounterCardPeriod } from './materi
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { playerCoins, playerForce, playerMagic, playerVp } from './material/PlayerState'
+import { TriggerType } from './material/Reaction'
 import { getVillageCardPeriod, VillageCard, VillageCardId } from './material/VillageCard'
 import { Memory } from './Memory'
 import { PlayerColor } from './PlayerColor'
@@ -233,7 +234,7 @@ describe('The Potions', () => {
     give(VillageCard.Selia)
     const potion = give(VillageCard.StrengthPotion, LocationType.Items)
     game.rule = { id: RuleId.Reaction, player: BLUE }
-    game.memory[Memory.Trigger] = [2]
+    game.memory[Memory.Trigger] = [TriggerType.ResolveEncounter]
     game.memory[Memory.Resume] = RuleId.ResolveEffects
     useReaction(potion)
     expect(items(MaterialType.VillageCard)[potion].location.type).toBe(LocationType.Items)
@@ -256,6 +257,21 @@ describe('Isandre', () => {
     expect(items(MaterialType.VillageCard)[isandre].location.rotation).toBe(true)
     expect(playerVp(rules(), BLUE)).toBe(3)
   })
+
+  it('answers a Companion tilted for its own reaction, and not only an Object', () => {
+    const isandre = give(VillageCard.Isandre)
+    const elwen = give(VillageCard.Elwen)
+    game.rule = { id: RuleId.Reaction, player: BLUE }
+    game.memory[Memory.Trigger] = [TriggerType.Travel]
+    game.memory[Memory.Resume] = RuleId.ResolveEffects
+    game.memory[Memory.TravelLeft] = 1
+    useReaction(elwen)
+    // The window was opened on the journey and now holds the tilt Elwen paid with.
+    expect(game.rule!.id).toBe(RuleId.Reaction)
+    useReaction(isandre)
+    expect(items(MaterialType.VillageCard)[elwen].location.rotation).toBe(false)
+    expect(items(MaterialType.VillageCard)[isandre].location.rotation).toBe(true)
+  })
 })
 
 describe('Seren', () => {
@@ -273,6 +289,34 @@ describe('Seren', () => {
     playCustom(CustomMoveType.Pass)
     expect(playerVp(rules(), BLUE)).toBe(7)
     expect(playerForce(rules(), BLUE)).toBe(1)
+  })
+})
+
+describe('Mira', () => {
+  it('is offered once the road is behind, so a Villager the Encounter has just given can be placed', () => {
+    const mira = give(VillageCard.Mira)
+    // Ferme: a Villager, and nothing to pay for it. A card in the Village gives it somewhere to stand.
+    placeEncounter(EncounterCard.Farm, Area.Wand)
+    placeCard(VillageCard.Smithy, 0, 0)
+    owe(travel(1))
+    play(rules().getLegalMoves(BLUE)[0])
+    playCustom(CustomMoveType.ResolveOutcome, (data: { outcomes: number[] }) => data.outcomes.length > 0)
+    expect(game.rule!.id).toBe(RuleId.Reaction)
+    useReaction(mira)
+    expect(game.rule!.id).toBe(RuleId.PlaceVillager)
+    expect(items(MaterialType.VillageCard)[mira].location.rotation).toBe(true)
+  })
+
+  it('answers the journey itself, and not the Encounter: no card resolved, and she still speaks', () => {
+    const mira = give(VillageCard.Mira)
+    placeEncounter(EncounterCard.Farm, Area.Wand)
+    placeCard(VillageCard.Smithy, 0, 0)
+    owe(travel(1))
+    play(rules().getLegalMoves(BLUE)[0])
+    playCustom(CustomMoveType.Pass)
+    expect(game.rule!.id).toBe(RuleId.Reaction)
+    useReaction(mira)
+    expect(game.rule!.id).toBe(RuleId.PlaceVillager)
   })
 })
 

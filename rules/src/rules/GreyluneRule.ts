@@ -483,6 +483,10 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
    * A Companion is tilted; a Potion is emptied and goes back in the box, unless Selia is there to
    * tilt it instead (rulebook p.15). Either way a card just went down, and Isandre may say so — so
    * the window a tilt happens in grows a trigger it was not opened for.
+   *
+   * "One of your cards" is every one of them, the Companion tilted for its own reaction included:
+   * that is what the card says, and nothing runs away, because Isandre pays with her own tilt and
+   * has none left over until something stands her back up.
    */
   useReaction(card: number, option: number): GreyluneMove[] {
     const tiltedBefore = this.remind<number>(Memory.LastTilted)

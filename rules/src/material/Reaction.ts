@@ -3,21 +3,28 @@ import { Requirement } from './Effect'
 /**
  * The moments a Companion or a Potion may step into an action already under way.
  *
- * Every reaction of the box hangs on one of these. Two of them are read a little more generously
- * than the cards word them, and for the same reason: what a Potion lends "when you go adventuring"
- * — 2 Magic, an ignored condition — is only ever worth anything when the Encounter is being
- * resolved, and nothing is learnt between leaving Greylune and arriving. So those are offered on
- * arrival, where the player can see what they are paying for, rather than before the first step.
- *
- * See `docs/ecarts-regles.md`, where every divergence from the rulebook is listed.
+ * Every reaction of the box hangs on one of these. Four cards are worded "when you go adventuring"
+ * and none of them is offered at the first step, because none of them can be answered there. What a
+ * Potion lends — 2 Magic, an ignored condition — is only ever worth anything while the Encounter is
+ * resolved, and nothing is learnt between leaving Greylune and arriving, so those are offered on
+ * arrival, where the player sees what they are paying for. What Mira and the Potion d'endurance put
+ * back in the Village may be a Villager the Encounter has just handed over, which the appendix says
+ * in as many words, so those are offered once the road is behind. Elwen alone is answered at the
+ * departure, because the length of the road is what she changes.
  */
 export enum TriggerType {
-  /** The Adventurer is about to leave: Elwen lengthens the road, the Potion d'endurance fills the Village. */
+  /** The Adventurer is about to leave: Elwen lengthens the road. */
   Travel = 1,
+  /**
+   * The journey is over and everything it paid has been handed over: Mira and the Potion
+   * d'endurance. Both are worded "when you go adventuring" and both put an active Villager in the
+   * Village, and the appendix says which Villager that may be — one the Encounter has just handed
+   * over. So the window belongs to the departure and is only opened at the end of the road, where
+   * the player has everything the journey gave to choose from.
+   */
+  TravelDone,
   /** An Encounter is being resolved: temporary skills and ignored conditions. */
   ResolveEncounter,
-  /** The Encounter has been resolved: Mira. */
-  AfterEncounter,
   /** An Object is being bought: Dorian. */
   BuyItem,
   /** A story is being told: Seren and the Charisma potion. */
@@ -26,7 +33,7 @@ export enum TriggerType {
   SpendForce,
   /** Villagers are about to be spent on one of the player's own cards: Bran. */
   SpendVillagers,
-  /** A Villager is being taken out of the Village: Neris. */
+  /** A Villager is being taken out of the Village and onto the camp: Neris. Never the Event tile. */
   RemoveVillager,
   /** A Seal is being spent: Selia. */
   ActivateSeal,

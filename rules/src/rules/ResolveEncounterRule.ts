@@ -141,7 +141,7 @@ export class ResolveEncounterRule extends GreyluneRule {
     return [
       ...this.payRequirements(requirements.filter((requirement) => !isCheck(requirement))),
       this.encounterCards.index(data.card).moveItem({ type: LocationType.UntoldStories, player: this.player }),
-      ...this.openReactions([TriggerType.AfterEncounter], RuleId.ResolveEffects)
+      this.startRule(RuleId.ResolveEffects)
     ]
   }
 }

@@ -30,6 +30,13 @@ export enum Memory {
   /** How far the Adventurer may still travel. */
   TravelLeft,
 
+  /**
+   * That the action took the Adventurer out of Greylune. Set when the journey starts and read when
+   * the action has nothing left to hand over, which is when the cards that answer a journey are
+   * offered (see {@link TriggerType.TravelDone}).
+   */
+  WentAdventuring,
+
   /** The rewards a Tavern pays, one per story value, and what the story told is worth so far. */
   StoryRewards,
   StoryValue,

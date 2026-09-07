@@ -144,7 +144,7 @@ const spendVillagers = (count = 1): Requirement => req(RequirementType.SpendVill
 export const encounterCardData: Record<EncounterCard, EncounterCardData> = {
   // ---------------------------------------------------------------- period I
 
-  /** 2 spaces on the printed card, 3 in the appendix: the card is what the players have (see `docs/ecarts-regles.md`). */
+  /** 2 spaces on the printed card, 3 in the appendix: the card is right and the appendix is an erratum. */
   [EncounterCard.Valley]: {
     story: 0,
     outcomes: [

@@ -287,7 +287,7 @@
     "214": {
       "name": "Potion d'endurance",
       "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
-      "reaction": "Quand vous partez à l'aventure, vous pouvez défausser cette carte pour placer un <villager/> actif au Village."
+      "reaction": "Quand vous partez à l'aventure, vous pouvez défausser cette carte pour placer un <villager/> actif au Village. Vous pouvez placer un <villager/> obtenu lors de la résolution de la carte Rencontre."
     },
     "215": {
       "name": "Potion de vol",
@@ -406,7 +406,7 @@
       "name": "Mira",
       "role": "Éclaireuse",
       "immediate": "Gagnez 1 <villager/>.",
-      "reaction": "Après avoir résolu une Rencontre, vous pouvez incliner cette carte pour placer un <villager/> actif au Village.",
+      "reaction": "Quand vous partez à l'aventure, vous pouvez incliner cette carte pour placer un <villager/> actif au Village. Vous pouvez placer un <villager/> obtenu lors de la résolution de la carte Rencontre.",
       "score": "1 PV par blason différent parmi les Rencontres que vous avez résolues."
     }
   },

@@ -30,7 +30,21 @@ export class ResolveEffectsRule extends GreyluneRule {
       if (moves.length) return moves
       gains = rest
     }
-    return this.endOfTurn()
+    const journey = this.travelDone()
+    return journey.length ? journey : this.endOfTurn()
+  }
+
+  /**
+   * The cards that answer a journey, offered once the road is behind and everything it paid has been
+   * handed over: what Mira and the Potion d'endurance put back in the Village may be a Villager the
+   * Encounter has just given (see {@link TriggerType.TravelDone}). The journey is forgotten first, so
+   * that the Villager they queue is resolved by a pass that no longer opens the window.
+   */
+  private travelDone(): GreyluneMove[] {
+    if (!this.remind<boolean>(Memory.WentAdventuring)) return []
+    this.forget(Memory.WentAdventuring)
+    if (!this.reactionChoices([TriggerType.TravelDone]).length) return []
+    return this.openReactions([TriggerType.TravelDone], RuleId.ResolveEffects)
   }
 
   private startGain(gain: Gain): GreyluneMove[] {
@@ -43,6 +57,7 @@ export class ResolveEffectsRule extends GreyluneRule {
         return [this.startRule(RuleId.ChooseSkill)]
       case GainType.Travel:
         this.memorize(Memory.TravelLeft, this.amount(gain.count))
+        this.memorize(Memory.WentAdventuring, true)
         return this.openReactions([TriggerType.Travel], RuleId.Travel)
       case GainType.Straighten:
         return this.tiltedCards.length ? [this.startRule(RuleId.StraightenCard)] : []
