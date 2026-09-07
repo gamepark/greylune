@@ -1,4 +1,4 @@
-import { EventTile, eventTileData } from '@gamepark/greylune/material/EventTile'
+import { EventTile, eventTileData, isFestival } from '@gamepark/greylune/material/EventTile'
 import { QuestTile, questRequirements } from '@gamepark/greylune/material/QuestTile'
 import { readFileSync } from 'fs'
 import { describe, expect, it } from 'vitest'
@@ -7,6 +7,10 @@ import { describe, expect, it } from 'vitest'
  * The same seam as the two card specs, on the tiles. An Event tile draws one line per option it
  * offers and a Heroic Quest one line for what it asks, and both take those sentences from the
  * translation files: an option added or a condition dropped must not leave an empty line behind.
+ *
+ * The Festival is the exception, and is checked as one: its 5 options are each a pair of amounts,
+ * written from the tile data itself rather than from a sentence (see `Gains`), so it carries a name
+ * and nothing else. A sentence appearing there again would be a sentence nothing reads.
  *
  * Checked in the developer's own language; the other locales are translated from it in one pass
  * before release (see `CLAUDE.md`).
@@ -23,7 +27,7 @@ const allQuests = Object.keys(questRequirements).map(Number) as QuestTile[]
 describe('Every Event tile is written out in full', () => {
   it.each(allEvents)('tile %i lists exactly the options it offers', (tile) => {
     const entry = events[tile] ?? {}
-    const abilities = eventTileData[tile].abilities
+    const abilities = isFestival(tile) ? [] : eventTileData[tile].abilities
     expect(Object.keys(entry).sort()).toEqual(['name', ...abilities.map((_, index) => String(index))].sort())
     abilities.forEach((ability, index) => {
       const option = entry[String(index)] as object | undefined

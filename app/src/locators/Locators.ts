@@ -6,9 +6,10 @@ import { VpTokenValue } from '@gamepark/greylune/material/VpToken'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
 import { DeckLocator, ListLocator, Locator, MaterialContext, PileLocator } from '@gamepark/react-game'
-import { Location, XYCoordinates } from '@gamepark/rules-api'
+import { Location } from '@gamepark/rules-api'
 import { CenteredFlexLocator } from './CenteredFlexLocator'
 import { CenteredListLocator } from './CenteredListLocator'
+import { EventSpaceLocator } from './EventSpaceLocator'
 import { playerPanelLocator } from './PlayerPanelLocator'
 import { VillageGapLocator } from './VillageGapLocator'
 import { getBandRow, hideBandOfOtherPlayers, showsBandOf } from './DisplayedPlayer'
@@ -61,19 +62,6 @@ import {
   areaSpots,
   vpTokenStackSpots
 } from './TableLayout'
-
-/**
- * The 5 free spaces of the Festival, in percentage of the tile they are drawn on: one at the top
- * between the Magic and the 2 points, two down each side, and the last two either side of the Force
- * at the bottom. Standing on one is choosing the 2 bonuses it lies between.
- */
-const festivalSpaces: Record<number, XYCoordinates> = {
-  0: { x: 50, y: 34 },
-  1: { x: 31.5, y: 49 },
-  2: { x: 69, y: 49 },
-  3: { x: 31.5, y: 72 },
-  4: { x: 69, y: 72 }
-}
 
 /** Which of the 4 seats a player sits in. Fixed for the whole game, so positions never move. */
 const seatOf = (context: MaterialContext, player?: number) => Math.max(0, context.rules.players.indexOf(player as PlayerColor))
@@ -161,11 +149,11 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
    * The Villagers taking part in the Event stand on the tile itself. The Festival is the only one
    * with spaces of its own: 5 of them, drawn in a ring, each between 2 of its bonuses. Every other
    * tile has a single space, so everybody stands in the middle of it.
+   *
+   * A Villager that has just walked onto the tile has no `x` yet: it stands in the middle of it,
+   * whatever the tile, until its player says what they take from the Event (see `EventRule`).
    */
-  [LocationType.EventSpace]: new Locator({
-    parentItemType: MaterialType.EventTile,
-    getPositionOnParent: (location: Location) => festivalSpaces[location.x ?? 0] ?? { x: 50, y: 50 }
-  }),
+  [LocationType.EventSpace]: new EventSpaceLocator(),
 
   // ---------------------------------------------------------------- main board spaces
 

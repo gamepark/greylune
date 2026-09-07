@@ -84,14 +84,16 @@ export class GreyluneRules
    * {@link StackingStrategy} is what is left when `x` or `y` still names a space inside that area and
    * several items may share it: it leaves them alone and keeps a sequence on `z`, the rank in the
    * pile. That is the score track and the season track (`x` is the value, and everybody's markers
-   * lie on one board), the shields of a Quest (`x` tells the first player's from the shared one), and
-   * the {@link LocationType.VillageGap}, where `x` and `y` name the gap and any number of Villagers
-   * stand in it. {@link LocationType.Area} is the same pile without the `x`, so the sequence on `z`
-   * is enough on its own.
+   * lie on one board), the shields of a Quest (`x` tells the first player's from the shared one), the
+   * {@link LocationType.VillageGap}, where `x` and `y` name the gap and any number of Villagers stand
+   * in it, and the {@link LocationType.EventSpace}, where `x` names one of the Festival's printed
+   * spaces and, on every other tile, nothing at all: the Villagers of all the players share its
+   * middle. {@link LocationType.Area} is the same pile without the `x`,
+   * so the sequence on `z` is enough on its own.
    *
-   * A place that never holds two items at once needs no strategy at all, and has none: the Event
-   * space and the special action space take one Villager per player per year, and an Encounter card
-   * carries a single Income token.
+   * A place that never holds two items at once needs no strategy at all, and has none: the special
+   * action space takes one Villager per player per year, and an Encounter card carries a single
+   * Income token.
    *
    * The remaining location types are deliberately absent, because what tells their spaces apart is a
    * value and not a rank: {@link LocationType.QuestTileSpace} (`id` is the {@link Area} the
@@ -119,7 +121,8 @@ export class GreyluneRules
       [LocationType.ActiveVillagers]: new PositiveSequenceStrategy(),
       [LocationType.VillagerReserve]: new PositiveSequenceStrategy(),
       [LocationType.Camp]: new PositiveSequenceStrategy(),
-      [LocationType.VillageGap]: new StackingStrategy()
+      [LocationType.VillageGap]: new StackingStrategy(),
+      [LocationType.EventSpace]: new StackingStrategy()
     },
     [MaterialType.Adventurer]: {
       [LocationType.Area]: new PositiveSequenceStrategy()

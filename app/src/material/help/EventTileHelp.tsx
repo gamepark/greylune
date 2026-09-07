@@ -6,6 +6,7 @@ import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { MaterialHelpProps, useRules } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
+import { GainsLabel } from '../../components/Gains'
 import { cardInk } from '../../theme/colors'
 import { HelpFact, HelpFacts, HelpList, HelpListItem, HelpNote, HelpOutcome, HelpOutcomes, HelpTitle, helpDialogCss, helpIcons } from './HelpLayout'
 
@@ -19,6 +20,10 @@ import { HelpFact, HelpFacts, HelpList, HelpListItem, HelpNote, HelpOutcome, Hel
  * Four of the six ask for something: Force, Magic or coins, laid out cost facing reward like an
  * Encounter. The Banquet and the Festival ask for nothing, and their options are simply a list: what
  * the player chooses there is where the Villager stands, not what they pay.
+ *
+ * The Festival is the one tile whose options are written by nobody: each of its 5 is a pair of
+ * amounts, and a figure and a symbol say a pair of amounts in every language at once (see
+ * {@link GainsLabel}).
  */
 export const EventTileHelp = ({ item }: MaterialHelpProps<PlayerColor, MaterialType, LocationType>) => {
   const tile = item.id as EventTile | undefined
@@ -48,9 +53,13 @@ const EventTileDetails = ({ tile }: { tile: EventTile }) => {
         </HelpOutcomes>
       ) : (
         <HelpList title={t('help.options')}>
-          {abilities.map((_, index) => (
+          {abilities.map((ability, index) => (
             <HelpListItem key={index}>
-              <Trans i18nKey={`event-tile.${tile}.${index}.reward`} components={helpIcons} />
+              {isFestival(tile) ? (
+                <GainsLabel gains={ability.gains ?? []} />
+              ) : (
+                <Trans i18nKey={`event-tile.${tile}.${index}.reward`} components={helpIcons} />
+              )}
             </HelpListItem>
           ))}
         </HelpList>

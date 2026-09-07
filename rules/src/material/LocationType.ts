@@ -26,8 +26,15 @@ export enum LocationType {
    */
   EventPile,
   /**
-   * The Event tile of the year, where a Villager is placed to take part in it: `x` is the option the
-   * Villager pays for. On the Festival, and only there, an option taken is taken for the year.
+   * The Event tile of the year, where a Villager is placed to take part in it: `parent` is the tile.
+   *
+   * `x` is one of the Festival's 5 printed spaces, and nothing at all on any other tile: an option
+   * that leaves no piece on the table is spent and gained on the spot and never written down. So the
+   * Festival holds one Villager per space, and every other tile a little crowd in its middle — one
+   * per player, `z` being the rank among them.
+   *
+   * The tile belongs to nobody, and neither does the space: whose a Villager is, is sculpted into
+   * the figure (see {@link Villager}).
    */
   EventSpace,
   /** The 3 Heroic Quest spaces of the main board, `id` being the {@link Area} each one lies at. */

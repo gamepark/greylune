@@ -25,6 +25,11 @@ Source : `kDrive/Licences/Sorry We Are French/GREYLUNE`.
 | `tokens` | pièces, sceaux, jetons Revenu, jetons Bonus, jetons PV, jeton 1er joueur |
 | `pawns` | meeples et marqueurs, par couleur (`Blue`, `Orange`, `Red`, `Purple`) |
 | `seasons` | `Spring`, `Summer`, `Autumn` : bannières découpées dans `boards/SeasonBoard.png` |
+| `icons` | symboles isolés (`Gold`, `Magic`, `Move`, `Strength`, `VictoryPoint`, `Villager`) — **provisoires** |
+
+Les `icons` sont la seule exception à la règle « une image = une pièce » : la Force, la Magie, les
+points de victoire et la route n'existent comme pièce nulle part, seulement comme symbole imprimé
+sur les plateaux et les cartes. Voir `IconImages.ts`.
 
 ## Répartition des cartes par période
 

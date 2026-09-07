@@ -61,5 +61,15 @@ export enum CustomMoveType {
   UseReaction,
 
   /** Which of the Bonus tokens left is spent. Data: the index of the token. */
-  ChooseBonus
+  ChooseBonus,
+
+  /**
+   * What a Villager standing on the Event tile takes from it. Data: the index of the option.
+   *
+   * Only the Festival draws its options as spaces of its own, and there the choice is where the
+   * Villager stands, so it is an item move. Every other tile prints its options as a line of icons
+   * that no piece is ever put on: what is chosen is spent and gained at once and leaves nothing on
+   * the table, so there is nothing to move and nothing to write down.
+   */
+  TakeEventOption
 }

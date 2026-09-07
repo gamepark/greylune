@@ -7,7 +7,7 @@ import { Area } from './material/Area'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { adventurerArea, playerSeason, villagersAtDisposal } from './material/PlayerState'
-import { VILLAGERS_PER_PLAYER } from './material/Villager'
+import { getVillagerPlayer, Villager, VILLAGERS_PER_PLAYER } from './material/Villager'
 import { PlayerColor } from './PlayerColor'
 import { RuleId } from './rules/RuleId'
 import { Season } from './Season'
@@ -52,8 +52,9 @@ const check = (game: Game) => {
     expect([LocationType.EncounterDeck, LocationType.EncounterRow, LocationType.UntoldStories, LocationType.ToldStories]).toContain(item.location.type)
   }
   for (const player of game.players) {
-    // The 7 figures of a player are somewhere, and only ever in one of the places they belong.
-    const villagers = rules.material(MaterialType.Villager).player(player)
+    // The 7 figures of a player are somewhere, and only ever in one of the places they belong. Whose
+    // a figure is, is sculpted into it: the Event tile belongs to nobody and says nothing about it.
+    const villagers = rules.material(MaterialType.Villager).id<Villager>((villager) => getVillagerPlayer(villager) === player)
     expect(villagers.length).toBe(VILLAGERS_PER_PLAYER)
     for (const item of villagers.getItems()) {
       expect([

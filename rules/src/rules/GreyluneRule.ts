@@ -1,13 +1,15 @@
-import { CustomMove, getEnumValues, isCustomMoveType, Material, MaterialMoney, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { CustomMove, getEnumValues, isCustomMoveType, Location, Material, MaterialMoney, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { BONUS_TOKEN_SCORES, MAX_SKILL, SCORE_TRACK_SIZE } from '../Constants'
 import { Memory } from '../Memory'
 import { PlayerColor } from '../PlayerColor'
 import { bonusToken, Count, Gain, GainType, placeVillager, Requirement, RequirementType, SEAL } from '../material/Effect'
+import { EventTile, eventTileData, isFestival } from '../material/EventTile'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { activeVillagers, keepsPotions, playerCoins, playerForce, playerMagic, playerSeason, playerVp, scoreValue } from '../material/PlayerState'
 import { Reaction, ReactionEffect, ReactionType, TriggerType } from '../material/Reaction'
 import { Coin, coinUnits } from '../material/Tokens'
+import { getVillagerPlayer, Villager } from '../material/Villager'
 import { isPotion, VillageCard, VillageCardId, villageCardData } from '../material/VillageCard'
 import { getVpToken, getVpTokenValue, VpToken, VpTokenValue } from '../material/VpToken'
 import { Season } from '../Season'
@@ -57,6 +59,16 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
     return this.material(MaterialType.Villager)
   }
 
+  /**
+   * The player's own Villagers, wherever they stand. Whose a figure is, is sculpted into it and not
+   * written on the place it is put down (see {@link Villager}), which is what lets it be asked for in
+   * the places that belong to nobody — the Event tile holds one Villager of each player, and holds
+   * them the same way.
+   */
+  get myVillagers(): GreyluneMaterial {
+    return this.villagers.id<Villager>((villager) => getVillagerPlayer(villager) === this.player)
+  }
+
   get activeVillagers(): GreyluneMaterial {
     return activeVillagers(this, this.player)
   }
@@ -95,6 +107,48 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
 
   get temporaryMagic(): number {
     return this.remind<number>(Memory.TemporaryMagic) ?? 0
+  }
+
+  // ------------------------------------------------------------------ the Event of the year
+
+  /** The tile of the year: the one on top of the pile, and the only one turned face up. */
+  get tileOfTheYear(): GreyluneMaterial {
+    return this.material(MaterialType.EventTile).location(LocationType.EventPile).rotation(true)
+  }
+
+  get eventTile(): EventTile | undefined {
+    return this.tileOfTheYear.getItem()?.id as EventTile | undefined
+  }
+
+  /**
+   * Where a Villager placed on the Event stands: on the tile itself, which is what `parent` says.
+   * The tile is one of a pile, and a pile is drawn as a single stack whatever it holds, so a Villager
+   * whose location does not name it would be laid out against the stack rather than against the card
+   * on top of it, and end up under the pile instead of on the scroll.
+   */
+  get eventSpace(): Location<PlayerColor, LocationType> {
+    return { type: LocationType.EventSpace, parent: this.tileOfTheYear.getIndex() }
+  }
+
+  /** Once a year for each player, whichever season they spend it in (rulebook p.6). */
+  get hasUsedEvent(): boolean {
+    return this.myVillagers.location(LocationType.EventSpace).length > 0
+  }
+
+  /**
+   * What the Event of the year still offers this player: the options they can pay for, minus — on
+   * the Festival, and only there — the spaces somebody is already standing on.
+   *
+   * A Villager that has walked onto the tile but not yet chosen stands in the middle of it, on no
+   * option at all, so it takes nothing away from anybody.
+   */
+  get eventOptions(): number[] {
+    const tile = this.eventTile
+    if (tile === undefined) return []
+    const taken = this.villagers.location(LocationType.EventSpace).getItems().map((item) => item.location.x)
+    return eventTileData[tile].abilities.flatMap((ability, option) =>
+      this.canPay(ability.requirements) && !(isFestival(tile) && taken.includes(option)) ? [option] : []
+    )
   }
 
   // ------------------------------------------------------------------ the queue of gains

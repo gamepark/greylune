@@ -4,6 +4,7 @@ import { ComponentType } from 'react'
 import { Trans } from 'react-i18next'
 import { BonusTokenHeader } from './BonusTokenHeader'
 import { ChooseSkillHeader } from './ChooseSkillHeader'
+import { EventHeader } from './EventHeader'
 import { VillagerIcon } from '../components/Icons'
 import { ReactionHeader } from './ReactionHeader'
 import { ResolveEncounterHeader } from './ResolveEncounterHeader'
@@ -18,8 +19,8 @@ import { TravelHeader } from './TravelHeader'
  *
  * The bar holds a single line that never wraps and is cut off with an ellipsis, so every sentence
  * here is one short clause: what to do, and nothing about why. It carries no full stop — a bar is a
- * label rather than prose, and the line ends where it ends. Whatever the box has a piece for is
- * shown as that piece (see {@link VillagerIcon} and the rest), which is what keeps a sentence that
+ * label rather than prose, and the line ends where it ends. Whatever the material can say is drawn
+ * rather than written (see {@link VillagerIcon} and the rest), which is what keeps a sentence that
  * fits in French fitting in German too.
  *
  * A choice is offered as a button only when there is nothing on the table to click for it: passing,
@@ -33,10 +34,11 @@ import { TravelHeader } from './TravelHeader'
  * from end to end, they can put in the order their own language wants. The only two that cannot be
  * written that way are the ones whose alternatives are the pieces themselves (see {@link Alternatives}).
  *
- * Five rules are missing on purpose. {@link RuleId.Autumn}, {@link RuleId.Event},
- * {@link RuleId.UseItem} and {@link RuleId.ResolveEffects} ask nobody anything and hand the turn on
- * the moment they start, so a header would only ever flash; {@link RuleId.Winter} does the same, and
- * is named all the same because a new year is worth announcing.
+ * Four rules are missing on purpose. {@link RuleId.Autumn}, {@link RuleId.UseItem} and
+ * {@link RuleId.ResolveEffects} ask nobody anything and hand the turn on the moment they start, so a
+ * header would only ever flash; {@link RuleId.Winter} does the same, and is named all the same
+ * because a new year is worth announcing. {@link RuleId.Event} is the one step that sometimes asks
+ * and sometimes does not, and it says which (see {@link EventHeader}).
  */
 export const Headers: Partial<Record<RuleId, ComponentType>> = {
   // ------------------------------------------------------------------ the four seasons
@@ -53,6 +55,7 @@ export const Headers: Partial<Record<RuleId, ComponentType>> = {
   [RuleId.TellStory]: TellStoryHeader,
   [RuleId.StraightenCard]: () => <HeaderText code="straighten" />,
   [RuleId.PlaceVillager]: () => <HeaderText code="place-villager" components={{ villager: <VillagerIcon /> }} />,
+  [RuleId.Event]: EventHeader,
   [RuleId.ChooseSkill]: ChooseSkillHeader,
   [RuleId.BonusToken]: BonusTokenHeader,
   [RuleId.Reaction]: ReactionHeader

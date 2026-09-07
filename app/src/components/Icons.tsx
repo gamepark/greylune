@@ -1,15 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
-import { BonusToken, Coin, IncomeToken, Seal } from '@gamepark/greylune/material/Tokens'
-import { getVillager } from '@gamepark/greylune/material/Villager'
+import { BonusToken, IncomeToken, Seal } from '@gamepark/greylune/material/Tokens'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
 import { usePlayerId, useRules } from '@gamepark/react-game'
-import { adventurerImages, MagicMarker, scoreMarkerImages, StrengthMarker, villagerImages } from '../images/PawnImages'
+import { ForceGem, GoldCoin, Laurel, MagicGem, Rider, VillagerFigure } from '../images/IconImages'
+import { adventurerImages } from '../images/PawnImages'
 import { seasonImages } from '../images/SeasonImages'
 import { QuestTileBack } from '../images/TileImages'
-import { bonusTokenImages, coinImages, incomeTokenImages, sealImages, SealBack } from '../images/TokenImages'
+import { bonusTokenImages, incomeTokenImages, sealImages, SealBack } from '../images/TokenImages'
 
 /**
  * The words a sentence would otherwise have to spell out, drawn from the material instead.
@@ -17,19 +17,21 @@ import { bonusTokenImages, coinImages, incomeTokenImages, sealImages, SealBack }
  * Written for the header bar, and used by the help dialogs for the same reason. The bar is one line
  * that never wraps and is cut off with an ellipsis (see `Header`), and a sentence that fits in French
  * can still overrun in German: "Dorfbewohner" is 13 letters where "villageois" is 10 and the pawn is
- * 1 em. So everything the box has a piece for is shown as that piece, and only what the material
- * cannot say is left as text. The help dialogs spell out cards that carry no text at all, and the
+ * 1 em. So whatever the material can say is drawn rather than written, and only what it cannot say is
+ * left as text. The help dialogs spell out cards that carry no text at all, and the
  * same pieces are what tie a sentence back to what the player is looking at.
  *
- * The box prints no icon on its own — Force, Magic, the seasons and the rest are only ever inlaid in
- * the boards and the cards (see `images/README.md`) — so each of these is the smallest real piece that
- * says the thing: the marker that stands on a track, the pawn that walks, the token that is spent.
+ * Some are the piece itself, when one piece is what the sentence means: the Adventurer that walks,
+ * the token that is spent, the tile that is chosen. The rest are drawn as the symbol the boards and
+ * the cards print them with (see {@link IconImages}) — Force, Magic, victory points and the road,
+ * which the box gives no piece for, and gold and the Villagers, which come in several pieces where a
+ * sentence means only an amount.
  */
 
 /**
  * The player the coloured pieces are borrowed from: whoever is being waited for, and the reader
- * themselves when nobody is. A Villager and a score marker exist in 4 colours and in none, so the
- * icon is the one the sentence is about.
+ * themselves when nobody is. The Adventurer exists in 4 colours and in none, so the icon is the one
+ * the sentence is about.
  */
 const useIconPlayer = (): PlayerColor => {
   const rules = useRules<GreyluneRules>()!
@@ -51,24 +53,24 @@ const iconCss = css`
 
 const Icon = ({ src, className }: { src: string } & IconProps) => <img src={src} alt="" css={iconCss} className={className} />
 
-/** A coin of the denomination the sentence is about: the silver 1, or the gold 5. */
-export const CoinIcon = ({ value = Coin.One, ...props }: { value?: Coin } & IconProps) => <Icon src={coinImages[value]} {...props} />
+/** Money, as the cards print it: a sentence says how much, never in which coins it is paid. */
+export const CoinIcon = (props: IconProps) => <Icon src={GoldCoin} {...props} />
 
-/** The marker that stands on the score track, which is the only piece the game gives a point. */
-export const VpIcon = (props: IconProps) => {
-  const player = useIconPlayer()
-  return <Icon src={scoreMarkerImages[player]} {...props} />
-}
+/** The laurel a victory point is printed as, wherever the game hands one out. */
+export const VpIcon = (props: IconProps) => <Icon src={Laurel} {...props} />
 
-export const ForceIcon = (props: IconProps) => <Icon src={StrengthMarker} {...props} />
+export const ForceIcon = (props: IconProps) => <Icon src={ForceGem} {...props} />
 
-export const MagicIcon = (props: IconProps) => <Icon src={MagicMarker} {...props} />
+export const MagicIcon = (props: IconProps) => <Icon src={MagicGem} {...props} />
 
-/** The first of the player's 7 figures: they are all Villagers, and no two are sculpted alike. */
-export const VillagerIcon = (props: IconProps) => {
-  const player = useIconPlayer()
-  return <Icon src={villagerImages[getVillager(player, 1)]} {...props} />
-}
+/** The road, as the board draws it: what the Adventurer does with the spaces an effect hands over. */
+export const TravelIcon = (props: IconProps) => <Icon src={Rider} {...props} />
+
+/**
+ * A Villager, as the cards print one. The figures are sculpted 7 different ways and come in the 4
+ * colours, and none of those is what a sentence means: it means a Villager, any Villager.
+ */
+export const VillagerIcon = (props: IconProps) => <Icon src={VillagerFigure} {...props} />
 
 export const AdventurerIcon = (props: IconProps) => {
   const player = useIconPlayer()

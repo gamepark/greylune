@@ -1,5 +1,7 @@
 {
   "Place": "Placer",
+  "Participate": "Participer",
+  "gains": "<gain1/> et <gain2/>",
   "header": {
     "winter": "Nouvelle année",
     "spring": {
@@ -44,6 +46,14 @@
     "place-villager": {
       "you": "Placez un <villager/>",
       "player": "{player} place un villageois"
+    },
+    "event": {
+      "you": "Choisissez ce que l'événement vous rapporte",
+      "player": "{player} participe à l'événement"
+    },
+    "resolve-event": {
+      "you": "Résolution de l'événement",
+      "player": "{player} participe à l'événement"
     },
     "skill": {
       "you": "Gagnez",
@@ -722,22 +732,7 @@
       }
     },
     "2": {
-      "name": "Festival",
-      "0": {
-        "reward": "Gagnez 1 <magic/> et 2 PV"
-      },
-      "1": {
-        "reward": "Gagnez 1 <magic/> et 2 <coin/>"
-      },
-      "2": {
-        "reward": "Gagnez 2 PV et déplacez votre <adventurer/> jusqu'à 1 case"
-      },
-      "3": {
-        "reward": "Gagnez 2 <coin/> et 1 <force/>"
-      },
-      "4": {
-        "reward": "Déplacez votre <adventurer/> jusqu'à 1 case et gagnez 1 <force/>"
-      }
+      "name": "Festival"
     },
     "3": {
       "name": "Grande foire",

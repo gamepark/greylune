@@ -114,6 +114,53 @@ export const stacked = (spot: Coordinates, level = 0): Coordinates => ({
 export const eventSpot = onMainBoard(8.3, 14.5)
 
 /**
+ * The 5 free spaces of the Festival, in percentage of the tile they are drawn on: one at the top
+ * between the Magic and the 2 points, two down each side, and the last two either side of the Force
+ * at the bottom. Standing on one is choosing the 2 bonuses it lies between, so both the Villagers
+ * and the buttons that send them there are placed from this one list.
+ *
+ * Not quite on the printed frames: a Villager is 1.87 by 3.04 em where the tile is 7.71 by 9.94, so
+ * a pawn set square on a frame reaches a good way over whatever is printed above it — and what is
+ * printed above is one of the 2 bonuses the space pays. The 4 side spaces are carried outwards and
+ * the top one lifted, far enough to let the bonuses be read past the pawns, not so far that a space
+ * stops belonging to the frame it stands for.
+ */
+export const festivalSpaces: Record<number, XYCoordinates> = {
+  0: { x: 50, y: 29 },
+  1: { x: 20, y: 42 },
+  2: { x: 80, y: 42 },
+  3: { x: 23, y: 72 },
+  4: { x: 77, y: 72 }
+}
+
+/**
+ * Where a button that claims one of those spaces is drawn, in em from the middle of the tile: on the
+ * space, then nudged a little further out along the same line, so that the space it claims and the
+ * 2 bonuses printed either side of it stay in sight under it.
+ */
+export const festivalSpaceSpot = (option: number): XYCoordinates => {
+  const { x, y } = festivalSpaces[option] ?? { x: 50, y: 50 }
+  const dx = ((x - 50) / 100) * eventTileSize.width
+  const dy = ((y - 50) / 100) * eventTileSize.height
+  const distance = Math.hypot(dx, dy) || 1
+  return { x: dx + (dx / distance) * festivalSpaceNudge, y: dy + (dy / distance) * festivalSpaceNudge }
+}
+
+/**
+ * Half the width of the button, near enough: a disc pushed out by its own radius leaves the space it
+ * claims where the eye can still find it, and the ring of 5 clear of one another.
+ */
+const festivalSpaceNudge = 1
+
+/**
+ * The step from one Villager to the next when several stand on the same Event space. Every tile but
+ * the Festival draws its options on one and the same space, so the Villagers of all the players who
+ * took part that year end up there together, and a step narrower than a Villager is wide lets them
+ * overlap the way figures crowded on a board do.
+ */
+export const eventSpaceGap: Partial<XYCoordinates> = { x: 1.4 }
+
+/**
  * The 3 Heroic Quest spaces, each on the road just past the banner of its Area — the farther the
  * space, the more it pays: 7/5 laurels past the purple banner, 8/6 past the red one, 9/7 past the
  * black one, which lies across the sea in the top-left corner.

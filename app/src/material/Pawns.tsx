@@ -1,12 +1,15 @@
+/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { Villager } from '@gamepark/greylune/material/Villager'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { ItemContext, TokenDescription } from '@gamepark/react-game'
-import { MaterialItem } from '@gamepark/rules-api'
+import { MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { isSameGap } from '@gamepark/greylune/material/Village'
 import { gapsToPlaceVillager } from '../village/PlaceVillager'
+import { canSelectVillager } from '../villagers/SelectVillager'
+import { SelectedVillager } from '../villagers/SelectedVillager'
 import {
   adventurerImages,
   MagicMarker,
@@ -47,6 +50,21 @@ export class VillagerDescription extends TokenDescription<PlayerColor, MaterialT
   getItemExtraCss(item: MaterialItem<PlayerColor, LocationType, Villager>, context: ItemContext<PlayerColor, MaterialType, LocationType>) {
     if (item.location.type !== LocationType.VillageGap) return undefined
     return gapsToPlaceVillager(context).some((gap) => isSameGap(item.location, { x: gap.x ?? 0, y: gap.y ?? 0 })) ? transparentToPointer : undefined
+  }
+
+  /**
+   * A Villager the player could put down somewhere is aimed at by clicking it, and the ring is what
+   * says so. The framework hangs the whole of that behaviour off an item having a menu — one click
+   * takes it, another lets it go, taking one lets go of the one before, and it is dropped as soon as
+   * the Villager is no longer waiting to be placed — so the ring is declared as the menu it is.
+   * See {@link SelectVillager}.
+   */
+  getItemMenu(
+    _item: MaterialItem<PlayerColor, LocationType, Villager>,
+    context: ItemContext<PlayerColor, MaterialType, LocationType>,
+    legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
+  ) {
+    return canSelectVillager(context, legalMoves) ? <SelectedVillager /> : undefined
   }
 }
 

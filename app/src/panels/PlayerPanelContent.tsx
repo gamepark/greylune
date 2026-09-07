@@ -2,12 +2,10 @@ import { css } from '@emotion/react'
 import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { playerCoins, playerVp } from '@gamepark/greylune/material/PlayerState'
-import { Coin } from '@gamepark/greylune/material/Tokens'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { StyledPlayerPanel, usePlay, usePlayer, usePlayerId, useRules } from '@gamepark/react-game'
 import { Location, MaterialMoveBuilder } from '@gamepark/rules-api'
-import { scoreMarkerImages } from '../images/PawnImages'
-import { coinImages } from '../images/TokenImages'
+import { GoldCoin, Laurel } from '../images/IconImages'
 import { showsAllBandsFor } from '../locators/DisplayedPlayer'
 import { playerPanelEms, playerPanelScale, playerPanelWidth } from '../locators/TableLayout'
 import { playerColors } from '../PlayerColors'
@@ -23,9 +21,10 @@ import { playerColors } from '../PlayerColors'
  * of coins of 2 values, and their score, which is a marker on a track plus the token it may have
  * earned. Everything else a panel could show is already legible on the board it sits on.
  *
- * The gold is counted in units and shown under the 5 coin: the 1 is struck in silver, and at the size
- * of a badge icon a silver disc says nothing, where the gold one says money at a glance. The score is
- * shown under the player's own marker, the piece standing on the track the number is read off.
+ * Both are badged with the symbol the game prints them with rather than with a piece: gold is a heap
+ * of 2 coins and no single one of them is the amount, and the score marker is a pawn in the player's
+ * colour, which at badge size reads as the player and not as points. The coin and the laurel say
+ * money and victory points at a glance, and are the same marks the cards are read with.
  */
 export const PlayerPanelContent = ({ location }: { location: Location<PlayerColor, LocationType> }) => {
   const rules = useRules<GreyluneRules>()!
@@ -42,8 +41,8 @@ export const PlayerPanelContent = ({ location }: { location: Location<PlayerColo
       player={player}
       activeRing
       counters={[
-        { image: coinImages[Coin.Five], value: playerCoins(rules, player.id) },
-        { image: scoreMarkerImages[player.id], value: playerVp(rules, player.id) }
+        { image: GoldCoin, value: playerCoins(rules, player.id) },
+        { image: Laurel, value: playerVp(rules, player.id) }
       ]}
       countersPerLine={2}
       onClick={selectable ? () => play(MaterialMoveBuilder.changeView(player.id), { transient: true }) : undefined}

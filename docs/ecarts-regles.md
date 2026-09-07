@@ -32,15 +32,15 @@ C'est le seul désaccord entre une carte Rencontre et l'annexe.
 
 > **Question.** Confirmez-vous que c'est bien 2, et que l'annexe est à corriger ?
 
-### 1.2 Licorne — un jeton Revenu de 1 ou de 2 PV ?
+### 1.2 Licorne — erreur de l'annexe
 
 |  |  |
 |---|---|
 | **L'annexe (p. 18)** | 2 PV pour la Tonnellerie **et** 2 PV pour la Licorne |
 | **Le matériel** | un seul jeton « 2 PV » est découpé, et deux jetons « 1 PV » ; la planche apparie la Licorne avec un « 1 » |
-| **Notre choix** | **1 PV** pour la Licorne, 2 PV pour la Tonnellerie |
+| **Retenu** | **1 PV** pour la Licorne, 2 PV pour la Tonnellerie |
 
-> **Question.** Est-ce bien la Licorne qui perd le 2, ou l'appariement de la planche est-il à revoir ?
+C'est le matériel qui fait foi : la Licorne rapporte 1 PV. **L'annexe p. 18 est à corriger.**
 
 ---
 
@@ -215,11 +215,10 @@ hasard l'a posée, et c'est la première chose que l'aide affiche.
 ## Récapitulatif des questions
 
 1. **Vallée** — 2 cases (la carte) ou 3 (l'annexe) ?
-2. **Licorne** — jeton Revenu de 1 PV ou de 2 PV ?
-3. **Neris** — le Villageois qui part sur la tuile Événement compte-t-il comme « retiré » ?
-4. **Mira** — après avoir résolu une Rencontre, ou dès le départ à l'aventure ?
-5. **Isandre** — peut-elle redresser un Compagnon incliné pour sa réaction ?
-6. **Bran et Isandre** — le symbole de déclenchement identique sur les deux cartes est-il voulu ?
-7. **Le lion d'or / Le loup gris** — un jeton Sceau est-il nécessaire pour raconter, ou seulement
+2. **Neris** — le Villageois qui part sur la tuile Événement compte-t-il comme « retiré » ?
+3. **Mira** — après avoir résolu une Rencontre, ou dès le départ à l'aventure ?
+4. **Isandre** — peut-elle redresser un Compagnon incliné pour sa réaction ?
+5. **Bran et Isandre** — le symbole de déclenchement identique sur les deux cartes est-il voulu ?
+6. **Le lion d'or / Le loup gris** — un jeton Sceau est-il nécessaire pour raconter, ou seulement
    pour le palier qui en utilise la valeur ?
-8. **Potions et Ariok** — fenêtre au départ, ou à l'arrivée sur la case ?
+7. **Potions et Ariok** — fenêtre au départ, ou à l'arrivée sur la case ?

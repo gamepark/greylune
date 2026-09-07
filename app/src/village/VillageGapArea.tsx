@@ -4,10 +4,11 @@ import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { borderRadiusCss, LocationDescription, sizeCss, transformCss, useLegalMoves, useMaterialContext, usePlay } from '@gamepark/react-game'
-import { Location, MaterialMove } from '@gamepark/rules-api'
+import { isMoveItemType, Location, MaterialMove, MoveItem } from '@gamepark/rules-api'
 import { HTMLAttributes, MouseEvent, PointerEvent, Ref, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { colors, rgbOf } from '../theme/colors'
+import { parchmentLabelCss, parchmentLitCss, parchmentSurfaceCss } from '../theme/parchment'
+import { moveOfSelectedVillager, useSelectedVillager } from '../villagers/SelectVillager'
 
 type VillageGapAreaProps = {
   location: Location<PlayerColor, LocationType>
@@ -23,6 +24,9 @@ type VillageGapAreaProps = {
  * this is offered (see {@link VillagerDescription}), so the whole strip answers the click and no pawn
  * ever swallows it.
  *
+ * Which Villager it takes is the one the player aimed at, if they aimed at one, and otherwise any of
+ * theirs: the two halves of the decision are made in either order (see `SelectVillager`).
+ *
  * A mouse arms it by hovering, and the click that follows places. A finger has no hover to give, so
  * the first tap does the arming and the second one places; a tap anywhere else disarms, which is
  * exactly what makes the first tap safe. The two are told apart by the pointer that sends the click,
@@ -33,6 +37,7 @@ export const VillageGapArea = ({ location, description, ref, ...props }: Village
   const context = useMaterialContext<PlayerColor, MaterialType, LocationType>()
   const play = usePlay()
   const moves = useLegalMoves<MaterialMove<PlayerColor, MaterialType, LocationType>>((move) => description.isMoveToLocation(move, location, context))
+  const selected = useSelectedVillager()
   const [armed, setArmed] = useState(false)
   const area = useRef<HTMLDivElement | null>(null)
   const { isOver, setNodeRef } = useDroppable({ id: JSON.stringify(location), disabled: !moves.length, data: location })
@@ -64,7 +69,7 @@ export const VillageGapArea = ({ location, description, ref, ...props }: Village
   const onClick = (event: MouseEvent<HTMLDivElement>) => {
     const pointer = event.nativeEvent instanceof globalThis.PointerEvent ? event.nativeEvent.pointerType : 'mouse'
     if (!armed && (pointer === 'touch' || pointer === 'pen')) setArmed(true)
-    else play(moves[0])
+    else play(moveOfSelectedVillager(moves.filter(isVillagerMove), selected))
   }
 
   return (
@@ -87,56 +92,29 @@ export const VillageGapArea = ({ location, description, ref, ...props }: Village
   )
 }
 
-/**
- * The colours the Village is painted in: the parchment of the cards, the ink they are lettered with
- * and the gold of their frames — the game's own three, taken from the theme. A gap is a hole in that
- * grid, so the button drawn in it is cut from the same cloth rather than laid over it: a slip of
- * parchment, lettered in ink, that the light catches once it is aimed at.
- */
-const ink = rgbOf(colors.ink)
-const parchment = rgbOf(colors.parchment)
-const gold = rgbOf(colors.gold)
-const parchmentDeep = rgbOf(colors.parchmentDeep)
-const parchmentLight = rgbOf(colors.parchmentLight)
+const isVillagerMove = (move: MaterialMove<PlayerColor, MaterialType, LocationType>): move is MoveItem<PlayerColor, MaterialType, LocationType> =>
+  isMoveItemType(MaterialType.Villager)(move)
 
-/** At rest: a slip of parchment slid into the free space, quiet enough to leave the Village legible. */
+/**
+ * A gap is a hole in the grid of cards, so the button drawn in it is cut from the same cloth as the
+ * Village rather than laid over it: the parchment, ink and gold every button on the table is made of
+ * (see {@link parchmentSurfaceCss}).
+ */
 const gapAreaCss = css`
+  ${parchmentSurfaceCss};
   position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  border: 0.06em solid rgba(${gold}, 0.7);
-  background: linear-gradient(to bottom, rgba(${parchment}, 0.82), rgba(${parchmentDeep}, 0.86));
-  box-shadow:
-    0 0.05em 0.15em rgba(0, 0, 0, 0.35),
-    inset 0 0 0.3em rgba(${gold}, 0.3);
-  color: rgba(${ink}, 0.85);
-  transition:
-    background 0.15s ease-in-out,
-    border-color 0.15s ease-in-out,
-    box-shadow 0.15s ease-in-out,
-    color 0.15s ease-in-out;
 `
 
-/** Aimed at: the parchment turns fresh, the gold frame takes the light and the ink goes black. */
-const armedCss = css`
-  border-color: rgb(${gold});
-  background: linear-gradient(to bottom, rgba(${parchmentLight}, 0.97), rgba(${parchment}, 0.97));
-  box-shadow:
-    0 0 0.5em 0.1em rgba(${gold}, 0.8),
-    inset 0 0 0.45em rgba(255, 255, 255, 0.75);
-  color: rgb(${ink});
-  cursor: pointer;
-`
+const armedCss = parchmentLitCss
 
 const labelCss = css`
+  ${parchmentLabelCss};
   font-size: 0.8em;
-  font-weight: bold;
-  line-height: 1;
-  letter-spacing: 0.03em;
   white-space: nowrap;
-  text-shadow: 0 0.03em 0.06em rgba(255, 255, 255, 0.6);
 `
 
 const rotatedLabelCss = css`
