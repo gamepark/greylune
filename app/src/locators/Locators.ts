@@ -1,4 +1,3 @@
-import { Area } from '@gamepark/greylune/material/Area'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { HeroicQuestArea } from '@gamepark/greylune/material/QuestTile'
@@ -7,6 +6,7 @@ import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
 import { DeckLocator, ListLocator, Locator, MaterialContext, PileLocator } from '@gamepark/react-game'
 import { Location } from '@gamepark/rules-api'
+import { AreaLocator } from './AreaLocator'
 import { CampLocator } from './CampLocator'
 import { CenteredFlexLocator } from './CenteredFlexLocator'
 import { CenteredListLocator } from './CenteredListLocator'
@@ -60,9 +60,7 @@ import {
   toldStoriesSpot,
   untoldStoriesSpot,
   villageDeckSpot,
-  villageGap,
   villagerReserveSpot,
-  areaSpots,
   vpTokenStackSpots
 } from './TableLayout'
 
@@ -150,10 +148,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
   // ---------------------------------------------------------------- main board spaces
 
   /** Several Adventurers share an area as soon as they are level: they line up in it. */
-  [LocationType.Area]: new CenteredListLocator({
-    gap: villageGap,
-    getCenter: (location: Location) => areaSpots[(location.id as Area) ?? Area.Village]
-  }),
+  [LocationType.Area]: new AreaLocator(),
 
   /** Players level on the score track share a shield, and their markers pile up on it. */
   [LocationType.ScoreTrack]: new Locator({

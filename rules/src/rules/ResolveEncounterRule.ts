@@ -1,15 +1,16 @@
 import { CustomMove, isCustomMoveType } from '@gamepark/rules-api'
 import { Memory } from '../Memory'
 import { Area } from '../material/Area'
-import { coins, Gain, isCheck, Requirement, vp } from '../material/Effect'
+import { coins, Gain, GainType, isCheck, Requirement, vp } from '../material/Effect'
 import { EncounterCard, EncounterCardId, encounterCardData } from '../material/EncounterCard'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { adventurerArea } from '../material/PlayerState'
 import { HeroicQuestArea, heroicQuestAreas, questRequirements, QuestTile } from '../material/QuestTile'
 import { TriggerType } from '../material/Reaction'
+import { incomeTokenGains } from '../material/Tokens'
 import { CustomMoveType } from './CustomMoveType'
-import { GreyluneMove, GreyluneRule } from './GreyluneRule'
+import { GreyluneMaterial, GreyluneMove, GreyluneRule } from './GreyluneRule'
 import { RuleId } from './RuleId'
 
 /** Which requirement of which side of the card, when a Potion lets one of them be waved away. */
@@ -21,10 +22,11 @@ export type ResolveOutcomeData = { card: number; outcomes: number[]; ignored?: I
 /**
  * The Adventurer has stopped in one of the areas out of Greylune (rulebook p.11).
  *
- * The player may resolve one Encounter of the row they stand in, satisfying either of its two sides
- * or both, and slide it over their board as a story not told yet. They may also refuse it — for the
+ * The player resolves one Encounter of the row they stand in, satisfying either of its two sides or
+ * both, and slides it over their board as a story not told yet. They may also refuse it — for the
  * coin the Wand area pays, the point the Bow one pays, or the Heroic Quest lying in the three
- * farthest ones — or simply do nothing.
+ * farthest ones — but refusing is only ever taking what the space offers instead, never doing
+ * nothing: the Adventurer "résout une Rencontre sur sa case d'arrivée, si possible" (p.11).
  */
 export class ResolveEncounterRule extends GreyluneRule {
   /** Where the Adventurer stands, {@link Area.Village} while it is still in Greylune. */
@@ -44,6 +46,12 @@ export class ResolveEncounterRule extends GreyluneRule {
     return this.area === 0 ? this.endOfAction() : []
   }
 
+  /**
+   * Passing is not one of the alternatives, it is what is left to a player who has none: a space
+   * whose Encounters they cannot pay for, which offers neither the coin nor the point, and whose
+   * Heroic Quest — if it carries one — is not theirs to take. Anywhere else the Adventurer has
+   * stopped somewhere that owes them something, and they take it.
+   */
   getPlayerMoves(): GreyluneMove[] {
     const moves: GreyluneMove[] = this.row
       .getIndexes()
@@ -51,7 +59,7 @@ export class ResolveEncounterRule extends GreyluneRule {
       .map((data) => this.customMove(CustomMoveType.ResolveOutcome, data))
     if (this.spaceGain) moves.push(this.customMove(CustomMoveType.SkipEncounter))
     if (this.canTakeQuest) moves.push(this.customMove(CustomMoveType.ResolveQuest))
-    moves.push(this.customMove(CustomMoveType.Pass))
+    if (!moves.length) moves.push(this.customMove(CustomMoveType.Pass))
     return moves
   }
 
@@ -131,18 +139,36 @@ export class ResolveEncounterRule extends GreyluneRule {
   }
 
   /**
-   * The conditions are paid, the rewards queued and the card slid over the personal board. The
-   * Income token the card may carry is one of those rewards, and is taken when the queue reaches it.
+   * The conditions are paid, the rewards queued and the card slid over the personal board.
+   *
+   * The Income token the card may carry is lifted off it first, and taken straight to the row it
+   * will be paid from every Autumn. It is a piece lying on the card, so anything else would carry it
+   * along: it would follow the card under the personal board and then have to cross it back, which
+   * is not what taking a token off a card looks like. What it pays on the spot is queued where the
+   * token itself stood among the rewards, so the order the card reads in is the order it pays in.
    */
   private resolve(data: ResolveOutcomeData): GreyluneMove[] {
     const front = this.encounterCards.getItem<EncounterCardId>(data.card).id.front!
     const requirements = this.requirementsOf(front, data.outcomes, data.ignored)
-    this.pushGains(data.outcomes.flatMap((outcome) => encounterCardData[front].outcomes[outcome].gains ?? []))
+    const gains = data.outcomes.flatMap((outcome) => encounterCardData[front].outcomes[outcome].gains ?? [])
+    const income = this.incomeOn(data.card)
+    // The token is printed in the reward of one side: the other side leaves it where it lies.
+    const taken = income.length > 0 && gains.some((gain) => gain.type === GainType.IncomeToken)
+    this.pushGains(gains.flatMap((gain) => (gain.type === GainType.IncomeToken ? (taken ? incomeTokenGains[gain.token] : []) : [gain])))
     return [
       ...this.payRequirements(requirements.filter((requirement) => !isCheck(requirement))),
+      ...(taken ? income.moveItems({ type: LocationType.IncomeTokenSpace, player: this.player }) : []),
       this.encounterCards.index(data.card).moveItem({ type: LocationType.UntoldStories, player: this.player }),
       this.startRule(RuleId.ResolveEffects)
     ]
+  }
+
+  /**
+   * The Income token laid on a card, if it was ever laid: the stock holds one token per card that
+   * asks for one, and a card revealed in a year the stock had already run dry carries none.
+   */
+  private incomeOn(card: number): GreyluneMaterial {
+    return this.material(MaterialType.IncomeToken).location(LocationType.CardIncome).parent(card)
   }
 }
 

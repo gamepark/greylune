@@ -29,6 +29,7 @@ import {
 export class AdventurerDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, PlayerColor> {
   width = 3.25
   height = 3.52
+  borderRadius = 0.5
   transparency = true
   images = adventurerImages
 }

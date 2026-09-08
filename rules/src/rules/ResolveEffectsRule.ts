@@ -4,7 +4,6 @@ import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { MAX_SKILL } from '../Constants'
 import { TriggerType } from '../material/Reaction'
-import { incomeTokenGains } from '../material/Tokens'
 import { villageGaps } from '../material/Village'
 import { cardsAroundGap } from '../material/Village'
 import { GreyluneMove, GreyluneRule } from './GreyluneRule'
@@ -71,14 +70,10 @@ export class ResolveEffectsRule extends GreyluneRule {
         return this.bonusTokens.length ? [this.startRule(RuleId.BonusToken)] : []
       case GainType.Reaction:
         return this.openReactions([gain.trigger], RuleId.ResolveEffects)
-      case GainType.IncomeToken: {
-        // Nothing to take if someone got there first, or if the card was never given a token.
-        const token = this.material(MaterialType.IncomeToken).id(gain.token).location(LocationType.CardIncome)
-        if (!token.length) return []
-        this.pushGains(incomeTokenGains[gain.token], true)
-        return [...token.moveItems({ type: LocationType.IncomeTokenSpace, player: this.player }), ...this.resume()]
-      }
       default:
+        // {@link GainType.IncomeToken} never reaches the queue: the token is a piece lying on the
+        // Encounter card, and the rule that resolves the card lifts it off before the card is slid
+        // away, queueing what it pays in its stead (see `ResolveEncounterRule`).
         return []
     }
   }

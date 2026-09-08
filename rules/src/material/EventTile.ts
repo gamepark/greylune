@@ -31,6 +31,13 @@ export const eventTileData: Record<EventTile, EventTileData> = {
   /**
    * Festival: 5 free spaces drawn in a ring, each one between 2 of the 5 bonuses printed around
    * them, so choosing where to stand is choosing which 2 to take.
+   *
+   * The tile draws the 2 bonuses of a space side by side and names no order between them, but the
+   * queue that hands them over has one, and the road is never just a gain: the whole journey — the
+   * Encounter at the end of it included — is resolved inside it, and whatever follows it in the list
+   * is only paid once the Adventurer is home. So the road goes last on the 2 spaces that carry one,
+   * or the Force of the fifth space would reach the player too late to satisfy the Encounter it was
+   * taken to go and meet.
    */
   [EventTile.Festival]: {
     abilities: [
@@ -38,7 +45,7 @@ export const eventTileData: Record<EventTile, EventTileData> = {
       { gains: [magic(), coins(2)] },
       { gains: [vp(2), travel(1)] },
       { gains: [coins(2), force()] },
-      { gains: [travel(1), force()] }
+      { gains: [force(), travel(1)] }
     ]
   },
 

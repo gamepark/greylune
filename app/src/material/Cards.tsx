@@ -6,6 +6,8 @@ import { VillageCardId } from '@gamepark/greylune/material/VillageCard'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { CardDescription, ItemContext } from '@gamepark/react-game'
 import { MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { resolveMoves } from '../encounters/EncounterActions'
+import { EncounterCardMenu } from '../encounters/ResolveEncounter'
 import { encounterCardBacks, encounterCardImagesEn, encounterCardImagesFr } from '../images/EncounterCardImages'
 import { villageCardBacks, villageCardImagesEn, villageCardImagesFr } from '../images/VillageCardImages'
 import { encounterCardSize, villageCardBorderRadius, villageCardSize } from '../locators/TableLayout'
@@ -66,6 +68,26 @@ export class EncounterCardDescription extends CardDescription<PlayerColor, Mater
   images = encounterCardImagesEn
   backImages = encounterCardBacks
   help = EncounterCardHelp
+
+  /** Like a card of the Village: what it offers is there to be read, not to be uncovered. */
+  isMenuAlwaysVisible(): boolean {
+    return true
+  }
+
+  /**
+   * An Encounter of the row the Adventurer has stopped in wears the ways it may be resolved (see
+   * {@link EncounterCardMenu}). The moves are the reader's own, so a card only ever offers anything
+   * to the player it is waiting for, and only while it is being waited for.
+   */
+  getItemMenu(
+    item: MaterialItem<PlayerColor, LocationType, EncounterCardId>,
+    context: ItemContext<PlayerColor, MaterialType, LocationType>,
+    legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
+  ) {
+    if (item.location.type !== LocationType.EncounterRow || item.id?.front === undefined) return undefined
+    const moves = resolveMoves(legalMoves, context.index)
+    return moves.length ? <EncounterCardMenu front={item.id.front} moves={moves} /> : undefined
+  }
 }
 
 export class EncounterCardDescriptionFr extends EncounterCardDescription {

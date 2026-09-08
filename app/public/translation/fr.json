@@ -1,6 +1,8 @@
 {
   "Place": "Placer",
   "Participate": "Participer",
+  "cancel": "Annuler",
+  "ok": "Ok",
   "gains": "<gain1/> et <gain2/>",
   "action": {
     "exploit": "Exploiter",
@@ -9,6 +11,8 @@
     "buy-price": "Acheter ({{price}} <coin/>)",
     "recruit": "Recruter",
     "recruit-price": "Recruter ({{price}} <coin/>)",
+    "resolve": "Résoudre",
+    "resolve-both": "Résoudre les deux",
     "camp": "Aller au campement",
     "camp-coins": "Gagner {{coins}} <coin/>"
   },
@@ -35,11 +39,12 @@
       "player": "{player} part à l'aventure"
     },
     "encounter": {
-      "you-none": "Résolvez une rencontre ou <pass>passez</pass>",
-      "you-coin": "Résolvez une rencontre, <take>prenez <coin/></take> ou <pass>passez</pass>",
-      "you-vp": "Résolvez une rencontre, <take>prenez 1 <vp/></take> ou <pass>passez</pass>",
-      "you-quest": "Résolvez une rencontre, <quest>accomplissez une quête <crown/></quest> ou <pass>passez</pass>",
-      "player": "{player} résout une rencontre"
+      "you-none": "Résolvez une rencontre",
+      "you-coin": "Résolvez une rencontre ou <take>prenez 1 <coin/></take>",
+      "you-vp": "Résolvez une rencontre ou <take>prenez 1 <vp/></take>",
+      "you-quest": "Résolvez une rencontre ou <quest>accomplissez une quête <crown/></quest>",
+      "player": "{player} résout une rencontre",
+      "nothing": "Vous ne pouvez résoudre ni rencontre ni quête ici."
     },
     "quest": {
       "you": "Racontez {count, plural, one {# histoire} other {# histoires}}",

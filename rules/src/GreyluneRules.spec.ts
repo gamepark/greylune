@@ -286,6 +286,24 @@ describe('The areas', () => {
     expect(playerVp(rules(), BLUE)).toBe(4)
     expect(items(MaterialType.EncounterCard)[card].location.type).toBe(LocationType.UntoldStories)
   })
+
+  it('never lets a player walk away from an Encounter they can resolve', () => {
+    // Moutons: nothing to satisfy, so the row of the purple space is never out of reach.
+    placeEncounter(EncounterCard.Sheep, Area.Hammer)
+    items(MaterialType.Adventurer).find((item) => item.id === BLUE)!.location = { type: LocationType.Area, id: Area.Hammer }
+    expect(rules().getLegalMoves(BLUE).some(isCustomMoveType(CustomMoveType.Pass))).toBe(false)
+  })
+
+  it('is passed only where the space owes nothing: no Encounter to pay for, and a Quest out of reach', () => {
+    placeEncounter(EncounterCard.Sheep, Area.Wand)
+    for (const item of items(MaterialType.QuestTile)) {
+      if (item.location.id === Area.Hammer) item.id = QuestTile.Giant
+    }
+    items(MaterialType.Adventurer).find((item) => item.id === BLUE)!.location = { type: LocationType.Area, id: Area.Hammer }
+    const moves = rules().getLegalMoves(BLUE)
+    expect(moves).toHaveLength(1)
+    expect(isCustomMoveType(CustomMoveType.Pass)(moves[0])).toBe(true)
+  })
 })
 
 describe('An Income token', () => {

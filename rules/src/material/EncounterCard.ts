@@ -184,7 +184,13 @@ export const encounterCardData: Record<EncounterCard, EncounterCardData> = {
       { requirements: [pay(RequirementType.SpendMagic, 1)], gains: [coins(4)] }
     ]
   },
-  [EncounterCard.LoneTower]: { story: 3, outcomes: [{ requirements: [pay(RequirementType.SpendMagic, 1)], gains: [travel(3), vp(3)] }] },
+  /**
+   * The card reads "go back on the road, and gain 3 VP", but the road goes last here: the whole of
+   * the second journey — the Encounter at the end of it included — is resolved inside that gain, and
+   * 3 points that cross the 8 hand the player a Bonus token they would rather spend before setting
+   * off than after coming home. See the Festival in `EventTile` for the same rule of thumb.
+   */
+  [EncounterCard.LoneTower]: { story: 3, outcomes: [{ requirements: [pay(RequirementType.SpendMagic, 1)], gains: [vp(3), travel(3)] }] },
   [EncounterCard.Witchcraft]: { story: 1, outcomes: [{ requirements: [pay(RequirementType.SpendCoins, 4)], gains: [magic(2)] }] },
   [EncounterCard.Incantation]: { story: 3, outcomes: [{ requirements: [spendVillagers()], gains: [magic()] }] },
   [EncounterCard.Unicorn]: {
@@ -251,9 +257,10 @@ export const encounterCardData: Record<EncounterCard, EncounterCardData> = {
       { requirements: [spendVillagers()], gains: [vp(4)] }
     ]
   },
+  /** The road last, as on the Lone tower: the points are counted before the Adventurer sets off. */
   [EncounterCard.Relay]: {
     story: 1,
-    outcomes: [{ requirements: [pay(RequirementType.SpendCoins, 4)], gains: [travel(3), vp(2)] }]
+    outcomes: [{ requirements: [pay(RequirementType.SpendCoins, 4)], gains: [vp(2), travel(3)] }]
   },
   [EncounterCard.FairyRing]: { story: 2, outcomes: [{ requirements: [spendVillagers()], gains: [magic(), vp(3)] }] },
   [EncounterCard.HolyChalice]: {

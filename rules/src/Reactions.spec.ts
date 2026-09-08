@@ -313,7 +313,9 @@ describe('Mira', () => {
     placeCard(VillageCard.Smithy, 0, 0)
     owe(travel(1))
     play(rules().getLegalMoves(BLUE)[0])
-    playCustom(CustomMoveType.Pass)
+    // The coin of the gold space rather than the Farm: turning an Encounter down is the only way to
+    // resolve nothing where the space offers something (see {@link ResolveEncounterRule}).
+    playCustom(CustomMoveType.SkipEncounter)
     expect(game.rule!.id).toBe(RuleId.Reaction)
     useReaction(mira)
     expect(game.rule!.id).toBe(RuleId.PlaceVillager)

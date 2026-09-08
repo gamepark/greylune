@@ -20,6 +20,9 @@ import { Coordinates, XYCoordinates } from '@gamepark/rules-api'
 
 // ------------------------------------------------------------------ component sizes
 
+/** The footprint of anything laid flat on the table, in centimetres like everything else here. */
+type Size = { width: number; height: number }
+
 export const mainBoardSize = { width: 20.98, height: 28 }
 export const seasonBoardSize = { width: 26.54, height: 12.7 }
 export const playerBoardSize = { width: 18.78, height: 13.94 }
@@ -93,24 +96,37 @@ export const vpTokenStackSpots: Record<VpTokenValue, Coordinates> = {
   [VpTokenValue.Vp75]: onMainBoard(3.46, 25.36)
 }
 
-/** Greylune itself, where every Adventurer starts and returns each Autumn. One row for everybody. */
-export const villageSpot = onMainBoard(8.5, 23.46)
-export const villageGap: Partial<XYCoordinates> = { x: 1.4 }
+/**
+ * The ground of each {@link Area}: the open space printed on the board where its Adventurers stand,
+ * and what a player aims at to walk one there. Greylune is the walled town itself; the 5 others are
+ * the clear stretches the road leaves between its bends and the edge of the board, each one under
+ * the banner of its Area and beside the notch its Encounter cards are slotted into — which is why
+ * they are found at the same coordinate along the edge as those notches.
+ *
+ * The riders printed on the map are not spaces: they are the road from one Area to the next, drawn
+ * halfway between two banners, and an Adventurer set down on one stands nowhere in particular.
+ */
+const areaSpaces: Record<Area, XYCoordinates & Size> = {
+  [Area.Village]: { x: 8.5, y: 23.2, width: 6.8, height: 4 },
+  [Area.Wand]: { x: 14.65, y: 26.6, width: 5.2, height: 2.7 },
+  [Area.Bow]: { x: 19.65, y: 23.1, width: 2.6, height: 3.8 },
+  [Area.Hammer]: { x: 19.65, y: 13.9, width: 2.6, height: 3.8 },
+  [Area.Swords]: { x: 19.65, y: 4.9, width: 2.6, height: 3.8 },
+  [Area.Edge]: { x: 14.65, y: 1.3, width: 5.2, height: 2.6 }
+}
+
+export const areaSpot = (area: Area): Coordinates => onMainBoard(areaSpaces[area].x, areaSpaces[area].y)
+
+export const areaSize = (area: Area): Size => ({ width: areaSpaces[area].width, height: areaSpaces[area].height })
 
 /**
- * Where an Adventurer stands in each {@link Area}. Greylune is the Village itself; the 5 others are
- * drawn as riders on the map, on the stretch of road just before the notch their Encounter cards
- * are slotted into, so they run anticlockwise: along the bottom edge, up the right one, then along
- * the top.
+ * Several Adventurers standing in the same Area line up along the length of the space they share:
+ * across the board in Greylune and in the 2 Areas that lie against the top and the bottom edge, down
+ * it in the 3 that lie against the right edge, where the space is taller than it is wide. A step
+ * shorter than a pawn, either way: they crowd the space rather than run out of it.
  */
-export const areaSpots: Record<Area, Coordinates> = {
-  [Area.Village]: villageSpot,
-  [Area.Wand]: onMainBoard(10.6, 26.5),
-  [Area.Bow]: onMainBoard(18.65, 26.55),
-  [Area.Hammer]: onMainBoard(19, 18.5),
-  [Area.Swords]: onMainBoard(19, 9.3),
-  [Area.Edge]: onMainBoard(18.5, 1.5)
-}
+export const areaGap = (area: Area): Partial<XYCoordinates> =>
+  areaSpaces[area].width > areaSpaces[area].height ? { x: 1.4 } : { y: 1.1 }
 
 /**
  * Two markers on the same space of a track are one on top of the other. Each one is set down leaning
@@ -264,7 +280,7 @@ export const villageGapGap = (gap: Gap, villagers: number): Partial<XYCoordinate
  * as wide as what the grid spacing leaves over once a card is deducted. That strip is exactly what a
  * Villager is dropped on, so it is exactly what the drop area covers.
  */
-export const villageGapSize = (gap: Gap): { width: number; height: number } =>
+export const villageGapSize = (gap: Gap): Size =>
   Number.isInteger(gap.x)
     ? { width: villageCardSize.width, height: villageGridGap - villageCardSize.height }
     : { width: villageGridGap - villageCardSize.width, height: villageCardSize.height }
