@@ -5,10 +5,11 @@ import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { Villager } from '@gamepark/greylune/material/Villager'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { ItemContext, TokenDescription } from '@gamepark/react-game'
-import { MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { isSameGap } from '@gamepark/greylune/material/Village'
 import { gapsToPlaceVillager } from '../village/PlaceVillager'
 import { canSelectVillager } from '../villagers/SelectVillager'
+import { campOf, isActivateCard, isGainCoinsAround, slotOfCard, villagerActionData } from '../villagers/VillagerActions'
 import { SelectedVillager } from '../villagers/SelectedVillager'
 import {
   adventurerImages,
@@ -39,6 +40,7 @@ export class AdventurerDescription extends TokenDescription<PlayerColor, Materia
 export class VillagerDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, Villager> {
   width = 1.87
   height = 3.04
+  borderRadius = 0.5
   transparency = true
   images = villagerImages
 
@@ -65,6 +67,27 @@ export class VillagerDescription extends TokenDescription<PlayerColor, MaterialT
     legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
   ) {
     return canSelectVillager(context, legalMoves) ? <SelectedVillager /> : undefined
+  }
+
+  /**
+   * A Villager spent in Summer is not moved but named: what it is spent on is a pair — this Villager,
+   * that card — so the rules take it as a custom move rather than as the pawn walking off (see
+   * `SummerRule`). Dragging is the same decision made with the hand instead of with two clicks, so
+   * the pawn is picked up for those moves too, and the pair is read back out of where it is dropped.
+   */
+  canDrag(move: MaterialMove<PlayerColor, MaterialType, LocationType>, context: ItemContext<PlayerColor, MaterialType, LocationType>) {
+    if (isActivateCard(move) || isGainCoinsAround(move)) return villagerActionData(move).villager === context.index
+    return super.canDrag(move, context)
+  }
+
+  /** Where each of those moves is dropped: the card it names, or the tents the Villager goes back to. */
+  getMoveDropLocations(
+    context: ItemContext<PlayerColor, MaterialType, LocationType>,
+    move: MaterialMove<PlayerColor, MaterialType, LocationType>
+  ): Location<PlayerColor, LocationType>[] {
+    if (isActivateCard(move)) return [{ type: LocationType.VillageGrid, ...slotOfCard(context.rules, villagerActionData(move).card!) }]
+    if (isGainCoinsAround(move)) return [campOf(context.rules, context.index)]
+    return super.getMoveDropLocations(context, move)
   }
 }
 

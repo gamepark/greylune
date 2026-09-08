@@ -2,6 +2,16 @@
   "Place": "Placer",
   "Participate": "Participer",
   "gains": "<gain1/> et <gain2/>",
+  "action": {
+    "exploit": "Exploiter",
+    "exploit-price": "Exploiter ({{price}} <coin/>)",
+    "buy": "Acheter",
+    "buy-price": "Acheter ({{price}} <coin/>)",
+    "recruit": "Recruter",
+    "recruit-price": "Recruter ({{price}} <coin/>)",
+    "camp": "Aller au campement",
+    "camp-coins": "Gagner {{coins}} <coin/>"
+  },
   "header": {
     "winter": "Nouvelle année",
     "spring": {

@@ -7,17 +7,21 @@ import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
 import { DeckLocator, ListLocator, Locator, MaterialContext, PileLocator } from '@gamepark/react-game'
 import { Location } from '@gamepark/rules-api'
+import { CampLocator } from './CampLocator'
 import { CenteredFlexLocator } from './CenteredFlexLocator'
 import { CenteredListLocator } from './CenteredListLocator'
 import { EventSpaceLocator } from './EventSpaceLocator'
 import { playerPanelLocator } from './PlayerPanelLocator'
+import { fanBySeat, seatOf } from './Seats'
 import { VillageGapLocator } from './VillageGapLocator'
+import { VillageGridLocator } from './VillageGridLocator'
 import { getBandRow, hideBandOfOtherPlayers, showsBandOf } from './DisplayedPlayer'
 import { companionsDependencies, companionsMaxSpread, encounterRowArea, encounterRowDependencies, encounterRowSpread } from './CrowdedRows'
 import {
   activeVillagersSpot,
   bonusTokensGap,
   bonusTokensSpot,
+  campRowGap,
   campSpot,
   coinReserveSpot,
   companionsGap,
@@ -57,21 +61,10 @@ import {
   untoldStoriesSpot,
   villageDeckSpot,
   villageGap,
-  villageGridSpot,
   villagerReserveSpot,
   areaSpots,
   vpTokenStackSpots
 } from './TableLayout'
-
-/** Which of the 4 seats a player sits in. Fixed for the whole game, so positions never move. */
-const seatOf = (context: MaterialContext, player?: number) => Math.max(0, context.rules.players.indexOf(player as PlayerColor))
-
-/**
- * Several players share one space: the Village, a season circle, a score shield. Spread them around
- * the middle of that space rather than stacking them out of sight.
- */
-const fanBySeat = (context: MaterialContext, player: number | undefined, step: number) =>
-  (seatOf(context, player) - (context.rules.players.length - 1) / 2) * step
 
 /** The middle of a player's personal board, once the column has settled which row carries the band. */
 const areaOf = (context: MaterialContext, player?: PlayerColor) => playerAreaSpot(seatOf(context, player), context.rules.players.length, getBandRow(context))
@@ -94,9 +87,8 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
 
   [LocationType.VillageDeck]: new DeckLocator({ coordinates: villageDeckSpot }),
 
-  [LocationType.VillageGrid]: new Locator({
-    getCoordinates: (location: Location) => villageGridSpot(location.x ?? 0, location.y ?? 0)
-  }),
+  /** The cards themselves, and the buttons laid over the ones a Villager may be spent on. */
+  [LocationType.VillageGrid]: new VillageGridLocator(),
 
   [LocationType.VillageGap]: new VillageGapLocator(),
 
@@ -200,11 +192,11 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     getCoordinates: (location: Location) => stacked(seasonSpots[(location.x as Season) ?? Season.Spring], location.z)
   }),
 
-  [LocationType.Camp]: new CenteredListLocator({
+  [LocationType.Camp]: new CampLocator({
     gap: { x: 1.7 },
     getCenter: (location: Location, context: MaterialContext) => ({
       ...campSpot,
-      y: campSpot.y + fanBySeat(context, location.player, 2.6)
+      y: campSpot.y + fanBySeat(context, location.player, campRowGap)
     })
   }),
 

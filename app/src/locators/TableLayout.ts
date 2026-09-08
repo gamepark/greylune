@@ -323,7 +323,36 @@ const commonZoneTop = villageDeckSpot.y - villageCardSize.height / 2 - tableMarg
 const commonZoneBottom = seasonBoardSpot.y + seasonBoardSize.height / 2 + tableMargin
 
 /** The tents to the left of the Season board, where spent Villagers rest until Autumn. */
-export const campSpot = onSeasonBoard(5.07, 6.34)
+const campOnBoard: XYCoordinates = { x: 5.15, y: 6.05 }
+
+export const campSpot = onSeasonBoard(campOnBoard.x, campOnBoard.y)
+
+/**
+ * The same tents, measured from the middle of the Season board: the camp carries no piece of its own
+ * to hang a menu on, so the button that sends a Villager there is drawn on the board itself and has
+ * to find its way back out to them (see {@link CampMenu}).
+ */
+export const campBoardOffset: XYCoordinates = {
+  x: campOnBoard.x - seasonBoardSize.width / 2,
+  y: campOnBoard.y - seasonBoardSize.height / 2
+}
+
+/** The step from one player's row of tents to the next: they share the space and never overlap. */
+export const campRowGap = 2.6
+
+/**
+ * The drop area of the camp covers the tents printed on the board, all of them: a Villager coming
+ * home is aimed at the camp rather than at the row of it its player's own Villagers line up on, and
+ * only ever one player's Villager is ever in the air.
+ */
+export const campAreaSize = { width: 6.3, height: 6.3 }
+
+/**
+ * Where a button offering a card sits on it: low and to the right, off the middle so that what is
+ * drawn there stays readable, and past the middle so that its label falls back inside rather than
+ * out over the card next door (see {@link ItemMenuButton}).
+ */
+export const actionButtonSpot: XYCoordinates = { x: -1, y: 1 }
 
 /**
  * The Seals already spent lie in the strip the bottom-left corner of the table leaves open, between

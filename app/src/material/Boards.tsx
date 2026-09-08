@@ -1,10 +1,14 @@
+/** @jsxImportSource @emotion/react */
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
-import { BoardDescription, MaterialContext } from '@gamepark/react-game'
-import { MaterialItem } from '@gamepark/rules-api'
+import { BoardDescription, ItemContext, MaterialContext } from '@gamepark/react-game'
+import { CustomMove, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { MainBoard, PlayerBoard, SeasonBoard } from '../images/BoardImages'
 import { mainBoardSize, playerBoardSize, seasonBoardSize } from '../locators/TableLayout'
+import { CampMenu } from '../villagers/CampAction'
+import { selectedVillager } from '../villagers/SelectVillager'
+import { bestCoinsMove, isGainCoinsAround, villagerActionData } from '../villagers/VillagerActions'
 
 /**
  * Boards never move and never change, so they stay out of the game state: they are static items,
@@ -26,6 +30,30 @@ export class SeasonBoardDescription extends BoardDescription<PlayerColor, Materi
   image = SeasonBoard
   transparency = true
   staticItem = { location: { type: LocationType.SeasonBoard } }
+
+  /** The board asks to be pressed, not picked up: the offer it carries is there as soon as it is due. */
+  isMenuAlwaysVisible(): boolean {
+    return true
+  }
+
+  /**
+   * The camp is a corner of this board and holds no piece of its own, so the offer to send the aimed-at
+   * Villager home is hung here (see {@link CampMenu}). A Villager lies between 2 cards and may come back
+   * with either of them: the fuller purse is the one offered.
+   */
+  getItemMenu(
+    _item: MaterialItem<PlayerColor, LocationType>,
+    context: ItemContext<PlayerColor, MaterialType, LocationType>,
+    legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
+  ) {
+    const villager = selectedVillager(context.rules)
+    if (villager === undefined) return undefined
+    const move = bestCoinsMove(
+      legalMoves.filter((move): move is CustomMove => isGainCoinsAround(move) && villagerActionData(move).villager === villager),
+      context.rules
+    )
+    return move && <CampMenu move={move} />
+  }
 }
 
 export class PlayerBoardDescription extends BoardDescription<PlayerColor, MaterialType, LocationType> {
