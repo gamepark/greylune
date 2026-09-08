@@ -55,6 +55,19 @@ const notchOverlap = 0.34
 /** The air left between the outermost component and the edge of the table. */
 const tableMargin = 1
 
+/**
+ * A marker is drawn seen from a hair above the table: the disc or the shield that has to register
+ * with the space printed under it is the top face, and the thickness of the token and its shadow are
+ * drawn below it. The centre of the image is therefore a touch above the centre of that face, and a
+ * marker aimed straight at its space leaves the space showing underneath. Every marker spot is thus
+ * the printed space nudged by this much, measured on the artwork of each marker.
+ */
+const markerDrop = {
+  season: { x: 0.01, y: 0.08 },
+  score: { x: 0.02, y: 0.05 },
+  quest: { x: 0.03, y: 0.04 }
+}
+
 // ------------------------------------------------------------------ main board
 
 export const mainBoardSpot: XYCoordinates = { x: 0, y: 0 }
@@ -66,8 +79,10 @@ const onMainBoard = (x: number, y: number): Coordinates => ({
 })
 
 /** The track snakes up the left column (0 to 12) then back down the right one (13 to 24). */
-export const scoreTrackSpot = (score: number): Coordinates =>
-  score <= 12 ? onMainBoard(1.6, 22.96 - 1.8 * score) : onMainBoard(3.5, 2.26 + 1.804 * (score - 13))
+export const scoreTrackSpot = (score: number): Coordinates => {
+  const { x, y } = markerDrop.score
+  return score <= 12 ? onMainBoard(1.58 + x, 23.1 + y - 1.81 * score) : onMainBoard(3.43 + x, 2.25 + y + 1.808 * (score - 13))
+}
 
 /**
  * The 2 shields at the foot of the track, under the 0: the victory point tokens of every player wait
@@ -166,9 +181,9 @@ export const eventSpaceGap: Partial<XYCoordinates> = { x: 1.4 }
  * black one, which lies across the sea in the top-left corner.
  */
 export const questTileSpots: Record<HeroicQuestArea, Coordinates> = {
-  [Area.Hammer]: onMainBoard(14.88, 14.84),
-  [Area.Swords]: onMainBoard(14.84, 6.5),
-  [Area.Edge]: onMainBoard(7.88, 3.32)
+  [Area.Hammer]: onMainBoard(14.71, 14.62),
+  [Area.Swords]: onMainBoard(14.71, 6.39),
+  [Area.Edge]: onMainBoard(7.83, 3.56)
 }
 
 /**
@@ -177,8 +192,8 @@ export const questTileSpots: Record<HeroicQuestArea, Coordinates> = {
  */
 export const questRewardSpot = (area: HeroicQuestArea, first: boolean): Coordinates => ({
   ...questTileSpots[area],
-  x: questTileSpots[area].x + (first ? -0.95 : 0.95),
-  y: questTileSpots[area].y + 2.5
+  x: questTileSpots[area].x + (first ? -0.815 : 0.815) + markerDrop.quest.x,
+  y: questTileSpots[area].y + 2.47 + markerDrop.quest.y
 })
 
 /**
@@ -289,12 +304,18 @@ const onSeasonBoard = (x: number, y: number): Coordinates => ({
   z: onBoard
 })
 
-/** Winter has no space of its own: it is the year's upkeep, resolved with the marker still on Spring. */
+const onSeasonSpace = (x: number, y: number): Coordinates => onSeasonBoard(x + markerDrop.season.x, y + markerDrop.season.y)
+
+/**
+ * Winter has no space of its own: it is the year's upkeep, resolved with the marker still on Spring.
+ * The 3 circles are the same size but not quite in line: the one of Summer is printed a little lower
+ * than its neighbours, so it gets its own height rather than the height of the row.
+ */
 export const seasonSpots: Record<Season, Coordinates> = {
-  [Season.Winter]: onSeasonBoard(13.26, 9.17),
-  [Season.Spring]: onSeasonBoard(13.26, 9.17),
-  [Season.Summer]: onSeasonBoard(17.69, 9.17),
-  [Season.Autumn]: onSeasonBoard(22.09, 9.17)
+  [Season.Winter]: onSeasonSpace(13.26, 9.16),
+  [Season.Spring]: onSeasonSpace(13.26, 9.16),
+  [Season.Summer]: onSeasonSpace(17.67, 9.38),
+  [Season.Autumn]: onSeasonSpace(22.1, 9.16)
 }
 
 /** Top and bottom of everything the players share: the row of decks over the Village grid, and the Season board. */
@@ -427,7 +448,8 @@ export const playerBoardSpot = (area: XYCoordinates): XYCoordinates => area
 export const strengthTrackSpot = (area: XYCoordinates, level: number) => onPlayerBoard(area, 8.15, 11.26 - 1.62 * level)
 export const magicTrackSpot = (area: XYCoordinates, level: number) => onPlayerBoard(area, 10.58, 11.26 - 1.62 * level)
 
-export const questMarkerSpot = (area: XYCoordinates, index: number) => onPlayerBoard(area, 12.48 + 1.4 * index, 7.7)
+export const questMarkerSpot = (area: XYCoordinates, index: number) =>
+  onPlayerBoard(area, 12.44 + markerDrop.quest.x + 1.415 * index, 7.66 + markerDrop.quest.y)
 export const incomeTokenSpot = (area: XYCoordinates, index: number) => onPlayerBoard(area, 4.83, 5.85 + 2.3 * index)
 export const activeVillagersSpot = (area: XYCoordinates) => onPlayerBoard(area, 14.08, 10)
 export const specialActionSpot = (area: XYCoordinates) => onPlayerBoard(area, 13.83, 3.72)
