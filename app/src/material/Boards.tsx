@@ -6,6 +6,8 @@ import { BoardDescription, ItemContext, MaterialContext } from '@gamepark/react-
 import { CustomMove, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { MainBoard, PlayerBoard, SeasonBoard } from '../images/BoardImages'
 import { mainBoardSize, playerBoardSize, seasonBoardSize } from '../locators/TableLayout'
+import { TravelMenu } from '../travel/TravelMenu'
+import { isTravelMove } from '../travel/TravelMoves'
 import { CampMenu } from '../villagers/CampAction'
 import { selectedVillager } from '../villagers/SelectVillager'
 import { bestCoinsMove, isGainCoinsAround, villagerActionData } from '../villagers/VillagerActions'
@@ -21,6 +23,25 @@ export class MainBoardDescription extends BoardDescription<PlayerColor, Material
   height = mainBoardSize.height
   image = MainBoard
   staticItem = { location: { type: LocationType.MainBoard } }
+
+  /** The map asks to be pressed, not picked up: what it offers is there as soon as it is due. */
+  isMenuAlwaysVisible(): boolean {
+    return true
+  }
+
+  /**
+   * The areas the Adventurer may walk to are stretches of ground printed here and hold no piece of
+   * their own, so the offers to go there are hung on the board (see {@link TravelMenu}). The moves
+   * are the reader's own, so the map only ever offers a journey to the player it is waiting for.
+   */
+  getItemMenu(
+    _item: MaterialItem<PlayerColor, LocationType>,
+    _context: ItemContext<PlayerColor, MaterialType, LocationType>,
+    legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
+  ) {
+    const moves = legalMoves.filter(isTravelMove)
+    return moves.length ? <TravelMenu moves={moves} /> : undefined
+  }
 }
 
 export class SeasonBoardDescription extends BoardDescription<PlayerColor, MaterialType, LocationType> {

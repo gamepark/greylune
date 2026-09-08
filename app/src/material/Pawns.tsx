@@ -7,6 +7,8 @@ import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { ItemContext, TokenDescription } from '@gamepark/react-game'
 import { Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { isSameGap } from '@gamepark/greylune/material/Village'
+import { StayPutMenu } from '../travel/TravelMenu'
+import { stayPutMove } from '../travel/TravelMoves'
 import { gapsToPlaceVillager } from '../village/PlaceVillager'
 import { canSelectVillager } from '../villagers/SelectVillager'
 import { campOf, isActivateCard, isGainCoinsAround, slotOfCard, villagerActionData } from '../villagers/VillagerActions'
@@ -32,6 +34,27 @@ export class AdventurerDescription extends TokenDescription<PlayerColor, Materia
   borderRadius = 0.5
   transparency = true
   images = adventurerImages
+
+  /** The pawn is aimed at to be walked, so the offer it wears has to be read without taking it. */
+  isMenuAlwaysVisible(): boolean {
+    return true
+  }
+
+  /**
+   * While a journey is being waited for, the Adventurer of the player travelling wears the offer to
+   * go no further (see {@link StayPutMenu}); every other area within reach wears the offer to walk
+   * there, on the board itself. The moves are the reader's own, so only the pawn of the player being
+   * waited for ever carries anything.
+   */
+  getItemMenu(
+    item: MaterialItem<PlayerColor, LocationType, PlayerColor>,
+    context: ItemContext<PlayerColor, MaterialType, LocationType>,
+    legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
+  ) {
+    if (item.id !== context.rules.game.rule?.player) return undefined
+    const move = stayPutMove(context.rules, legalMoves)
+    return move && <StayPutMenu move={move} />
+  }
 }
 
 /**

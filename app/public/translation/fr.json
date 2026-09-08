@@ -14,7 +14,9 @@
     "resolve": "Résoudre",
     "resolve-both": "Résoudre les deux",
     "camp": "Aller au campement",
-    "camp-coins": "Gagner {{coins}} <coin/>"
+    "camp-coins": "Gagner {{coins}} <coin/>",
+    "travel": "Voyager",
+    "stay": "Rester sur place"
   },
   "header": {
     "winter": "Nouvelle année",
@@ -35,7 +37,7 @@
       "player": "{player} défausse un objet"
     },
     "travel": {
-      "you": "Déplacez votre <adventurer/> jusqu'à {count, plural, one {# case} other {# cases}} ou <stay>restez sur place</stay>",
+      "you": "Déplacez votre <adventurer/> jusqu'à {count, plural, one {# case} other {# cases}}",
       "player": "{player} part à l'aventure"
     },
     "encounter": {

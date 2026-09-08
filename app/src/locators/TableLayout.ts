@@ -120,6 +120,24 @@ export const areaSpot = (area: Area): Coordinates => onMainBoard(areaSpaces[area
 export const areaSize = (area: Area): Size => ({ width: areaSpaces[area].width, height: areaSpaces[area].height })
 
 /**
+ * The same open ground, measured from the middle of the main board: an Area is a space printed on
+ * the map and carries no piece of its own to hang a menu on, so the button offering to walk an
+ * Adventurer there is drawn on the board itself and has to find its way back out to it (see
+ * `TravelMenu`).
+ */
+export const areaBoardOffset = (area: Area): XYCoordinates => ({
+  x: areaSpaces[area].x - mainBoardSize.width / 2,
+  y: areaSpaces[area].y - mainBoardSize.height / 2
+})
+
+/**
+ * Where the offer to go no further sits on the Adventurer wearing it: just off its right shoulder,
+ * near enough to belong to that pawn and not to the one standing beside it in the same area, and its
+ * label written back over the map (see {@link ItemMenuButton}).
+ */
+export const adventurerStaySpot: XYCoordinates = { x: -2, y: 0 }
+
+/**
  * Several Adventurers standing in the same Area line up along the length of the space they share:
  * across the board in Greylune and in the 2 Areas that lie against the top and the bottom edge, down
  * it in the 3 that lie against the right edge, where the space is taller than it is wide. A step

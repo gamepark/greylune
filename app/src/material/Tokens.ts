@@ -5,7 +5,7 @@ import { VpToken } from '@gamepark/greylune/material/VpToken'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { MoneyDescription, TokenDescription } from '@gamepark/react-game'
 import { ComponentSize } from '@gamepark/react-game'
-import { MaterialItem } from '@gamepark/rules-api'
+import { Location, MaterialItem } from '@gamepark/rules-api'
 import {
   bonusTokenImages,
   coinImages,
@@ -39,6 +39,12 @@ export class CoinDescription extends MoneyDescription<PlayerColor, MaterialType,
     { id: Coin.One, quantity: 10, location: { type: LocationType.CoinReserve } },
     { id: Coin.Five, quantity: 6, location: { type: LocationType.CoinReserve } }
   ]
+
+  /**
+   * Money is never moved, it is created and destroyed: paying and being paid would fade in and out
+   * on the spot without this. The heap of the bank is where the coins come from and go back to.
+   */
+  stockLocation: Location<PlayerColor, LocationType> = { type: LocationType.CoinReserve }
 }
 
 export class SealDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, Seal> {
