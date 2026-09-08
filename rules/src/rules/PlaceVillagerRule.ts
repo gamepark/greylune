@@ -15,11 +15,8 @@ export class PlaceVillagerRule extends GreyluneRule {
   }
 
   getPlayerMoves(): GreyluneMove[] {
-    return this.activeVillagers
-      .getIndexes()
-      .flatMap((villager) =>
-        this.gaps.map((gap) => this.villagers.index(villager).moveItem({ type: LocationType.VillageGap, player: this.player, ...gap }))
-      )
+    const villagers = this.activeVillagers
+    return this.gaps.flatMap((gap) => villagers.moveItems({ type: LocationType.VillageGap, player: this.player, ...gap }))
   }
 
   afterItemMove(move: ItemMove<number, MaterialType, LocationType>): GreyluneMove[] {

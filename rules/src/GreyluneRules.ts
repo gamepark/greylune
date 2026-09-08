@@ -4,6 +4,7 @@ import {
   HiddenMaterialRules,
   HidingStrategy,
   hideItemId,
+  isStartRule,
   MaterialGame,
   MaterialMove,
   PositiveSequenceStrategy,
@@ -164,6 +165,15 @@ export class GreyluneRules
     [MaterialType.EncounterCard]: { [LocationType.EncounterDeck]: hideFront },
     [MaterialType.EventTile]: { [LocationType.EventPile]: hideEventTile },
     [MaterialType.Seal]: { [LocationType.SealStack]: hideItemId }
+  }
+
+  /**
+   * Winter reads the faces of the two decks to lay the new year out — which row an Encounter belongs
+   * in, and how many Seals a Village card was drawn with. No client can see those faces, so none of
+   * them can play the turn of the year on its own: it waits for the server's answer.
+   */
+  isUnpredictableMove(move: MaterialMove<PlayerColor, MaterialType, LocationType, RuleId>, player: PlayerColor): boolean {
+    return (isStartRule(move) && move.id === RuleId.Winter) || super.isUnpredictableMove(move, player)
   }
 
   /**

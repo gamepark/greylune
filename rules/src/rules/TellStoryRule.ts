@@ -37,15 +37,13 @@ export class TellStoryRule extends GreyluneRule {
     return encounterCardData[this.encounterCards.getItem<EncounterCardId>(card).id.front!].story
   }
 
+  /** A card worth nothing cannot be told, unless a boost is there to make it a 3. */
+  get tellable() {
+    return this.boosts > 0 ? this.untold : this.untold.filter<EncounterCardId>((item) => encounterCardData[item.id.front!].story > 0)
+  }
+
   getPlayerMoves(): GreyluneMove[] {
-    const moves: GreyluneMove[] = []
-    if (this.value < MAX_STORY_VALUE) {
-      for (const card of this.untold.getIndexes()) {
-        if (this.storyValue(card) > 0 || this.boosts > 0) {
-          moves.push(this.encounterCards.index(card).moveItem({ type: LocationType.ToldStories, player: this.player }))
-        }
-      }
-    }
+    const moves: GreyluneMove[] = this.value < MAX_STORY_VALUE ? this.tellable.moveItems({ type: LocationType.ToldStories, player: this.player }) : []
     moves.push(this.customMove(CustomMoveType.Pass))
     return moves
   }

@@ -21,10 +21,10 @@ export class SpringRule extends SeasonRule {
    * whose two cards have both been taken is worth nothing to anyone and is not offered.
    */
   private placeVillagerMoves(): GreyluneMove[] {
-    const gaps = villageGaps.filter((gap) => cardsAroundGap(this, gap).length > 0)
-    return this.activeVillagers
-      .getIndexes()
-      .flatMap((villager) => gaps.map((gap) => this.villagers.index(villager).moveItem({ type: LocationType.VillageGap, player: this.player, ...gap })))
+    const villagers = this.activeVillagers
+    return villageGaps
+      .filter((gap) => cardsAroundGap(this, gap).length > 0)
+      .flatMap((gap) => villagers.moveItems({ type: LocationType.VillageGap, player: this.player, ...gap }))
   }
 
   onCustomMove(move: CustomMove): GreyluneMove[] {

@@ -65,8 +65,8 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
     for (const slot of range(VILLAGE_GRID_SIDE * VILLAGE_GRID_SIDE)) {
       deck.dealOne({ type: LocationType.VillageGrid, x: slot % VILLAGE_GRID_SIDE, y: Math.floor(slot / VILLAGE_GRID_SIDE) })
     }
-    for (const card of this.material(MaterialType.VillageCard).location(LocationType.VillageGrid).getIndexes()) {
-      this.placeSeals(card)
+    for (const [card, item] of this.material(MaterialType.VillageCard).location(LocationType.VillageGrid).entries) {
+      this.placeSeals(card, (item.id as VillageCardId).front as VillageCard)
     }
   }
 
@@ -74,8 +74,7 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
    * The `-1` symbol asks for one Seal less than there are players, the `?` for exactly one, whatever the table
    * seats (rulebook p.6).
    */
-  private placeSeals(card: number) {
-    const front = this.material(MaterialType.VillageCard).getItem<VillageCardId>(card).id.front as VillageCard
+  private placeSeals(card: number, front: VillageCard) {
     const seals = villageCardData[front].seals
     const count = seals === PLAYERS_MINUS_ONE ? this.players.length - 1 : (seals ?? 0)
     this.material(MaterialType.Seal).deck().deal({ type: LocationType.CardSeal, parent: card }, count)
@@ -98,8 +97,8 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
     this.material(MaterialType.EncounterCard)
       .deck()
       .deal((item) => ({ type: LocationType.EncounterRow, id: encounterArea[(item.id as EncounterCardId).front!] }), row)
-    for (const card of this.material(MaterialType.EncounterCard).location(LocationType.EncounterRow).getIndexes()) {
-      const income = encounterIncomeToken(this.material(MaterialType.EncounterCard).getItem<EncounterCardId>(card).id.front!)
+    for (const [card, item] of this.material(MaterialType.EncounterCard).location(LocationType.EncounterRow).entries) {
+      const income = encounterIncomeToken((item.id as EncounterCardId).front!)
       if (income !== undefined) {
         this.material(MaterialType.IncomeToken).id(income).moveItem({ type: LocationType.CardIncome, parent: card })
       }

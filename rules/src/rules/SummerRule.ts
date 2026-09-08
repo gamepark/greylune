@@ -49,8 +49,8 @@ export class SummerRule extends SeasonRule {
   /** Every pair of one of the player's Villagers and a card standing next to it, plus the empty gaps. */
   private villagerMoves(): GreyluneMove[] {
     const moves: GreyluneMove[] = []
-    for (const villager of villagersInVillage(this, this.player).getIndexes()) {
-      const cards = cardsAroundGap(this, gapOf(this.villagers.getItem(villager).location))
+    for (const [villager, item] of villagersInVillage(this, this.player).entries) {
+      const cards = cardsAroundGap(this, gapOf(item.location))
       // Both neighbours gone: the Villager is still taken back, and gains nothing (rulebook p.7).
       if (!cards.length) moves.push(this.customMove(CustomMoveType.GainCoinsAround, { villager }))
       for (const card of cards) {
@@ -141,13 +141,8 @@ export class SummerRule extends SeasonRule {
   /** One Villager on the special space, once a year: the space is the player's, and it takes one. */
   private specialActionMoves(): GreyluneMove[] {
     if (this.villagers.location(LocationType.SpecialAction).player(this.player).length) return []
-    return this.activeVillagers
-      .getIndexes()
-      .flatMap((villager) =>
-        specialActions.map((_, option) =>
-          this.villagers.index(villager).moveItem({ type: LocationType.SpecialAction, player: this.player, x: option })
-        )
-      )
+    const villagers = this.activeVillagers
+    return specialActions.flatMap((_, option) => villagers.moveItems({ type: LocationType.SpecialAction, player: this.player, x: option }))
   }
 
   /** Autumn only takes a player who has nothing left standing in the Village (rulebook p.9). */

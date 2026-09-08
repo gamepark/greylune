@@ -5,7 +5,7 @@ import { GreyluneRules } from './GreyluneRules'
 import { GreyluneSetup } from './GreyluneSetup'
 import { Area } from './material/Area'
 import { force, vp } from './material/Effect'
-import { EncounterCard, EncounterCardId, getEncounterCardPeriod } from './material/EncounterCard'
+import { EncounterCard, EncounterCardId, encounterArea, getEncounterCardPeriod } from './material/EncounterCard'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { playerCoins, playerForce, playerMagic, playerVp } from './material/PlayerState'
@@ -369,17 +369,14 @@ describe('Autumn', () => {
 
 describe('Winter', () => {
   /**
-   * A card still in its deck shows nobody its face, and a player replaying the year on their own
-   * screen sees exactly that. The rule has to lay the year out all the same, and the faces it cannot
-   * read yet must not stop it.
+   * The year is laid out off the faces of the two decks, and a player's screen does not know them:
+   * it must not try to play the turn of the year on its own, and wait for the server instead.
    */
-  it('lays the year out on a table where the decks are still face down', () => {
+  it('is not a turn a client can play on its own', () => {
     const view = rules().getView(BLUE)
     expect(view.items[MaterialType.VillageCard]!.some((entry) => entry.location.type === LocationType.VillageDeck && entry.id.front === undefined)).toBe(true)
-    view.rule = { id: RuleId.Winter, player: BLUE }
     const seen = new GreyluneRules(view)
-    expect(() => applyAutomaticMoves(seen, [seen.startRule(RuleId.Winter) as MaterialMove])).not.toThrow()
-    expect(seen.material(MaterialType.VillageCard).location(LocationType.VillageGrid).length).toBe(9)
+    expect(seen.isUnpredictableMove(seen.startRule(RuleId.Winter) as MaterialMove, BLUE)).toBe(true)
   })
 
   it('lays out a new Village, turns the next Event up and passes the first player token', () => {
@@ -389,6 +386,11 @@ describe('Winter', () => {
     expect(currentYear(rules(), 2)).toBe(2)
     expect(count(MaterialType.VillageCard, LocationType.VillageGrid)).toBe(9)
     expect(count(MaterialType.EncounterCard, LocationType.EncounterRow)).toBe(5)
+    for (const card of items(MaterialType.EncounterCard)) {
+      if (card.location.type !== LocationType.EncounterRow) continue
+      const front = (card.id as EncounterCardId).front!
+      expect(card.location.id, `${EncounterCard[front]} is not in the row of its Area`).toBe(encounterArea[front])
+    }
     const event = items(MaterialType.EventTile).find((entry) => entry.location.rotation === true)!
     expect(event.id).not.toBe(firstEvent)
     expect(items(MaterialType.FirstPlayerToken)[0].location.player).toBe(ORANGE)
