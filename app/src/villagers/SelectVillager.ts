@@ -27,14 +27,17 @@ type VillagerMove = MoveItem<PlayerColor, MaterialType, LocationType>
  */
 
 /**
- * The two ways a Villager is put down: into a gap of the Village, or onto the Event tile. The
- * Villager already standing on the Event and choosing its option is not one of them — it is placed
- * already, and what is left to settle about it is not which Villager it is.
+ * The three ways a Villager is put down: into a gap of the Village, onto the Event tile, or into the
+ * doorway of the special action. The Villager already standing on the Event and choosing its option
+ * is not one of them — it is placed already, and what is left to settle about it is not which
+ * Villager it is. The special action asks its own question the same way, and after the same pause.
  */
 const isPlacement = (move: GreyluneMove, index: number): move is VillagerMove =>
   isMoveItemType(MaterialType.Villager)(move) &&
   move.itemIndex === index &&
-  (move.location.type === LocationType.VillageGap || (move.location.type === LocationType.EventSpace && move.location.x === undefined))
+  (move.location.type === LocationType.VillageGap ||
+    move.location.type === LocationType.SpecialAction ||
+    (move.location.type === LocationType.EventSpace && move.location.x === undefined))
 
 /**
  * A Villager is worth aiming at exactly while there is somewhere to send it: a gap of the Village or
@@ -44,17 +47,14 @@ const isPlacement = (move: GreyluneMove, index: number): move is VillagerMove =>
  */
 export const canSelectVillager = (context: ItemContext<PlayerColor, MaterialType, LocationType>, legalMoves: GreyluneMove[]): boolean =>
   legalMoves.some(
-    (move) =>
-      isPlacement(move, context.index) ||
-      ((isActivateCard(move) || isGainCoinsAround(move)) && villagerActionData(move).villager === context.index)
+    (move) => isPlacement(move, context.index) || ((isActivateCard(move) || isGainCoinsAround(move)) && villagerActionData(move).villager === context.index)
   )
 
 /**
  * The Villager the player has aimed at, if any. Only one is ever selected: the framework lets go of
  * the one before as it takes a new one.
  */
-export const selectedVillager = (rules?: MaterialSource): number | undefined =>
-  rules?.material(MaterialType.Villager).selected().getIndexes()[0]
+export const selectedVillager = (rules?: MaterialSource): number | undefined => rules?.material(MaterialType.Villager).selected().getIndexes()[0]
 
 export const useSelectedVillager = (): number | undefined => selectedVillager(useRules<GreyluneRules>())
 

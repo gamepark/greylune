@@ -77,5 +77,15 @@ export enum CustomMoveType {
    * that no piece is ever put on: what is chosen is spent and gained at once and leaves nothing on
    * the table, so there is nothing to move and nothing to write down.
    */
-  TakeEventOption
+  TakeEventOption,
+
+  /**
+   * What a Villager standing on the special action of the personal board takes from it. Data: the
+   * index of the option.
+   *
+   * Same shape as {@link TakeEventOption}, and for the same reason: the board draws its 3 options as
+   * a line of icons and gives them no space of their own, so the Villager is put down once and for
+   * all and the choice leaves nothing on the table to read it off.
+   */
+  TakeSpecialAction
 }

@@ -5,7 +5,22 @@ import { BonusToken, IncomeToken, Seal } from '@gamepark/greylune/material/Token
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
 import { usePlayerId, useRules } from '@gamepark/react-game'
-import { DiscardedPotion, ForceGem, GoldCoin, Laurel, MagicGem, Rider, TiltArrow, VillagerFigure } from '../images/IconImages'
+import {
+  DiscardedPotion,
+  ForceGem,
+  ForceGemDown,
+  ForceGemUp,
+  GoldCoin,
+  Laurel,
+  MagicGem,
+  MagicGemDown,
+  MagicGemUp,
+  Rider,
+  riderImages,
+  StoryBook,
+  TiltArrow,
+  VillagerFigure
+} from '../images/IconImages'
 import { adventurerImages } from '../images/PawnImages'
 import { seasonImages } from '../images/SeasonImages'
 import { QuestTileBack } from '../images/TileImages'
@@ -63,8 +78,28 @@ export const ForceIcon = (props: IconProps) => <Icon src={ForceGem} {...props} /
 
 export const MagicIcon = (props: IconProps) => <Icon src={MagicGem} {...props} />
 
-/** The road, as the board draws it: what the Adventurer does with the spaces an effect hands over. */
-export const TravelIcon = (props: IconProps) => <Icon src={Rider} {...props} />
+/**
+ * The same gems with the arrow the cards draw them under when the level moves: green and above for a
+ * step up, red and below for a step down. They are the symbol for *one* step, arrow included, so
+ * nothing is written in front of them — which is how the cards print them, and there is no card that
+ * hands over or asks for more than one step at a time bar a single one.
+ */
+export const ForceUpIcon = (props: IconProps) => <Icon src={ForceGemUp} {...props} />
+export const ForceDownIcon = (props: IconProps) => <Icon src={ForceGemDown} {...props} />
+export const MagicUpIcon = (props: IconProps) => <Icon src={MagicGemUp} {...props} />
+export const MagicDownIcon = (props: IconProps) => <Icon src={MagicGemDown} {...props} />
+
+/** A story to be told: the book the personal board prints, ticked, for the Tavern it opens. */
+export const StoryIcon = (props: IconProps) => <Icon src={StoryBook} {...props} />
+
+/**
+ * The road, as the box draws it: the rider with the distance cut into it. There is one drawing per
+ * distance and no figure is ever written beside it (see {@link riderImages}); the bare rider is for
+ * a journey whose length is not a number anybody can read yet.
+ */
+export const TravelIcon = ({ count, ...props }: { count?: number } & IconProps) => (
+  <Icon src={(count !== undefined && riderImages[count]) || Rider} {...props} />
+)
 
 /**
  * A Villager, as the cards print one. The figures are sculpted 7 different ways and come in the 4

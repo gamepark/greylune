@@ -1,7 +1,7 @@
 import { CustomMove, isCustomMoveType, ItemMove } from '@gamepark/rules-api'
 import { MAX_COMPANIONS } from '../Constants'
 import { Memory } from '../Memory'
-import { coins, force, Gain, magic, Requirement, RequirementType, tellStory, travel, usesSeal, vp } from '../material/Effect'
+import { coins, Requirement, RequirementType, usesSeal } from '../material/Effect'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { playerCompanions, villagersInVillage } from '../material/PlayerState'
@@ -17,12 +17,6 @@ import { SeasonRule } from './SeasonRule'
 
 /** What a move that takes a Villager out of the Village says: which Villager, and which card. */
 export type VillagerActionData = { villager: number; card?: number }
-
-/**
- * The 3 things the special space of the personal board can be spent on (rulebook p.9). The story it
- * hears pays by tiers like a Tavern.
- */
-export const specialActions: Gain[][] = [[tellStory([coins(2)], [force()], [vp(2)])], [travel(1)], [magic()]]
 
 /**
  * The turn of a player in Summer (rulebook p.7).
@@ -91,12 +85,18 @@ export class SummerRule extends SeasonRule {
   /** An option of a Building, with the Seal it may need and the coins left once the card is paid. */
   canUseAbility(card: number, requirements: Requirement[] = [], price = 0, reduction: CostReduction = this.costReduction): boolean {
     if (!usesSeal(requirements)) return this.canPay(requirements, reduction)
-    const values = this.seals(card).getItems().map((item) => item.id as Seal)
+    const values = this.seals(card)
+      .getItems()
+      .map((item) => item.id as Seal)
     if (!values.length) return false
     const needsCoins = requirements.some((requirement) => requirement.type === RequirementType.SealCoins)
     const cheapest = reduction.freeSealValue ? Seal.One : Math.min(...values)
     return (
-      this.canPay(requirements.filter((requirement) => !usesSeal([requirement])), reduction) && (!needsCoins || this.coins - price >= cheapest)
+      this.canPay(
+        requirements.filter((requirement) => !usesSeal([requirement])),
+        reduction
+      ) &&
+      (!needsCoins || this.coins - price >= cheapest)
     )
   }
 
@@ -138,11 +138,17 @@ export class SummerRule extends SeasonRule {
       )
   }
 
-  /** One Villager on the special space, once a year: the space is the player's, and it takes one. */
+  /**
+   * One Villager on the special space, once a year: the space is the player's, and it takes one.
+   *
+   * Which of its 3 options is taken is not settled here. The Villager is simply put down on the
+   * space, and the board is then read (see `SpecialActionRule`): one move rather than one per option,
+   * because an option taken leaves nothing on the space to tell it by, so nothing about where the
+   * pawn lands could ever say which one it was.
+   */
   private specialActionMoves(): GreyluneMove[] {
     if (this.villagers.location(LocationType.SpecialAction).player(this.player).length) return []
-    const villagers = this.activeVillagers
-    return specialActions.flatMap((_, option) => villagers.moveItems({ type: LocationType.SpecialAction, player: this.player, x: option }))
+    return this.activeVillagers.moveItems({ type: LocationType.SpecialAction, player: this.player })
   }
 
   /** Autumn only takes a player who has nothing left standing in the Village (rulebook p.9). */
@@ -154,8 +160,7 @@ export class SummerRule extends SeasonRule {
 
   afterItemMove(move: ItemMove<number, MaterialType, LocationType>): GreyluneMove[] {
     if (move.itemType === MaterialType.Villager && 'location' in move && move.location.type === LocationType.SpecialAction) {
-      this.pushGains(specialActions[move.location.x ?? 0])
-      return this.endOfAction()
+      return [this.startRule(RuleId.SpecialAction)]
     }
     return super.afterItemMove(move)
   }

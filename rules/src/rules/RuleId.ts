@@ -12,6 +12,14 @@
  * The final scoring is deliberately not a rule: the victory points of the Quests, the Companions,
  * the Objects and the skills are read off the state at the end of the 5th year. They are computed,
  * not played (see `finalScore`).
+ *
+ * **The numbers are written down.** Every move carries the rule it starts as the number this enum
+ * gives it, and a game is that list of moves replayed from the setup. So adding a rule anywhere but
+ * at the end renumbers the ones after it and turns every game already recorded into nonsense: the
+ * rules replayed are no longer the ones that were played. Until the game is released that costs a
+ * `game.new()` and nothing else, and the list is kept in the order it reads best — which is this one.
+ * From the day the platform starts keeping games, it is frozen and a new rule goes at the end,
+ * wherever it belongs. Same for {@link CustomMoveType}.
  */
 export enum RuleId {
   // ------------------------------------------------------------------------------- the four seasons
@@ -73,6 +81,14 @@ export enum RuleId {
    * once a year for each player. The Villager stands on the option it pays for.
    */
   Event,
+
+  /**
+   * The special action of the personal board, once a Villager is standing on it — once a year for
+   * each player. The board prints its 3 options as a line of icons and gives them no space of their
+   * own, exactly as the Event tiles that are not the Festival do: the Villager does not budge, and
+   * what it takes is named here.
+   */
+  SpecialAction,
 
   // ---------------------------------------------------------- what many cards and effects lead into
 

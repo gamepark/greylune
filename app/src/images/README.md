@@ -25,7 +25,7 @@ Source : `kDrive/Licences/Sorry We Are French/GREYLUNE`.
 | `tokens` | pièces, sceaux, jetons Revenu, jetons Bonus, jetons PV, jeton 1er joueur |
 | `pawns` | meeples et marqueurs, par couleur (`Blue`, `Orange`, `Red`, `Purple`) |
 | `seasons` | `Spring`, `Summer`, `Autumn` : bannières découpées dans `boards/SeasonBoard.png` |
-| `icons` | symboles isolés (`Gold`, `Magic`, `Move`, `PotionDiscarded`, `Strength`, `Tilt`, `VictoryPoint`, `Villager`) — **provisoires** |
+| `icons` | symboles isolés (`Gold`, `Magic(Up/Down)`, `Move`, `Move1-5`, `PotionDiscarded`, `Story`, `Strength(Up/Down)`, `Tilt`, `VictoryPoint`, `Villager`) — **provisoires** |
 
 Les `icons` sont la seule exception à la règle « une image = une pièce » : la Force, la Magie, les
 points de victoire et la route n'existent comme pièce nulle part, seulement comme symbole imprimé
@@ -67,17 +67,27 @@ en miroir sur les planches de punchboard.
 - Les cartes n'existent qu'en **fr** et **en**.
 - Aucune icône isolée n'existe (saisons, Force, Magie, Sceau, pièce, récit, blasons de Distance,
   types de carte) : elles ne sont qu'incrustées dans les cartes et les plateaux. Il faudra les
-  découper ou les redemander pour les `Headers`, l'aide et les `PlayerPanels`.
+  découper — voir la liste des découpages ci-dessous — ou les redemander.
 - `seasons/*` : premier découpage de ce genre, fait pour les `Headers` (bannières fleur, soleil et
   feuille du plateau Saisons, fond parchemin rendu transparent au seuil de saturation). Les autres
   icônes des `Headers` empruntent la pièce réelle qui dit la chose — `pawns/StrengthMarker` pour la
   Force, `pawns/MagicMarker` pour la Magie, `tokens/Coin1` pour une pièce, `pawns/ScoreMarker*` pour
   un PV, `pawns/Villager*1` pour un villageois, `tiles/QuestTileBack` pour une Quête héroïque. À
   remplacer par de vraies icônes quand on les aura.
-- `icons/Tilt.png` et `icons/PotionDiscarded.png` : **découpés temporairement** dans le bas des cartes
-  `cards/village/fr/Item2.jpg` (Tommy) et `Item6.jpg` (Potion de mana), là où ces deux symboles sont
-  imprimés comme coût — la flèche crochue de l'inclinaison, et la fiole barrée d'une croix rouge de
-  la potion défaussée. Fond parchemin retiré par écart à la couleur médiane du pourtour, couleur
-  d'origine restituée sur les bords antialiasés. À remplacer par les vraies icônes quand on les aura.
+- **Découpages temporaires**, tous faits de la même façon : fond retiré par écart à la couleur
+  médiane du pourtour, couleur d'origine restituée sur les bords antialiasés, pixels isolés du fond
+  supprimés. À remplacer par les vraies icônes quand on les aura.
+
+  | Icône | Source | Ce que c'est |
+  |---|---|---|
+  | `Tilt` | `cards/village/fr/Item2.jpg` (Tommy) | la flèche crochue de l'inclinaison |
+  | `PotionDiscarded` | `Item6.jpg` (Potion de mana) | la fiole barrée d'une croix rouge |
+  | `Story` | `boards/PlayerBoard.png` | le livre coché de l'action spéciale |
+  | `MagicUp` | `boards/PlayerBoard.png` | la gemme de Magie sous un triangle vert |
+  | `StrengthUp` | `Building6.jpg` (Forge) | la gemme de Force sous un triangle vert |
+  | `StrengthDown` / `MagicDown` | `Building9.jpg` (Salle des héros) | les mêmes sur un triangle rouge |
+  | `Move1`, `Move2` | `Item2.jpg` (Tommy) | le cavalier avec sa distance découpée dedans |
+  | `Move3`, `Move5` | `Item10.jpg` (Crin blanc) | idem |
+  | `Move4` | `Building7.jpg` (Guilde des voyageurs II) | idem |
 - `pawns/*` : rendus vectoriels extraits de `MEEPLES GREYLUNE.ai` (fiche de fabrication).
   L'ombre portée directionnelle du gabarit est incrustée dans le dessin d'origine.

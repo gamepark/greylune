@@ -14,6 +14,8 @@
     "resolve": "Résoudre",
     "resolve-both": "Résoudre les deux",
     "use": "Utiliser",
+    "tell": "Raconter",
+    "gain-magic": "Gagner 1 Magie",
     "extra-coins": "Gagner {{coins}} <coin/> de plus",
     "no-surcharge": "Ne pas payer les villageois",
     "camp": "Aller au campement",
@@ -21,7 +23,8 @@
     "travel": "Voyager",
     "stay": "Rester sur place",
     "summer": "Passer à l'été",
-    "autumn": "Passer à l'automne"
+    "autumn": "Passer à l'automne",
+    "special-action": "Action spéciale"
   },
   "header": {
     "winter": "Nouvelle année",
@@ -76,6 +79,10 @@
     "event": {
       "you": "Choisissez ce que l'événement vous rapporte",
       "player": "{player} participe à l'événement"
+    },
+    "special-action": {
+      "you": "Choisissez ce que vous rapporte l'action spéciale",
+      "player": "{player} utilise son action spéciale"
     },
     "resolve-event": {
       "you": "Résolution de l'événement",

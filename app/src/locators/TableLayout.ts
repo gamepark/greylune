@@ -40,6 +40,8 @@ export const encounterCardSize = { width: 5.2, height: 8 }
 export const eventTileSize = { width: 7.71, height: 9.94 }
 export const questTileSize = { width: 3.75, height: 4.13 }
 export const sealSize = { width: 2.12, height: 2.23 }
+/** A Villager figure, its baked-in shadow included, as `VillagerDescription` draws it. */
+const villagerHeight = 3.04
 
 /** Anything laid on a board has to clear its thickness, or it disappears inside it. */
 const onBoard = 0.1
@@ -558,7 +560,57 @@ export const questMarkerSpot = (area: XYCoordinates, index: number) =>
   onPlayerBoard(area, 12.44 + markerDrop.quest.x + 1.415 * index, 7.66 + markerDrop.quest.y)
 export const incomeTokenSpot = (area: XYCoordinates, index: number) => onPlayerBoard(area, 4.83, 5.85 + 2.3 * index)
 export const activeVillagersSpot = (area: XYCoordinates) => onPlayerBoard(area, 14.08, 10)
-export const specialActionSpot = (area: XYCoordinates) => onPlayerBoard(area, 13.83, 3.72)
+
+/**
+ * The house printed in the upper right of the board, where the Villager of the year stands: the
+ * middle of the drawing, which is what the buttons it carries are hung beside, and the line its base
+ * is drawn on, which is what the Villager itself has to stand on.
+ */
+const specialActionHouse = { x: 13.83, y: 3.6, base: 4.14 }
+
+/**
+ * How far below the middle of its own picture a Villager's feet are.
+ *
+ * The figures are drawn standing, the halo of shadow baked in all round them except underneath,
+ * where the base is flush with the bottom edge of the artwork (see `PawnImages`). So a pawn aimed at
+ * a spot does not stand on it but a good centimetre below it. The 7 figures agree to within a pixel:
+ * their base falls at 0.925 of the height of the picture.
+ */
+const villagerBaseDrop = (0.925 - 0.5) * villagerHeight
+
+/**
+ * The Villager stands on the line drawn at the foot of the house rather than in the middle of it, the
+ * way a pawn set down anywhere else on the table stands on the space it is put in. So the spot is
+ * that line, raised by everything the pawn's own picture carries under its middle.
+ */
+export const specialActionSpot = (area: XYCoordinates) => onPlayerBoard(area, specialActionHouse.x, specialActionHouse.base - villagerBaseDrop)
+
+/**
+ * Where the offers the special action carries are hung (see `SpecialActionMenu`).
+ *
+ * The space holds no piece of its own until a Villager is standing in it, and the 3 things it can be
+ * spent on are printed as a line of icons under it, on nothing anybody puts anything on — so both
+ * the offer to go there and the offer of each option are hung on the board itself and walk back out
+ * to the space. Beside it rather than on it: the doorway is where the pawn is about to stand, or
+ * already stands, and the buttons keep off both. To the right, which is where the board leaves room.
+ */
+export const specialActionBoardOffset: XYCoordinates = {
+  x: specialActionHouse.x + 2.6 - playerBoardSize.width / 2,
+  y: specialActionHouse.y - playerBoardSize.height / 2
+}
+
+/**
+ * Where each of the 3 options of the special action is offered (see `SpecialActionOption`).
+ *
+ * Not under the doorway, where the board prints them closer together than 3 buttons could stand, but
+ * on the piece each one would move: the line of tiers the Tavern pays by, printed on the board at the
+ * height of {@link specialActionStoryOffset} and ending a good centimetre short of the rolled edge;
+ * the Adventurer, off its left flank, mirroring the offer to stay put on its right; and the Magic
+ * marker, a step above it, which is where it would go.
+ */
+export const specialActionStoryOffset: XYCoordinates = { x: 16.5 - playerBoardSize.width / 2, y: 6.05 - playerBoardSize.height / 2 }
+export const specialActionTravelSpot: XYCoordinates = { x: 2, y: 0 }
+export const specialActionMagicSpot: XYCoordinates = { x: 0, y: -2 }
 
 /** Where the first card of each row goes, and which way the ones after it run. */
 export const companionsSpot = (area: XYCoordinates) => besidePlayerBoard(area, -sideRowStart, 0)
@@ -689,9 +741,6 @@ export const villagerReserveSpot = (area: XYCoordinates) => besidePlayerBoard(ar
 /** The one point token a player can hold, in the middle of the band, between the 2 rows of Stories. */
 export const playerVpTokensSpot = (area: XYCoordinates) => besidePlayerBoard(area, 0, bandCenterY)
 
-/** Lifted above everything else on the table: a panel is never covered by a card that reaches it. */
-export const panelZ = 20
-
 /**
  * A player's panel is part of the table, over their own row of Objects, pushed against the outer edge
  * of the area: its right edge is the right edge of the last Object card, so the only thing between it
@@ -727,15 +776,13 @@ export const playerPanelSpot = (area: XYCoordinates, hasBand: boolean) =>
  * panel when that player is not read: wherever the panel is, the token is the piece pinned to it.
  */
 const firstPlayerTokenSize = { width: 3.44, height: 5.7 }
-export const firstPlayerTokenSpot = (area: XYCoordinates, hasBand: boolean): Coordinates => ({
+export const firstPlayerTokenSpot = (area: XYCoordinates, hasBand: boolean): XYCoordinates => ({
   ...besidePlayerBoard(
     area,
     sideRowX + sideRowWidth / 2 - playerPanelWidth - bandEndSlot / 2,
     /** Its foot on the line the bottom of the panel is drawn on, whichever of the 2 lines that is. */
     (hasBand ? -villageCardSize.height / 2 : -printedHalf + playerPanelHeight + overCardsAir) - firstPlayerTokenSize.height / 2
-  ),
-  /** Dropped, it lies over the Object cards, and like the panel it is never the thing covered. */
-  z: panelZ
+  )
 })
 
 /**

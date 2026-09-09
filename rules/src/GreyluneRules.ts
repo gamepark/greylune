@@ -28,6 +28,7 @@ import { ResolveEffectsRule } from './rules/ResolveEffectsRule'
 import { ResolveEncounterRule } from './rules/ResolveEncounterRule'
 import { ResolveQuestRule } from './rules/ResolveQuestRule'
 import { RuleId } from './rules/RuleId'
+import { SpecialActionRule } from './rules/SpecialActionRule'
 import { SpringRule } from './rules/SpringRule'
 import { StraightenCardRule } from './rules/StraightenCardRule'
 import { SummerRule } from './rules/SummerRule'
@@ -60,6 +61,7 @@ export class GreyluneRules
     [RuleId.UseItem]: UseItemRule,
     [RuleId.DiscardItem]: DiscardItemRule,
     [RuleId.Event]: EventRule,
+    [RuleId.SpecialAction]: SpecialActionRule,
     [RuleId.Travel]: TravelRule,
     [RuleId.ResolveEncounter]: ResolveEncounterRule,
     [RuleId.ChooseOutcome]: ChooseOutcomeRule,

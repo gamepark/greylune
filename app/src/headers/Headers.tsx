@@ -57,6 +57,7 @@ export const Headers: Partial<Record<RuleId, ComponentType>> = {
   [RuleId.StraightenCard]: () => <HeaderText code="straighten" />,
   [RuleId.PlaceVillager]: () => <HeaderText code="place-villager" components={{ villager: <VillagerIcon /> }} />,
   [RuleId.Event]: EventHeader,
+  [RuleId.SpecialAction]: () => <HeaderText code="special-action" />,
   [RuleId.ChooseSkill]: ChooseSkillHeader,
   [RuleId.BonusToken]: BonusTokenHeader,
   [RuleId.Reaction]: ReactionHeader

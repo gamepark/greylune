@@ -5,6 +5,7 @@ import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { Villager } from '@gamepark/greylune/material/Villager'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { RuleId } from '@gamepark/greylune/rules/RuleId'
+import { SpecialAction } from '@gamepark/greylune/rules/SpecialActionRule'
 import { Season } from '@gamepark/greylune/Season'
 import { ItemContext, TokenDescription } from '@gamepark/react-game'
 import { isMoveItemType, Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
@@ -12,19 +13,14 @@ import { isSameGap } from '@gamepark/greylune/material/Village'
 import { ChangeSeasonMenu } from '../season/SeasonMenu'
 import { StayPutMenu } from '../travel/TravelMenu'
 import { stayPutMove } from '../travel/TravelMoves'
+import { specialActionMagicSpot, specialActionTravelSpot } from '../locators/TableLayout'
 import { gapsToPlaceVillager } from '../village/PlaceVillager'
 import { canSelectVillager } from '../villagers/SelectVillager'
+import { SpecialActionOption } from '../villagers/SpecialAction'
+import { specialActionOptions } from '../villagers/SpecialActionMoves'
 import { campOf, isActivateCard, isGainCoinsAround, slotOfCard, villagerActionData } from '../villagers/VillagerActions'
 import { SelectedVillager } from '../villagers/SelectedVillager'
-import {
-  adventurerImages,
-  MagicMarker,
-  questMarkerImages,
-  scoreMarkerImages,
-  seasonMarkerImages,
-  StrengthMarker,
-  villagerImages
-} from '../images/PawnImages'
+import { adventurerImages, MagicMarker, questMarkerImages, scoreMarkerImages, seasonMarkerImages, StrengthMarker, villagerImages } from '../images/PawnImages'
 
 /**
  * Meeples and markers. Their artwork already carries its drop shadow, so they are declared with the
@@ -48,6 +44,10 @@ export class AdventurerDescription extends TokenDescription<PlayerColor, Materia
    * go no further (see {@link StayPutMenu}); every other area within reach wears the offer to walk
    * there, on the board itself. The moves are the reader's own, so only the pawn of the player being
    * waited for ever carries anything.
+   *
+   * It also wears the road of the special action, off its other flank: that option is a journey, and
+   * the pawn about to make it is what a player looks at to decide whether it is worth the Villager
+   * (see {@link SpecialActionOption}).
    */
   getItemMenu(
     item: MaterialItem<PlayerColor, LocationType, PlayerColor>,
@@ -55,6 +55,10 @@ export class AdventurerDescription extends TokenDescription<PlayerColor, Materia
     legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
   ) {
     if (item.id !== context.rules.game.rule?.player) return undefined
+    const options = specialActionOptions(legalMoves)
+    if (options.length) {
+      return <SpecialActionOption moves={options} option={SpecialAction.Travel} {...specialActionTravelSpot} labelPosition="right" />
+    }
     const move = stayPutMove(context.rules, legalMoves)
     return move && <StayPutMenu move={move} />
   }
@@ -195,4 +199,23 @@ export class MagicMarkerDescription extends TokenDescription<PlayerColor, Materi
   height = 1.96
   transparency = true
   image = MagicMarker
+
+  /** The marker is pressed, not picked up: what it offers has to be read where it stands. */
+  isMenuAlwaysVisible(): boolean {
+    return true
+  }
+
+  /**
+   * The Magic of the special action, worn by the marker itself, one step above where it stands — the
+   * very space it would climb to. Only the acting player's marker: the moves are the reader's own,
+   * and a track already at 5 is offered nothing at all (see `SpecialActionRule`).
+   */
+  getItemMenu(
+    item: MaterialItem<PlayerColor, LocationType>,
+    context: ItemContext<PlayerColor, MaterialType, LocationType>,
+    legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
+  ) {
+    if (item.location.player !== context.rules.game.rule?.player) return undefined
+    return <SpecialActionOption moves={specialActionOptions(legalMoves)} option={SpecialAction.Magic} labelPosition="left" {...specialActionMagicSpot} />
+  }
 }
