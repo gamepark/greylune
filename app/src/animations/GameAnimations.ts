@@ -21,6 +21,36 @@ gameAnimations
   .configure((move) => isMoveItemType(MaterialType.Villager)(move) && move.location.type === LocationType.EventSpace && move.location.x !== undefined)
   .duration(200)
 
+/**
+ * A card of a player's own laid on its side, or standing back up (see {@link tiltedCardAngle}).
+ *
+ * The card goes nowhere: a tilt is a move whose destination is the place the card already lies, with
+ * nothing changed but its rotation, and that is what tells it apart from the same card arriving in
+ * the row after being bought. So there is no distance to cover and nothing to wait for — a third of
+ * a second is a hand turning a card, where the second a journey across the table is given would read
+ * as the card thinking it over. Autumn stands a whole row of them back up one after another, which
+ * is the other reason to keep it short.
+ */
+gameAnimations
+  .configure(
+    (move, context) =>
+      isMoveItemType(MaterialType.VillageCard)(move) &&
+      (move.location.type === LocationType.Items || move.location.type === LocationType.Companions) &&
+      context.rules.material(MaterialType.VillageCard).getItem(move.itemIndex).location.type === move.location.type
+  )
+  .duration(300)
+
+/**
+ * The Adventurer riding out of Greylune, or further along the road (see `TravelRule`).
+ *
+ * However far it goes, it goes in one move: the areas lie in a line and a journey names where it
+ * ends, not the spaces it crosses. So the pawn covers anything from one bend of the road to the
+ * whole map in the same time, and half a second is what makes both read as a ride — long enough to
+ * follow the pawn round the board and see where it stopped, short enough that a journey the player
+ * has just decided on is not something they then wait for.
+ */
+gameAnimations.configure((move) => isMoveItemType(MaterialType.Adventurer)(move) && move.location.type === LocationType.Area).duration(500)
+
 /** Where the flight ends and the push begins: the card spends the last quarter of it sliding in. */
 const SLIDE_START = 0.75
 

@@ -5,7 +5,7 @@ import { BonusToken, IncomeToken, Seal } from '@gamepark/greylune/material/Token
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
 import { usePlayerId, useRules } from '@gamepark/react-game'
-import { ForceGem, GoldCoin, Laurel, MagicGem, Rider, VillagerFigure } from '../images/IconImages'
+import { DiscardedPotion, ForceGem, GoldCoin, Laurel, MagicGem, Rider, TiltArrow, VillagerFigure } from '../images/IconImages'
 import { adventurerImages } from '../images/PawnImages'
 import { seasonImages } from '../images/SeasonImages'
 import { QuestTileBack } from '../images/TileImages'
@@ -71,6 +71,16 @@ export const TravelIcon = (props: IconProps) => <Icon src={Rider} {...props} />
  * colours, and none of those is what a sentence means: it means a Villager, any Villager.
  */
 export const VillagerIcon = (props: IconProps) => <Icon src={VillagerFigure} {...props} />
+
+/**
+ * The hooked arrow the cards print in front of everything an Object, or a Companion, is laid on its
+ * side for. It is the gesture rather than the effect — every use of a card costs the same one — so it
+ * goes on the button doing it rather than in what the button says.
+ */
+export const TiltIcon = (props: IconProps) => <Icon src={TiltArrow} {...props} />
+
+/** The same place in the sentence, for a Potion: it is emptied rather than tilted, and never comes back. */
+export const DiscardedPotionIcon = (props: IconProps) => <Icon src={DiscardedPotion} {...props} />
 
 export const AdventurerIcon = (props: IconProps) => {
   const player = useIconPlayer()

@@ -1,7 +1,9 @@
+import { RequirementType } from '@gamepark/greylune/material/Effect'
 import { ReactionType } from '@gamepark/greylune/material/Reaction'
 import { VillageCard, villageCardData } from '@gamepark/greylune/material/VillageCard'
 import { CustomMove } from '@gamepark/rules-api'
 import { useTranslation } from 'react-i18next'
+import { DiscardedPotionIcon, TiltIcon } from '../components/Icons'
 import { actionButtonSpot } from '../locators/TableLayout'
 import { GreyluneMenuButton } from '../theme/GreyluneMenuButton'
 import { reactionData } from './ReactionActions'
@@ -10,6 +12,11 @@ import { reactionData } from './ReactionActions'
  * The button a card wears while it may answer (see {@link reactionMoves}). What it does is printed on
  * the card the button is laid over, so the word is enough — except on the one card offering a choice,
  * where the two options have to be told apart.
+ *
+ * It carries the gesture the card prints in front of its own answer, and that is where a Potion parts
+ * company with a Companion: a Companion is laid on its side and stands up again in Autumn, a Potion
+ * is emptied and never comes back. The symbol is the one printed on the card, so the button says
+ * which of the two is about to happen before it happens.
  */
 export const ReactionCardMenu = ({ front, moves }: { front: VillageCard; moves: CustomMove[] }) => (
   <>
@@ -20,7 +27,9 @@ export const ReactionCardMenu = ({ front, moves }: { front: VillageCard; moves: 
         y={actionButtonSpot.y + (index - (moves.length - 1) / 2) * reactionButtonStep}
         move={move}
         label={<ReactionLabel front={front} option={reactionData(move).option} />}
-      />
+      >
+        <ReactionIcon front={front} />
+      </GreyluneMenuButton>
     ))}
   </>
 )
@@ -40,3 +49,7 @@ const ReactionLabel = ({ front, option }: { front: VillageCard; option: number }
   if (effect?.type === ReactionType.NoSurcharge) return <>{t('action.no-surcharge')}</>
   return <>{t('action.use')}</>
 }
+
+/** Laid on its side, or emptied: what the card asks for, which is what the card prints. */
+const ReactionIcon = ({ front }: { front: VillageCard }) =>
+  villageCardData[front].reaction!.requirements.some((requirement) => requirement.type === RequirementType.DiscardCard) ? <DiscardedPotionIcon /> : <TiltIcon />

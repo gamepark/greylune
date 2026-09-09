@@ -56,4 +56,13 @@ const menuButtonCss = css`
     text-wrap: balance;
     text-align: center;
   }
+
+  /**
+   * A label with nothing to draw takes no room: the 2 Objects paying in points counted on what the
+   * player owns are the only effects a figure and a symbol cannot say, and there the button is on
+   * its own on a card offering nothing else, so the card is left to say it.
+   */
+  > span:empty {
+    display: none;
+  }
 `

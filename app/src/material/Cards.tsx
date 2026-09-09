@@ -10,6 +10,8 @@ import { encounterMoves } from '../encounters/EncounterActions'
 import { EncounterCardMenu } from '../encounters/ResolveEncounter'
 import { encounterCardBacks, encounterCardImagesEn, encounterCardImagesFr } from '../images/EncounterCardImages'
 import { villageCardBacks, villageCardImagesEn, villageCardImagesFr } from '../images/VillageCardImages'
+import { itemActionMoves } from '../items/ItemActions'
+import { ItemCardMenu } from '../items/UseItem'
 import { encounterCardSize, villageCardBorderRadius, villageCardSize } from '../locators/TableLayout'
 import { reactionMoves } from '../reactions/ReactionActions'
 import { ReactionCardMenu } from '../reactions/UseReaction'
@@ -47,6 +49,11 @@ export class VillageCardDescription extends CardDescription<PlayerColor, Materia
    * A card of the player's own carries one thing, and only while a window is open on it: the offer to
    * answer with it (see {@link ReactionCardMenu}). A card in the Village is never in that position —
    * a reaction is answered with what one already owns — so the two never meet.
+   *
+   * An Object of the player's own carries what tilting it would give (see {@link ItemCardMenu}), for
+   * as long as it can be tilted: an Object is used out of the player's own turn order, waiting on
+   * nothing, so what it offers is worn the whole time it is on offer. That, too, never meets a
+   * reaction: an Object is used in Summer, and Summer opens no window on the player using it.
    */
   getItemMenu(
     item: MaterialItem<PlayerColor, LocationType, VillageCardId>,
@@ -55,6 +62,10 @@ export class VillageCardDescription extends CardDescription<PlayerColor, Materia
   ) {
     const reactions = reactionMoves(legalMoves, context.index)
     if (reactions.length && item.id?.front !== undefined) return <ReactionCardMenu front={item.id.front} moves={reactions} />
+    if (item.location.type === LocationType.Items) {
+      const uses = itemActionMoves(legalMoves, context.index)
+      return uses.length && item.id?.front !== undefined ? <ItemCardMenu front={item.id.front} moves={uses} /> : undefined
+    }
     if (item.location.type !== LocationType.VillageGrid) return undefined
     const villager = selectedVillager(context.rules)
     if (villager === undefined) return undefined

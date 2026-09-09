@@ -29,6 +29,13 @@ export const playerBoardSize = { width: 18.78, height: 13.94 }
 export const villageCardSize = { width: 7, height: 7 }
 /** The rounded corners of a Village card, which the drop areas drawn between them borrow. */
 export const villageCardBorderRadius = 0.35
+/**
+ * A card of the player's own that has been used is laid on its side: a quarter turn to the right, and
+ * back up next Autumn (rulebook p.7). Village cards are square, so it turns in place — the row it
+ * lies in neither moves nor opens up, and the picture on the card is the only thing saying it is
+ * spent, exactly as on the table.
+ */
+export const tiltedCardAngle = 90
 export const encounterCardSize = { width: 5.2, height: 8 }
 export const eventTileSize = { width: 7.71, height: 9.94 }
 export const questTileSize = { width: 3.75, height: 4.13 }
@@ -151,8 +158,7 @@ export const adventurerStaySpot: XYCoordinates = { x: -2, y: 0 }
  * it in the 3 that lie against the right edge, where the space is taller than it is wide. A step
  * shorter than a pawn, either way: they crowd the space rather than run out of it.
  */
-export const areaGap = (area: Area): Partial<XYCoordinates> =>
-  areaSpaces[area].width > areaSpaces[area].height ? { x: 1.4 } : { y: 1.1 }
+export const areaGap = (area: Area): Partial<XYCoordinates> => (areaSpaces[area].width > areaSpaces[area].height ? { x: 1.4 } : { y: 1.1 })
 
 /**
  * Two markers on the same space of a track are one on top of the other. Each one is set down leaning
@@ -404,6 +410,14 @@ export const campAreaSize = { width: 6.3, height: 6.3 }
  * out over the card next door (see {@link ItemMenuButton}).
  */
 export const actionButtonSpot: XYCoordinates = { x: -1, y: 1 }
+
+/**
+ * Where the buttons an Object of the player's own wears sit on it (see `ItemCardMenu`). Its own spot
+ * rather than the one above: an Object lies in a row along the player's board, hard against its
+ * neighbours and away from the Village, so the room a button has there is not the room it has in the
+ * grid, and the two are free to move apart.
+ */
+export const itemActionSpot: XYCoordinates = { x: 0, y: 0 }
 
 /**
  * The Seals already spent lie in the strip the bottom-left corner of the table leaves open, between

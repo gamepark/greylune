@@ -30,8 +30,12 @@ const requirementIcons: Partial<Record<RequirementType, ReactNode>> = {
   [RequirementType.ReturnVillager]: <VillagerIcon />
 }
 
-/** "1 <force/>", or "1 <force/> 4 <coin/>" when a condition asks for two things at once. */
-export const RequirementsLabel = ({ requirements = [], fallback }: { requirements?: Requirement[]; fallback?: ReactNode }) => {
+/**
+ * "1 <force/>", or "1 <force/> 4 <coin/>" when a condition asks for two things at once. `suffix` is
+ * whatever the condition is followed by when there is one to draw — an arrow to what it buys, say —
+ * and goes with it when there is not, rather than being left hanging after nothing.
+ */
+export const RequirementsLabel = ({ requirements = [], fallback, suffix }: { requirements?: Requirement[]; fallback?: ReactNode; suffix?: ReactNode }) => {
   const drawn = requirements.filter((requirement) => requirementIcons[requirement.type] !== undefined)
   if (!drawn.length) return <>{fallback}</>
   return (
@@ -42,6 +46,7 @@ export const RequirementsLabel = ({ requirements = [], fallback }: { requirement
           {requirement.count ?? 1} {requirementIcons[requirement.type]}
         </Fragment>
       ))}
+      {suffix}
     </>
   )
 }

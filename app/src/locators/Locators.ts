@@ -5,7 +5,7 @@ import { VpTokenValue } from '@gamepark/greylune/material/VpToken'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
 import { DeckLocator, ListLocator, Locator, MaterialContext, PileLocator } from '@gamepark/react-game'
-import { Location } from '@gamepark/rules-api'
+import { Location, MaterialItem } from '@gamepark/rules-api'
 import { AreaLocator } from './AreaLocator'
 import { CampLocator } from './CampLocator'
 import { CenteredFlexLocator } from './CenteredFlexLocator'
@@ -56,12 +56,20 @@ import {
   storiesGap,
   storiesMaxGap,
   strengthTrackSpot,
+  tiltedCardAngle,
   toldStoriesSpot,
   untoldStoriesSpot,
   villageDeckSpot,
   villagerReserveSpot,
   vpTokenStackSpots
 } from './TableLayout'
+
+/**
+ * A card a player has used lies on its side until it is straightened (see {@link tiltedCardAngle}).
+ * Both rows of cards a player keeps are tilted the same way: an Object is laid down to be used, a
+ * Companion to answer with, and it is the same gesture and the same card standing back up in Autumn.
+ */
+const tilt = (item: MaterialItem): number => (item.location.rotation === true ? tiltedCardAngle : 0)
 
 export const Locators: Partial<Record<LocationType, Locator<PlayerColor, MaterialType, LocationType>>> = {
   // ---------------------------------------------------------------- boards
@@ -203,6 +211,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
    * tighten up as well when an Encounter row lays claim to it: see {@link CrowdedRows}.
    */
   [LocationType.Companions]: new ListLocator({
+    getItemRotateZ: tilt,
     gap: companionsGap,
     getMaxGap: (location: Location, context: MaterialContext) => ({ x: -companionsMaxSpread(location.player as PlayerColor, context) }),
     getPositionDependencies: (location: Location, context: MaterialContext) => companionsDependencies(location.player as PlayerColor, context),
@@ -210,6 +219,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
   }),
 
   [LocationType.Items]: new ListLocator({
+    getItemRotateZ: tilt,
     maxCount: playerCardsMaxCount,
     gap: itemsGap,
     getCoordinates: (location: Location, context: MaterialContext) => itemsSpot(areaOf(context, location.player))

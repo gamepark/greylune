@@ -25,7 +25,7 @@ Source : `kDrive/Licences/Sorry We Are French/GREYLUNE`.
 | `tokens` | pièces, sceaux, jetons Revenu, jetons Bonus, jetons PV, jeton 1er joueur |
 | `pawns` | meeples et marqueurs, par couleur (`Blue`, `Orange`, `Red`, `Purple`) |
 | `seasons` | `Spring`, `Summer`, `Autumn` : bannières découpées dans `boards/SeasonBoard.png` |
-| `icons` | symboles isolés (`Gold`, `Magic`, `Move`, `Strength`, `VictoryPoint`, `Villager`) — **provisoires** |
+| `icons` | symboles isolés (`Gold`, `Magic`, `Move`, `PotionDiscarded`, `Strength`, `Tilt`, `VictoryPoint`, `Villager`) — **provisoires** |
 
 Les `icons` sont la seule exception à la règle « une image = une pièce » : la Force, la Magie, les
 points de victoire et la route n'existent comme pièce nulle part, seulement comme symbole imprimé
@@ -74,5 +74,10 @@ en miroir sur les planches de punchboard.
   Force, `pawns/MagicMarker` pour la Magie, `tokens/Coin1` pour une pièce, `pawns/ScoreMarker*` pour
   un PV, `pawns/Villager*1` pour un villageois, `tiles/QuestTileBack` pour une Quête héroïque. À
   remplacer par de vraies icônes quand on les aura.
+- `icons/Tilt.png` et `icons/PotionDiscarded.png` : **découpés temporairement** dans le bas des cartes
+  `cards/village/fr/Item2.jpg` (Tommy) et `Item6.jpg` (Potion de mana), là où ces deux symboles sont
+  imprimés comme coût — la flèche crochue de l'inclinaison, et la fiole barrée d'une croix rouge de
+  la potion défaussée. Fond parchemin retiré par écart à la couleur médiane du pourtour, couleur
+  d'origine restituée sur les bords antialiasés. À remplacer par les vraies icônes quand on les aura.
 - `pawns/*` : rendus vectoriels extraits de `MEEPLES GREYLUNE.ai` (fiche de fabrication).
   L'ombre portée directionnelle du gabarit est incrustée dans le dessin d'origine.
