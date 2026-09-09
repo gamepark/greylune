@@ -1,8 +1,7 @@
-import { ItemMove } from '@gamepark/rules-api'
-import { Memory } from '../Memory'
+import { isMoveItemType, ItemMove } from '@gamepark/rules-api'
+import { eventTriggers } from '../material/EventTile'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { TriggerType } from '../material/Reaction'
 import { Season } from '../Season'
 import { GreyluneMove, GreyluneRule } from './GreyluneRule'
 import { RuleId } from './RuleId'
@@ -27,28 +26,25 @@ export abstract class SeasonRule extends GreyluneRule {
    * the season track, and the new season is played at once (see {@link afterItemMove}).
    */
   changeSeasonMoves(to: Season): GreyluneMove[] {
-    return this.material(MaterialType.SeasonMarker).id(this.player).moveItems({ type: LocationType.SeasonTrack, x: to })
+    return this.material(MaterialType.SeasonMarker).id(this.player).moveItems({ type: LocationType.SeasonTrack, id: to })
   }
 
   /**
-   * The Villager is standing on the tile: what it takes from the Event is settled next. And the
-   * season marker has moved: the season it landed on is the one that is now played, read back off
-   * the board rather than named beside the move.
+   * The Villager is standing on the tile: what it takes from the Event is settled next, once the
+   * player has been given the chance to answer whatever that tile asks to be paid. And the season
+   * marker has moved: the season it landed on is the one that is now played, read back off the board
+   * rather than named beside the move.
    */
   afterItemMove(move: ItemMove<number, MaterialType, LocationType>): GreyluneMove[] {
-    if (!('location' in move)) return []
-    if (move.itemType === MaterialType.SeasonMarker) {
-      return [this.startRule(move.location.x === Season.Summer ? RuleId.Summer : RuleId.Autumn)]
+    if (isMoveItemType(MaterialType.SeasonMarker)(move)) {
+      return [this.startRule(move.location.id === Season.Summer ? RuleId.Summer : RuleId.Autumn)]
     }
-    if (move.itemType !== MaterialType.Villager) return []
-    if (move.location.type === LocationType.EventSpace) return this.openReactions([TriggerType.SpendForce], RuleId.Event)
+    if (!isMoveItemType(MaterialType.Villager)(move)) return []
+    if (move.location.type === LocationType.EventSpace) {
+      const tile = this.eventTile
+      return this.openReactions(tile === undefined ? [] : eventTriggers(tile), RuleId.Event)
+    }
     if (move.location.type === LocationType.VillageGap) return this.endOfAction()
-    return []
-  }
-
-  /** The memory of an action never survives a season change: nothing is owed on the way in. */
-  onRuleStart(): GreyluneMove[] {
-    this.forget(Memory.CostReduction)
     return []
   }
 }

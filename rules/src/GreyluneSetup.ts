@@ -110,7 +110,7 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
     // up. Whose piece it is, is its `id`.
     this.material(MaterialType.Adventurer).createItem({ id: player, location: { type: LocationType.Area, id: Area.Village } })
     this.material(MaterialType.ScoreMarker).createItem({ id: player, location: { type: LocationType.ScoreTrack, x: 0 } })
-    this.material(MaterialType.SeasonMarker).createItem({ id: player, location: { type: LocationType.SeasonTrack, x: Season.Spring } })
+    this.material(MaterialType.SeasonMarker).createItem({ id: player, location: { type: LocationType.SeasonTrack, id: Season.Spring } })
     this.material(MaterialType.StrengthMarker).createItem({ location: { type: LocationType.StrengthTrack, player, x: 0 } })
     this.material(MaterialType.MagicMarker).createItem({ location: { type: LocationType.MagicTrack, player, x: 0 } })
     this.material(MaterialType.QuestMarker).createItems(

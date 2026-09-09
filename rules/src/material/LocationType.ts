@@ -79,7 +79,7 @@ export enum LocationType {
 
   // ---------------------------------------------------------------- season board
 
-  /** The 3 season spaces of the Season board: `x` is a {@link Season}, `z` the rank in the pile. */
+  /** The 3 season spaces of the Season board: `id` is a {@link Season}, `x` the rank in the pile. */
   SeasonTrack,
   /** Where spent Villagers rest until Autumn. */
   Camp,

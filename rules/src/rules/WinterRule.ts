@@ -183,7 +183,7 @@ export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, Loc
    */
   private newRound(): GreyluneMove[] {
     return [
-      ...this.material(MaterialType.SeasonMarker).moveItems({ type: LocationType.SeasonTrack, x: Season.Spring }),
+      ...this.material(MaterialType.SeasonMarker).moveItems({ type: LocationType.SeasonTrack, id: Season.Spring }),
       this.material(MaterialType.FirstPlayerToken).moveItem({ type: LocationType.FirstPlayerTokenSpace, player: this.nextFirstPlayer })
     ]
   }

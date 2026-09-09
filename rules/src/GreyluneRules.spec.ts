@@ -115,7 +115,7 @@ const setActiveVillagers = (player: PlayerColor, keep: number) => {
 }
 
 const setSeason = (player: PlayerColor, season: Season) => {
-  items(MaterialType.SeasonMarker).find((item) => item.id === player)!.location.x = season
+  items(MaterialType.SeasonMarker).find((item) => item.id === player)!.location.id = season
 }
 
 const startRule = (id: RuleId, player: PlayerColor = BLUE) => {

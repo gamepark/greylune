@@ -18,7 +18,7 @@ import { isPotion, PermanentType, VillageCard, VillageCardId, villageCardData } 
 
 /** The season a player is in. Everyone starts a year in Spring and moves on at their own pace. */
 export const playerSeason = (source: MaterialSource, player: PlayerColor): Season =>
-  (source.material(MaterialType.SeasonMarker).id(player).getItem()?.location.x as Season) ?? Season.Spring
+  (source.material(MaterialType.SeasonMarker).id(player).getItem()?.location.id as Season) ?? Season.Spring
 
 /** Which {@link Area} the Adventurer stands in, {@link Area.Village} while it is at home. */
 export const adventurerArea = (source: MaterialSource, player: PlayerColor): Area =>

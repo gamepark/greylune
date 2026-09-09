@@ -1,4 +1,4 @@
-import { CustomMove, isCustomMoveType, ItemMove } from '@gamepark/rules-api'
+import { CustomMove, isCustomMoveType, isMoveItemType, ItemMove } from '@gamepark/rules-api'
 import { MAX_COMPANIONS } from '../Constants'
 import { Memory } from '../Memory'
 import { coins, Requirement, RequirementType, usesSeal } from '../material/Effect'
@@ -159,7 +159,7 @@ export class SummerRule extends SeasonRule {
   // ------------------------------------------------------------------ playing
 
   afterItemMove(move: ItemMove<number, MaterialType, LocationType>): GreyluneMove[] {
-    if (move.itemType === MaterialType.Villager && 'location' in move && move.location.type === LocationType.SpecialAction) {
+    if (isMoveItemType(MaterialType.Villager)(move) && move.location.type === LocationType.SpecialAction) {
       return [this.startRule(RuleId.SpecialAction)]
     }
     return super.afterItemMove(move)

@@ -155,7 +155,7 @@ describe('Kael', () => {
     const building = placeCard(VillageCard.HallOfTheHeroes, 0, 0)
     const villager = standVillager(BLUE, 0.5, 0)
     setSkill(BLUE, 0, 0)
-    items(MaterialType.SeasonMarker).find((item) => item.id === BLUE)!.location.x = Season.Summer
+    items(MaterialType.SeasonMarker).find((item) => item.id === BLUE)!.location.id = Season.Summer
     game.rule = { id: RuleId.Summer, player: BLUE }
     playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === villager)
     // Nothing is affordable without him, so Kael is the only thing the rule has to offer.
@@ -183,7 +183,7 @@ describe('Neris', () => {
     standVillager(ORANGE, 1, 0.5)
     standVillager(ORANGE, 1, 1.5)
     setCoins(BLUE, 7)
-    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.x = Season.Summer
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
     game.rule = { id: RuleId.Summer, player: BLUE }
     playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === villager)
     expect(game.rule!.id).toBe(RuleId.ActivateCard)
@@ -206,7 +206,7 @@ describe('Dorian', () => {
     const item = placeCard(VillageCard.MagicRing, 0, 0)
     const villager = standVillager(BLUE, 0.5, 0)
     setCoins(BLUE, 7)
-    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.x = Season.Summer
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
     game.rule = { id: RuleId.Summer, player: BLUE }
     playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === villager)
     useReaction(dorian)
@@ -277,7 +277,7 @@ describe('Isandre', () => {
     const isandre = give(VillageCard.Isandre)
     // Cor: 3 victory points for a tilt and a Villager.
     const horn = give(VillageCard.Horn, LocationType.Items)
-    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.x = Season.Summer
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
     game.rule = { id: RuleId.Summer, player: BLUE }
     playCustom(CustomMoveType.UseItem, (data: { card: number; ability: number }) => data.card === horn && data.ability === 0)
     expect(items(MaterialType.VillageCard)[horn].location.rotation).toBe(true)

@@ -188,7 +188,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
   // ---------------------------------------------------------------- season board
 
   [LocationType.SeasonTrack]: new Locator({
-    getCoordinates: (location: Location) => stacked(seasonSpots[(location.x as Season) ?? Season.Spring], location.z)
+    getCoordinates: (location: Location) => stacked(seasonSpots[(location.id as Season) ?? Season.Spring], location.x)
   }),
 
   [LocationType.Camp]: new CampLocator({

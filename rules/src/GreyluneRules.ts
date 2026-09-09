@@ -79,7 +79,9 @@ export class GreyluneRules
    * Every pile and every row where items simply follow one another keeps a `x` sequence: it is what
    * orders a deck (the top card is the highest `x`), and what the display needs to tell two items of
    * the same location apart instead of stacking them all on its first spot. Nothing else ever has to
-   * hand out a `x`, in the setup or in a rule.
+   * hand out a `x`, in the setup or in a rule. The season track is one of those rows rather than a
+   * track: a season is a whole area of its own (`id`), and the markers that have reached it are the
+   * pile that stands on it.
    *
    * {@link FillGapStrategy} is for the places where the slots are printed and stay: the 3 Quest
    * marker spaces of a personal board. What leaves one of those leaves a hole, and what comes back
@@ -88,8 +90,8 @@ export class GreyluneRules
    * A strategy is only ever handed the items of one area — same `id`, same `player`, same `parent`.
    * {@link StackingStrategy} is what is left when `x` or `y` still names a space inside that area and
    * several items may share it: it leaves them alone and keeps a sequence on `z`, the rank in the
-   * pile. That is the score track and the season track (`x` is the value, and everybody's markers
-   * lie on one board), the shields of a Quest (`x` tells the first player's from the shared one), the
+   * pile. That is the score track (`x` is the value, and everybody's markers lie on one board), the
+   * shields of a Quest (`x` tells the first player's from the shared one), the
    * {@link LocationType.VillageGap}, where `x` and `y` name the gap and any number of Villagers stand
    * in it, and the {@link LocationType.EventSpace}, where `x` names one of the Festival's printed
    * spaces and, on every other tile, nothing at all: the Villagers of all the players share its
@@ -136,7 +138,7 @@ export class GreyluneRules
       [LocationType.ScoreTrack]: new StackingStrategy()
     },
     [MaterialType.SeasonMarker]: {
-      [LocationType.SeasonTrack]: new StackingStrategy()
+      [LocationType.SeasonTrack]: new PositiveSequenceStrategy()
     },
     [MaterialType.QuestMarker]: {
       [LocationType.QuestMarkerSpace]: new FillGapStrategy(),

@@ -1,4 +1,4 @@
-import { CustomMove, isCustomMoveType, ItemMove } from '@gamepark/rules-api'
+import { CustomMove, isCustomMoveType, isMoveItemType, ItemMove } from '@gamepark/rules-api'
 import { eventTileData, isFestival } from '../material/EventTile'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
@@ -44,7 +44,7 @@ export class EventRule extends GreyluneRule {
 
   /** The Festival: the space the Villager has taken its place on is the option it pays for. */
   afterItemMove(move: ItemMove<number, MaterialType, LocationType>): GreyluneMove[] {
-    if (move.itemType !== MaterialType.Villager || !('location' in move) || move.location.type !== LocationType.EventSpace) return []
+    if (!isMoveItemType(MaterialType.Villager)(move) || move.location.type !== LocationType.EventSpace) return []
     return move.location.x === undefined ? [] : this.takeOption(move.location.x)
   }
 
