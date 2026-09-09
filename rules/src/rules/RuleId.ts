@@ -21,7 +21,8 @@ export enum RuleId {
    * Encounters and the Event tile of the past year are discarded, the 9 new Village cards are laid
    * out and receive their Seal tokens, the next Event is turned face up, the Encounter row is dealt
    * again, every Season marker goes back to Spring and the first player token passes to the left.
-   * Never played on the first year: the setup already did it.
+   * The first year is no exception: the setup builds the decks and the piles, and this rule lays the
+   * year on the table — it simply finds nothing to put away.
    */
   Winter = 1,
 

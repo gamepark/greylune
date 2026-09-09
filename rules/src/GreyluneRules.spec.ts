@@ -5,13 +5,13 @@ import { GreyluneRules } from './GreyluneRules'
 import { GreyluneSetup } from './GreyluneSetup'
 import { Area } from './material/Area'
 import { force, vp } from './material/Effect'
-import { EncounterCard, EncounterCardId, encounterArea, getEncounterCardPeriod } from './material/EncounterCard'
+import { EncounterCard, EncounterCardId, encounterArea, encounterIncomeToken, getEncounterCardPeriod } from './material/EncounterCard'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { playerCoins, playerForce, playerMagic, playerVp } from './material/PlayerState'
 import { QuestTile } from './material/QuestTile'
-import { IncomeToken, Seal } from './material/Tokens'
-import { getVillageCardPeriod, VillageCard, VillageCardId } from './material/VillageCard'
+import { IncomeToken } from './material/Tokens'
+import { getVillageCardPeriod, PLAYERS_MINUS_ONE, VillageCard, VillageCardId, villageCardData } from './material/VillageCard'
 import { getVpToken, VpTokenValue } from './material/VpToken'
 import { Memory } from './Memory'
 import { PlayerColor } from './PlayerColor'
@@ -113,8 +113,52 @@ const startRule = (id: RuleId, player: PlayerColor = BLUE) => {
   game.rule = { id, player }
 }
 
+/**
+ * Every Village card of the grid carries what its symbol calls for, and nothing else — the `-1`
+ * symbol is worth 1 Seal at the 2 players these tests seat.
+ */
+const expectSealsOnGrid = () => {
+  for (const [card, item] of rules().material(MaterialType.VillageCard).location(LocationType.VillageGrid).entries) {
+    const front = (item.id as VillageCardId).front!
+    const seals = villageCardData[front].seals
+    const expected = seals === PLAYERS_MINUS_ONE ? 1 : (seals ?? 0)
+    expect(rules().material(MaterialType.Seal).location(LocationType.CardSeal).parent(card).length, VillageCard[front]).toBe(expected)
+  }
+}
+
 beforeEach(() => {
   game = new GreyluneSetup().setup({ players: [{ id: BLUE }, { id: ORANGE }] })
+})
+
+/**
+ * The setup builds the decks and the piles and hands over to {@link WinterRule} to lay the first
+ * year out, so what is asserted here is that the turn of the year works on an empty table too.
+ */
+describe('The setup', () => {
+  it('lays the first year out and opens it on the first player', () => {
+    expect(currentYear(rules(), 2)).toBe(1)
+    expect(count(MaterialType.VillageCard, LocationType.VillageGrid)).toBe(9)
+    expect(count(MaterialType.EncounterCard, LocationType.EncounterRow)).toBe(5)
+    for (const card of items(MaterialType.EncounterCard)) {
+      if (card.location.type !== LocationType.EncounterRow) continue
+      const front = (card.id as EncounterCardId).front!
+      expect(card.location.id, `${EncounterCard[front]} is not in the row of its Area`).toBe(encounterArea[front])
+    }
+    expect(items(MaterialType.EventTile).filter((tile) => tile.location.rotation === true)).toHaveLength(1)
+    expect(items(MaterialType.FirstPlayerToken)[0].location.player).toBe(BLUE)
+    expect(game.rule).toEqual({ id: RuleId.Spring, player: BLUE })
+  })
+
+  it('gives every Village card of the first grid the Seals its symbol calls for', () => {
+    expectSealsOnGrid()
+  })
+
+  it('gives every Encounter of the first row the Income token it carries', () => {
+    for (const [card, item] of rules().material(MaterialType.EncounterCard).location(LocationType.EncounterRow).entries) {
+      const income = encounterIncomeToken((item.id as EncounterCardId).front!)
+      expect(rules().material(MaterialType.IncomeToken).location(LocationType.CardIncome).parent(card).getItem()?.id).toBe(income)
+    }
+  })
 })
 
 describe('The Village', () => {
@@ -397,14 +441,27 @@ describe('Winter', () => {
     expect(game.rule).toEqual({ id: RuleId.Spring, player: ORANGE })
   })
 
-  it('gives every card that asks for it as many Seals as there are players, less one', () => {
+  it('gives every card of the new grid the Seals its symbol calls for', () => {
     startRule(RuleId.Winter)
     play(rules().startRule(RuleId.Winter) as MaterialMove)
-    for (const card of items(MaterialType.VillageCard)) {
-      if (card.location.type !== LocationType.VillageGrid) continue
-      const seals = items(MaterialType.Seal).filter((seal) => seal.location.type === LocationType.CardSeal)
-      expect(seals.every((seal) => Object.values(Seal).includes(seal.id as Seal))).toBe(true)
+    expectSealsOnGrid()
+  })
+
+  /**
+   * A Seal spent is gone for good, so the stack does run out. The rulebook then makes a new stack of
+   * the discard and shuffles it (p.6) — here the stack is emptied into the discard beforehand, so
+   * that the very first card of the new grid has nothing left to be paid with.
+   */
+  it('makes a new stack of the discard, shuffled, when the Seals run out', () => {
+    for (const seal of items(MaterialType.Seal)) {
+      if (seal.location.type === LocationType.SealStack) seal.location = { type: LocationType.SealDiscard }
     }
+    expect(count(MaterialType.Seal, LocationType.SealStack)).toBe(0)
+    startRule(RuleId.Winter)
+    play(rules().startRule(RuleId.Winter) as MaterialMove)
+    expectSealsOnGrid()
+    expect(count(MaterialType.Seal, LocationType.SealDiscard)).toBe(0)
+    expect(count(MaterialType.Seal, LocationType.SealStack)).toBeGreaterThan(0)
   })
 })
 

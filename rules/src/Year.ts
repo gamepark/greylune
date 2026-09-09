@@ -11,9 +11,10 @@ export const encounterRowSize = (players: number): number => players + 3
 /**
  * The Encounter deck is the calendar of the game.
  *
- * It is built to hold exactly one row per year and nothing more, the setup lays out the first, and
- * every Winter deals another. So a deck with cards left is a year still to come, and an empty one is
- * the 5th year being played — which is why nothing here has to count the years.
+ * It is built to hold exactly one row per year and nothing more, and every Winter deals one — the
+ * first year included, which the setup hands over to Winter to lay out. So a deck with cards left is
+ * a year still to come, and an empty one is the 5th year being played — which is why nothing here
+ * has to count the years.
  */
 const encounterDeck = (source: MaterialSource) => source.material(MaterialType.EncounterCard).location(LocationType.EncounterDeck)
 

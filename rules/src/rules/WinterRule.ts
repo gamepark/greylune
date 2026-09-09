@@ -1,4 +1,4 @@
-import { isDeleteItem, isMoveItem, ItemMove, Location, MaterialRulesPart } from '@gamepark/rules-api'
+import { isDeleteItem, isMoveItem, isMoveItemsAtOnce, isShuffle, ItemMove, MaterialRulesPart } from '@gamepark/rules-api'
 import { range } from 'es-toolkit'
 import { VILLAGE_GRID_SIDE } from '../Constants'
 import { PlayerColor } from '../PlayerColor'
@@ -19,27 +19,22 @@ import { RuleId } from './RuleId'
  * out in their place. Then everyone is set back to Spring and the first player token passes to the
  * left.
  *
- * The Seals are the one supply that comes back: a Seal spent is not gone for good, and the rulebook
- * shuffles the discard into a new pile when the stack runs short (p.6). Here the discard is simply
- * drawn from once the stack is empty, which is the same thing without a shuffle the client would
- * have to be told about.
+ * The first year is no exception: {@link GreyluneSetup} builds the two decks and the two piles and
+ * hands over to this rule, which finds nothing to put away and lays the year out the same way. The
+ * table is described here, once, and never a second time in the setup.
+ *
+ * The Seals of the cards nobody took are the one thing put away that comes back: they go to the
+ * discard, and the rulebook makes a new stack of it, shuffled, when the stack runs short (p.6). That
+ * is the one loop of this rule, and it is spread over {@link dealSeals} and two reactions.
  */
 export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, LocationType, RuleId> {
   onRuleStart(): GreyluneMove[] {
-    return [
-      ...this.putAway(),
-      ...this.revealVillage(),
-      ...this.revealEncounters(),
-      ...this.newRound(),
-      this.startPlayerTurn(RuleId.Spring, this.nextFirstPlayer)
-    ]
+    return [...this.putAway(), ...this.newEvent(), ...this.revealVillage(), ...this.revealEncounters(), ...this.newRound()]
   }
 
   // ------------------------------------------------------------------ what the past year leaves
 
   private putAway(): GreyluneMove[] {
-    const grid = this.material(MaterialType.VillageCard).location(LocationType.VillageGrid)
-    const row = this.material(MaterialType.EncounterCard).location(LocationType.EncounterRow)
     return [
       ...this.material(MaterialType.Seal).location(LocationType.CardSeal).moveItems({ type: LocationType.SealDiscard }),
       ...this.material(MaterialType.IncomeToken).location(LocationType.CardIncome).deleteItems(),
@@ -47,13 +42,24 @@ export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, Loc
       // 5 years and nothing more. So a card nobody took is out of the game for good and goes back in
       // the box, rather than onto a discard nobody would ever draw from. Same for the Event of the
       // year: the pile only holds the years to come.
-      ...grid.deleteItems(),
-      ...row.deleteItems(),
-      this.event.deleteItem()
+      ...this.grid.deleteItems(),
+      ...this.material(MaterialType.EncounterCard).location(LocationType.EncounterRow).deleteItems()
     ]
   }
 
-  /** The tile of the year: the one on top of the pile, and the only one face up. */
+  /**
+   * The Event of the year is the tile on top of the pile, and the only one face up. The tile of the
+   * past year is taken off the pile, and turning up the one it uncovers is left to
+   * {@link afterItemMove}: a list of moves is built against the state it starts from, so the new top
+   * of the pile cannot be named while the old one is still on it. On the first year there is nothing
+   * to take off, and the pile is simply opened on its first tile.
+   */
+  private newEvent(): GreyluneMove[] {
+    const pastYear = this.material(MaterialType.EventTile).location(LocationType.EventPile).rotation(true)
+    return pastYear.exists ? pastYear.deleteItems() : [this.event.rotateItem(true)]
+  }
+
+  /** The tile the pile opens on: the last one of the sequence that orders it. */
   get event() {
     return this.material(MaterialType.EventTile)
       .location(LocationType.EventPile)
@@ -67,6 +73,9 @@ export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, Loc
    * decks, and nobody else can see them (see {@link GreyluneRules.isUnpredictableMove}). So an
    * Encounter is dealt straight into the row of the Area printed on its banner, and what a card
    * calls for once it is down follows in {@link afterItemMove}.
+   *
+   * The grid is the one place that names its own coordinates, and it takes two: `x` is the column
+   * and `y` the row, which is what the Villagers placed in the gaps between cards are read against.
    */
   private revealVillage(): GreyluneMove[] {
     const deck = this.material(MaterialType.VillageCard).location(LocationType.VillageDeck).deck()
@@ -84,42 +93,76 @@ export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, Loc
 
   /**
    * What each piece asks for as it lands: the tile of the new year is turned up when the tile of the
-   * past year leaves the Event pile, a Village card is dealt the Seals printed on it, and an
-   * Encounter takes the Income token it carries.
+   * past year leaves the Event pile, a Village card is dealt the Seals printed on it, an Encounter
+   * takes the Income token it carries, and the year opens on whoever the first player token has just
+   * reached. The two moves that rebuild the Seal stack answer each other here as well.
    */
   afterItemMove(move: ItemMove<PlayerColor, MaterialType, LocationType>): GreyluneMove[] {
     if (isDeleteItem(move) && move.itemType === MaterialType.EventTile) return [this.event.rotateItem(true)]
+    if (isMoveItemsAtOnce(move) && move.itemType === MaterialType.Seal) return [this.sealStack.shuffle()]
+    if (isShuffle(move) && move.itemType === MaterialType.Seal) return this.dealSeals()
     if (!isMoveItem(move)) return []
     if (move.itemType === MaterialType.VillageCard && move.location.type === LocationType.VillageGrid) {
-      return this.placeSeals(move.itemIndex)
+      return this.dealSeals(move.itemIndex)
     }
     if (move.itemType === MaterialType.EncounterCard && move.location.type === LocationType.EncounterRow) {
       return this.placeIncomeToken(move.itemIndex)
+    }
+    if (move.itemType === MaterialType.FirstPlayerToken) {
+      return [this.startPlayerTurn(RuleId.Spring, move.location.player!)]
     }
     return []
   }
 
   /**
-   * The `-1` symbol asks for one Seal less than there are players, the `?` for exactly one, whatever the table
-   * seats (rulebook p.6). They are drawn from the stack, and from what was already spent once the
-   * stack has run out — the rulebook makes a new pile of the discard at that point (p.6).
+   * The Seals a card of the grid is owed, drawn from the top of the stack.
+   *
+   * The stack does run out: a Seal spent on a card is gone for good, and only the ones nobody took
+   * come back, when the year is put away. The rulebook then makes a new stack of the discard and
+   * shuffles it (p.6), which is what the three lines below and the two reactions above do together —
+   * the card is given whatever the stack still holds, the discard is turned over in one move, the
+   * new stack is shuffled, and the shuffle comes back here to finish paying. Neither of those two
+   * can be written on the next line rather than as a reaction: a move is built against the state it
+   * starts from, and both need the one the move before them leaves.
+   *
+   * @param card The card to pay, the one that has just landed. Only the last card dealt can be owed
+   * anything — every card before it was paid as it landed — so the shuffle needs no argument.
+   * @throws when nothing is left in the stack nor in the discard to pay the card with.
    */
-  private placeSeals(card: number): GreyluneMove[] {
-    const front = this.material(MaterialType.VillageCard).getItem<VillageCardId>(card).id.front!
-    const seals = villageCardData[front].seals
-    const count = seals === PLAYERS_MINUS_ONE ? this.game.players.length - 1 : (seals ?? 0)
-    return this.sealSupply.limit(count).moveItems({ type: LocationType.CardSeal, parent: card })
+  private dealSeals(card: number = this.lastCardDealt): GreyluneMove[] {
+    const owed = this.missingSeals(card)
+    if (!owed) return []
+    const moves = this.sealStack.deck().deal({ type: LocationType.CardSeal, parent: card }, owed)
+    if (moves.length === owed) return moves
+    // A grid asks for 9 Seals at most and the game holds 24, so an empty discard here means the
+    // stock has been leaking somewhere. Better to stop than to lay out a year that is short of
+    // Seals, which nothing downstream expects.
+    const discard = this.material(MaterialType.Seal).location(LocationType.SealDiscard)
+    if (!discard.exists) throw new Error(`${owed - moves.length} Seals are owed to a Village card, and there is none left in the stack or the discard`)
+    return [...moves, discard.moveItemsAtOnce({ type: LocationType.SealStack })]
   }
 
-  /** The stack, from the top, and then the discard, from the bottom: one supply drawn in one order. */
-  private get sealSupply() {
-    const inStack = (location: Location<PlayerColor, LocationType>) => location.type === LocationType.SealStack
-    return this.material(MaterialType.Seal)
-      .location((location) => inStack(location) || location.type === LocationType.SealDiscard)
-      .sort(
-        (item) => (inStack(item.location) ? 0 : 1),
-        (item) => (inStack(item.location) ? -(item.location.x ?? 0) : (item.location.x ?? 0))
-      )
+  /** The card the grid was last dealt: {@link revealVillage} fills the slots row by row. */
+  private get lastCardDealt(): number {
+    return this.grid.maxBy((item) => (item.location.y ?? 0) * VILLAGE_GRID_SIDE + (item.location.x ?? 0)).getIndex()
+  }
+
+  /**
+   * What a card of the grid is still owed: the `-1` symbol asks for one Seal less than there are
+   * players, the `?` for exactly one, whatever the table seats (rulebook p.6).
+   */
+  private missingSeals(card: number): number {
+    const seals = villageCardData[this.material(MaterialType.VillageCard).getItem<VillageCardId>(card).id.front!].seals
+    const asked = seals === PLAYERS_MINUS_ONE ? this.game.players.length - 1 : (seals ?? 0)
+    return asked - this.material(MaterialType.Seal).location(LocationType.CardSeal).parent(card).length
+  }
+
+  private get sealStack() {
+    return this.material(MaterialType.Seal).location(LocationType.SealStack)
+  }
+
+  private get grid() {
+    return this.material(MaterialType.VillageCard).location(LocationType.VillageGrid)
   }
 
   /** The token drawn on the card's reward scroll: the stock holds exactly one, and no other card asks for it. */
@@ -132,13 +175,16 @@ export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, Loc
 
   // ------------------------------------------------------------------ everybody back to Spring
 
+  /**
+   * There is exactly one first player token, and where it goes is the last thing the year of one
+   * player leaves and the first thing the next one needs. So the turn is started in reaction to its
+   * move (see {@link afterItemMove}) rather than beside it: the player who opens the year is named
+   * once, and read back off the board.
+   */
   private newRound(): GreyluneMove[] {
     return [
       ...this.material(MaterialType.SeasonMarker).moveItems({ type: LocationType.SeasonTrack, x: Season.Spring }),
-      ...this.material(MaterialType.FirstPlayerToken).moveItems({
-        type: LocationType.FirstPlayerTokenSpace,
-        player: this.nextFirstPlayer
-      })
+      this.material(MaterialType.FirstPlayerToken).moveItem({ type: LocationType.FirstPlayerTokenSpace, player: this.nextFirstPlayer })
     ]
   }
 

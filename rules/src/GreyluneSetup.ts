@@ -1,17 +1,17 @@
 import { getEnumValues, MaterialGameSetup } from '@gamepark/rules-api'
 import { range, shuffle } from 'es-toolkit'
-import { ACTIVE_VILLAGERS, EVENT_TILES_REMOVED, QUEST_MARKERS, SEALS_PER_VALUE, STARTING_COINS, VILLAGE_CARDS_REMOVED, VILLAGE_GRID_SIDE } from './Constants'
+import { ACTIVE_VILLAGERS, EVENT_TILES_REMOVED, QUEST_MARKERS, SEALS_PER_VALUE, STARTING_COINS, VILLAGE_CARDS_REMOVED } from './Constants'
 import { GreyluneOptions } from './GreyluneOptions'
 import { GreyluneRules } from './GreyluneRules'
 import { Area } from './material/Area'
-import { EncounterCard, EncounterCardId, encounterCardsOfPeriod, encounterArea, encounterIncomeToken, getEncounterCardPeriod } from './material/EncounterCard'
+import { EncounterCard, encounterCardsOfPeriod, getEncounterCardPeriod } from './material/EncounterCard'
 import { EventTile } from './material/EventTile'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { Period } from './material/Period'
 import { heroicQuestAreas, QuestTile } from './material/QuestTile'
 import { BonusToken, coinUnits, IncomeToken, Seal } from './material/Tokens'
-import { getVillageCardPeriod, PLAYERS_MINUS_ONE, VillageCard, VillageCardId, villageCardData, villageCardsOfPeriod } from './material/VillageCard'
+import { getVillageCardPeriod, VillageCard, villageCardsOfPeriod } from './material/VillageCard'
 import { playerVillagers } from './material/Villager'
 import { getVpToken, VpTokenValue } from './material/VpToken'
 import { PlayerColor } from './PlayerColor'
@@ -21,7 +21,9 @@ import { encounterRowSize } from './Year'
 
 /**
  * Builds the initial state described in "Mise en place générale" and "Mise en place des joueurs"
- * (rules booklet, pages 2 and 3).
+ * (rules booklet, pages 2 and 3) — or rather everything of it that the turn of the year does not
+ * already do: the decks, the piles, the bank and the 4 personal boards. Laying the first year out on
+ * the table is left to {@link WinterRule}, which is the same operation (see {@link start}).
  *
  * No `x` is ever handed out here: the location strategies of {@link GreyluneRules} order every deck
  * and every row, and the decks are dealt from rather than sliced, so the cards that get revealed are
@@ -38,21 +40,19 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
     this.setupQuestTiles()
     for (const player of this.players) this.setupPlayer(player)
     // The last player to have gone adventuring takes the token: the platform already seats players
-    // in a random order, so the first seat is as good a draw as any.
+    // in a random order, so any seat is as good a draw as any other. It is put down on the last one
+    // because the first year is laid out by Winter like every other, and Winter starts by passing
+    // the token to the left — so it reaches the first seat, and the game opens on it.
     this.material(MaterialType.FirstPlayerToken).createItem({
-      location: { type: LocationType.FirstPlayerTokenSpace, player: this.players[0] }
+      location: { type: LocationType.FirstPlayerTokenSpace, player: this.players[this.players.length - 1] }
     })
   }
 
   /**
    * Village deck: 9 cards of period III at the bottom, then 18 of period II, then 18 of period I on
-   * top — 2 cards of each of the first two periods are removed unseen. The top 9 are revealed at
-   * once to form the 3x3 grid of the first year, and the Seals their symbols call for are laid on
-   * them.
-   *
-   * The grid is the one place that names its own coordinates, and it takes two: `x` is the column
-   * and `y` the row, which is what the Villagers placed in the gaps between cards will be read
-   * against.
+   * top — 2 cards of each of the first two periods are removed unseen. That is exactly 45 cards, one
+   * 3x3 grid for each of the 5 years, and the first grid is dealt off it by {@link WinterRule} like
+   * the four that follow.
    */
   private setupVillageCards() {
     const cards = [
@@ -61,30 +61,11 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
       ...shuffle(villageCardsOfPeriod[Period.I]).slice(VILLAGE_CARDS_REMOVED)
     ]
     this.material(MaterialType.VillageCard).createItems(cards.map((card) => ({ id: villageCardId(card), location: { type: LocationType.VillageDeck } })))
-    const deck = this.material(MaterialType.VillageCard).deck()
-    for (const slot of range(VILLAGE_GRID_SIDE * VILLAGE_GRID_SIDE)) {
-      deck.dealOne({ type: LocationType.VillageGrid, x: slot % VILLAGE_GRID_SIDE, y: Math.floor(slot / VILLAGE_GRID_SIDE) })
-    }
-    for (const [card, item] of this.material(MaterialType.VillageCard).location(LocationType.VillageGrid).entries) {
-      this.placeSeals(card, (item.id as VillageCardId).front as VillageCard)
-    }
-  }
-
-  /**
-   * The `-1` symbol asks for one Seal less than there are players, the `?` for exactly one, whatever the table
-   * seats (rulebook p.6).
-   */
-  private placeSeals(card: number, front: VillageCard) {
-    const seals = villageCardData[front].seals
-    const count = seals === PLAYERS_MINUS_ONE ? this.players.length - 1 : (seals ?? 0)
-    this.material(MaterialType.Seal).deck().deal({ type: LocationType.CardSeal, parent: card }, count)
   }
 
   /**
    * Encounter deck: 5/6/7 cards of period III at the bottom, then 10/12/14 of period II, then as
-   * many of period I, at 2/3/4 players. The top 5/6/7 are revealed and sorted along the right edge
-   * of the main board, each into the row of the Area it is worth, and the ones that carry an
-   * Income token receive it face up.
+   * many of period I, at 2/3/4 players — one row per year here as well.
    */
   private setupEncounterCards() {
     const row = encounterRowSize(this.players.length)
@@ -94,25 +75,12 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
       ...shuffle(encounterCardsOfPeriod[Period.I]).slice(0, 2 * row)
     ]
     this.material(MaterialType.EncounterCard).createItems(cards.map((card) => ({ id: encounterCardId(card), location: { type: LocationType.EncounterDeck } })))
-    this.material(MaterialType.EncounterCard)
-      .deck()
-      .deal((item) => ({ type: LocationType.EncounterRow, id: encounterArea[(item.id as EncounterCardId).front!] }), row)
-    for (const [card, item] of this.material(MaterialType.EncounterCard).location(LocationType.EncounterRow).entries) {
-      const income = encounterIncomeToken((item.id as EncounterCardId).front!)
-      if (income !== undefined) {
-        this.material(MaterialType.IncomeToken).id(income).moveItem({ type: LocationType.CardIncome, parent: card })
-      }
-    }
   }
 
-  /**
-   * One Event tile leaves the game; the 5 others form a face-down pile. The tile of the first year is
-   * the one on top, turned face up where it lies rather than moved anywhere.
-   */
+  /** One Event tile leaves the game; the 5 others form a face-down pile, one per year. */
   private setupEventTiles() {
     const tiles = shuffle(getEnumValues(EventTile)).slice(EVENT_TILES_REMOVED)
     this.material(MaterialType.EventTile).createItems(tiles.map((id) => ({ id, location: { type: LocationType.EventPile } })))
-    this.material(MaterialType.EventTile).deck().rotateItem(true)
   }
 
   /** 3 of the 9 Heroic Quests are played, one face up on each of the 3 Quest spaces of the map. */
@@ -164,8 +132,15 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
     this.material(MaterialType.Coin).money(coinUnits).addMoney(STARTING_COINS, { type: LocationType.PlayerCoins, player })
   }
 
+  /**
+   * The table is not laid out here: "Mise en place générale" and the turn of the year are the same
+   * operation — the 3x3 grid and the Seals its cards call for, the Encounter row and the Income
+   * tokens it carries, the first Event turned face up, everyone in Spring, and the first player
+   * token. So the setup builds the decks and the piles and lets {@link WinterRule} open the first
+   * year, which ends by starting the turn of the first player.
+   */
   start() {
-    this.startPlayerTurn(RuleId.Spring, this.players[0])
+    this.startRule(RuleId.Winter)
   }
 }
 
