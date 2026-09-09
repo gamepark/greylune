@@ -51,6 +51,7 @@ export const Headers: Partial<Record<RuleId, ComponentType>> = {
   [RuleId.DiscardItem]: () => <HeaderText code="discard-item" />,
   [RuleId.Travel]: TravelHeader,
   [RuleId.ResolveEncounter]: ResolveEncounterHeader,
+  [RuleId.ChooseOutcome]: () => <HeaderText code="outcome" />,
   [RuleId.ResolveQuest]: ResolveQuestHeader,
   [RuleId.TellStory]: TellStoryHeader,
   [RuleId.StraightenCard]: () => <HeaderText code="straighten" />,

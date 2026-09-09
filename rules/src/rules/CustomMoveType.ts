@@ -44,7 +44,16 @@ export enum CustomMoveType {
   /** Force or Magic, wherever a card leaves it open. Data: true for Force. */
   ChooseSkill,
 
-  /** Which side of an Encounter card is paid for. Data: the index of the outcome. */
+  /**
+   * Which Encounter of the row the Adventurer resolves. Data: the index of the card.
+   *
+   * The card first, its sides after (see {@link ResolveOutcome}): what a player picks out of the row
+   * is a card, and a two-sided card offers up to 3 ways of paying for it that only read on the card
+   * once it has been picked.
+   */
+  ChooseEncounter,
+
+  /** Which side of an Encounter card is paid for. Data: `{ card, outcomes, ignored? }`. */
   ResolveOutcome,
 
   /** Taking the coin, the point or the Heroic Quest the space offers rather than an Encounter. */

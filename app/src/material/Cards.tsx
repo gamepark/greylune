@@ -6,11 +6,13 @@ import { VillageCardId } from '@gamepark/greylune/material/VillageCard'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { CardDescription, ItemContext } from '@gamepark/react-game'
 import { MaterialItem, MaterialMove } from '@gamepark/rules-api'
-import { resolveMoves } from '../encounters/EncounterActions'
+import { encounterMoves } from '../encounters/EncounterActions'
 import { EncounterCardMenu } from '../encounters/ResolveEncounter'
 import { encounterCardBacks, encounterCardImagesEn, encounterCardImagesFr } from '../images/EncounterCardImages'
 import { villageCardBacks, villageCardImagesEn, villageCardImagesFr } from '../images/VillageCardImages'
 import { encounterCardSize, villageCardBorderRadius, villageCardSize } from '../locators/TableLayout'
+import { reactionMoves } from '../reactions/ReactionActions'
+import { ReactionCardMenu } from '../reactions/UseReaction'
 import { VillageCardMenu } from '../village/CardAction'
 import { selectedVillager } from '../villagers/SelectVillager'
 import { isActivateCard, villagerActionData } from '../villagers/VillagerActions'
@@ -41,12 +43,18 @@ export class VillageCardDescription extends CardDescription<PlayerColor, Materia
    * A card standing in the Village carries what the Villager the player has aimed at may do with it
    * (see {@link VillageCardMenu}); a card already bought, or still in the deck, carries nothing. The
    * Villager is named inside the move rather than moved by it, so the pair is read out of it.
+   *
+   * A card of the player's own carries one thing, and only while a window is open on it: the offer to
+   * answer with it (see {@link ReactionCardMenu}). A card in the Village is never in that position —
+   * a reaction is answered with what one already owns — so the two never meet.
    */
   getItemMenu(
     item: MaterialItem<PlayerColor, LocationType, VillageCardId>,
     context: ItemContext<PlayerColor, MaterialType, LocationType>,
     legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
   ) {
+    const reactions = reactionMoves(legalMoves, context.index)
+    if (reactions.length && item.id?.front !== undefined) return <ReactionCardMenu front={item.id.front} moves={reactions} />
     if (item.location.type !== LocationType.VillageGrid) return undefined
     const villager = selectedVillager(context.rules)
     if (villager === undefined) return undefined
@@ -75,9 +83,10 @@ export class EncounterCardDescription extends CardDescription<PlayerColor, Mater
   }
 
   /**
-   * An Encounter of the row the Adventurer has stopped in wears the ways it may be resolved (see
-   * {@link EncounterCardMenu}). The moves are the reader's own, so a card only ever offers anything
-   * to the player it is waiting for, and only while it is being waited for.
+   * An Encounter of the row the Adventurer has stopped in wears the decision it is waiting for (see
+   * {@link EncounterCardMenu}): the offer to take it while the row is being read, then the ways of
+   * paying for it once it is the card being resolved. The moves are the reader's own, so a card only
+   * ever offers anything to the player it is waiting for, and only while it is being waited for.
    */
   getItemMenu(
     item: MaterialItem<PlayerColor, LocationType, EncounterCardId>,
@@ -85,7 +94,7 @@ export class EncounterCardDescription extends CardDescription<PlayerColor, Mater
     legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
   ) {
     if (item.location.type !== LocationType.EncounterRow || item.id?.front === undefined) return undefined
-    const moves = resolveMoves(legalMoves, context.index)
+    const moves = encounterMoves(legalMoves, context.index)
     return moves.length ? <EncounterCardMenu front={item.id.front} moves={moves} /> : undefined
   }
 }

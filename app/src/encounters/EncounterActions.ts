@@ -1,9 +1,10 @@
+import { ResolveOutcomeData } from '@gamepark/greylune/rules/EncounterRule'
 import { CustomMoveType } from '@gamepark/greylune/rules/CustomMoveType'
-import { ResolveOutcomeData } from '@gamepark/greylune/rules/ResolveEncounterRule'
 import { CustomMove, isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
 
 /**
- * Resolving the Encounter the Adventurer has stopped in front of (see `ResolveEncounterRule`).
+ * Resolving the Encounter the Adventurer has stopped in front of, in the 2 halves the rules make of
+ * it: the card, then the sides it is paid for (see `ResolveEncounterRule` and `ChooseOutcomeRule`).
  *
  * The card is pressed rather than carried: what leaves the row is not what the player decides — the
  * Income token lying on the card has to be lifted off before the card is slid away, and a card
@@ -12,19 +13,32 @@ import { CustomMove, isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
  * that answers it.
  */
 
+export const isChooseEncounter = isCustomMoveType(CustomMoveType.ChooseEncounter)
+
 export const isResolveOutcome = isCustomMoveType(CustomMoveType.ResolveOutcome)
 
 export const resolveOutcomeData = (move: CustomMove): ResolveOutcomeData => move.data as ResolveOutcomeData
 
 /**
- * The ways a card may be resolved, one per set of sides: its left, its right, or both. A Potion that
+ * What an Encounter of the row wears, whichever half of the decision the player is in: the one
+ * button that takes the card while the row is being read, and the ways of paying for it once it is
+ * the card being resolved. The two never show at once — the row is offered by one rule and the sides
+ * by the next — so a card is never asking two questions.
+ */
+export const encounterMoves = (legalMoves: MaterialMove[], card: number): CustomMove[] => {
+  const chosen = legalMoves.filter((move): move is CustomMove => isChooseEncounter(move) && move.data === card)
+  return chosen.length ? chosen : outcomeMoves(legalMoves, card)
+}
+
+/**
+ * The ways a card may be paid for, one per set of sides: its left, its right, or both. A Potion that
  * lets a condition be waived multiplies each of them into as many moves as there are ways to spend
  * that favour, and they are not a choice a player would want to be asked — the favour is lent for
  * this one adventure and is worth nothing kept — so the widest waiver stands for its set. A waived
  * condition is either a check the player would have passed anyway or a price they no longer pay: it
  * is never the worse move.
  */
-export const resolveMoves = (legalMoves: MaterialMove[], card: number): CustomMove[] => {
+const outcomeMoves = (legalMoves: MaterialMove[], card: number): CustomMove[] => {
   const bySides = new Map<string, CustomMove>()
   for (const move of legalMoves) {
     if (!isResolveOutcome(move) || resolveOutcomeData(move).card !== card) continue

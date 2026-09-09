@@ -90,9 +90,9 @@ export enum LocationType {
   Companions,
   /** Bought Objects, to the right of the personal board. */
   Items,
-  /** Resolved Encounters not told yet, slid over the top-left of the personal board. */
+  /** Resolved Encounters not told yet, pushed under the top-left of the personal board. */
   UntoldStories,
-  /** Encounters already told in a Tavern, slid over the top-right of the personal board. */
+  /** Encounters already told in a Tavern, pushed under the top-right of the personal board. */
   ToldStories,
   /** The Villagers a player may still use this year. */
   ActiveVillagers,

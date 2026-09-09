@@ -18,6 +18,9 @@ export enum Memory {
   /** The Village card a Villager has just designated, while its price is settled and it resolves. */
   ActivatedCard,
 
+  /** The Encounter the Adventurer has just designated, while the sides it is paid for are chosen. */
+  ResolvedEncounter,
+
   /** The last card of the player to have gone down, which is the one Isandre stands back up. */
   LastTilted,
 

@@ -104,6 +104,12 @@ const owe = (...gains: ReturnType<typeof vp>[]) => {
   play(rules().startRule(RuleId.ResolveEffects) as MaterialMove)
 }
 
+/** The move that walks the Adventurer to an Area, among the ones the road is offering. */
+const travelTo = (area: Area): MaterialMove =>
+  rules()
+    .getLegalMoves(BLUE)
+    .find((move) => 'location' in move && move.location?.type === LocationType.Area && move.location.id === area)!
+
 const useReaction = (index: number, option = 0) =>
   playCustom(CustomMoveType.UseReaction, (data: { card: number; option: number }) => data.card === index && data.option === option)
 
@@ -223,11 +229,35 @@ describe('The Potions', () => {
     expect(game.rule!.id).toBe(RuleId.Reaction)
     useReaction(potion)
     expect(game.rule!.id).toBe(RuleId.ResolveEncounter)
-    playCustom(CustomMoveType.ResolveOutcome)
+    playCustom(CustomMoveType.ChooseEncounter)
     expect(playerVp(rules(), BLUE)).toBe(3)
     // The Force was only lent: the track never moved.
     expect(playerForce(rules(), BLUE)).toBe(0)
     expect(rules().material(MaterialType.VillageCard).location(LocationType.Items).player(BLUE).length).toBe(0)
+  })
+
+  it('takes a condition off one Encounter and does not follow the road to the next', () => {
+    const potion = give(VillageCard.InvisibilityPotion, LocationType.Items)
+    // Vallée: 2 spaces of road for 1 Force, and the road leads to a Meute de loups asking 2 Force.
+    placeEncounter(EncounterCard.Valley, Area.Wand)
+    const wolves = encounter(EncounterCard.PackOfWolves)
+    items(MaterialType.EncounterCard)[wolves].location = { type: LocationType.EncounterRow, id: Area.Bow }
+    delete items(MaterialType.EncounterCard)[wolves].quantity
+    setSkill(BLUE, 0, 0)
+    game.rule = { id: RuleId.Travel, player: BLUE }
+    game.memory[Memory.TravelLeft] = 1
+    play(rules().getLegalMoves(BLUE)[0])
+    useReaction(potion)
+    expect(rules().remind(Memory.IgnoredConditions)).toBe(1)
+    // The Force the Vallée asks for is waved away, and the road it pays with is taken.
+    playCustom(CustomMoveType.ChooseEncounter)
+    playCustom(CustomMoveType.ResolveOutcome, (data: { outcomes: number[] }) => data.outcomes.length === 1 && data.outcomes[0] === 0)
+    expect(rules().remind(Memory.IgnoredConditions)).toBe(0)
+    expect(game.rule!.id).toBe(RuleId.Travel)
+    play(travelTo(Area.Bow))
+    // The favour was spent on the Vallée: the wolves are out of reach, and the green space pays instead.
+    expect(game.rule!.id).toBe(RuleId.ResolveEncounter)
+    expect(rules().getLegalMoves(BLUE).some(isCustomMoveType(CustomMoveType.ChooseEncounter))).toBe(false)
   })
 
   it('is only tilted when Selia keeps it', () => {
@@ -300,7 +330,7 @@ describe('Mira', () => {
     placeCard(VillageCard.Smithy, 0, 0)
     owe(travel(1))
     play(rules().getLegalMoves(BLUE)[0])
-    playCustom(CustomMoveType.ResolveOutcome, (data: { outcomes: number[] }) => data.outcomes.length > 0)
+    playCustom(CustomMoveType.ChooseEncounter)
     expect(game.rule!.id).toBe(RuleId.Reaction)
     useReaction(mira)
     expect(game.rule!.id).toBe(RuleId.PlaceVillager)

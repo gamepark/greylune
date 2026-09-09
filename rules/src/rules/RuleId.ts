@@ -85,11 +85,18 @@ export enum RuleId {
 
   /**
    * The Adventurer has stopped at a {@link Area}: the player may resolve one Encounter of that
-   * row by satisfying one of its two sides, or both to gain both rewards, and slides it over their
+   * row by satisfying one of its two sides, or both to gain both rewards, and pushes it under their
    * personal board as a story not told yet. They may also refuse it, for what the space itself
    * offers instead: 1 coin, 1 victory point, or the Heroic Quest lying there.
    */
   ResolveEncounter,
+
+  /**
+   * Which side of the Encounter just named is paid for, when the player can afford more than one
+   * way. Only the 7 two-sided cards ever get here; every other Encounter is resolved the moment it
+   * is named.
+   */
+  ChooseOutcome,
 
   /**
    * A Heroic Quest, taken instead of an Encounter on the space it lies on, and only once per player:

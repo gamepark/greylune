@@ -13,6 +13,9 @@
     "recruit-price": "Recruter ({{price}} <coin/>)",
     "resolve": "Résoudre",
     "resolve-both": "Résoudre les deux",
+    "use": "Utiliser",
+    "extra-coins": "Gagner {{coins}} <coin/> de plus",
+    "no-surcharge": "Ne pas payer les villageois",
     "camp": "Aller au campement",
     "camp-coins": "Gagner {{coins}} <coin/>",
     "travel": "Voyager",
@@ -49,6 +52,10 @@
       "you-quest": "Résolvez une rencontre ou <quest>accomplissez une quête <crown/></quest>",
       "player": "{player} résout une rencontre",
       "nothing": "Vous ne pouvez résoudre ni rencontre ni quête ici."
+    },
+    "outcome": {
+      "you": "Choisissez ce que vous payez et ce que vous gagnez",
+      "player": "{player} choisit ce qu'il paye et ce qu'il gagne"
     },
     "quest": {
       "you": "Racontez {count, plural, one {# histoire} other {# histoires}}",

@@ -12,10 +12,10 @@ import { CenteredFlexLocator } from './CenteredFlexLocator'
 import { CenteredListLocator } from './CenteredListLocator'
 import { EventSpaceLocator } from './EventSpaceLocator'
 import { playerPanelLocator } from './PlayerPanelLocator'
-import { fanBySeat, seatOf } from './Seats'
+import { areaOf, fanBySeat } from './Seats'
 import { VillageGapLocator } from './VillageGapLocator'
 import { VillageGridLocator } from './VillageGridLocator'
-import { getBandRow, hideBandOfOtherPlayers, showsBandOf } from './DisplayedPlayer'
+import { hideBandOfOtherPlayers, showsBandOf } from './DisplayedPlayer'
 import { companionsDependencies, companionsMaxSpread, encounterRowArea, encounterRowDependencies, encounterRowSpread } from './CrowdedRows'
 import {
   activeVillagersSpot,
@@ -37,7 +37,6 @@ import {
   itemsSpot,
   magicTrackSpot,
   mainBoardSpot,
-  playerAreaSpot,
   playerBoardSpot,
   playerCardsMaxCount,
   playerCoinsRadius,
@@ -63,9 +62,6 @@ import {
   villagerReserveSpot,
   vpTokenStackSpots
 } from './TableLayout'
-
-/** The middle of a player's personal board, once the column has settled which row carries the band. */
-const areaOf = (context: MaterialContext, player?: PlayerColor) => playerAreaSpot(seatOf(context, player), context.rules.players.length, getBandRow(context))
 
 export const Locators: Partial<Record<LocationType, Locator<PlayerColor, MaterialType, LocationType>>> = {
   // ---------------------------------------------------------------- boards
@@ -247,18 +243,23 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
 
   // ------------------------------------------------- the band above the personal board, drawn for one player
 
-  [LocationType.UntoldStories]: new CenteredListLocator({
+  /**
+   * The 2 fans of Stories, pushed under the top edge of the board. Like the Companions and the Objects
+   * they are anchored rather than centred: the first card is pushed against the printed edge and the
+   * fan climbs away from it, so a Story stays where it was laid when the next one arrives.
+   */
+  [LocationType.UntoldStories]: new ListLocator({
     gap: storiesGap,
     maxGap: storiesMaxGap,
     hide: hideBandOfOtherPlayers,
-    getCenter: (location: Location, context: MaterialContext) => untoldStoriesSpot(areaOf(context, location.player))
+    getCoordinates: (location: Location, context: MaterialContext) => untoldStoriesSpot(areaOf(context, location.player))
   }),
 
-  [LocationType.ToldStories]: new CenteredListLocator({
+  [LocationType.ToldStories]: new ListLocator({
     gap: storiesGap,
     maxGap: storiesMaxGap,
     hide: hideBandOfOtherPlayers,
-    getCenter: (location: Location, context: MaterialContext) => toldStoriesSpot(areaOf(context, location.player))
+    getCoordinates: (location: Location, context: MaterialContext) => toldStoriesSpot(areaOf(context, location.player))
   }),
 
   /**

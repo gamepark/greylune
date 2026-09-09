@@ -1,23 +1,16 @@
 import { CustomMove, isCustomMoveType } from '@gamepark/rules-api'
 import { Memory } from '../Memory'
 import { Area } from '../material/Area'
-import { coins, Gain, GainType, isCheck, Requirement, vp } from '../material/Effect'
-import { EncounterCard, EncounterCardId, encounterCardData } from '../material/EncounterCard'
+import { coins, Gain, vp } from '../material/Effect'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { adventurerArea } from '../material/PlayerState'
 import { HeroicQuestArea, heroicQuestAreas, questRequirements, QuestTile } from '../material/QuestTile'
 import { TriggerType } from '../material/Reaction'
-import { incomeTokenGains } from '../material/Tokens'
 import { CustomMoveType } from './CustomMoveType'
-import { GreyluneMaterial, GreyluneMove, GreyluneRule } from './GreyluneRule'
+import { EncounterRule } from './EncounterRule'
+import { GreyluneMove } from './GreyluneRule'
 import { RuleId } from './RuleId'
-
-/** Which requirement of which side of the card, when a Potion lets one of them be waved away. */
-type Ignored = { outcome: number; requirement: number }
-
-/** What a move to resolve an Encounter says: the card, the sides paid for, the conditions waved away. */
-export type ResolveOutcomeData = { card: number; outcomes: number[]; ignored?: Ignored[] }
 
 /**
  * The Adventurer has stopped in one of the areas out of Greylune (rulebook p.11).
@@ -27,8 +20,13 @@ export type ResolveOutcomeData = { card: number; outcomes: number[]; ignored?: I
  * coin the Wand area pays, the point the Bow one pays, or the Heroic Quest lying in the three
  * farthest ones — but refusing is only ever taking what the space offers instead, never doing
  * nothing: the Adventurer "résout une Rencontre sur sa case d'arrivée, si possible" (p.11).
+ *
+ * What is chosen here is the card alone. Which of its two sides is paid for is a decision of its
+ * own, taken on the card once it has been named (see {@link ChooseOutcomeRule}): a two-sided card
+ * offers up to 3 ways to resolve it, and hanging all of them off every card of the row at once asks
+ * the player to read the whole row before touching any of it.
  */
-export class ResolveEncounterRule extends GreyluneRule {
+export class ResolveEncounterRule extends EncounterRule {
   /** Where the Adventurer stands, {@link Area.Village} while it is still in Greylune. */
   get area(): Area {
     return adventurerArea(this, this.player)
@@ -36,10 +34,6 @@ export class ResolveEncounterRule extends GreyluneRule {
 
   get row() {
     return this.encounterCards.location(LocationType.EncounterRow).locationId(this.area)
-  }
-
-  get ignores(): number {
-    return this.remind<number>(Memory.IgnoredConditions) ?? 0
   }
 
   onRuleStart(): GreyluneMove[] {
@@ -55,44 +49,12 @@ export class ResolveEncounterRule extends GreyluneRule {
   getPlayerMoves(): GreyluneMove[] {
     const moves: GreyluneMove[] = this.row
       .getIndexes()
-      .flatMap((card) => this.encounterMoves(card))
-      .map((data) => this.customMove(CustomMoveType.ResolveOutcome, data))
+      .filter((card) => this.encounterMoves(card).length > 0)
+      .map((card) => this.customMove(CustomMoveType.ChooseEncounter, card))
     if (this.spaceGain) moves.push(this.customMove(CustomMoveType.SkipEncounter))
     if (this.canTakeQuest) moves.push(this.customMove(CustomMoveType.ResolveQuest))
     if (!moves.length) moves.push(this.customMove(CustomMoveType.Pass))
     return moves
-  }
-
-  /** Every way this Encounter can be resolved: one side, the other, both, and what may be waved away. */
-  private encounterMoves(card: number): ResolveOutcomeData[] {
-    const front = this.encounterCards.getItem<EncounterCardId>(card).id.front!
-    const outcomes = encounterCardData[front].outcomes
-    const subsets = outcomes.length > 1 ? [[0], [1], [0, 1]] : [[0]]
-    return subsets.flatMap((subset) => this.ignoreVariants(front, subset).map((ignored) => ({ card, outcomes: subset, ignored })))
-  }
-
-  /**
-   * The lists of conditions the player may wave away for a subset of sides, and still pay the rest.
-   * Without a Potion or Ariok there is exactly one: the empty list.
-   */
-  private ignoreVariants(front: EncounterCard, subset: number[]): (Ignored[] | undefined)[] {
-    const all = subset.flatMap((outcome) =>
-      (encounterCardData[front].outcomes[outcome].requirements ?? []).map((_, requirement) => ({ outcome, requirement }))
-    )
-    const variants: (Ignored[] | undefined)[] = []
-    for (const ignored of subsetsUpTo(all, this.ignores)) {
-      if (!this.canPay(this.requirementsOf(front, subset, ignored))) continue
-      variants.push(ignored.length ? ignored : undefined)
-    }
-    return variants
-  }
-
-  private requirementsOf(front: EncounterCard, subset: number[], ignored: Ignored[] = []): Requirement[] {
-    return subset.flatMap((outcome) =>
-      (encounterCardData[front].outcomes[outcome].requirements ?? []).filter(
-        (_, requirement) => !ignored.some((entry) => entry.outcome === outcome && entry.requirement === requirement)
-      )
-    )
   }
 
   /** The coin the Wand area pays and the point the Bow one pays, to whoever resolves nothing. */
@@ -134,47 +96,20 @@ export class ResolveEncounterRule extends GreyluneRule {
     if (isCustomMoveType(CustomMoveType.ResolveQuest)(move)) {
       return this.openReactions([TriggerType.SpendForce], RuleId.ResolveQuest)
     }
-    if (isCustomMoveType(CustomMoveType.ResolveOutcome)(move)) return this.resolve(move.data as ResolveOutcomeData)
+    if (isCustomMoveType(CustomMoveType.ChooseEncounter)(move)) return this.designate(move.data as number)
     return super.onCustomMove(move)
   }
 
   /**
-   * The conditions are paid, the rewards queued and the card slid over the personal board.
-   *
-   * The Income token the card may carry is lifted off it first, and taken straight to the row it
-   * will be paid from every Autumn. It is a piece lying on the card, so anything else would carry it
-   * along: it would follow the card under the personal board and then have to cross it back, which
-   * is not what taking a token off a card looks like. What it pays on the spot is queued where the
-   * token itself stood among the rewards, so the order the card reads in is the order it pays in.
+   * The card is named, and the sides it is paid for are chosen next — unless there is nothing to
+   * choose. A card printing a single side has one way to be resolved and asks nothing; so does a
+   * two-sided card the player can only afford one half of, and a question with one answer is a click
+   * spent on nothing.
    */
-  private resolve(data: ResolveOutcomeData): GreyluneMove[] {
-    const front = this.encounterCards.getItem<EncounterCardId>(data.card).id.front!
-    const requirements = this.requirementsOf(front, data.outcomes, data.ignored)
-    const gains = data.outcomes.flatMap((outcome) => encounterCardData[front].outcomes[outcome].gains ?? [])
-    const income = this.incomeOn(data.card)
-    // The token is printed in the reward of one side: the other side leaves it where it lies.
-    const taken = income.length > 0 && gains.some((gain) => gain.type === GainType.IncomeToken)
-    this.pushGains(gains.flatMap((gain) => (gain.type === GainType.IncomeToken ? (taken ? incomeTokenGains[gain.token] : []) : [gain])))
-    return [
-      ...this.payRequirements(requirements.filter((requirement) => !isCheck(requirement))),
-      ...(taken ? income.moveItems({ type: LocationType.IncomeTokenSpace, player: this.player }) : []),
-      this.encounterCards.index(data.card).moveItem({ type: LocationType.UntoldStories, player: this.player }),
-      this.startRule(RuleId.ResolveEffects)
-    ]
+  private designate(card: number): GreyluneMove[] {
+    const ways = this.encounterMoves(card)
+    if (ways.length === 1) return this.resolve(ways[0])
+    this.memorize(Memory.ResolvedEncounter, card)
+    return [this.startRule(RuleId.ChooseOutcome)]
   }
-
-  /**
-   * The Income token laid on a card, if it was ever laid: the stock holds one token per card that
-   * asks for one, and a card revealed in a year the stock had already run dry carries none.
-   */
-  private incomeOn(card: number): GreyluneMaterial {
-    return this.material(MaterialType.IncomeToken).location(LocationType.CardIncome).parent(card)
-  }
-}
-
-/** Every subset of `items` of at most `size` entries, the empty one included. */
-const subsetsUpTo = <T>(items: T[], size: number): T[][] => {
-  if (size <= 0 || !items.length) return [[]]
-  const [head, ...tail] = items
-  return [...subsetsUpTo(tail, size), ...subsetsUpTo(tail, size - 1).map((subset) => [head, ...subset])]
 }

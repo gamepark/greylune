@@ -38,6 +38,14 @@ export const sealSize = { width: 2.12, height: 2.23 }
 const onBoard = 0.1
 
 /**
+ * The other side of {@link onBoard}: a card pushed *under* a board has to pass below that thickness,
+ * or it is drawn over the very board it is slid into. The table is drawn without perspective, so the
+ * figure only ever settles an order — it is set far enough below that a whole game of Stories piling
+ * up on one another (see {@link storiesGap}) never climbs back over the board.
+ */
+const underBoard = -1
+
+/**
  * How high the Village gaps, and everything standing in them, are drawn. It is not a height on the
  * table but a matter of what covers what: the areas of the locations are painted before every
  * component, so a strip left at the height of the board is buried under it where the grid bites into
@@ -450,15 +458,30 @@ const sideRowStart = playerBoardSize.width / 2 - playerBoardShadow + villageCard
 const sideRowWidth = villageCardSize.width + 2 * playerCardsGap
 const sideRowX = sideRowStart + playerCardsGap
 
+/** How far above the middle of a board its ink reaches, which is the edge a player pushes a card against. */
+const printedHalf = playerBoardSize.height / 2 - playerBoardShadow
+const playerRowAir = 1
+
+/** All a Story ever shows once it is pushed home: the top quarter of the card, and nothing more. */
+const storyReveal = encounterCardSize.height / 4
+
+/**
+ * How many Stories a fan lays out at full step before it has to tighten up. Each one is worth a
+ * quarter of a card of height, so 4 of them is exactly one card — the band is a card tall, which is
+ * what it was when a single Story lay flat in it, and the fan now shows 4 where it used to show 1.
+ */
+const storiesFan = 4
+
 /**
  * The band above the board is as thin as the material allows, because with 4 areas stacked every
- * centimetre of it is paid 4 times. The Stories set its height: they are slid over the top edge of the
- * board, the way a player pushes them under it, and they can come down to the top of the level 5 space
- * of the Strength and Magic tracks and no further. What sticks out above the board is the band.
+ * centimetre of it is paid 4 times. The Stories set its height: each one is pushed under the printed
+ * edge of the board and under the ones already there, so a fan is a stack of quarters climbing away
+ * from the board, and what sticks out above the board is the band.
  */
-const topTrackSpace = 11.26 - 1.62 * 5 - 1.98 / 2
-const bandTop = -playerBoardSize.height / 2 - (encounterCardSize.height - topTrackSpace)
-const bandCenterY = bandTop + encounterCardSize.height / 2
+const bandTop = -printedHalf - storiesFan * storyReveal
+
+/** The middle of what the band actually shows, between its own top and the printed edge of the board. */
+const bandCenterY = (bandTop - printedHalf) / 2
 
 /** The rectangle an area has to fit in, measured from the middle of the personal board. */
 export const playerAreaBox = {
@@ -467,9 +490,6 @@ export const playerAreaBox = {
   top: bandTop,
   bottom: playerBoardSize.height / 2
 }
-
-const printedHalf = playerBoardSize.height / 2 - playerBoardShadow
-const playerRowAir = 1
 
 /** How far above the middle of a board its own material reaches: the whole band, or nothing. */
 const rowTop = (hasBand: boolean) => (hasBand ? -playerAreaBox.top : printedHalf)
@@ -564,7 +584,7 @@ export const crowdedRowsRoom = (area: EncounterRowArea): number =>
  * the row of Companions, and the band above it.
  */
 const companionsStrip = { top: -villageCardSize.height / 2, bottom: villageCardSize.height / 2 }
-const bandStrip = { top: bandTop, bottom: bandTop + encounterCardSize.height }
+const bandStrip = { top: bandTop, bottom: -printedHalf }
 
 const crossesStrip = (area: EncounterRowArea, areaY: number, strip: { top: number; bottom: number }): boolean => {
   const { y } = encounterRowSpot(area)
@@ -582,24 +602,49 @@ const twoCompanionsRight = -sideRowStart + villageCardSize.width / 2
 const twoCompanionsLeft = -sideRowStart - playerCardsGap - villageCardSize.width / 2
 
 /**
- * A player holds one point token at a time, and it stands in the very middle of the band, over the
- * middle of the board, in the gap the 2 rows of Stories leave between them.
+ * Resolved Encounters are pushed under the board, untold on its left half, told on its right. A fan is
+ * one card wide and stands on the mark printed for it rather than on the middle of whatever room is
+ * left beside it: the board carries the 2 marks, one on either side of its centre and the same
+ * distance from it, so one figure measured on the artwork places both fans.
  */
-const vpTokenSlot = 1.86 + 2 * 0.2
+const storiesX = 4.05
 
 /**
- * Resolved Encounters fill the middle of the band, over the board, untold on the left half, told on
- * the right half. Each row is a fan centred on its half and tightens up rather than running out over
- * what stands beside it: the gold on the left, the Bonus tokens on the right, and the point token
- * between the two of them. A fan is given the tighter of the two sides, so both of them read alike.
+ * Where the first Story of a fan comes to rest: pushed in until only {@link storyReveal} of it is left
+ * showing above the printed edge of the board. What is under the board is under it for good — a Story
+ * is read by its top quarter, and the fan is what makes the rest of it worth nothing to look at.
  */
-const storiesRoom = -twoCompanionsRight - 0.2 - vpTokenSlot / 2
-const storiesX = vpTokenSlot / 2 + storiesRoom / 2
+const storiesAnchorY = -printedHalf - storyReveal + encounterCardSize.height / 2
 
-export const untoldStoriesSpot = (area: XYCoordinates) => besidePlayerBoard(area, -storiesX, bandCenterY)
-export const toldStoriesSpot = (area: XYCoordinates) => besidePlayerBoard(area, storiesX, bandCenterY)
-export const storiesGap: Partial<XYCoordinates> = { x: 1.4 }
-export const storiesMaxGap: Partial<XYCoordinates> = { x: storiesRoom - encounterCardSize.width }
+export const untoldStoriesSpot = (area: XYCoordinates): Coordinates => ({ ...besidePlayerBoard(area, -storiesX, storiesAnchorY), z: underBoard })
+export const toldStoriesSpot = (area: XYCoordinates): Coordinates => ({ ...besidePlayerBoard(area, storiesX, storiesAnchorY), z: underBoard })
+
+/**
+ * Every Story after the first is pushed in *under* the ones already there and a quarter of a card
+ * higher, so each shows its own quarter and the fan climbs away from the board. Hence both signs: the
+ * step up the table, and the hair of depth that puts the newcomer behind its elders.
+ */
+export const storiesGap: Partial<Coordinates> = { y: -storyReveal, z: -0.01 }
+
+/** A full fan reaches the top of the band; past that the cards close up rather than climb out of it. */
+export const storiesMaxGap: Partial<XYCoordinates> = { y: -(storiesFan - 1) * storyReveal }
+
+/** Everything but the quarter it shows: how far a Story travels while it is being pushed in. */
+export const storiesPush = encounterCardSize.height - storyReveal
+
+/**
+ * The air the band has above it before the printed board of the row above starts, which is exactly what
+ * that row leaves (see {@link playerColumnHeight}). The top row has no neighbour and the edge of the
+ * table instead, which is the same distance away.
+ */
+const storiesApproach = Math.min(playerRowAir, tableMargin)
+
+/**
+ * The highest a Story may be lined up before it is pushed in: its top edge meets the board of the row
+ * above and goes no further. A card that has to travel further than the band affords starts here
+ * instead — the fan is 4 cards deep and only the first of them is given the whole {@link storiesPush}.
+ */
+export const storiesCeiling = (area: XYCoordinates): number => area.y + bandTop + encounterCardSize.height / 2 - storiesApproach
 
 /**
  * What a player keeps out of their board is not floated in the middle of the band: each pile stands on

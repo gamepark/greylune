@@ -105,6 +105,15 @@ const setSkill = (player: PlayerColor, force: number, magic: number) => {
   items(MaterialType.MagicMarker).find((item) => item.location.player === player)!.location.x = magic
 }
 
+/**
+ * Sends every active Villager but a few out into the Village, so a test can set the purse it means to
+ * spend. The camp is left alone: it is where a Villager actually paid for something ends up.
+ */
+const setActiveVillagers = (player: PlayerColor, keep: number) => {
+  const active = items(MaterialType.Villager).filter((item) => item.location.type === LocationType.ActiveVillagers && item.location.player === player)
+  active.slice(keep).forEach((item, index) => (item.location = { type: LocationType.VillageGap, player, x: index + 0.5, y: 0 }))
+}
+
 const setSeason = (player: PlayerColor, season: Season) => {
   items(MaterialType.SeasonMarker).find((item) => item.id === player)!.location.x = season
 }
@@ -326,9 +335,32 @@ describe('The areas', () => {
     // Ours: 2 victory points for 1 Force, and 2 more for 1 Magic.
     const card = placeEncounter(EncounterCard.Bear, Area.Wand)
     setSkill(BLUE, 1, 1)
+    // Two sides, both within reach: the card is named first and paid for after (see ChooseOutcomeRule).
+    playCustom(CustomMoveType.ChooseEncounter)
+    expect(game.rule!.id).toBe(RuleId.ChooseOutcome)
     playCustom(CustomMoveType.ResolveOutcome, (data: { outcomes: number[] }) => data.outcomes.length === 2)
     expect(playerVp(rules(), BLUE)).toBe(4)
     expect(items(MaterialType.EncounterCard)[card].location.type).toBe(LocationType.UntoldStories)
+  })
+
+  it('never lets one Villager pay for both halves of the Labyrinthe', () => {
+    // Labyrinthe: 4 victory points for a Villager, and 4 more for a second one.
+    placeEncounter(EncounterCard.Labyrinth, Area.Wand)
+    setActiveVillagers(BLUE, 1)
+    playCustom(CustomMoveType.ChooseEncounter)
+    // A single Villager buys a single half, and the two halves are the same offer: nothing to choose.
+    expect(game.rule!.id).not.toBe(RuleId.ChooseOutcome)
+    expect(count(MaterialType.Villager, LocationType.Camp, BLUE)).toBe(1)
+    expect(playerVp(rules(), BLUE)).toBe(4)
+  })
+
+  it('sends both Villagers to the camp when both halves of the Labyrinthe are taken', () => {
+    placeEncounter(EncounterCard.Labyrinth, Area.Wand)
+    setActiveVillagers(BLUE, 2)
+    playCustom(CustomMoveType.ChooseEncounter)
+    expect(game.rule!.id).toBe(RuleId.ChooseOutcome)
+    playCustom(CustomMoveType.ResolveOutcome, (data: { outcomes: number[] }) => data.outcomes.length === 2)
+    expect(count(MaterialType.Villager, LocationType.Camp, BLUE)).toBe(2)
   })
 
   it('never lets a player walk away from an Encounter they can resolve', () => {
@@ -359,7 +391,7 @@ describe('An Income token', () => {
     items(MaterialType.Adventurer).find((item) => item.id === BLUE)!.location = { type: LocationType.Area, id: Area.Bow }
     startRule(RuleId.ResolveEncounter)
     const coins = playerCoins(rules(), BLUE)
-    playCustom(CustomMoveType.ResolveOutcome)
+    playCustom(CustomMoveType.ChooseEncounter)
     expect(playerCoins(rules(), BLUE)).toBe(coins + 1)
     expect(items(MaterialType.IncomeToken)[token].location.type).toBe(LocationType.IncomeTokenSpace)
     setSeason(BLUE, Season.Autumn)

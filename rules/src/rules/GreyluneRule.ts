@@ -2,7 +2,7 @@ import { CustomMove, getEnumValues, isCustomMoveType, Location, Material, Materi
 import { BONUS_TOKEN_SCORES, MAX_SKILL, SCORE_TRACK_SIZE } from '../Constants'
 import { Memory } from '../Memory'
 import { PlayerColor } from '../PlayerColor'
-import { bonusToken, Count, Gain, GainType, placeVillager, Requirement, RequirementType, SEAL } from '../material/Effect'
+import { bonusToken, Count, Gain, GainType, isCheck, placeVillager, Requirement, RequirementType, SEAL } from '../material/Effect'
 import { EventTile, eventTileData, isFestival } from '../material/EventTile'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
@@ -305,7 +305,7 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
    * still promise, so that a card only a Companion can pay for is offered all the same.
    */
   canPay(requirements: Requirement[] = [], reduction: CostReduction = this.costReduction): boolean {
-    return requirements.every((requirement) => this.canPayOne(requirement, reduction))
+    return gathered(requirements).every((requirement) => this.canPayOne(requirement, reduction))
   }
 
   private canPayOne(requirement: Requirement, reduction: CostReduction = this.costReduction): boolean {
@@ -326,7 +326,7 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
       case RequirementType.SpendVillagers:
         return this.activeVillagers.length >= Math.max(0, count - (reduction.villagers ?? 0))
       case RequirementType.ReturnVillager:
-        return this.activeVillagers.length >= 1
+        return this.activeVillagers.length >= count
       case RequirementType.DiscardItem:
         return this.material(MaterialType.VillageCard).location(LocationType.Items).player(this.player).length >= 1
       case RequirementType.TellStories:
@@ -342,7 +342,7 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
    * a choice — an Object to discard, stories to move — are handled by the rule that asks for them.
    */
   payRequirements(requirements: Requirement[] = []): GreyluneMove[] {
-    return requirements.flatMap((requirement) => this.payOne(requirement))
+    return gathered(requirements).flatMap((requirement) => this.payOne(requirement))
   }
 
   /** What a list of requirements asks for in coins: a Seal is worth what it was spent at. */
@@ -369,7 +369,7 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
       case RequirementType.SpendVillagers:
         return this.spendVillagers(Math.max(0, count - (reduction.villagers ?? 0)))
       case RequirementType.ReturnVillager:
-        return this.activeVillagers.limit(1).moveItems({ type: LocationType.VillagerReserve, player: this.player })
+        return this.activeVillagers.limit(count).moveItems({ type: LocationType.VillagerReserve, player: this.player })
       default:
         return []
     }
@@ -610,6 +610,26 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
   forgetAction(): void {
     for (const key of getEnumValues(Memory)) this.forget(key)
   }
+}
+
+/**
+ * The same list of requirements, with everything of one kind asked for once.
+ *
+ * An effect can name a kind twice — the Labyrinthe wants a Villager on either side of it, and both
+ * sides resolved wants two — and a list read entry by entry would check the second against a purse
+ * the first has not been taken out of yet, then pay them out of the same one: one Villager sent to
+ * the camp, and both rewards. So what is spent adds up, and what is only read off a board does not,
+ * since being over the taller of two bars clears them both.
+ */
+const gathered = (requirements: Requirement[]): Requirement[] => {
+  const kinds: Requirement[] = []
+  for (const requirement of requirements) {
+    const kind = kinds.find((entry) => entry.type === requirement.type)
+    if (!kind) kinds.push({ ...requirement })
+    else if (isCheck(requirement)) kind.count = Math.max(kind.count ?? 1, requirement.count ?? 1)
+    else kind.count = (kind.count ?? 1) + (requirement.count ?? 1)
+  }
+  return kinds
 }
 
 /** The token a score calls for: none below 25, then one lap of the track for each 25 up to 100. */

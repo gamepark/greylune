@@ -18,6 +18,7 @@ import { PlayerColor } from './PlayerColor'
 import { ActivateCardRule } from './rules/ActivateCardRule'
 import { AutumnRule } from './rules/AutumnRule'
 import { BonusTokenRule } from './rules/BonusTokenRule'
+import { ChooseOutcomeRule } from './rules/ChooseOutcomeRule'
 import { ChooseSkillRule } from './rules/ChooseSkillRule'
 import { DiscardItemRule } from './rules/DiscardItemRule'
 import { EventRule } from './rules/EventRule'
@@ -61,6 +62,7 @@ export class GreyluneRules
     [RuleId.Event]: EventRule,
     [RuleId.Travel]: TravelRule,
     [RuleId.ResolveEncounter]: ResolveEncounterRule,
+    [RuleId.ChooseOutcome]: ChooseOutcomeRule,
     [RuleId.ResolveQuest]: ResolveQuestRule,
     [RuleId.TellStory]: TellStoryRule,
     [RuleId.StraightenCard]: StraightenCardRule,
