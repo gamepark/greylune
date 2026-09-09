@@ -22,20 +22,28 @@ export abstract class SeasonRule extends GreyluneRule {
     return this.villagers.location(from).player(this.player).moveItems(this.eventSpace)
   }
 
-  /** The Villager is standing on the tile: what it takes from the Event is settled next. */
+  /**
+   * Moving on costs nothing and cannot be taken back: the player walks their marker one step down
+   * the season track, and the new season is played at once (see {@link afterItemMove}).
+   */
+  changeSeasonMoves(to: Season): GreyluneMove[] {
+    return this.material(MaterialType.SeasonMarker).id(this.player).moveItems({ type: LocationType.SeasonTrack, x: to })
+  }
+
+  /**
+   * The Villager is standing on the tile: what it takes from the Event is settled next. And the
+   * season marker has moved: the season it landed on is the one that is now played, read back off
+   * the board rather than named beside the move.
+   */
   afterItemMove(move: ItemMove<number, MaterialType, LocationType>): GreyluneMove[] {
-    if (move.itemType !== MaterialType.Villager || !('location' in move)) return []
+    if (!('location' in move)) return []
+    if (move.itemType === MaterialType.SeasonMarker) {
+      return [this.startRule(move.location.x === Season.Summer ? RuleId.Summer : RuleId.Autumn)]
+    }
+    if (move.itemType !== MaterialType.Villager) return []
     if (move.location.type === LocationType.EventSpace) return this.openReactions([TriggerType.SpendForce], RuleId.Event)
     if (move.location.type === LocationType.VillageGap) return this.endOfAction()
     return []
-  }
-
-  /** Moving on costs nothing and cannot be taken back, and the new season is played at once. */
-  changeSeason(to: Season): GreyluneMove[] {
-    return [
-      this.material(MaterialType.SeasonMarker).id(this.player).moveItem({ type: LocationType.SeasonTrack, x: to }),
-      this.startRule(to === Season.Summer ? RuleId.Summer : RuleId.Autumn)
-    ]
   }
 
   /** The memory of an action never survives a season change: nothing is owed on the way in. */

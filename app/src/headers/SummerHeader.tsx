@@ -1,7 +1,7 @@
-import { CustomMoveType } from '@gamepark/greylune/rules/CustomMoveType'
+import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { Season } from '@gamepark/greylune/Season'
 import { HeaderText, PlayMoveButton, useLegalMove } from '@gamepark/react-game'
-import { isCustomMoveType } from '@gamepark/rules-api'
+import { isMoveItemType } from '@gamepark/rules-api'
 import { SeasonIcon, VillagerIcon } from '../components/Icons'
 
 /**
@@ -15,7 +15,7 @@ import { SeasonIcon, VillagerIcon } from '../components/Icons'
  * planning for.
  */
 export const SummerHeader = () => {
-  const autumn = useLegalMove(isCustomMoveType(CustomMoveType.ChangeSeason))
+  const autumn = useLegalMove(isMoveItemType(MaterialType.SeasonMarker))
   return (
     <HeaderText
       code="summer"

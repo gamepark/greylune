@@ -352,6 +352,15 @@ export const seasonSpots: Record<Season, Coordinates> = {
   [Season.Autumn]: onSeasonSpace(22.1, 9.16)
 }
 
+/**
+ * The button that walks a marker on to the next season, measured from the marker itself: right under
+ * the pawn's foot, and under the track rather than along it — the spaces on either side are where
+ * the markers of the other players stand (see `ChangeSeasonMenu`). The circles are printed all but
+ * on the bottom edge of the board, so it hangs a little below the parchment, over the open table:
+ * still the width of a Villager clear of the bottom of the table itself.
+ */
+export const changeSeasonButtonSpot: XYCoordinates = { x: 2, y: 2 }
+
 /** Top and bottom of everything the players share: the row of decks over the Village grid, and the Season board. */
 const commonZoneTop = villageDeckSpot.y - villageCardSize.height / 2 - tableMargin
 const commonZoneBottom = seasonBoardSpot.y + seasonBoardSize.height / 2 + tableMargin

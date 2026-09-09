@@ -16,7 +16,9 @@
     "camp": "Aller au campement",
     "camp-coins": "Gagner {{coins}} <coin/>",
     "travel": "Voyager",
-    "stay": "Rester sur place"
+    "stay": "Rester sur place",
+    "summer": "Passer à l'été",
+    "autumn": "Passer à l'automne"
   },
   "header": {
     "winter": "Nouvelle année",

@@ -5,9 +5,11 @@ import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { Villager } from '@gamepark/greylune/material/Villager'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { RuleId } from '@gamepark/greylune/rules/RuleId'
+import { Season } from '@gamepark/greylune/Season'
 import { ItemContext, TokenDescription } from '@gamepark/react-game'
-import { Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { isMoveItemType, Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { isSameGap } from '@gamepark/greylune/material/Village'
+import { ChangeSeasonMenu } from '../season/SeasonMenu'
 import { StayPutMenu } from '../travel/TravelMenu'
 import { stayPutMove } from '../travel/TravelMoves'
 import { gapsToPlaceVillager } from '../village/PlaceVillager'
@@ -132,11 +134,39 @@ const transparentToPointer = css`
   pointer-events: none;
 `
 
+/**
+ * The marker of each player on the season track: where it stands is which season that player is in,
+ * and walking it one space on is how they move to the next one (see `SeasonRule`).
+ */
 export class SeasonMarkerDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, PlayerColor> {
   width = 1.88
   height = 2
+  borderRadius = 1
   transparency = true
   images = seasonMarkerImages
+
+  /** The pawn is aimed at to be walked, so the offer it wears has to be read without taking it. */
+  isMenuAlwaysVisible(): boolean {
+    return true
+  }
+
+  /**
+   * The marker of the reader, while they are the one being waited for in Spring or in Summer, wears
+   * the offer to move on (see {@link ChangeSeasonMenu}). Nobody else's marker carries anything: the
+   * moves are the reader's own, and a season is left by the player who is in it.
+   */
+  getItemMenu(
+    item: MaterialItem<PlayerColor, LocationType, PlayerColor>,
+    context: ItemContext<PlayerColor, MaterialType, LocationType>,
+    legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
+  ) {
+    const rule = context.rules.game.rule
+    if (item.id !== context.player || item.id !== rule?.player) return undefined
+    if (rule.id !== RuleId.Spring && rule.id !== RuleId.Summer) return undefined
+    const season = rule.id === RuleId.Spring ? Season.Summer : Season.Autumn
+    const move = legalMoves.find((move) => isMoveItemType(MaterialType.SeasonMarker)(move) && move.itemIndex === context.index)
+    return <ChangeSeasonMenu season={season} move={move} />
+  }
 }
 
 export class ScoreMarkerDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, PlayerColor> {

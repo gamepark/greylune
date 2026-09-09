@@ -20,9 +20,6 @@ export enum CustomMoveType {
   /** Gaining Villagers out of the reserve. Data: the amount. */
   GainVillagers,
 
-  /** Spring, or Summer: the player moves on to the next season and acts there at once. */
-  ChangeSeason,
-
   /**
    * Summer, "Gagner des pièces". Data: `{ villager, card }` — the Villager leaving the Village and
    * the card it designates, which pays 1 coin for every other Villager standing around it.

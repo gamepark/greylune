@@ -40,7 +40,7 @@ export class SummerRule extends SeasonRule {
       ...this.eventMoves(LocationType.VillageGap),
       ...this.useItemMoves(),
       ...this.specialActionMoves(),
-      ...(this.canReachAutumn ? [this.customMove(CustomMoveType.ChangeSeason)] : [])
+      ...(this.canReachAutumn ? this.changeSeasonMoves(Season.Autumn) : [])
     ]
   }
 
@@ -161,7 +161,6 @@ export class SummerRule extends SeasonRule {
   }
 
   onCustomMove(move: CustomMove): GreyluneMove[] {
-    if (isCustomMoveType(CustomMoveType.ChangeSeason)(move)) return this.changeSeason(Season.Autumn)
     if (isCustomMoveType(CustomMoveType.GainCoinsAround)(move)) return this.gainCoinsAround(move.data as VillagerActionData)
     if (isCustomMoveType(CustomMoveType.ActivateCard)(move)) return this.startActivation(move.data as VillagerActionData)
     if (isCustomMoveType(CustomMoveType.UseItem)(move)) return this.startUseItem(move.data as { card: number; ability: number })

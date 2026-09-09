@@ -1,8 +1,6 @@
-import { CustomMove, isCustomMoveType } from '@gamepark/rules-api'
 import { LocationType } from '../material/LocationType'
 import { cardsAroundGap, villageGaps } from '../material/Village'
 import { Season } from '../Season'
-import { CustomMoveType } from './CustomMoveType'
 import { GreyluneMove } from './GreyluneRule'
 import { SeasonRule } from './SeasonRule'
 
@@ -13,7 +11,7 @@ import { SeasonRule } from './SeasonRule'
  */
 export class SpringRule extends SeasonRule {
   getPlayerMoves(): GreyluneMove[] {
-    return [...this.placeVillagerMoves(), ...this.eventMoves(LocationType.ActiveVillagers), this.customMove(CustomMoveType.ChangeSeason)]
+    return [...this.placeVillagerMoves(), ...this.eventMoves(LocationType.ActiveVillagers), ...this.changeSeasonMoves(Season.Summer)]
   }
 
   /**
@@ -25,9 +23,5 @@ export class SpringRule extends SeasonRule {
     return villageGaps
       .filter((gap) => cardsAroundGap(this, gap).length > 0)
       .flatMap((gap) => villagers.moveItems({ type: LocationType.VillageGap, player: this.player, ...gap }))
-  }
-
-  onCustomMove(move: CustomMove): GreyluneMove[] {
-    return isCustomMoveType(CustomMoveType.ChangeSeason)(move) ? this.changeSeason(Season.Summer) : super.onCustomMove(move)
   }
 }

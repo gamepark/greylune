@@ -1,7 +1,7 @@
-import { CustomMoveType } from '@gamepark/greylune/rules/CustomMoveType'
+import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { Season } from '@gamepark/greylune/Season'
 import { HeaderText, PlayMoveButton, useLegalMove } from '@gamepark/react-game'
-import { isCustomMoveType } from '@gamepark/rules-api'
+import { isMoveItemType } from '@gamepark/rules-api'
 import { SeasonIcon, VillagerIcon } from '../components/Icons'
 
 /**
@@ -9,10 +9,10 @@ import { SeasonIcon, VillagerIcon } from '../components/Icons'
  *
  * Both actions of the season put a Villager down — in a gap of the Village, or on the Event tile —
  * so the bar asks for one thing and the table offers the two places to put it. Moving on to Summer
- * is the only choice with nothing on the table to click, so it is the only button.
+ * walks the season marker one step down its track, and the bar offers the same move as a button.
  */
 export const SpringHeader = () => {
-  const summer = useLegalMove(isCustomMoveType(CustomMoveType.ChangeSeason))
+  const summer = useLegalMove(isMoveItemType(MaterialType.SeasonMarker))
   return (
     <HeaderText
       code="spring"
