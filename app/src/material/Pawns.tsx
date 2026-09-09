@@ -4,6 +4,7 @@ import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { Villager } from '@gamepark/greylune/material/Villager'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
+import { RuleId } from '@gamepark/greylune/rules/RuleId'
 import { ItemContext, TokenDescription } from '@gamepark/react-game'
 import { Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { isSameGap } from '@gamepark/greylune/material/Village'
@@ -54,6 +55,18 @@ export class AdventurerDescription extends TokenDescription<PlayerColor, Materia
     if (item.id !== context.rules.game.rule?.player) return undefined
     const move = stayPutMove(context.rules, legalMoves)
     return move && <StayPutMenu move={move} />
+  }
+
+  /**
+   * The journey is dragged: the pawn is taken from where it stands and dropped on the ground of the
+   * area it walks to. That ground is what takes the drop, and the Adventurers already standing on it
+   * are drawn over it, so they let the pointer through while the journey lasts — the pawn being
+   * walked is then the only one that answers it, and an area already occupied is dropped onto like
+   * an empty one. Same reasoning as the Villagers standing in an open gap.
+   */
+  getItemExtraCss(item: MaterialItem<PlayerColor, LocationType, PlayerColor>, context: ItemContext<PlayerColor, MaterialType, LocationType>) {
+    const rule = context.rules.game.rule
+    return rule?.id === RuleId.Travel && item.id !== rule.player ? transparentToPointer : undefined
   }
 }
 
