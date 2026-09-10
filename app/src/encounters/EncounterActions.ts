@@ -1,6 +1,10 @@
+import { LocationType } from '@gamepark/greylune/material/LocationType'
+import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { ResolveOutcomeData } from '@gamepark/greylune/rules/EncounterRule'
 import { CustomMoveType } from '@gamepark/greylune/rules/CustomMoveType'
-import { CustomMove, isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
+import { RuleId } from '@gamepark/greylune/rules/RuleId'
+import { PlayerColor } from '@gamepark/greylune/PlayerColor'
+import { CustomMove, isCustomMoveType, isMoveItemType, MaterialItem, MaterialMove, MaterialRules } from '@gamepark/rules-api'
 
 /**
  * Resolving the Encounter the Adventurer has stopped in front of, in the 2 halves the rules make of
@@ -58,3 +62,44 @@ const bySidesRead = (a: CustomMove, b: CustomMove): number => {
   const [left, right] = [resolveOutcomeData(a).outcomes, resolveOutcomeData(b).outcomes]
   return left.length - right.length || left[0] - right[0]
 }
+
+/**
+ * The move that slides one Encounter over to the told Stories, when there is one: the Tavern only
+ * offers the cards it would hear, and the Tournament of the Bards takes any of them (see
+ * `TellStoryRule` and `ResolveQuestRule`). Either way the card is pressed rather than dragged, so
+ * that a fan of quarters overlapping one another is aimed at once and not carried across the band.
+ */
+export const tellStoryMove = (legalMoves: MaterialMove[], card: number): MaterialMove | undefined =>
+  legalMoves.find(
+    (move) => isMoveItemType(MaterialType.EncounterCard)(move) && move.itemIndex === card && move.location.type === LocationType.ToldStories
+  )
+
+/**
+ * Closing the story, which is what the Tavern is paid on: the player is paid when they stop, and
+ * only then (see `TellStoryRule`).
+ *
+ * Passing is the one move half the rules of the game end on, so the rule has to be read as well as
+ * the move: the same custom move answers a reaction window, an Encounter nobody can pay for and a
+ * journey cut short, and none of those is worn by a personal board.
+ */
+export const endStoryMove = (
+  legalMoves: MaterialMove[],
+  rules: MaterialRules<PlayerColor, MaterialType, LocationType>
+): CustomMove | undefined =>
+  rules.game.rule?.id === RuleId.TellStory ? legalMoves.find((move): move is CustomMove => isCustomMoveType(CustomMoveType.Pass)(move)) : undefined
+
+/**
+ * Whether a told Story is the last one told, which is the head of the fan and the only Story to wear
+ * the offer to stop. Every Encounter told in the whole game is in that fan, so the button would
+ * otherwise be worn a dozen times over — and by cards buried under the one just slid in.
+ */
+export const isLastToldStory = (
+  item: MaterialItem<PlayerColor, LocationType>,
+  rules: MaterialRules<PlayerColor, MaterialType, LocationType>
+): boolean =>
+  rules
+    .material(MaterialType.EncounterCard)
+    .location(LocationType.ToldStories)
+    .player(item.location.player)
+    .getItems()
+    .every((other) => (other.location.x ?? 0) <= (item.location.x ?? 0))

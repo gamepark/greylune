@@ -14,6 +14,7 @@
     "resolve": "Résoudre",
     "use": "Utiliser",
     "tell": "Raconter",
+    "end-story": "Terminer le récit",
     "gain-magic": "Gagner 1 Magie",
     "extra-coins": "Gagner {{coins}} <coin/> de plus",
     "no-surcharge": "Ne pas payer les villageois",

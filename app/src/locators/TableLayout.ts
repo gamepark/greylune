@@ -723,6 +723,32 @@ export const storiesMaxGap: Partial<XYCoordinates> = { y: -(storiesFan - 1) * st
 export const storiesPush = encounterCardSize.height - storyReveal
 
 /**
+ * Where the button that tells a Story is worn, measured from the middle of its card (see
+ * `TellStoryButton`). The quarter left showing is the whole of what a player sees of an Encounter
+ * once it is pushed in, so the button is hung level with it — and off the right edge of the card
+ * rather than over it, since that quarter is the one strip of the card that has anything to read.
+ *
+ * Off the right edge is the middle of the alley the 2 fans leave between them: the button is a hair
+ * over 2 wide and the alley 2.9, so hanging it a whole {@link storiesX} out from the untold fan puts
+ * it dead centre of the gap, clear of the card it belongs to and of the told Stories opposite.
+ */
+export const storyButtonSpot: XYCoordinates = {
+  x: storiesX,
+  y: -encounterCardSize.height / 2 + storyReveal / 2
+}
+
+/**
+ * Where the offer to close a story is worn, measured from the middle of the Story it is hung on (see
+ * `EndStoryButton`): the last one told, on its top edge.
+ *
+ * Half over the card and half in the air above it, which is the whole of the room there is — a fan of
+ * 4 reaches the top of the band and goes no further (see {@link storiesMaxGap}), so a button lifted
+ * clear of the card would climb out of the band and into the row above. It rides the head of the pile
+ * and is never buried: the Story that has just joined is the one wearing it.
+ */
+export const endStoryButtonSpot: XYCoordinates = { x: 0, y: -encounterCardSize.height / 2 }
+
+/**
  * The air the band has above it before the printed board of the row above starts, which is exactly what
  * that row leaves (see {@link playerColumnHeight}). The top row has no neighbour and the edge of the
  * table instead, which is the same distance away.

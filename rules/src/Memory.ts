@@ -40,9 +40,9 @@ export enum Memory {
    */
   WentAdventuring,
 
-  /** The rewards a Tavern pays, one per story value, and what the story told is worth so far. */
+  /** The rewards a Tavern pays, one per story value, and what each Encounter told so far is worth. */
   StoryRewards,
-  StoryValue,
+  StoryTold,
   /** Set by Seren or a Charisma potion: the next Encounter told counts as a 3. */
   StoryBoost,
 

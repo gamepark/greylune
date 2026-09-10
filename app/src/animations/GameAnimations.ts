@@ -5,7 +5,7 @@ import { ItemContext, MaterialGameAnimations } from '@gamepark/react-game'
 import { Coordinates, isMoveItemType, MaterialMove } from '@gamepark/rules-api'
 import { areaOf } from '../locators/Seats'
 import { spread } from '../locators/spread'
-import { storiesCeiling, storiesGap, storiesMaxGap, storiesPush, untoldStoriesSpot } from '../locators/TableLayout'
+import { storiesCeiling, storiesGap, storiesMaxGap, storiesPush, toldStoriesSpot, untoldStoriesSpot } from '../locators/TableLayout'
 
 export const gameAnimations = new MaterialGameAnimations<PlayerColor, MaterialType, LocationType>()
 
@@ -55,10 +55,11 @@ gameAnimations.configure((move) => isMoveItemType(MaterialType.Adventurer)(move)
 const SLIDE_START = 0.75
 
 /**
- * An Encounter won is not laid beside the personal board but pushed under its top edge, until only
- * the top quarter of it is left showing (see {@link untoldStoriesSpot}). Flown straight at that spot,
- * three quarters of the card would vanish on the frame it lands, which reads as the card falling into
- * a hole rather than as a hand pushing it home.
+ * An Encounter won, and then the same Encounter told, is not laid beside the personal board but
+ * pushed under its top edge, until only the top quarter of it is left showing (see
+ * {@link untoldStoriesSpot} and {@link toldStoriesSpot}). Flown straight at that spot, three quarters
+ * of the card would vanish on the frame it lands, which reads as the card falling into a hole rather
+ * than as a hand pushing it home.
  *
  * So it flies to the point {@link storiesPush} above its slot instead — where it lies flush with the
  * edge it is about to go under, nothing hidden yet — comes back down to table level there, and only
@@ -75,7 +76,7 @@ const SLIDE_START = 0.75
  * of the card instead of sending it to the middle — depth included.
  */
 gameAnimations
-  .configure((move) => isMoveItemType(MaterialType.EncounterCard)(move) && move.location.type === LocationType.UntoldStories)
+  .configure((move) => isMoveItemType(MaterialType.EncounterCard)(move) && isStoriesFan(move.location.type))
   .trajectory((context, move) => {
     const flight = storyFlight(context, move)
     if (!flight) return {}
@@ -97,26 +98,26 @@ gameAnimations
     }
   })
 
-/**
- * A Story told crosses from one half of the band to the other without ever leaving the board it is
- * tucked under, so it slides flat along its edge. Lifting it would take it over the board for the
- * length of the move and drop it back under at the very end, which is the one thing the card never
- * does once it has been pushed in.
- */
-gameAnimations
-  .configure((move) => isMoveItemType(MaterialType.EncounterCard)(move) && move.location.type === LocationType.ToldStories)
-  .flat()
+/** The 2 halves of the band an Encounter is pushed under: the Stories still to tell, and those told. */
+const isStoriesFan = (type?: LocationType): type is LocationType.UntoldStories | LocationType.ToldStories =>
+  type === LocationType.UntoldStories || type === LocationType.ToldStories
 
 /**
  * Where the card leaves from, where it lands, and the height it is pushed in from. The new Story is
  * the last of its fan, a whole spread above the first one, and the fan it joins is the one that is
  * there now plus itself — the move has not been played yet.
+ *
+ * A Story told is one crossing from the left half of the band to the right, and it makes the very
+ * same flight: it is pulled back out from under the board, carried over to the other fan and pushed
+ * in there, which is the gesture the player just made and the one the untold fan is read with. What
+ * it never does is slide across underneath, where the card would be a quarter of itself gliding
+ * sideways with nothing to say where it came from.
  */
 const storyFlight = (
   context: ItemContext<PlayerColor, MaterialType, LocationType>,
   move: MaterialMove<PlayerColor, MaterialType, LocationType>
 ): { from: Coordinates; to: Coordinates; pushFrom: number } | undefined => {
-  if (!isMoveItemType(MaterialType.EncounterCard)(move) || move.location.type !== LocationType.UntoldStories) return
+  if (!isMoveItemType(MaterialType.EncounterCard)(move) || !isStoriesFan(move.location.type)) return
   const player = move.location.player as PlayerColor
   const card = context.rules.material(MaterialType.EncounterCard).getItem(move.itemIndex)
   const spot = context.locators[card.location.type]?.getItemCoordinates(card, {
@@ -128,8 +129,8 @@ const storyFlight = (
   if (!spot) return
   const from = { x: spot.x ?? 0, y: spot.y ?? 0, z: spot.z ?? 0 }
   const area = areaOf(context, player)
-  const anchor = untoldStoriesSpot(area)
-  const gaps = context.rules.material(MaterialType.EncounterCard).location(LocationType.UntoldStories).player(player).length
+  const anchor = move.location.type === LocationType.ToldStories ? toldStoriesSpot(area) : untoldStoriesSpot(area)
+  const gaps = context.rules.material(MaterialType.EncounterCard).location(move.location.type).player(player).length
   const to = { x: anchor.x, y: anchor.y + spread(storiesGap.y!, gaps, storiesMaxGap.y), z: anchor.z + gaps * storiesGap.z! }
   return { from, to, pushFrom: Math.max(to.y - storiesPush, storiesCeiling(area)) }
 }

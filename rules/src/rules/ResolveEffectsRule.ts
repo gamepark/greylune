@@ -64,7 +64,7 @@ export class ResolveEffectsRule extends GreyluneRule {
         return this.canPlaceVillager ? [this.startRule(RuleId.PlaceVillager)] : []
       case GainType.TellStory:
         this.memorize(Memory.StoryRewards, gain.rewards)
-        this.memorize(Memory.StoryValue, 0)
+        this.memorize(Memory.StoryTold, [])
         return this.openReactions([TriggerType.TellStory], RuleId.TellStory)
       case GainType.BonusToken:
         return this.bonusTokens.length ? [this.startRule(RuleId.BonusToken)] : []

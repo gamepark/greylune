@@ -1,4 +1,4 @@
-import { applyAutomaticMoves, isCustomMoveType, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { applyAutomaticMoves, isCustomMoveType, isMoveItemType, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { BASE_INCOME, MAX_ITEMS } from './Constants'
 import { GreyluneRules } from './GreyluneRules'
@@ -290,8 +290,24 @@ describe('A Tavern', () => {
   beforeEach(() => {
     startRule(RuleId.TellStory)
     game.memory[Memory.StoryRewards] = [[vp(2)], [force()], [vp(5)]]
-    game.memory[Memory.StoryValue] = 0
+    game.memory[Memory.StoryTold] = []
   })
+
+  /** Whether the Tavern would hear that Encounter as the story stands. */
+  const tellable = (card: number): boolean =>
+    rules()
+      .getLegalMoves(BLUE)
+      .some((move) => isMoveItemType(MaterialType.EncounterCard)(move) && move.itemIndex === card)
+
+  /** Slides one named Encounter over, and fails the test when the Tavern refuses it. */
+  const tell = (card: number) => {
+    const move = rules()
+      .getLegalMoves(BLUE)
+      .find((move) => isMoveItemType(MaterialType.EncounterCard)(move) && move.itemIndex === card)
+    expect(move, 'the Tavern will not hear that Encounter').toBeDefined()
+    play(move!)
+  }
+
 
   it('pays only the first tier for a story worth 1', () => {
     untold(EncounterCard.Ambush)
@@ -310,6 +326,34 @@ describe('A Tavern', () => {
     expect(playerVp(rules(), BLUE)).toBe(7)
     expect(playerForce(rules(), BLUE)).toBe(1)
     expect(count(MaterialType.EncounterCard, LocationType.ToldStories, BLUE)).toBe(2)
+  })
+
+  it('stops a story at 3: a 2 is refused after 1 and 1, where a third 1 still fits', () => {
+    const first = untold(EncounterCard.Ambush)
+    const second = untold(EncounterCard.CircleOfStones)
+    const third = untold(EncounterCard.Camp)
+    const two = untold(EncounterCard.Marauders)
+    tell(first)
+    tell(second)
+    expect(tellable(two)).toBe(false)
+    expect(tellable(third)).toBe(true)
+  })
+
+  it('lets 2 and 2 run over the maximum, and hears nothing after them', () => {
+    const two = untold(EncounterCard.Hermit)
+    const other = untold(EncounterCard.Marauders)
+    const one = untold(EncounterCard.Ambush)
+    tell(two)
+    expect(tellable(one)).toBe(true)
+    tell(other)
+    expect(rules().getLegalMoves(BLUE)).toHaveLength(1)
+  })
+
+  it('never adds an Encounter worth 3 to a story already begun', () => {
+    const one = untold(EncounterCard.Ambush)
+    const three = untold(EncounterCard.Tiger)
+    tell(one)
+    expect(tellable(three)).toBe(false)
   })
 
   it('never hears an Encounter worth nothing', () => {
