@@ -1,12 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { VillageCard, villageCardData } from '@gamepark/greylune/material/VillageCard'
 import { CustomMove } from '@gamepark/rules-api'
-import { GainsLabel } from '../components/Gains'
+import { EffectLabel } from '../components/Effect'
 import { TiltIcon } from '../components/Icons'
-import { RequirementsLabel } from '../components/Requirements'
 import { itemActionSpot } from '../locators/TableLayout'
 import { GreyluneMenuButton } from '../theme/GreyluneMenuButton'
-import { parchmentArrowCss } from '../theme/parchment'
 import { itemActionData } from './ItemActions'
 
 /**
@@ -36,17 +34,15 @@ export const ItemCardMenu = ({ front, moves }: { front: VillageCard; moves: Cust
 const useButtonStep = 2.4
 
 /**
- * What a button says, the way the card prints it: what the option is paid with on top of the tilt,
- * an arrow, and what it hands over. No word at all — the figures and the symbols of the material say
- * it in every language at once.
+ * What a button says, which is what every button offering an effect says (see {@link EffectLabel}):
+ * what the option is paid with on top of the tilt, an arrow, and what it hands over.
  *
  * The tilt is left out, being what every option of every Object costs and what the button already
  * wears; so is a card given up, which has no symbol of its own. An option paid for with the tilt
- * alone is therefore only what it gives, and the arrow goes with the cost when there is none to draw.
- * The 2 Objects paying in points counted on what the player owns say nothing at all, cost included:
- * both offer that one option, so their button is unambiguous, and the card under it says the rest.
+ * alone is therefore only what it gives. The 2 Objects paying in points counted on what the player
+ * owns say nothing at all, cost included: both offer that one option, so their button is
+ * unambiguous, and the card under it says the rest.
  */
-const UseItemLabel = ({ front, ability }: { front: VillageCard; ability: number }) => {
-  const { requirements, gains = [] } = villageCardData[front].abilities![ability]
-  return <GainsLabel gains={gains} prefix={<RequirementsLabel requirements={requirements} suffix={<span css={parchmentArrowCss}>→</span>} />} />
-}
+const UseItemLabel = ({ front, ability }: { front: VillageCard; ability: number }) => (
+  <EffectLabel {...villageCardData[front].abilities![ability]} />
+)

@@ -106,7 +106,7 @@ export class EncounterCardDescription extends CardDescription<PlayerColor, Mater
   ) {
     if (item.location.type !== LocationType.EncounterRow || item.id?.front === undefined) return undefined
     const moves = encounterMoves(legalMoves, context.index)
-    return moves.length ? <EncounterCardMenu front={item.id.front} moves={moves} /> : undefined
+    return moves.length ? <EncounterCardMenu front={item.id.front} moves={moves} x={item.location.x ?? 0} /> : undefined
   }
 }
 

@@ -108,9 +108,10 @@ export enum RuleId {
   ResolveEncounter,
 
   /**
-   * Which side of the Encounter just named is paid for, when the player can afford more than one
-   * way. Only the 7 two-sided cards ever get here; every other Encounter is resolved the moment it
-   * is named.
+   * Which sides of the Encounter just named are paid for. Only the 7 two-sided cards ever get here,
+   * and only those the player does not satisfy outright: a side that costs nothing is always taken,
+   * so a card met on both counts pays both rewards the moment it is named, and every one-sided
+   * Encounter is resolved there too.
    */
   ChooseOutcome,
 

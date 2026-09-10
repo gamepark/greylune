@@ -2,6 +2,7 @@ import { CustomMove, isCustomMoveType } from '@gamepark/rules-api'
 import { Memory } from '../Memory'
 import { Area } from '../material/Area'
 import { coins, Gain, vp } from '../material/Effect'
+import { encounterCardData } from '../material/EncounterCard'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { adventurerArea } from '../material/PlayerState'
@@ -101,14 +102,18 @@ export class ResolveEncounterRule extends EncounterRule {
   }
 
   /**
-   * The card is named, and the sides it is paid for are chosen next — unless there is nothing to
-   * choose. A card printing a single side has one way to be resolved and asks nothing; so does a
-   * two-sided card the player can only afford one half of, and a question with one answer is a click
-   * spent on nothing.
+   * The card is named, and the sides it is paid for are chosen next — unless there is nothing left to
+   * choose *and* nothing left to miss.
+   *
+   * A single way that takes every side of the card is everything the card has to give, and asks
+   * nothing: every one-sided Encounter is resolved on the spot, and so are the Ours, the Démon and
+   * the Dragon of a player who meets both of their conditions. A single way that leaves a side behind
+   * is still a button, and it is worth the click it costs — it is where the player reads that they
+   * only satisfy half of the card and are only paid half of it.
    */
   private designate(card: number): GreyluneMove[] {
     const ways = this.encounterMoves(card)
-    if (ways.length === 1) return this.resolve(ways[0])
+    if (ways.length === 1 && ways[0].outcomes.length === encounterCardData[this.front(card)].outcomes.length) return this.resolve(ways[0])
     this.memorize(Memory.ResolvedEncounter, card)
     return [this.startRule(RuleId.ChooseOutcome)]
   }

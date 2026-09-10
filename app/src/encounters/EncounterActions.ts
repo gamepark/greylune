@@ -31,12 +31,14 @@ export const encounterMoves = (legalMoves: MaterialMove[], card: number): Custom
 }
 
 /**
- * The ways a card may be paid for, one per set of sides: its left, its right, or both. A Potion that
- * lets a condition be waived multiplies each of them into as many moves as there are ways to spend
- * that favour, and they are not a choice a player would want to be asked — the favour is lent for
- * this one adventure and is worth nothing kept — so the widest waiver stands for its set. A waived
- * condition is either a check the player would have passed anyway or a price they no longer pay: it
- * is never the worse move.
+ * The ways a card may be paid for, one button per set of sides. A side that costs the player nothing
+ * is part of every one of them (see `EncounterRule`), so what the buttons really ask is which prices
+ * are paid: at most 2 of them, and never one that hands over less for the same price.
+ *
+ * A Potion that lets a condition be waived can still split a set of sides into several moves, and
+ * which conditions the favour is spent on is not a choice a player would want to be asked — the rule
+ * only ever offers to waive what the set cannot be paid for without, so the moves left differ in
+ * nothing that matters and the cheapest waiver stands for its set.
  */
 const outcomeMoves = (legalMoves: MaterialMove[], card: number): CustomMove[] => {
   const bySides = new Map<string, CustomMove>()
@@ -44,7 +46,7 @@ const outcomeMoves = (legalMoves: MaterialMove[], card: number): CustomMove[] =>
     if (!isResolveOutcome(move) || resolveOutcomeData(move).card !== card) continue
     const sides = resolveOutcomeData(move).outcomes.join()
     const best = bySides.get(sides)
-    if (best === undefined || waived(move) > waived(best)) bySides.set(sides, move)
+    if (best === undefined || waived(move) < waived(best)) bySides.set(sides, move)
   }
   return [...bySides.values()].sort(bySidesRead)
 }

@@ -4,7 +4,7 @@ import { BASE_INCOME, MAX_ITEMS } from './Constants'
 import { GreyluneRules } from './GreyluneRules'
 import { GreyluneSetup } from './GreyluneSetup'
 import { Area } from './material/Area'
-import { force, vp } from './material/Effect'
+import { force, gathered, isCheck, RequirementType, travel, vp } from './material/Effect'
 import { EncounterCard, EncounterCardId, encounterArea, encounterIncomeToken, getEncounterCardPeriod } from './material/EncounterCard'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
@@ -16,6 +16,7 @@ import { getVpToken, VpTokenValue } from './material/VpToken'
 import { Memory } from './Memory'
 import { PlayerColor } from './PlayerColor'
 import { CustomMoveType } from './rules/CustomMoveType'
+import { outcomeEffect, ResolveOutcomeData } from './rules/EncounterRule'
 import { RuleId } from './rules/RuleId'
 import { Season } from './Season'
 import { currentYear } from './Year'
@@ -331,16 +332,62 @@ describe('The areas', () => {
     expect(playerCoins(rules(), BLUE)).toBe(coins + 1)
   })
 
-  it('pays both sides of an Encounter to a player who satisfies both', () => {
-    // Ours: 2 victory points for 1 Force, and 2 more for 1 Magic.
+  it('pays both sides of an Encounter to a player who satisfies both, with nothing to choose', () => {
+    // Ours: 2 victory points for 1 Force, and 2 more for 1 Magic. Neither side costs anything, so
+    // both are taken and the card is resolved the moment it is named.
     const card = placeEncounter(EncounterCard.Bear, Area.Wand)
     setSkill(BLUE, 1, 1)
-    // Two sides, both within reach: the card is named first and paid for after (see ChooseOutcomeRule).
     playCustom(CustomMoveType.ChooseEncounter)
-    expect(game.rule!.id).toBe(RuleId.ChooseOutcome)
-    playCustom(CustomMoveType.ResolveOutcome, (data: { outcomes: number[] }) => data.outcomes.length === 2)
+    expect(game.rule!.id).not.toBe(RuleId.ChooseOutcome)
     expect(playerVp(rules(), BLUE)).toBe(4)
     expect(items(MaterialType.EncounterCard)[card].location.type).toBe(LocationType.UntoldStories)
+  })
+
+  it('still asks a player who satisfies one side of the Ours to press the button that says so', () => {
+    placeEncounter(EncounterCard.Bear, Area.Wand)
+    setSkill(BLUE, 1, 0)
+    playCustom(CustomMoveType.ChooseEncounter)
+    // Half the card is out of reach: one button, and it is pressed, so that the player reads what
+    // they are not being paid.
+    expect(game.rule!.id).toBe(RuleId.ChooseOutcome)
+    expect(rules().getLegalMoves(BLUE)).toHaveLength(1)
+    playCustom(CustomMoveType.ResolveOutcome)
+    expect(playerVp(rules(), BLUE)).toBe(2)
+  })
+
+  it('never offers to leave behind a side of the Vallée that costs nothing', () => {
+    // Vallée: 2 spaces of road for 1 Force, and 3 victory points for a Villager.
+    placeEncounter(EncounterCard.Valley, Area.Wand)
+    setSkill(BLUE, 1, 0)
+    setActiveVillagers(BLUE, 1)
+    playCustom(CustomMoveType.ChooseEncounter)
+    expect(game.rule!.id).toBe(RuleId.ChooseOutcome)
+    // The road alone, or the road and the points: never the points alone, which would be the same
+    // Villager for one reward less. What the 2 buttons say is what each of them takes and gives —
+    // the Force is had, not paid, so it is the Villager alone that tells them apart.
+    const effects = rules()
+      .getLegalMoves(BLUE)
+      .map((move) => outcomeEffect(EncounterCard.Valley, (move as { data: ResolveOutcomeData }).data))
+    expect(effects).toEqual([
+      { requirements: [{ type: RequirementType.Force, count: 1 }], gains: [travel(2)] },
+      { requirements: [{ type: RequirementType.Force, count: 1 }, { type: RequirementType.SpendVillagers, count: 1 }], gains: [travel(2), vp(3)] }
+    ])
+    expect(effects.map((effect) => gathered(effect.requirements!.filter((requirement) => !isCheck(requirement))))).toEqual([
+      [],
+      [{ type: RequirementType.SpendVillagers, count: 1 }]
+    ])
+  })
+
+  it('pays the points of the Vallée before sending the Adventurer back on the road', () => {
+    placeEncounter(EncounterCard.Valley, Area.Wand)
+    setSkill(BLUE, 1, 0)
+    setActiveVillagers(BLUE, 1)
+    playCustom(CustomMoveType.ChooseEncounter)
+    playCustom(CustomMoveType.ResolveOutcome, (data: { outcomes: number[] }) => data.outcomes.length === 2)
+    // The road is the last thing the card hands over: the 3 points are counted before the second
+    // journey starts, and the Adventurer is still waiting to be moved.
+    expect(playerVp(rules(), BLUE)).toBe(3)
+    expect(game.rule!.id).toBe(RuleId.Travel)
   })
 
   it('never lets one Villager pay for both halves of the Labyrinthe', () => {
@@ -348,8 +395,11 @@ describe('The areas', () => {
     placeEncounter(EncounterCard.Labyrinth, Area.Wand)
     setActiveVillagers(BLUE, 1)
     playCustom(CustomMoveType.ChooseEncounter)
-    // A single Villager buys a single half, and the two halves are the same offer: nothing to choose.
-    expect(game.rule!.id).not.toBe(RuleId.ChooseOutcome)
+    // A single Villager buys a single half, and the two halves are the same offer: one button, and
+    // it is pressed to say that the other half is not being paid for.
+    expect(game.rule!.id).toBe(RuleId.ChooseOutcome)
+    expect(rules().getLegalMoves(BLUE)).toHaveLength(1)
+    playCustom(CustomMoveType.ResolveOutcome)
     expect(count(MaterialType.Villager, LocationType.Camp, BLUE)).toBe(1)
     expect(playerVp(rules(), BLUE)).toBe(4)
   })

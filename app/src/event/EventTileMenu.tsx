@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { EventTile, eventTileData, isFestival } from '@gamepark/greylune/material/EventTile'
 import { Trans, useTranslation } from 'react-i18next'
+import { EffectArrow } from '../components/Effect'
 import { GainsLabel } from '../components/Gains'
 import { VillagerIcon } from '../components/Icons'
 import { festivalSpaceSpot } from '../locators/TableLayout'
 import { helpIcons } from '../material/help/HelpLayout'
 import { GreyluneMenuButton } from '../theme/GreyluneMenuButton'
-import { parchmentArrowCss } from '../theme/parchment'
 import { moveOfSelectedVillager, useSelectedVillager } from '../villagers/SelectVillager'
 import { EventOption, eventOptions, GreyluneMove, joinEventMoves } from './EventMoves'
 
@@ -60,7 +60,7 @@ const OptionButtons = ({ tile, options }: { tile: EventTile; options: EventOptio
               {!!requirements?.length && (
                 <>
                   <Trans i18nKey={`event-tile.${tile}.${option}.requirement`} components={helpIcons} />
-                  <span css={parchmentArrowCss}>→</span>
+                  <EffectArrow />
                 </>
               )}
               <Trans i18nKey={`event-tile.${tile}.${option}.reward`} components={helpIcons} />

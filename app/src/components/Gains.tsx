@@ -76,11 +76,12 @@ export const GainLabel = ({ gain }: { gain: Gain }) => (
  *
  * An effect with nothing to draw — points counted on what the player owns — is drawn as nothing at
  * all rather than as a figure with no symbol after it, and `prefix` goes with it: whatever leads into
- * the gains, an arrow from what they cost say, has nothing to lead into.
+ * the gains, an arrow from what they cost say, has nothing to lead into. A caller that cannot show
+ * an empty label — a button has to say something — passes the `fallback` to show in its stead.
  */
-export const GainsLabel = ({ gains, prefix }: { gains: Gain[]; prefix?: ReactNode }) => {
+export const GainsLabel = ({ gains, prefix, fallback }: { gains: Gain[]; prefix?: ReactNode; fallback?: ReactNode }) => {
   const drawn = gains.filter((gain) => gainIcon(gain) !== undefined)
-  if (!drawn.length) return null
+  if (!drawn.length) return <>{fallback}</>
   return (
     <>
       {prefix}

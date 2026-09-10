@@ -169,6 +169,28 @@ export type Effect = { requirements?: Requirement[]; gains?: Gain[] }
 export const isCheck = (requirement: Requirement): boolean =>
   requirement.type === RequirementType.Force || requirement.type === RequirementType.Magic || requirement.type === RequirementType.Skills
 
+/**
+ * The same list of requirements, with everything of one kind asked for once.
+ *
+ * An effect can name a kind twice — the Labyrinthe wants a Villager on either side of it, and both
+ * sides resolved wants two — and a list read entry by entry would check the second against a purse
+ * the first has not been taken out of yet, then pay them out of the same one: one Villager sent to
+ * the camp, and both rewards. So what is spent adds up, and what is only read off a board does not,
+ * since being over the taller of two bars clears them both.
+ *
+ * It is what a player is really asked for, so it is also what a button naming a price has to say.
+ */
+export const gathered = (requirements: Requirement[]): Requirement[] => {
+  const kinds: Requirement[] = []
+  for (const requirement of requirements) {
+    const kind = kinds.find((entry) => entry.type === requirement.type)
+    if (!kind) kinds.push({ ...requirement })
+    else if (isCheck(requirement)) kind.count = Math.max(kind.count ?? 1, requirement.count ?? 1)
+    else kind.count = (kind.count ?? 1) + (requirement.count ?? 1)
+  }
+  return kinds
+}
+
 /** Whether an effect spends a Seal, at its printed value or in coins. */
 export const usesSeal = (requirements: Requirement[] = []): boolean =>
   requirements.some((requirement) => requirement.type === RequirementType.Seal || requirement.type === RequirementType.SealCoins)
