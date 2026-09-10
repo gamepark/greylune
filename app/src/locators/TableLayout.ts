@@ -47,12 +47,22 @@ const villagerHeight = 3.04
 const onBoard = 0.1
 
 /**
- * The other side of {@link onBoard}: a card pushed *under* a board has to pass below that thickness,
- * or it is drawn over the very board it is slid into. The table is drawn without perspective, so the
- * figure only ever settles an order — it is set far enough below that a whole game of Stories piling
- * up on one another (see {@link storiesGap}) never climbs back over the board.
+ * A board a card is pushed *under* is itself lifted a hair off the table, so that the card can pass
+ * below it and still stand above the table. Nothing is ever drawn at a negative height: the table is
+ * a plane of its own and takes every click aimed at what lies behind it, so a card slid under the
+ * table rather than under the board is not merely hidden, it is out of reach.
+ *
+ * The lift is smaller than {@link onBoard}, so everything laid on the board stays over it.
  */
-const underBoard = -1
+const boardLevel = 0.04
+
+/**
+ * The other side of {@link boardLevel}: where a card pushed under a board comes to rest, between the
+ * board and the table. The table is drawn without perspective, so the figure only ever settles an
+ * order — what it has to hold is a whole game of Stories sinking under one another (see
+ * {@link storiesGap}) without ever reaching the table.
+ */
+const underBoard = 0.03
 
 /**
  * How high the Village gaps, and everything standing in them, are drawn. It is not a height on the
@@ -457,7 +467,7 @@ export const sealDiscardRadius: XYCoordinates = { x: (sealDiscardGap.right - sea
  * channel of PlayerBoard.png). Two boards set a centimetre apart would therefore read as 3.8 apart, so
  * the rows overlap by that margin, and the air below is counted between what is actually printed.
  */
-const playerBoardShadow = 1.42
+export const playerBoardShadow = 1.42
 
 /**
  * Companions to the left of the board, Objects to the right: 3 cards each, laid side by side, so the
@@ -551,7 +561,8 @@ const onPlayerBoard = (area: XYCoordinates, x: number, y: number): Coordinates =
 
 const besidePlayerBoard = (area: XYCoordinates, x: number, y: number): XYCoordinates => ({ x: area.x + x, y: area.y + y })
 
-export const playerBoardSpot = (area: XYCoordinates): XYCoordinates => area
+/** The one board something is slid under, hence the only one lifted off the table: see {@link boardLevel}. */
+export const playerBoardSpot = (area: XYCoordinates): Coordinates => ({ ...area, z: boardLevel })
 
 export const strengthTrackSpot = (area: XYCoordinates, level: number) => onPlayerBoard(area, 8.15, 11.26 - 1.62 * level)
 export const magicTrackSpot = (area: XYCoordinates, level: number) => onPlayerBoard(area, 10.58, 11.26 - 1.62 * level)
@@ -686,11 +697,17 @@ export const untoldStoriesSpot = (area: XYCoordinates): Coordinates => ({ ...bes
 export const toldStoriesSpot = (area: XYCoordinates): Coordinates => ({ ...besidePlayerBoard(area, storiesX, storiesAnchorY), z: underBoard })
 
 /**
+ * The hair of depth each Story takes from the one before it. The whole Encounter deck is 41 cards, so
+ * a fan sinks at most 0.02 below {@link underBoard} and never touches the table.
+ */
+const storiesDepth = 0.0005
+
+/**
  * Every Story after the first is pushed in *under* the ones already there and a quarter of a card
  * higher, so each shows its own quarter and the fan climbs away from the board. Hence both signs: the
  * step up the table, and the hair of depth that puts the newcomer behind its elders.
  */
-export const storiesGap: Partial<Coordinates> = { y: -storyReveal, z: -0.01 }
+export const storiesGap: Partial<Coordinates> = { y: -storyReveal, z: -storiesDepth }
 
 /** A full fan reaches the top of the band; past that the cards close up rather than climb out of it. */
 export const storiesMaxGap: Partial<XYCoordinates> = { y: -(storiesFan - 1) * storyReveal }

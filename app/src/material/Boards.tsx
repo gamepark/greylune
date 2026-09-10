@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
@@ -6,7 +7,7 @@ import { SpecialAction } from '@gamepark/greylune/rules/SpecialActionRule'
 import { BoardDescription, ItemContext, MaterialContext } from '@gamepark/react-game'
 import { CustomMove, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { MainBoard, PlayerBoard, SeasonBoard } from '../images/BoardImages'
-import { mainBoardSize, playerBoardSize, seasonBoardSize, specialActionStoryOffset } from '../locators/TableLayout'
+import { mainBoardSize, playerBoardShadow, playerBoardSize, seasonBoardSize, specialActionStoryOffset } from '../locators/TableLayout'
 import { TravelMenu } from '../travel/TravelMenu'
 import { isTravelMove } from '../travel/TravelMoves'
 import { CampMenu } from '../villagers/CampAction'
@@ -121,4 +122,30 @@ export class PlayerBoardDescription extends BoardDescription<PlayerColor, Materi
     const moves = specialActionMoves(legalMoves, item.location.player)
     return moves.length ? <SpecialActionMenu moves={moves} /> : undefined
   }
+
+  /**
+   * The picture of the board goes on for {@link playerBoardShadow} past the ink, to draw the shadow it
+   * casts on the table. That halo is transparent to the eye but not to the pointer, and it lies over
+   * the top of every Story pushed under the board and over the inner edge of the rows of cards beside
+   * it: a click aimed at any of them landed on the board instead. So the board answers on its ink
+   * alone, which is the board the player actually sees.
+   */
+  getItemExtraCss() {
+    return clicksOnPrintedBoard
+  }
 }
+
+/**
+ * The item lets the pointer through, and takes it back on the printed rectangle alone. A pseudo-element
+ * rather than a child: the faces of the item are the framework's to draw, and this is not one of them.
+ */
+const clicksOnPrintedBoard = css`
+  pointer-events: none;
+
+  &:before {
+    content: ' ';
+    position: absolute;
+    inset: ${playerBoardShadow}em;
+    pointer-events: auto;
+  }
+`
