@@ -141,7 +141,7 @@ const subtitle = (card: VillageCard, data: VillageCardData, type: VillageCardTyp
 /** The rules the card is an instance of: read once, skipped ever after. */
 const notes = (data: VillageCardData, type: VillageCardType): string[] => {
   const keys = [`help.type.${type}.note`]
-  if (isTavern(data)) keys.push('help.tavern.note')
+  if (isTavern(data)) keys.push('help.tell-story.note')
   if (data.potion) keys.push('help.potion.note')
   if (data.seals === PLAYERS_MINUS_ONE) keys.push('help.seals.note-players')
   else if (data.seals !== undefined) keys.push('help.seals.note-one')

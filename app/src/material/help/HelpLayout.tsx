@@ -143,13 +143,39 @@ const factValueCss = css`
   gap: 0.2em;
 `
 
-/** What the card does, one heading per kind of effect: immediate, ability, reaction, permanent, score. */
-export const HelpSection = ({ title, children }: { title: ReactNode; children: ReactNode }) => (
+/**
+ * What the card does, one heading per kind of effect: immediate, ability, reaction, permanent, score.
+ *
+ * `mark` is a picture of what the heading is about, set beside it: the personal board shows the very
+ * mark each of its sections names (see {@link PlayerBoardHelp}). It is drawn outside the heading
+ * rather than inside it, so that the ink of a picture does not fade with the type.
+ */
+export const HelpSection = ({ title, mark, children }: { title: ReactNode; mark?: ReactNode; children: ReactNode }) => (
   <section css={sectionCss}>
-    <h3 css={sectionTitleCss}>{title}</h3>
+    <HelpHeading mark={mark}>{title}</HelpHeading>
     <p css={sectionTextCss}>{children}</p>
   </section>
 )
+
+const HelpHeading = ({ mark, children }: { mark?: ReactNode; children: ReactNode }) =>
+  mark === undefined ? (
+    <h3 css={[sectionTitleCss, headingSpacingCss]}>{children}</h3>
+  ) : (
+    <div css={[headingRowCss, headingSpacingCss]}>
+      {mark}
+      <h3 css={sectionTitleCss}>{children}</h3>
+    </div>
+  )
+
+const headingRowCss = css`
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+`
+
+const headingSpacingCss = css`
+  margin: 0 0 0.15em;
+`
 
 const sectionCss = css`
   &:not(:first-of-type) {
@@ -159,7 +185,7 @@ const sectionCss = css`
 `
 
 const sectionTitleCss = css`
-  margin: 0 0 0.15em;
+  margin: 0;
   font-size: 0.8em;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -232,9 +258,9 @@ const outcomeArrowCss = css`
  * five free spaces of the Festival. A table of costs facing rewards would be a column of dashes, so
  * these are simply listed, and choosing between them is what placing the Villager does.
  */
-export const HelpList = ({ title, children }: { title: ReactNode; children: ReactNode }) => (
+export const HelpList = ({ title, mark, children }: { title: ReactNode; mark?: ReactNode; children: ReactNode }) => (
   <section css={sectionCss}>
-    <h3 css={sectionTitleCss}>{title}</h3>
+    <HelpHeading mark={mark}>{title}</HelpHeading>
     <ul css={listCss}>{children}</ul>
   </section>
 )

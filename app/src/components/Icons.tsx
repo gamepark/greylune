@@ -6,22 +6,26 @@ import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
 import { usePlayerId, useRules } from '@gamepark/react-game'
 import {
+  CompanionBadge,
   DiscardedPotion,
   ForceGem,
   ForceGemDown,
   ForceGemUp,
   GoldCoin,
+  IncomeHand,
   Laurel,
   MagicGem,
   MagicGemDown,
   MagicGemUp,
+  ObjectBadge,
   Rider,
   riderImages,
+  SpecialActionHouse,
   StoryBook,
   TiltArrow,
   VillagerFigure
 } from '../images/IconImages'
-import { adventurerImages } from '../images/PawnImages'
+import { adventurerImages, questMarkerImages } from '../images/PawnImages'
 import { seasonImages } from '../images/SeasonImages'
 import { QuestTileBack } from '../images/TileImages'
 import { bonusTokenImages, incomeTokenImages, sealImages, SealBack } from '../images/TokenImages'
@@ -133,6 +137,27 @@ export const IncomeTokenIcon = ({ token, ...props }: { token: IncomeToken } & Ic
 
 /** The back of the Heroic Quest tiles: the crown is what they all have in common. */
 export const QuestIcon = (props: IconProps) => <Icon src={QuestTileBack} {...props} />
+
+/**
+ * The Quest marker a player commits to a Quest, in their own colour. Whose is asked for rather than
+ * assumed, because the one place it is drawn is a legend about one player's own board, which is not
+ * always the reader's.
+ */
+export const QuestMarkerIcon = ({ player, ...props }: { player?: PlayerColor } & IconProps) => {
+  const fallback = useIconPlayer()
+  return <Icon src={questMarkerImages[player ?? fallback]} {...props} />
+}
+
+/**
+ * The 4 marks the personal board prints and the box draws nowhere else: what a Companion is filed
+ * under, what an Object is, the open hand of the income, and the doorway of the special action. They
+ * are cut out of the board itself (see {@link IconImages}), so a legend beside a heading is the very
+ * mark the player has under their eyes.
+ */
+export const CompanionIcon = (props: IconProps) => <Icon src={CompanionBadge} {...props} />
+export const ObjectIcon = (props: IconProps) => <Icon src={ObjectBadge} {...props} />
+export const IncomeIcon = (props: IconProps) => <Icon src={IncomeHand} {...props} />
+export const SpecialActionIcon = (props: IconProps) => <Icon src={SpecialActionHouse} {...props} />
 
 export const SeasonIcon = ({ season, ...props }: { season: Season.Spring | Season.Summer | Season.Autumn } & IconProps) => (
   <Icon src={seasonImages[season]} {...props} />

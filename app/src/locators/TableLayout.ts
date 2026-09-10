@@ -802,7 +802,10 @@ export const bonusTokensGap: Partial<XYCoordinates> = { y: 2.1 }
 export const bonusTokensSpot = (area: XYCoordinates) =>
   besidePlayerBoard(area, sideRowX - sideRowWidth / 2 + bandEndSlot / 2, standingOnCards(2 * bonusTokensGap.y! + 2))
 export const playerCoinsSpot = (area: XYCoordinates) => besidePlayerBoard(area, twoCompanionsRight - 7.52 / 2, standingOnCards(4.31))
-export const villagerReserveSpot = (area: XYCoordinates) => besidePlayerBoard(area, twoCompanionsLeft + 6.67 / 2, standingOnCards(3.04))
+/** The stretch of table the 4 Villagers of the reserve stand on: a row of them, and no more. */
+export const villagerReserveSize = { width: 6.67, height: villagerHeight }
+export const villagerReserveSpot = (area: XYCoordinates) =>
+  besidePlayerBoard(area, twoCompanionsLeft + villagerReserveSize.width / 2, standingOnCards(villagerReserveSize.height))
 
 /** The one point token a player can hold, in the middle of the band, between the 2 rows of Stories. */
 export const playerVpTokensSpot = (area: XYCoordinates) => besidePlayerBoard(area, 0, bandCenterY)

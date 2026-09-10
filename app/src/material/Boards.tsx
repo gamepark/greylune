@@ -15,6 +15,7 @@ import { SpecialActionMenu, SpecialActionOption } from '../villagers/SpecialActi
 import { specialActionMoves, specialActionOptions } from '../villagers/SpecialActionMoves'
 import { selectedVillager } from '../villagers/SelectVillager'
 import { bestCoinsMove, isGainCoinsAround, villagerActionData } from '../villagers/VillagerActions'
+import { PlayerBoardHelp } from './help/PlayerBoardHelp'
 
 /**
  * Boards never move and never change, so they stay out of the game state: they are static items,
@@ -87,6 +88,7 @@ export class PlayerBoardDescription extends BoardDescription<PlayerColor, Materi
   height = playerBoardSize.height
   image = PlayerBoard
   transparency = true
+  help = PlayerBoardHelp
 
   /** One board per player, in seat order. At 2 or 3 players the remaining seats stay empty. */
   getStaticItems({ rules }: MaterialContext<PlayerColor, MaterialType, LocationType>): MaterialItem<PlayerColor, LocationType>[] {

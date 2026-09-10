@@ -1,7 +1,10 @@
+import CompanionBadge from './icons/Companion.png'
 import GoldCoin from './icons/Gold.png'
+import IncomeHand from './icons/Income.png'
 import MagicGem from './icons/Magic.png'
 import MagicGemDown from './icons/MagicDown.png'
 import MagicGemUp from './icons/MagicUp.png'
+import ObjectBadge from './icons/Object.png'
 import Rider from './icons/Move.png'
 import Rider1 from './icons/Move1.png'
 import Rider2 from './icons/Move2.png'
@@ -9,6 +12,7 @@ import Rider3 from './icons/Move3.png'
 import Rider4 from './icons/Move4.png'
 import Rider5 from './icons/Move5.png'
 import DiscardedPotion from './icons/PotionDiscarded.png'
+import SpecialActionHouse from './icons/SpecialAction.png'
 import StoryBook from './icons/Story.png'
 import ForceGem from './icons/Strength.png'
 import ForceGemDown from './icons/StrengthDown.png'
@@ -42,19 +46,30 @@ const riderImages: Partial<Record<number, string>> = { 1: Rider1, 2: Rider2, 3: 
  * The rest are the other half of the same idea: not what an effect gives but what it costs, in the 2
  * cases where the cost is a gesture made to the card itself — laid on its side, or given up. The
  * cards print both of those as a symbol too, and it is the symbol a player has learnt to read.
+ *
+ * The last 4 are marks rather than symbols: the badge that stands for a Companion and the one that
+ * stands for an Object, the open hand holding a coin that says income, and the doorway a Villager
+ * stands in for the special action. The box draws no small picture of any of those, so each is cut
+ * out of the personal board, which is the one place all 4 are printed — and cut out of the artwork
+ * itself rather than redrawn, so a mark in a sentence is the very mark on the board (see
+ * `PlayerBoardHelp`).
  */
 export {
+  CompanionBadge,
   DiscardedPotion,
   ForceGem,
   ForceGemDown,
   ForceGemUp,
   GoldCoin,
+  IncomeHand,
   Laurel,
   MagicGem,
   MagicGemDown,
   MagicGemUp,
+  ObjectBadge,
   Rider,
   riderImages,
+  SpecialActionHouse,
   StoryBook,
   TiltArrow,
   VillagerFigure

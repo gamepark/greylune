@@ -8,7 +8,7 @@ import { RuleId } from '@gamepark/greylune/rules/RuleId'
 import { SpecialAction } from '@gamepark/greylune/rules/SpecialActionRule'
 import { Season } from '@gamepark/greylune/Season'
 import { ItemContext, SoundKit, TokenDescription } from '@gamepark/react-game'
-import { isMoveItemType, Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { isMoveItemType, Location, MaterialItem, MaterialMove, MaterialMoveBuilder } from '@gamepark/rules-api'
 import { isSameGap } from '@gamepark/greylune/material/Village'
 import { ChangeSeasonMenu } from '../season/SeasonMenu'
 import { StayPutMenu } from '../travel/TravelMenu'
@@ -91,6 +91,16 @@ export class VillagerDescription extends TokenDescription<PlayerColor, MaterialT
   transparency = true
   images = villagerImages
   soundKit = SoundKit.Wood
+
+  /**
+   * A figure in the reserve answers for the place it is standing in rather than for itself: what a
+   * Villager is, is the same everywhere, and what these 4 have to say is that they are not in play
+   * yet (see {@link VillagerReserveHelp}). Every other Villager opens its own dialog.
+   */
+  displayHelp(item: MaterialItem<PlayerColor, LocationType, Villager>, context: ItemContext<PlayerColor, MaterialType, LocationType>) {
+    if (item.location.type === LocationType.VillagerReserve) return MaterialMoveBuilder.displayLocationHelp(item.location)
+    return super.displayHelp(item, context)
+  }
 
   /**
    * While a gap is open to a Villager, the Villagers already standing in it let the pointer through:

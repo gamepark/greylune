@@ -15,6 +15,7 @@ import { playerPanelLocator } from './PlayerPanelLocator'
 import { areaOf, fanBySeat } from './Seats'
 import { VillageGapLocator } from './VillageGapLocator'
 import { VillageGridLocator } from './VillageGridLocator'
+import { VillagerReserveLocator } from './VillagerReserveLocator'
 import { hideBandOfOtherPlayers, showsBandOf } from './DisplayedPlayer'
 import { companionsDependencies, companionsMaxSpread, encounterRowArea, encounterRowDependencies, encounterRowSpread } from './CrowdedRows'
 import {
@@ -60,7 +61,6 @@ import {
   toldStoriesSpot,
   untoldStoriesSpot,
   villageDeckSpot,
-  villagerReserveSpot,
   vpTokenStackSpots
 } from './TableLayout'
 
@@ -287,11 +287,8 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     getCenter: (location: Location, context: MaterialContext) => bonusTokensSpot(areaOf(context, location.player))
   }),
 
-  [LocationType.VillagerReserve]: new CenteredListLocator({
-    gap: { x: 1.6 },
-    hide: hideBandOfOtherPlayers,
-    getCenter: (location: Location, context: MaterialContext) => villagerReserveSpot(areaOf(context, location.player))
-  }),
+  /** The one place of the table with an explanation of its own: see {@link VillagerReserveLocator}. */
+  [LocationType.VillagerReserve]: new VillagerReserveLocator(),
 
   /** Coins carry no rank: they are a quantity, and they are shown as a heap rather than a row. */
   [LocationType.PlayerCoins]: new PileLocator({
