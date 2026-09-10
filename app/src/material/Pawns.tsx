@@ -7,7 +7,7 @@ import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { RuleId } from '@gamepark/greylune/rules/RuleId'
 import { SpecialAction } from '@gamepark/greylune/rules/SpecialActionRule'
 import { Season } from '@gamepark/greylune/Season'
-import { ItemContext, TokenDescription } from '@gamepark/react-game'
+import { ItemContext, SoundKit, TokenDescription } from '@gamepark/react-game'
 import { isMoveItemType, Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { isSameGap } from '@gamepark/greylune/material/Village'
 import { ChangeSeasonMenu } from '../season/SeasonMenu'
@@ -25,6 +25,9 @@ import { adventurerImages, MagicMarker, questMarkerImages, scoreMarkerImages, se
 /**
  * Meeples and markers. Their artwork already carries its drop shadow, so they are declared with the
  * full size of the image, halo included.
+ *
+ * All of them are wooden pieces, meeples and markers alike, so each one names that sound rather than
+ * keeping the cardboard {@link TokenDescription} gives every token by default.
  */
 
 export class AdventurerDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, PlayerColor> {
@@ -33,6 +36,7 @@ export class AdventurerDescription extends TokenDescription<PlayerColor, Materia
   borderRadius = 0.5
   transparency = true
   images = adventurerImages
+  soundKit = SoundKit.Wood
 
   /** The pawn is aimed at to be walked, so the offer it wears has to be read without taking it. */
   isMenuAlwaysVisible(): boolean {
@@ -86,6 +90,7 @@ export class VillagerDescription extends TokenDescription<PlayerColor, MaterialT
   borderRadius = 0.5
   transparency = true
   images = villagerImages
+  soundKit = SoundKit.Wood
 
   /**
    * While a gap is open to a Villager, the Villagers already standing in it let the pointer through:
@@ -148,6 +153,7 @@ export class SeasonMarkerDescription extends TokenDescription<PlayerColor, Mater
   borderRadius = 1
   transparency = true
   images = seasonMarkerImages
+  soundKit = SoundKit.Wood
 
   /** The pawn is aimed at to be walked, so the offer it wears has to be read without taking it. */
   isMenuAlwaysVisible(): boolean {
@@ -178,6 +184,7 @@ export class ScoreMarkerDescription extends TokenDescription<PlayerColor, Materi
   height = 1.95
   transparency = true
   images = scoreMarkerImages
+  soundKit = SoundKit.Wood
 }
 
 export class QuestMarkerDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, PlayerColor> {
@@ -185,6 +192,7 @@ export class QuestMarkerDescription extends TokenDescription<PlayerColor, Materi
   height = 1.65
   transparency = true
   images = questMarkerImages
+  soundKit = SoundKit.Wood
 }
 
 export class StrengthMarkerDescription extends TokenDescription<PlayerColor, MaterialType, LocationType> {
@@ -192,6 +200,7 @@ export class StrengthMarkerDescription extends TokenDescription<PlayerColor, Mat
   height = 1.98
   transparency = true
   image = StrengthMarker
+  soundKit = SoundKit.Wood
 }
 
 export class MagicMarkerDescription extends TokenDescription<PlayerColor, MaterialType, LocationType> {
@@ -199,6 +208,7 @@ export class MagicMarkerDescription extends TokenDescription<PlayerColor, Materi
   height = 1.96
   transparency = true
   image = MagicMarker
+  soundKit = SoundKit.Wood
 
   /** The marker is pressed, not picked up: what it offers has to be read where it stands. */
   isMenuAlwaysVisible(): boolean {
