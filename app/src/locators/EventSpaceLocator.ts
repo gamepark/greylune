@@ -4,7 +4,7 @@ import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { MaterialContext } from '@gamepark/react-game'
 import { Location, XYCoordinates } from '@gamepark/rules-api'
 import { CenteredListLocator } from './CenteredListLocator'
-import { eventSpaceGap, festivalSpaces } from './TableLayout'
+import { eventSpaceGap, eventTileCrowdSpace, festivalSpaces } from './TableLayout'
 
 type GreyluneContext = MaterialContext<PlayerColor, MaterialType, LocationType>
 
@@ -26,7 +26,7 @@ export class EventSpaceLocator extends CenteredListLocator<PlayerColor, Material
   gap = eventSpaceGap
 
   getPositionOnParent(location: Location<PlayerColor, LocationType>): XYCoordinates {
-    return (location.x !== undefined && festivalSpaces[location.x]) || { x: 50, y: 53 }
+    return (location.x !== undefined && festivalSpaces[location.x]) || eventTileCrowdSpace
   }
 
   /** The rank in the crowd standing on one space, and never the space itself. */

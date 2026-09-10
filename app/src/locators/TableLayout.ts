@@ -228,6 +228,13 @@ export const festivalSpaceSpot = (option: number): XYCoordinates => {
 const festivalSpaceNudge = 1
 
 /**
+ * Where the Villagers of a tile that is not the Festival stand: the middle of the scroll, a little
+ * above centre, since such a tile draws its options as a line of icons at its foot and the crowd
+ * must leave them readable.
+ */
+export const eventTileCrowdSpace: XYCoordinates = { x: 50, y: 49 }
+
+/**
  * The step from one Villager to the next when several stand on the same Event space. Every tile but
  * the Festival draws its options on one and the same space, so the Villagers of all the players who
  * took part that year end up there together, and a step narrower than a Villager is wide lets them
