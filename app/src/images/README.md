@@ -12,6 +12,47 @@ Source : `kDrive/Licences/Sorry We Are French/GREYLUNE`.
   **12 % de la plus grande dimension** de chaque côté : en tenir compte pour les tailles
   déclarées dans `MaterialDescription`.
 
+### Recette de l'ombre portée
+
+Le découpage est dilaté de **22 px**, flouté au gaussien **σ = 24 px**, teinté `#190F05`, et la pièce
+est composée par-dessus. Seule l'opacité varie :
+
+La dilatation et le σ sont **proportionnels à la pièce** — le halo vaut environ 9 à 12 % de sa plus
+grande dimension. Valeurs mesurées : 22 / 24 px pour une tuile Événement (844 px), 10 / 9,7 pour une
+Quête (348), 13 / 14,6 pour le jeton 1er joueur (480), 5 à 6 / 5,7 à 6,6 pour les petits jetons.
+
+| Opacité | Où |
+|---|---|
+| **0,28** | `tiles/*`, `tokens/*` |
+| **0,50** | tout le reste des PNG |
+
+Les tuiles Événement et Quête (dos compris) et les 46 jetons ont été refaits depuis les punchboards
+à l'ombre allégée. L'opacité d'origine n'était pas uniforme — 0,46 sur les jetons Revenu, 0,48 sur
+les Quêtes, 0,50 sur les Événements, 0,52 sur le jeton 1er joueur, 0,57 à 0,59 sur les Sceaux,
+pièces, PV et Bonus — elle a été ramenée à 0,28 pour tout le monde. Restent à 0,50 les `pawns`, les
+`boards` découpés, les `seasons` et les `icons`.
+
+La géométrie ne change pas d'une opacité à l'autre : même canevas, même position du découpage, donc
+les tailles déclarées dans `MaterialDescription` restent valables.
+
+### Refaire une pièce depuis les punchboards
+
+Le masque, sa position dans le canevas et les paramètres d'ombre se lisent dans le PNG existant ; le
+punchboard ne fournit que la couleur. Trois pièges, tous rencontrés :
+
+1. **Corréler sur la luminance ne suffit pas.** Deux exemplaires qui ne diffèrent que par la couleur
+   du joueur sont indiscernables : les jetons PV orange ont d'abord été découpés dans le rouge, avec
+   une corrélation de 0,97. Départager les candidats sur l'écart RGB réel au fichier courant.
+2. **Le masque érodé cache ce qu'on cherche.** Une corrélation masquée érode le bord, donc elle ne
+   voit pas le magenta qui déborde précisément là. Compter le magenta **dans** le masque, à part.
+3. **Le repérage impression/découpe varie d'un exemplaire à l'autre.** Prendre celui qui est à la
+   fois bien aligné et propre, pas le mieux corrélé.
+
+Vérification en deux nombres par fichier : régénérer à l'opacité **d'origine** et vérifier qu'on
+retombe sur le fichier courant (valide alignement, masque et modèle d'ombre d'un coup), puis compter
+le magenta sur l'anneau extérieur de 2 px, nouveau contre courant. Sur les 56 pièces : écart alpha
+≤ 13/255, écart RGB ≤ 10/255, et aucun fichier plus sale qu'avant.
+
 ## Arborescence
 
 | Dossier | Contenu |
@@ -61,6 +102,17 @@ en miroir sur les planches de punchboard.
 
 - Les tuiles étaient imbriquées tournées sur les planches de punchboard : elles ont toutes été
   remises dans le sens de lecture (Quêtes pivotées d'un quart de tour, une Événement sur deux à 180°).
+- **Trait de découpe magenta** (`#E61672`) : les planches le tracent dans l'inter-tuile, au ras de la
+  coupe — franchement visible au verso, où il remplit tout l'espace entre les tuiles. Deux pièges :
+  1. Toutes les planches ne sont pas à la même échelle (`GREY 2` porte ses tuiles 1,3 % plus grandes
+     que `GREY 1`, `GREY 3` recto est exportée à 300 dpi). Quand il faut rééchelonner, **découper
+     avant de rééchantillonner** : hors du masque, chaque pixel prend la couleur du plus proche
+     pixel intérieur, puis on réduit. Sinon le filtre mélange le magenta dans le bord de la pièce.
+  2. Le repérage impression/découpe varie d'un exemplaire à l'autre sur une même planche. Le dos
+     d'Événement de `GREY 3 BACK` en bas à gauche est décalé de 9 px vers le bas : il corrèle
+     parfaitement sur l'illustration et déborde quand même dans le magenta. Choisir l'exemplaire en
+     comptant le magenta **à l'intérieur du masque**, pas seulement en corrélant l'illustration.
+     Celui retenu pour `EventTileBack` est sur `GREY 2 BACK`, à 180°.
 - Volontairement absents, sans usage en numérique : le logo-titre, les dos vierges du plateau
   personnel et du plateau Saisons, et le socle du jeton 1er joueur. Ne pas les régénérer.
 - Pas de fond de table dédié : la cover (`app/public/cover-1920.jpg`) fait office de fond.
