@@ -493,7 +493,9 @@ const sideRowX = sideRowStart + playerCardsGap
 
 /** How far above the middle of a board its ink reaches, which is the edge a player pushes a card against. */
 const printedHalf = playerBoardSize.height / 2 - playerBoardShadow
-const playerRowAir = 1
+
+/** The least air a row is ever left with, when the column asks for more height than the table has. */
+const minPlayerRowAir = 1
 
 /** All a Story ever shows once it is pushed home: the top quarter of the card, and nothing more. */
 const storyReveal = encounterCardSize.height / 4
@@ -531,14 +533,28 @@ const rowTop = (hasBand: boolean) => (hasBand ? -playerAreaBox.top : printedHalf
  * The areas are stacked in one column to the right of everything the players share. Past 2 players the
  * band above a board is only ever drawn for one of them at a time, so the column reserves the room for
  * a single band: the rows above the one being read close up over the band they are not using, and the
- * rows below are pushed down by it. The height of the column never changes, whoever is read, so nothing
- * else on the table moves.
+ * rows below are pushed down by it. The height the rows claim, air apart, is what this returns, and it
+ * never changes whoever is read, so nothing else on the table moves.
  */
-export const playerColumnHeight = (rows: number, allBands: boolean) => {
+const playerRowsHeight = (rows: number, allBands: boolean) => {
   const bands = allBands ? rows : 1
   const tops = bands * rowTop(true) + (rows - bands) * rowTop(false)
-  return tops + rows * printedHalf + (rows - 1) * playerRowAir
+  return tops + rows * printedHalf
 }
+
+/**
+ * The air between two rows: whatever the common zone has left once the rows have taken theirs, shared
+ * out over the gaps — one between each pair of rows, and one at either end, so that the column is
+ * still centred and every player reads the same amount of open sky over their own board, edge of the
+ * table included. Two players are given a whole table's height and are not left huddled in the middle
+ * of it; at 4 the rows ask for more than the zone has and are left the bare minimum instead, the
+ * column overflowing the zone evenly above and below as it always did.
+ */
+const playerRowAir = (rows: number, allBands: boolean) =>
+  Math.max(minPlayerRowAir, (commonZoneBottom - commonZoneTop - playerRowsHeight(rows, allBands)) / (rows + 1))
+
+export const playerColumnHeight = (rows: number, allBands: boolean) =>
+  playerRowsHeight(rows, allBands) + (rows - 1) * playerRowAir(rows, allBands)
 
 const playerAreaX = encounterRowSpot(Area.Hammer).x + encounterRowReserve + encounterCardSize.width / 2 + tableMargin - playerAreaBox.left
 
@@ -556,7 +572,7 @@ export const playerAreaSpot = (row: number, rows: number, bandRow?: number): XYC
   const bandAbove = !allBands && row >= bandRow ? rowTop(true) - rowTop(false) : 0
   return {
     x: playerAreaX,
-    y: top + row * (printedHalf + playerRowAir) + (row + 1) * rowTop(allBands) + bandAbove
+    y: top + row * (printedHalf + playerRowAir(rows, allBands)) + (row + 1) * rowTop(allBands) + bandAbove
   }
 }
 
@@ -749,11 +765,11 @@ export const storyButtonSpot: XYCoordinates = {
 export const endStoryButtonSpot: XYCoordinates = { x: 0, y: -encounterCardSize.height / 2 }
 
 /**
- * The air the band has above it before the printed board of the row above starts, which is exactly what
- * that row leaves (see {@link playerColumnHeight}). The top row has no neighbour and the edge of the
- * table instead, which is the same distance away.
+ * The air the band has above it before the printed board of the row above starts: at the very least
+ * what that row leaves it (see {@link playerRowAir}), and the top row has the edge of the table rather
+ * than a neighbour, which is no nearer.
  */
-const storiesApproach = Math.min(playerRowAir, tableMargin)
+const storiesApproach = Math.min(minPlayerRowAir, tableMargin)
 
 /**
  * The highest a Story may be lined up before it is pushed in: its top edge meets the board of the row
