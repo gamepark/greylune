@@ -3,7 +3,18 @@ import { css } from '@emotion/react'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
-import { borderRadiusCss, LocationDescription, sizeCss, transformCss, useLegalMoves, useMaterialContext, usePlay } from '@gamepark/react-game'
+import {
+  borderRadiusCss,
+  ItemContext,
+  LocationDescription,
+  shineEffect,
+  sizeCss,
+  transformCss,
+  useDraggedItem,
+  useLegalMoves,
+  useMaterialContext,
+  usePlay
+} from '@gamepark/react-game'
 import { isMoveItemType, Location, MaterialMove, MoveItem } from '@gamepark/rules-api'
 import { HTMLAttributes, MouseEvent, PointerEvent, Ref, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -31,6 +42,11 @@ type VillageGapAreaProps = {
  * the first tap does the arming and the second one places; a tap anywhere else disarms, which is
  * exactly what makes the first tap safe. The two are told apart by the pointer that sends the click,
  * not by the size of the screen: the same page answers a mouse and a finger the way each expects.
+ *
+ * A player carrying a Villager is answered the third way: every gap the pawn in their hand may be let
+ * go in takes the travelling shine the framework gives its own drop areas (see `SimpleDropArea`), so
+ * a gap of the Village and a space of the Event tile say "here" in the same words. The shine goes out
+ * the moment the pawn comes over the gap, the lit parchment saying it better from there.
  */
 export const VillageGapArea = ({ location, description, ref, ...props }: VillageGapAreaProps) => {
   const { t } = useTranslation()
@@ -41,6 +57,16 @@ export const VillageGapArea = ({ location, description, ref, ...props }: Village
   const [armed, setArmed] = useState(false)
   const area = useRef<HTMLDivElement | null>(null)
   const { isOver, setNodeRef } = useDroppable({ id: JSON.stringify(location), disabled: !moves.length, data: location })
+
+  /** The item the player is carrying, if any, as the descriptions want to be asked about it. */
+  const draggedItem = useDraggedItem<MaterialType>()
+  const draggedItemContext: ItemContext<PlayerColor, MaterialType, LocationType> | undefined = draggedItem && { ...context, ...draggedItem }
+
+  /**
+   * Whether letting go of that very item here would place it: the moves are already the ones that end
+   * in this gap, so all that is left to ask is whether the pawn being carried is the one they move.
+   */
+  const canDrop = !!draggedItemContext && moves.some((move) => context.material[draggedItemContext.type]?.canDrag(move, draggedItemContext))
 
   /** Anything the player touches outside the strip puts it back to rest, another gap included. */
   useEffect(() => {
@@ -80,7 +106,8 @@ export const VillageGapArea = ({ location, description, ref, ...props }: Village
         transformCss(...description.getLocationTransform(location, { ...context, canDrop: active })),
         sizeCss(width, height),
         borderRadiusCss(description.getBorderRadius(location.id)),
-        active && armedCss
+        active && armedCss,
+        canDrop && !isOver && shineEffect
       ]}
       onPointerEnter={(event: PointerEvent<HTMLDivElement>) => event.pointerType === 'mouse' && setArmed(true)}
       onPointerLeave={(event: PointerEvent<HTMLDivElement>) => event.pointerType === 'mouse' && setArmed(false)}
