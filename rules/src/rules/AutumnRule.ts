@@ -21,17 +21,18 @@ export class AutumnRule extends GreyluneRule {
     return [...this.comeHome(), ...this.straightenCards(), ...this.endOfAction()]
   }
 
-  /** The Adventurer walks back to Greylune and every Villager comes back to the active zone. */
+  /**
+   * The Adventurer walks back to Greylune, unless the year already ended with them at home, and
+   * every Villager who is anywhere but the reserve comes back to the active zone in one move — the
+   * reserve is the one place a figure is not brought home from, since it holds the ones the player
+   * does not own yet.
+   */
   private comeHome(): GreyluneMove[] {
-    const away = this.villagers
-      .player(this.player)
-      .location(
-        (location) =>
-          location.type === LocationType.Camp || location.type === LocationType.EventSpace || location.type === LocationType.SpecialAction
-      )
+    const travelling = this.adventurer.location((location) => location.id !== Area.Village)
+    const away = this.myVillagers.location((location) => location.type !== LocationType.VillagerReserve)
     return [
-      ...this.adventurer.moveItems({ type: LocationType.Area, id: Area.Village }),
-      ...away.moveItems({ type: LocationType.ActiveVillagers, player: this.player })
+      ...travelling.moveItems({ type: LocationType.Area, id: Area.Village }),
+      ...(away.exists ? [away.moveItemsAtOnce({ type: LocationType.ActiveVillagers, player: this.player })] : [])
     ]
   }
 

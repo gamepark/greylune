@@ -8,7 +8,7 @@ import { MaterialType } from '../material/MaterialType'
 import { PLAYERS_MINUS_ONE, VillageCardId, villageCardData } from '../material/VillageCard'
 import { Season } from '../Season'
 import { encounterRowSize } from '../Year'
-import { GreyluneMove } from './GreyluneRule'
+import { GreyluneMaterial, GreyluneMove } from './GreyluneRule'
 import { RuleId } from './RuleId'
 
 /**
@@ -34,16 +34,23 @@ export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, Loc
 
   // ------------------------------------------------------------------ what the past year leaves
 
+  /**
+   * Everything the past year leaves goes away one pile at a time: the Seals of the cards nobody took
+   * first, so the Village grid is bare when it goes, then the Income tokens of the Encounters nobody
+   * took, then the Encounters themselves. Each pile is one move — a table cleared in one gesture per
+   * pile rather than one per token — and an empty pile is no move at all, which is what the first
+   * year finds.
+   */
   private putAway(): GreyluneMove[] {
     return [
-      ...this.material(MaterialType.Seal).location(LocationType.CardSeal).moveItems({ type: LocationType.SealDiscard }),
-      ...this.material(MaterialType.IncomeToken).location(LocationType.CardIncome).deleteItems(),
+      ...atOnce(this.material(MaterialType.Seal).location(LocationType.CardSeal), (seals) => seals.moveItemsAtOnce({ type: LocationType.SealDiscard })),
       // Both decks are the calendar of the game and are never shuffled back — they hold exactly the
       // 5 years and nothing more. So a card nobody took is out of the game for good and goes back in
       // the box, rather than onto a discard nobody would ever draw from. Same for the Event of the
       // year: the pile only holds the years to come.
-      ...this.grid.deleteItems(),
-      ...this.material(MaterialType.EncounterCard).location(LocationType.EncounterRow).deleteItems()
+      ...atOnce(this.grid, (grid) => grid.deleteItemsAtOnce()),
+      ...atOnce(this.material(MaterialType.IncomeToken).location(LocationType.CardIncome), (tokens) => tokens.deleteItemsAtOnce()),
+      ...atOnce(this.material(MaterialType.EncounterCard).location(LocationType.EncounterRow), (row) => row.deleteItemsAtOnce())
     ]
   }
 
@@ -99,7 +106,12 @@ export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, Loc
    */
   afterItemMove(move: ItemMove<PlayerColor, MaterialType, LocationType>): GreyluneMove[] {
     if (isDeleteItem(move) && move.itemType === MaterialType.EventTile) return [this.event.rotateItem(true)]
-    if (isMoveItemsAtOnce(move) && move.itemType === MaterialType.Seal) return [this.sealStack.shuffle()]
+    // Two at-once moves carry Seals in this rule, and only one of them rebuilds the stack: the Seals
+    // of the year that is put away go to the discard and stay there, the discard turned over becomes
+    // the new stack and is shuffled.
+    if (isMoveItemsAtOnce(move) && move.itemType === MaterialType.Seal && move.location.type === LocationType.SealStack) {
+      return [this.sealStack.shuffle()]
+    }
     if (isShuffle(move) && move.itemType === MaterialType.Seal) return this.dealSeals()
     if (!isMoveItem(move)) return []
     if (move.itemType === MaterialType.VillageCard && move.location.type === LocationType.VillageGrid) {
@@ -194,4 +206,12 @@ export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, Loc
     const players = this.game.players
     return players[(players.indexOf(holder as PlayerColor) + 1) % players.length]
   }
+}
+
+/**
+ * One move for a whole pile, and no move at all when the pile is empty: an at-once move of nothing
+ * is still a move, and the first year of the game finds every pile of the past year empty.
+ */
+function atOnce(material: GreyluneMaterial, move: (material: GreyluneMaterial) => GreyluneMove): GreyluneMove[] {
+  return material.exists ? [move(material)] : []
 }
