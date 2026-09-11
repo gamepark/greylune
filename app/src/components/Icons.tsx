@@ -23,12 +23,13 @@ import {
   SpecialActionHouse,
   StoryBook,
   TiltArrow,
-  VillagerFigure
+  VillagerFigure,
+  WithdrawnVillager
 } from '../images/IconImages'
-import { adventurerImages, questMarkerImages } from '../images/PawnImages'
+import { adventurerImages, questMarkerImages, seasonMarkerImages } from '../images/PawnImages'
 import { seasonImages } from '../images/SeasonImages'
-import { QuestTileBack } from '../images/TileImages'
-import { bonusTokenImages, incomeTokenImages, sealImages, SealBack } from '../images/TokenImages'
+import { EventTileBack, QuestTileBack } from '../images/TileImages'
+import { bonusTokenImages, FirstPlayerToken, incomeTokenImages, sealImages, SealBack } from '../images/TokenImages'
 
 /**
  * The words a sentence would otherwise have to spell out, drawn from the material instead.
@@ -139,6 +140,15 @@ export const IncomeTokenIcon = ({ token, ...props }: { token: IncomeToken } & Ic
 export const QuestIcon = (props: IconProps) => <Icon src={QuestTileBack} {...props} />
 
 /**
+ * The banner of Greylune, as the main board flies it over the Village. The first player token is that
+ * same banner standing on a base, so the token is what is drawn: it is the one picture of it the box has.
+ */
+export const GreyluneIcon = (props: IconProps) => <Icon src={FirstPlayerToken} {...props} />
+
+/** The back of the Event tiles, which is what the pile in the middle of the main board shows of the years to come. */
+export const EventIcon = (props: IconProps) => <Icon src={EventTileBack} {...props} />
+
+/**
  * The Quest marker a player commits to a Quest, in their own colour. Whose is asked for rather than
  * assumed, because the one place it is drawn is a legend about one player's own board, which is not
  * always the reader's.
@@ -159,9 +169,16 @@ export const ObjectIcon = (props: IconProps) => <Icon src={ObjectBadge} {...prop
 export const IncomeIcon = (props: IconProps) => <Icon src={IncomeHand} {...props} />
 export const SpecialActionIcon = (props: IconProps) => <Icon src={SpecialActionHouse} {...props} />
 
-export const SeasonIcon = ({ season, ...props }: { season: Season.Spring | Season.Summer | Season.Autumn } & IconProps) => (
-  <Icon src={seasonImages[season]} {...props} />
-)
+export const SeasonIcon = ({ season, ...props }: { season: Season } & IconProps) => <Icon src={seasonImages[season]} {...props} />
+
+/** A Villager taken back out of the Village, as the Summer column of the Season board prints it: the mark of the camp. */
+export const WithdrawIcon = (props: IconProps) => <Icon src={WithdrawnVillager} {...props} />
+
+/** The Season marker of a player, in their colour: which one is asked for, like the Quest marker. */
+export const SeasonMarkerIcon = ({ player, ...props }: { player?: PlayerColor } & IconProps) => {
+  const fallback = useIconPlayer()
+  return <Icon src={seasonMarkerImages[player ?? fallback]} {...props} />
+}
 
 /** The Bonus token itself: what it pays is printed on it, and it is what the player is choosing. */
 export const BonusTokenIcon = ({ token, ...props }: { token: BonusToken } & IconProps) => <Icon src={bonusTokenImages[token]} {...props} />

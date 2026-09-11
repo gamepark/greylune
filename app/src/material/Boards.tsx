@@ -15,7 +15,9 @@ import { SpecialActionMenu, SpecialActionOption } from '../villagers/SpecialActi
 import { specialActionMoves, specialActionOptions } from '../villagers/SpecialActionMoves'
 import { selectedVillager } from '../villagers/SelectVillager'
 import { bestCoinsMove, isGainCoinsAround, villagerActionData } from '../villagers/VillagerActions'
+import { MainBoardHelp } from './help/MainBoardHelp'
 import { PlayerBoardHelp } from './help/PlayerBoardHelp'
+import { SeasonBoardHelp } from './help/SeasonBoardHelp'
 
 /**
  * Boards never move and never change, so they stay out of the game state: they are static items,
@@ -28,6 +30,7 @@ export class MainBoardDescription extends BoardDescription<PlayerColor, Material
   height = mainBoardSize.height
   image = MainBoard
   staticItem = { location: { type: LocationType.MainBoard } }
+  help = MainBoardHelp
 
   /** The map asks to be pressed, not picked up: what it offers is there as soon as it is due. */
   isMenuAlwaysVisible(): boolean {
@@ -56,6 +59,7 @@ export class SeasonBoardDescription extends BoardDescription<PlayerColor, Materi
   image = SeasonBoard
   transparency = true
   staticItem = { location: { type: LocationType.SeasonBoard } }
+  help = SeasonBoardHelp
 
   /** The board asks to be pressed, not picked up: the offer it carries is there as soon as it is due. */
   isMenuAlwaysVisible(): boolean {

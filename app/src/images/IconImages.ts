@@ -20,6 +20,7 @@ import ForceGemUp from './icons/StrengthUp.png'
 import TiltArrow from './icons/Tilt.png'
 import Laurel from './icons/VictoryPoint.png'
 import VillagerFigure from './icons/Villager.png'
+import WithdrawnVillager from './icons/Withdraw.png'
 
 /**
  * The rider for each distance. The box never draws a bare rider with a figure beside it: the number
@@ -53,6 +54,10 @@ const riderImages: Partial<Record<number, string>> = { 1: Rider1, 2: Rider2, 3: 
  * out of the personal board, which is the one place all 4 are printed — and cut out of the artwork
  * itself rather than redrawn, so a mark in a sentence is the very mark on the board (see
  * `PlayerBoardHelp`).
+ *
+ * The Season board adds one more, for the same reason: the Villager under a hooked arrow that its
+ * Summer column prints for a Villager taken back out of the Village. It is what the camp is for, and
+ * the camp itself is a painted scene with no mark of its own (see `SeasonBoardHelp`).
  */
 export {
   CompanionBadge,
@@ -72,5 +77,6 @@ export {
   SpecialActionHouse,
   StoryBook,
   TiltArrow,
-  VillagerFigure
+  VillagerFigure,
+  WithdrawnVillager
 }

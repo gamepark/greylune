@@ -114,15 +114,15 @@
     "type": {
       "1": {
         "name": "Bâtiment",
-        "note": "Un Bâtiment ne s'achète pas : il reste au Village toute l'année et chacun peut l'exploiter, autant de fois qu'il lui reste des villageois voisins."
+        "note": "Un Bâtiment ne peut être ni acheté ni recruté : il reste au Village après avoir été activé, et pourra être exploité par d'autres Villageois voisins, même par un joueur qui l'a déjà activé. Il peut être activé plusieurs fois au cours d'une même année."
       },
       "2": {
         "name": "Objet",
-        "note": "Un Objet s'achète et se range à droite de votre plateau. Vous ne pouvez en posséder que 3, sauf carte qui relève cette limite."
+        "note": "Un Objet s'achète et se place à droite de votre plateau personnel. Sauf exceptions, vous êtes limité à 3 Objets : si vous dépassez cette limite en achetant un Objet, défaussez un Objet de votre choix, incliné ou non (y compris celui que vous venez d'acquérir, après avoir marqué ses PV immédiats éventuels)."
       },
       "3": {
         "name": "Compagnon",
-        "note": "Un Compagnon se recrute pour 7 <coin/> et vous fait gagner 1 <villager/>, disponible immédiatement. Vous ne pouvez en recruter que 3."
+        "note": "Un Compagnon coûte 7 <coin/> à recruter et se place à gauche de votre plateau personnel. Il vous fait gagner 1 <villager/>, directement disponible, mais réduit d'une pièce votre revenu en Automne. Vous ne pouvez jamais recruter plus de 3 Compagnons au cours de la partie."
       }
     },
     "tavern": {
@@ -130,23 +130,23 @@
     },
     "tell-story": {
       "name": "Raconter une histoire",
-      "note": "Racontez une ou plusieurs de vos Rencontres non racontées, sans dépasser une valeur de récit totale de 3. Vous gagnez la 1re récompense pour un total de 1, les 2 premières pour 2, et les 3 pour 3."
+      "note": "Racontez une histoire à l'aide d'une ou plusieurs cartes Rencontre résolues précédemment, sans dépasser une valeur de récit maximum de 3 — exception : 2 histoires de valeur 2 chacune ne comptent que pour une histoire de valeur 3. Les gains sont cumulatifs : pour une valeur de récit cumulée de 1, gagnez uniquement le premier bonus ; pour 2, les deux premiers ; pour 3, tous les bonus."
     },
     "potion": {
       "name": "Potion",
-      "note": "Potion : elle n'a pas de capacité en été. Elle se boit en réaction, puis se défausse — sauf si Selia vous permet de l'incliner au lieu de la défausser."
+      "note": "Potion : elle doit être défaussée après usage et remise dans la boîte — sauf si Selia vous permet de l'incliner au lieu de la défausser."
     },
     "seals": {
       "label": "Sceaux",
       "none": "aucun",
       "spent": "Il ne reste aucun jeton <seal/> sur cette carte : elle ne peut plus être activée cette année.",
-      "note-players": "Cette carte reçoit chaque année autant de jetons <seal/> qu'il y a de joueurs, moins un. Chaque activation en dépense un.",
-      "note-one": "Cette carte reçoit chaque année un seul jeton <seal/>, quel que soit le nombre de joueurs."
+      "note-players": "À sa révélation, cette carte reçoit un nombre de jetons <seal/> égal au nombre de joueurs moins 1. Chaque activation en utilise un, qui est ensuite défaussé.",
+      "note-one": "À sa révélation, cette carte reçoit un seul jeton <seal/>, quel que soit le nombre de joueurs."
     },
     "village-deck": {
       "name": "Deck Village",
       "left": "Cartes restantes",
-      "note": "Les 9 premières cartes sont révélées chaque hiver et disposées en grille de 3x3. Le dos indique la période : les cartes I sortent les 2 premières années, les II les 2 suivantes, les III la dernière."
+      "note": "Chaque Hiver, les 9 premières cartes du deck Village sont révélées et disposées en grille de 3x3. Le dos indique la période : I pour les 2 premières années, II pour les 2 suivantes, III pour la dernière."
     },
     "distance": "Distance",
     "story": "Valeur de récit",
@@ -155,81 +155,159 @@
     "reward": "Récompense",
     "encounter": {
       "name": "Rencontre",
-      "note": "Une Rencontre se résout quand votre <adventurer/> s'arrête dans la zone où elle se trouve. Elle glisse ensuite au-dessus de votre plateau, en attendant d'être racontée dans une Taverne.",
-      "both": "Cette Rencontre a deux moitiés : satisfaites l'une, l'autre, ou les deux. Dans ce dernier cas, vous payez les deux prérequis et gagnez les deux récompenses.",
-      "story-only": "Cette Rencontre ne rapporte rien sur le moment : elle ne vaut que l'histoire que vous en tirerez.",
-      "untellable": "Valeur de récit 0 : cette Rencontre ne peut pas être racontée, à moins que Seren ou une Potion de charisme ne lui donne la valeur 3."
+      "note": "Une carte Rencontre se résout depuis la case où votre <adventurer/> s'est arrêté, en satisfaisant sa condition pour gagner sa récompense. Après l'avoir résolue, glissez-la dans la colonne des histoires non racontées de votre plateau personnel.",
+      "both": "Cette Rencontre possède 2 conditions et 2 récompenses : vous devez satisfaire au moins l'une des 2 pour la résoudre. Si vous ne satisfaites que la condition de gauche, vous ne gagnez que la récompense de gauche ; vous pouvez aussi satisfaire les 2 conditions pour obtenir les 2 récompenses.",
+      "story-only": "Cette Rencontre n'a pas de récompense : elle ne rapporte que lorsque vous la racontez.",
+      "untellable": "Valeur de récit 0 : vous ne pouvez pas raconter cette Rencontre, sauf si vous réussissez à en augmenter la valeur (Potion de charisme, Seren) ou pour valider la Quête Tournoi des Bardes."
     },
     "income-token": {
-      "note": "Jeton Revenu : quand vous résolvez une Rencontre qui en porte un, vous prenez le jeton et vous en résolvez l'effet aussitôt, puis vous le résolvez à nouveau à chaque phase de Revenu, en Automne. Le nombre de jetons Revenu que vous possédez n'est pas limité."
+      "note": "Jeton Revenu : après avoir résolu une Rencontre qui porte un jeton Revenu, placez-le sur votre plateau personnel et résolvez immédiatement son effet. Vous le résoudrez également lors de la phase de Revenu, en Automne. Le nombre de jetons Revenu n'est pas limité."
     },
     "encounter-deck": {
       "name": "Deck Rencontre",
       "left": "Cartes restantes",
-      "note": "Chaque hiver, 5, 6 ou 7 cartes — à 2, 3 ou 4 joueurs — sont révélées et rangées par distance, à droite du plateau principal. Le dos indique la période : les cartes I sortent les 2 premières années, les II les 2 suivantes, les III la dernière."
+      "note": "Chaque Hiver, les 5/6/7 premières cartes Rencontre (à 2/3/4 joueurs) sont révélées et disposées à droite du plateau principal en fonction de leur Distance. Le dos indique la période : I pour les 2 premières années, II pour les 2 suivantes, III pour la dernière."
     },
     "options": "Options",
     "vp": "{count} PV",
     "event": {
       "name": "Événement",
-      "note": "Une fois par année, au printemps ou en été, vous pouvez placer un <villager/> sur la tuile Événement au lieu de votre action habituelle — un <villager/> actif, ou, en été, un <villager/> qui se trouve au Village. Il vous faut pouvoir en payer le coût.",
-      "festival": "Festival : les 5 emplacements libres de la tuile sont ses 5 options. Un <villager/> posé sur l'un d'eux prend les 2 bonus qui l'encadrent, et cet emplacement est pris pour le reste de l'année."
+      "note": "Une fois par année, au Printemps ou en Été, vous pouvez participer à l'Événement en guise d'action : placez l'un de vos <villager/> actifs — ou, en Été, l'un de ceux qui se trouvent au Village — sur la tuile Événement, en étant en mesure de l'activer (en payant le coût éventuel) pour en obtenir les bénéfices.",
+      "festival": "Festival : choisissez une case libre de la tuile et gagnez les 2 bonus adjacents. Votre <villager/> y reste jusqu'à l'Automne."
     },
     "event-pile": {
       "name": "Pile d'Événements",
       "left": "Tuiles à venir",
-      "note": "Une tuile Événement est retirée au hasard à la mise en place et n'est jamais vue : sur les 6, une seule est révélée chaque année, et 5 années sont jouées."
+      "note": "À la mise en place, une tuile Événement est retirée au hasard et les 5 autres sont mélangées secrètement pour former la pile. Chaque Hiver, la première tuile de la pile est révélée : c'est l'Événement actif pour l'année en cours."
     },
     "quest": {
       "name": "Quête Héroïque",
       "first": "Au premier",
       "others": "Aux suivants",
-      "note": "Vous accomplissez une Quête Héroïque quand votre <adventurer/> s'arrête dans sa zone, au lieu de résoudre une Rencontre. Vous engagez alors l'un de vos 3 marqueurs de Quête sur l'un des deux écus de la zone : le premier arrivé prend le plus riche, tous les autres se partagent l'autre.",
-      "score": "Chaque joueur ne peut accomplir une même Quête qu'une seule fois, et ses points ne sont comptés qu'à la fin de la cinquième année."
+      "note": "Une fois votre <adventurer/> arrêté sur la case d'une Quête Héroïque, vous pouvez décider de ne pas résoudre de Rencontre pour résoudre la Quête à la place, si vous ne l'avez pas encore faite et que vous en satisfaites les conditions. Si vous êtes le premier joueur à le faire, placez l'un de vos marqueurs Quête sur l'emplacement rapportant le plus de PV en fin de partie ; sinon, placez-le sur l'emplacement situé à côté : plusieurs marqueurs (de joueurs différents) peuvent se trouver sur cet emplacement.",
+      "score": "Vous ne pouvez résoudre une même Quête qu'une seule fois. Ses PV ne sont ajoutés qu'à la fin de la partie, après la cinquième année."
     },
     "player-board": {
       "name": "Plateau personnel",
       "companions": {
         "name": "Compagnons",
-        "text": "La colonne de gauche tient vos Compagnons, qui y restent jusqu'à la fin de la partie. Inclinez-en un pour utiliser sa réaction ; ses effets permanents, eux, jouent qu'il soit incliné ou non."
+        "text": "Vos Compagnons se placent à gauche de votre plateau personnel. Leur capacité de réaction, en bas de la carte, demande de les incliner ; leur capacité permanente, elle, est active que le Compagnon soit incliné ou non."
       },
       "items": {
         "name": "Objets",
-        "text": "La colonne de droite tient vos Objets. La plupart s'utilisent en été en inclinant la carte, et une Potion se défausse après usage ; l'Automne redresse toutes vos cartes inclinées."
+        "text": "Vos Objets se placent à droite de votre plateau personnel. La plupart possèdent une capacité qui demande de dépenser une action en Été pour être utilisée, en inclinant la carte ; les Potions doivent être défaussées après usage. À l'Automne, redressez toutes vos cartes."
       },
       "stories": {
-        "name": "Récits",
-        "text": "Les Rencontres que vous résolvez se glissent sous le haut de votre plateau : à gauche vos histoires non racontées, à droite celles que vous avez déjà racontées et que vous ne pourrez plus raconter."
+        "name": "Histoires",
+        "text": "Après l'avoir résolue, glissez chaque carte Rencontre dans la colonne des histoires non racontées de votre plateau personnel. Une fois une histoire racontée, déplacez la ou les cartes vers la droite, dans la zone des histoires racontées : vous ne pourrez plus les raconter de nouveau pour le restant de la partie."
       },
       "income": {
         "name": "Revenu",
-        "text": "À l'Automne, vous gagnez 3 <coin/>, moins 1 <coin/> par Compagnon recruté, puis vous résolvez à nouveau chacun des jetons Revenu rangés dans la colonne de gauche."
+        "text": "À l'Automne, gagnez votre revenu : 3 <coin/>, moins 1 <coin/> par Compagnon, ainsi que les gains éventuels des jetons Revenu placés sur votre plateau personnel."
       },
       "skills": {
         "name": "Force et Magie",
-        "text": "La piste rouge est votre Force, la bleue votre Magie ; toutes deux vont de 0 à 5. Les cartes et les Quêtes demandent tantôt d'en posséder un certain niveau, tantôt d'en dépenser — auquel cas le marqueur redescend d'autant.",
-        "score": "En fin de partie, vous marquez 2 PV si vous avez au moins 3 Force et 3 Magie, et 5 PV si vous avez 5 Force et 5 Magie."
+        "text": "La piste rouge est celle de votre Force, la bleue celle de votre Magie : vos deux marqueurs commencent la partie sur leur emplacement le plus bas. Les cartes et les Quêtes demandent tantôt d'avoir au moins un certain niveau de Force ou de Magie, tantôt d'en dépenser.",
+        "score": "En fin de partie, vous marquez 2 PV si vous avez au moins 3 Force et 3 Magie, ou 5 PV si vous avez 5 Force et 5 Magie."
       },
       "special-action": {
         "name": "Action spéciale",
-        "text": "En été, placez l'un de vos <villager/> actifs sur la porte de votre plateau pour l'une de ces trois options. La case n'accueille qu'un seul Villageois, qui y reste jusqu'à l'Automne : l'action ne sert donc qu'une fois par année.",
+        "text": "Cette case spéciale, utilisable seulement en Été, vous permet de placer 1 de vos <villager/> actifs pour l'une de ces options, au choix. Il y reste jusqu'à l'Automne.",
         "0": "Raconter une histoire : 2 <coin/> + 1 <force/> + 2 <vp/>",
         "1": "Déplacer votre <adventurer/> d'une case",
         "2": "Gagner 1 <magic/>"
       },
       "quests": {
-        "name": "Marqueurs de Quête",
-        "text": "Vos 3 marqueurs de Quête attendent ici. Chaque fois que vous accomplissez une Quête Héroïque, vous en engagez un sur l'un des écus de sa zone, sur le plateau principal : vous ne pouvez donc pas en accomplir plus de 3."
+        "name": "Marqueurs Quête",
+        "text": "À la mise en place, vos 3 marqueurs Quête Héroïque sont placés sur ces emplacements. Chaque fois que vous résolvez une Quête Héroïque, vous placez l'un d'eux sur l'un des emplacements situés sous sa tuile, sur le plateau principal : vous ne pouvez donc pas en résoudre plus de 3."
       },
       "villagers": {
         "name": "Villageois actifs",
-        "text": "Le cadre en bas à droite tient vos Villageois actifs : ceux que vous pouvez encore placer au Village, dépenser, ou envoyer à l'événement cette année. À l'Automne, tous vos Villageois — du Village, du campement, de l'événement et de l'action spéciale — y reviennent."
+        "text": "Les Villageois que vous contrôlez au début de chaque année sont dits « actifs » et se trouvent dans cette zone de votre plateau personnel, tout comme ceux que vous gagnez en cours d'année. À l'Automne, remettez-y vos Villageois du campement, de l'Événement et de la case spéciale."
+      }
+    },
+    "main-board": {
+      "name": "Plateau principal",
+      "score": {
+        "name": "Piste de score",
+        "text": "Les <vp/> marqués en cours de partie font progresser votre marqueur sur la piste de score, qui repart de 0 après 24. Lorsque vous atteignez 25, 50, 75 puis 100 PV, prenez ou retournez vos jetons 25/50 et 75/100 PV.",
+        "note": "À la fin de la cinquième année, ajoutez aux PV accumulés pendant la partie les PV des Quêtes, des Compagnons et des Objets, et ceux de vos compétences : 2 PV si vous avez au moins 3 Force et 3 Magie, 5 PV si vous avez 5 Force et 5 Magie."
+      },
+      "bonus": {
+        "name": "Jetons Bonus",
+        "text": "Lorsque vous atteignez 8 PV, choisissez l'un de vos 3 jetons Bonus, résolvez son effet et remettez-le dans la boîte. Lorsque vous atteignez 20 PV, choisissez l'un de vos 2 jetons Bonus restants, résolvez son effet et remettez tous vos jetons dans la boîte."
+      },
+      "village": {
+        "name": "Village",
+        "text": "À la mise en place, chaque joueur place son <adventurer/> au Village. Lorsque vous partez à l'aventure, votre Aventurier se déplace d'abord depuis le Village ; au cours d'une même année, il se déplace ensuite depuis la case où il s'est arrêté. À l'Automne, il retourne au Village."
+      },
+      "road": {
+        "name": "Partir à l'aventure",
+        "text": "Lorsque vous voyagez, vous pouvez déplacer votre <adventurer/> jusqu'au nombre de cases indiqué, dans la direction de votre choix, ou rester sur place. Plusieurs Aventuriers peuvent se trouver sur la même case. Le blason en haut à gauche de chaque carte Rencontre indique où la placer : à droite du plateau, à côté de la case qui porte le même blason."
+      },
+      "stops": {
+        "name": "Pièce et PV",
+        "text": "Une fois votre <adventurer/> arrêté sur la case marquée d'une <coin/>, vous pouvez décider de ne pas résoudre de Rencontre pour gagner 1 <coin/>. Sur la case marquée d'un <vp/>, vous pouvez faire de même pour gagner 1 <vp/>."
+      },
+      "quests": {
+        "name": "Quêtes Héroïques",
+        "text": "Les 3 tuiles Quête Héroïque de la partie sont placées face visible sur les 3 emplacements du plateau, près des cases les plus éloignées du Village. Les PV qu'elles rapportent en fin de partie sont imprimés sous chaque emplacement : 7 et 5, 8 et 6, puis 9 et 7 <vp/>, de la case la plus proche à la plus éloignée."
+      },
+      "event": {
+        "name": "Événement",
+        "text": "La pile d'Événements est placée face cachée sur cet emplacement. Chaque Hiver, la tuile Événement de l'année précédente est défaussée et la première tuile de la pile est révélée : c'est l'Événement actif pour l'année en cours."
+      }
+    },
+    "season-board": {
+      "name": "Plateau Saisons",
+      "year": "Année",
+      "period": "Période",
+      "markers": {
+        "name": "Marqueurs Saison",
+        "text": "À votre tour, vous devez choisir l'une des actions autorisées par la saison dans laquelle vous vous trouvez : c'est ce qu'indique votre marqueur Saison. Certains joueurs peuvent se trouver en Été ou en Automne pendant que d'autres sont encore au Printemps. Un joueur en Été ne peut jamais retourner au Printemps au cours d'une même année, et une année n'est terminée que lorsque tous les joueurs ont atteint l'Automne."
+      },
+      "winter": {
+        "name": "Hiver",
+        "text": "L'Hiver est la phase de mise en place de l'année. Ignorez-la pour la première année : elle a déjà été effectuée à la mise en place.",
+        "0": "Placez le marqueur Saison de chaque joueur sur la case Printemps",
+        "1": "Le 1er joueur donne le jeton 1er joueur à son voisin de gauche",
+        "2": "Défaussez les cartes Village, les cartes Rencontre et la tuile Événement de l'année précédente, ainsi que les jetons Sceau ou Revenu qui s'y trouvaient",
+        "3": "Révélez les 9 premières cartes du deck Village en grille de 3x3, et placez-y les jetons <seal/> qu'elles demandent",
+        "4": "Révélez la première tuile de la pile d'Événements : c'est l'Événement actif pour l'année en cours",
+        "5": "Révélez les 5/6/7 premières cartes Rencontre (à 2/3/4 joueurs) et disposez-les à droite du plateau principal en fonction de leur Distance"
+      },
+      "spring": {
+        "name": "Printemps",
+        "0": "Placer un Villageois : prenez l'un de vos <villager/> actifs et placez-le au Village, entre deux cartes voisines ou entre une carte et un emplacement de carte vide",
+        "1": "Participer à l'Événement, une fois par année, avec l'un de vos <villager/> actifs",
+        "2": "Passer en Été et effectuer immédiatement une action d'Été"
+      },
+      "summer": {
+        "name": "Été",
+        "0": "Gagner des pièces : choisissez l'un de vos <villager/> au Village et une carte adjacente à celui-ci, et gagnez 1 <coin/> pour chaque autre Villageois adjacent à cette carte, quel qu'en soit le propriétaire",
+        "1": "Activer une carte : choisissez l'un de vos <villager/> au Village et une carte voisine de celui-ci, et payez son prix plus 1 <coin/> pour chaque autre Villageois voisin de cette carte, quel qu'en soit le propriétaire",
+        "2": "Participer à l'Événement, une fois par année, avec l'un de vos <villager/> actifs ou l'un de ceux qui se trouvent au Village",
+        "3": "Utiliser l'un de vos Objets redressés, en l'inclinant",
+        "4": "Utiliser l'action spéciale de votre plateau personnel",
+        "5": "Passer en Automne et effectuer immédiatement une action d'Automne, uniquement si vous n'avez plus de <villager/> au Village"
+      },
+      "autumn": {
+        "name": "Automne",
+        "text": "Une fois en Automne, vous ne pouvez plus effectuer d'action au cours de cette année, et vous résolvez immédiatement ces étapes, dans cet ordre.",
+        "0": "Renvoyez votre <adventurer/> au Village",
+        "1": "Remettez vos <villager/> du campement, de l'Événement et de l'action spéciale dans la zone des Villageois actifs de votre plateau personnel",
+        "2": "Redressez toutes vos cartes",
+        "3": "Gagnez votre revenu : 3 <coin/>, moins 1 <coin/> par Compagnon, ainsi que les gains éventuels de vos jetons Revenu"
+      },
+      "camp": {
+        "name": "Campement",
+        "text": "Lorsqu'un de vos <villager/> est utilisé et devient inactif, placez-le dans le campement pour signifier que vous ne pouvez plus l'utiliser cette année. C'est aussi là que vont les Villageois que vous dépensez, pris dans votre zone des Villageois actifs. À l'Automne, ils retournent dans cette zone."
       }
     },
     "villager-reserve": {
       "name": "Réserve de Villageois",
       "owned": "À votre disposition",
-      "text": "Vos 7 <villager/> n'entrent pas tous en jeu : vous commencez la partie avec 3 Villageois actifs, et les 4 autres attendent ici. Ils n'en sortent que lorsqu'une carte ou une Rencontre vous en fait gagner un. Une Quête peut aussi vous faire remettre un Villageois dans la réserve, et celui-là ne revient pas."
+      "text": "À la mise en place, 4 de vos 7 <villager/> sont mis de côté et ne sont pas disponibles pour le moment : vous commencez la partie avec 3 Villageois actifs. Chaque fois que vous gagnez un <villager/>, il vient d'ici et rejoint la zone des Villageois actifs de votre plateau personnel. La Quête Piège mortel vous fait remettre l'un de vos Villageois disponibles dans cette réserve."
     }
   },
   "village-card": {
@@ -239,15 +317,15 @@
     },
     "102": {
       "name": "Guilde des éclaireurs",
-      "ability": "Défaussez un jeton <seal/> et déplacez votre <adventurer/> jusqu'à un nombre de cases égal à sa valeur."
+      "ability": "Défaussez un jeton <seal/> et déplacez votre <adventurer/> jusqu'à un nombre de cases égal à la valeur du jeton."
     },
     "103": {
       "name": "Le chêne fendu",
-      "ability": "Racontez une ou plusieurs histoires : 2 PV + 1 <force/> + 1 <villager/>."
+      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 2 PV + 1 <force/> + 1 <villager/>."
     },
     "104": {
       "name": "Le lion d'or",
-      "ability": "Défaussez un jeton <seal/> et racontez une ou plusieurs histoires : 4 <coin/> + 1 PV + autant de <coin/> que la valeur du jeton."
+      "ability": "Défaussez un jeton <seal/> et racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 4 <coin/> + 1 PV + autant de <coin/> que la valeur du jeton."
     },
     "105": {
       "name": "École de magie",
@@ -263,7 +341,7 @@
     },
     "108": {
       "name": "Guilde des éclaireurs",
-      "ability": "Défaussez un jeton <seal/> et déplacez votre <adventurer/> jusqu'à un nombre de cases égal à sa valeur."
+      "ability": "Défaussez un jeton <seal/> et déplacez votre <adventurer/> jusqu'à un nombre de cases égal à la valeur du jeton."
     },
     "109": {
       "name": "Salle des héros",
@@ -275,11 +353,11 @@
     },
     "111": {
       "name": "Le loup gris",
-      "ability": "Défaussez un jeton <seal/> et racontez une ou plusieurs histoires : 4 <coin/> + autant de PV que la valeur du jeton + redressez une de vos cartes."
+      "ability": "Défaussez un jeton <seal/> et racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 4 <coin/> + autant de PV que la valeur du jeton + redressez une de vos cartes."
     },
     "112": {
       "name": "Le sanglier rieur",
-      "ability": "Racontez une ou plusieurs histoires : 3 PV + 2 <coin/> + 1 <force/> ou 1 <magic/>."
+      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 3 PV + 2 <coin/> + 1 <force/> ou 1 <magic/>."
     },
     "113": {
       "name": "Forteresse",
@@ -291,11 +369,11 @@
     },
     "115": {
       "name": "Bibliothèque",
-      "ability": "Défaussez un jeton <seal/>, dépensez autant de <coin/> que sa valeur et gagnez 1 PV par histoire que vous avez racontée."
+      "ability": "Défaussez un jeton <seal/>, dépensez autant de <coin/> que sa valeur et gagnez 1 PV par histoire racontée."
     },
     "116": {
       "name": "Le dragon rouge",
-      "ability": "Racontez une ou plusieurs histoires : 3 PV + 2 PV + 1 PV."
+      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 3 PV + 2 PV + 1 PV."
     },
     "201": {
       "name": "Statue de jade",
@@ -326,12 +404,12 @@
     "206": {
       "name": "Potion de mana",
       "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
-      "reaction": "Quand vous résolvez une Rencontre, vous pouvez défausser cette carte pour augmenter votre Magie de 2. Cette augmentation est temporaire : vous ne déplacez pas votre marqueur de Magie et ne pouvez pas dépenser ces points."
+      "reaction": "Quand vous partez à l'aventure, vous pouvez défausser cette carte pour augmenter votre Magie de 2. Cette augmentation est temporaire et vous ne déplacez pas votre marqueur de Magie : vous ne pouvez donc pas dépenser ces points."
     },
     "207": {
       "name": "Potion de force",
       "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
-      "reaction": "Quand vous résolvez une Rencontre, vous pouvez défausser cette carte pour augmenter votre Force de 2. Cette augmentation est temporaire : vous ne déplacez pas votre marqueur de Force et ne pouvez pas dépenser ces points."
+      "reaction": "Quand vous partez à l'aventure, vous pouvez défausser cette carte pour augmenter votre Force de 2. Cette augmentation est temporaire et vous ne déplacez pas votre marqueur de Force : vous ne pouvez donc pas dépenser ces points."
     },
     "208": {
       "name": "Épée courte",
@@ -367,12 +445,12 @@
     "214": {
       "name": "Potion d'endurance",
       "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
-      "reaction": "Quand vous partez à l'aventure, vous pouvez défausser cette carte pour placer un <villager/> actif au Village. Vous pouvez placer un <villager/> obtenu lors de la résolution de la carte Rencontre."
+      "reaction": "Quand vous partez à l'aventure, vous pouvez défausser cette carte pour placer un <villager/> actif au Village."
     },
     "215": {
       "name": "Potion de vol",
       "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
-      "reaction": "Quand vous résolvez une Rencontre, vous pouvez défausser cette carte pour augmenter votre Force et votre Magie de 1. Cette augmentation est temporaire : vous ne déplacez pas vos marqueurs et ne pouvez pas dépenser ces points."
+      "reaction": "Quand vous partez à l'aventure, vous pouvez défausser cette carte pour augmenter votre Force et votre Magie de 1. Cette augmentation est temporaire et vous ne déplacez pas vos marqueurs de Force et de Magie : vous ne pouvez donc pas dépenser ces points."
     },
     "216": {
       "name": "Chantelame",
@@ -382,7 +460,7 @@
     "217": {
       "name": "Potion d'invisibilité",
       "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
-      "reaction": "Quand vous résolvez une Rencontre, vous pouvez défausser cette carte pour ignorer une de ses conditions."
+      "reaction": "Quand vous partez à l'aventure, vous pouvez défausser cette carte pour ignorer une condition d'une carte Rencontre."
     },
     "218": {
       "name": "Statue de rubis",
@@ -391,13 +469,13 @@
     },
     "219": {
       "name": "Mandoline",
-      "ability": "Inclinez cette carte et dépensez 1 <villager/> pour gagner 1 PV par Rencontre non racontée que vous possédez.",
+      "ability": "Inclinez cette carte et dépensez 1 <villager/> pour marquer 1 PV par histoire non racontée.",
       "score": "5 PV."
     },
     "220": {
       "name": "Sac de voyage",
       "ability": "Inclinez cette carte et dépensez 1 <villager/> pour gagner 1 PV par Objet que vous possédez.",
-      "permanent": "Votre limite d'Objets est augmentée de 1. Cet effet s'applique même si cette carte est inclinée, et même si vous aviez déjà atteint votre limite avant de l'acquérir.",
+      "permanent": "Votre limite d'Objets est augmentée de 1. Cet effet fonctionne même si cette carte est inclinée et si vous avez atteint votre limite d'Objets avant de l'acquérir.",
       "score": "4 PV."
     },
     "221": {
@@ -422,7 +500,7 @@
       "role": "Archer",
       "immediate": "Gagnez 1 <villager/>.",
       "reaction": "Quand vous partez à l'aventure, vous pouvez incliner cette carte pour déplacer votre <adventurer/> jusqu'à 2 cases supplémentaires.",
-      "score": "1 PV par Rencontre que vous avez résolue à une distance de 3 ou plus du Village."
+      "score": "1 PV par carte Rencontre se trouvant à une distance de 3 ou plus du Village (racontée ou non)."
     },
     "303": {
       "name": "Dorian",
@@ -436,15 +514,15 @@
       "name": "Ariok",
       "role": "Magicien",
       "immediate": "Gagnez 1 <villager/> et 1 <magic/>.",
-      "reaction": "Quand vous résolvez une Rencontre, vous pouvez incliner cette carte et dépenser 1 <magic/> pour ignorer une de ses conditions.",
+      "reaction": "Quand vous partez à l'aventure, vous pouvez incliner cette carte et dépenser 1 <magic/> pour ignorer une condition d'une carte Rencontre.",
       "score": "1 PV par niveau de <magic/>."
     },
     "305": {
       "name": "Selia",
       "role": "Alchimiste",
       "immediate": "Gagnez 1 <villager/>.",
-      "reaction": "Quand vous activez un jeton <seal/>, vous pouvez incliner cette carte pour en choisir la valeur, entre 1 et 3.",
-      "permanent": "Quand vous utilisez une Potion, inclinez-la au lieu de la défausser. Rien ne vous empêche d'en utiliser plusieurs dans le même tour.",
+      "reaction": "Quand vous activez un jeton <seal/>, vous pouvez incliner cette carte pour en choisir la valeur (entre 1 et 3).",
+      "permanent": "Quand vous utilisez une Potion, inclinez-la au lieu de la défausser. Rappel : vous pouvez utiliser plusieurs Potions dans le même tour.",
       "score": "2 PV par Potion que vous possédez."
     },
     "306": {
@@ -452,42 +530,42 @@
       "role": "Roublarde",
       "immediate": "Gagnez 1 <villager/>.",
       "reaction": "Quand vous retirez un <villager/> du Village, vous pouvez incliner cette carte pour gagner 2 <coin/> supplémentaires, ou pour ne pas payer le surcoût.",
-      "score": "1 PV par tranche de 2 <coin/> qu'il vous reste."
+      "score": "1 PV par 2 <coin/> restantes."
     },
     "307": {
       "name": "Bran",
       "role": "Gardien",
       "immediate": "Gagnez 1 <villager/>.",
-      "reaction": "Quand vous devez dépenser 1 ou plusieurs <villager/> en activant une de vos cartes, vous pouvez incliner cette carte pour en dépenser 1 de moins.",
-      "score": "1 PV par <villager/> à votre disposition, moins 2."
+      "reaction": "Quand vous devez dépenser 1 ou plusieurs <villager/> en activant une de vos cartes, vous pouvez incliner cette carte pour réduire ce nombre de 1.",
+      "score": "PV = nombre de <villager/> à votre disposition moins 2."
     },
     "308": {
       "name": "Lucan",
       "role": "Paladin",
       "immediate": "Gagnez 1 <villager/>.",
-      "reaction": "Quand vous gagnez de la Force ou de la Magie, vous pouvez incliner cette carte pour gagner aussi l'autre.",
-      "score": "1 PV par niveau de la plus basse de vos deux compétences."
+      "reaction": "Quand vous gagnez de la Magie, vous pouvez incliner cette carte pour gagner 1 <force/> (ou inversement).",
+      "score": "PV = niveau le plus bas entre votre Force et votre Magie."
     },
     "309": {
       "name": "Isandre",
       "role": "Clerc",
       "immediate": "Gagnez 1 <villager/>.",
-      "reaction": "Quand vous inclinez une de vos cartes, vous pouvez incliner cette carte pour la redresser. Vous pouvez alors l'incliner de nouveau aussitôt, et déclencher son effet une seconde fois.",
-      "score": "2 PV par Compagnon que vous possédez."
+      "reaction": "Quand vous inclinez une de vos cartes, vous pouvez incliner cette carte pour la redresser. Vous pouvez immédiatement incliner la carte que vous venez de redresser pour déclencher de nouveau son effet.",
+      "score": "2 PV par Compagnon."
     },
     "310": {
       "name": "Seren",
       "role": "Barde",
       "immediate": "Gagnez 1 <villager/>.",
       "reaction": "Quand vous racontez une histoire, vous pouvez incliner cette carte pour que la valeur de récit d'une de vos cartes Rencontre soit de 3.",
-      "score": "1 PV par histoire que vous avez racontée."
+      "score": "1 PV par histoire racontée."
     },
     "311": {
       "name": "Mira",
       "role": "Éclaireuse",
       "immediate": "Gagnez 1 <villager/>.",
-      "reaction": "Quand vous partez à l'aventure, vous pouvez incliner cette carte pour placer un <villager/> actif au Village. Vous pouvez placer un <villager/> obtenu lors de la résolution de la carte Rencontre.",
-      "score": "1 PV par blason différent parmi les Rencontres que vous avez résolues."
+      "reaction": "Quand vous partez à l'aventure (avant ou après avoir résolu une Rencontre), vous pouvez incliner cette carte pour placer 1 <villager/> actif au Village.",
+      "score": "1 PV par carte Rencontre avec un blason différent (racontée ou non)."
     }
   },
   "encounter-card": {
@@ -866,7 +944,7 @@
     },
     "4": {
       "name": "Tournoi des Bardes",
-      "requirement": "Racontez 2 de vos Rencontres, quelle que soit leur valeur de récit"
+      "requirement": "Déplacez 2 cartes Rencontre vers la zone des histoires racontées (peu importe leur valeur de récit)"
     },
     "5": {
       "name": "Donation",
@@ -878,7 +956,7 @@
     },
     "7": {
       "name": "Piège mortel",
-      "requirement": "Remettez dans la réserve l'un de vos <villager/> disponibles : il est perdu pour le reste de la partie"
+      "requirement": "Remettez dans la réserve l'un de vos <villager/> disponibles"
     },
     "8": {
       "name": "Rançon",

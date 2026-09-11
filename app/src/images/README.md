@@ -65,7 +65,7 @@ le magenta sur l'anneau extérieur de 2 px, nouveau contre courant. Sur les 56 p
 | `tiles` | `EventTile1-6` + `EventTileBack`, `QuestTile1-9` + `QuestTileBack` |
 | `tokens` | pièces, sceaux, jetons Revenu, jetons Bonus, jetons PV, jeton 1er joueur |
 | `pawns` | meeples et marqueurs, par couleur (`Blue`, `Orange`, `Red`, `Purple`) |
-| `seasons` | `Spring`, `Summer`, `Autumn` : bannières découpées dans `boards/SeasonBoard.png` |
+| `seasons` | `Winter`, `Spring`, `Summer`, `Autumn` : bannières découpées dans `boards/SeasonBoard.png` |
 | `icons` | symboles isolés (`Gold`, `Magic(Up/Down)`, `Move`, `Move1-5`, `PotionDiscarded`, `Story`, `Strength(Up/Down)`, `Tilt`, `VictoryPoint`, `Villager`) — **provisoires** |
 
 Les `icons` sont la seule exception à la règle « une image = une pièce » : la Force, la Magie, les
@@ -141,5 +141,7 @@ en miroir sur les planches de punchboard.
   | `Move1`, `Move2` | `Item2.jpg` (Tommy) | le cavalier avec sa distance découpée dedans |
   | `Move3`, `Move5` | `Item10.jpg` (Crin blanc) | idem |
   | `Move4` | `Building7.jpg` (Guilde des voyageurs II) | idem |
+  | `Withdraw` | `boards/SeasonBoard.png` | le villageois retiré, sous sa flèche crochue (colonne de l'Été) |
+  | `seasons/Winter` | `boards/SeasonBoard.png` | le flocon de la colonne de l'Hiver, alpha progressif sur la saturation |
 - `pawns/*` : rendus vectoriels extraits de `MEEPLES GREYLUNE.ai` (fiche de fabrication).
   L'ombre portée directionnelle du gabarit est incrustée dans le dessin d'origine.

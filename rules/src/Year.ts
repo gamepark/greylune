@@ -1,6 +1,7 @@
 import { LocationType } from './material/LocationType'
 import { MaterialSource } from './material/MaterialSource'
 import { MaterialType } from './material/MaterialType'
+import { Period } from './material/Period'
 
 /** The game lasts 5 years, split in 3 periods: 2 for {@link Period.I}, 2 for II, 1 for III. */
 export const YEARS = 5
@@ -24,3 +25,6 @@ export const isLastYear = (source: MaterialSource): boolean => encounterDeck(sou
 /** Which of the 5 years is being played, read off what the deck has left to deal. */
 export const currentYear = (source: MaterialSource, players: number): number =>
   YEARS - Math.floor(encounterDeck(source).length / encounterRowSize(players))
+
+/** The period a year belongs to, which is the back of every card it deals: 2 years of I, 2 of II, then III. */
+export const yearPeriod = (year: number): Period => (year <= 2 ? Period.I : year <= 4 ? Period.II : Period.III)
