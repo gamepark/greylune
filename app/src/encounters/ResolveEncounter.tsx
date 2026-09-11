@@ -53,8 +53,8 @@ const rowStagger = (moves: CustomMove[], x: number): number => (isChooseEncounte
  * Paying for it has to say what the player is about to take and be given, and says it the way every
  * other button of the game does (see {@link EffectLabel}): what it costs them, an arrow, and what it
  * hands over. That is the whole of the choice, and it is the only reading that tells the 2 buttons of
- * a Vallée apart — the sides are not left and right, they are "2 <travel/>" and "1 <villager/> → 2
- * <travel/> 3 <vp/>", the second being the first with a Villager paid for 3 more points.
+ * a Vallée apart — the sides are not left and right, they are "2 <travel/>" and "<spend-villager/> →
+ * 2 <travel/> 3 <vp/>", the second being the first with a Villager paid for 3 more points.
  *
  * A side that hands over nothing that can be drawn is the one case with nothing to say, and the word
  * stands in for it there.

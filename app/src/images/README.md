@@ -66,7 +66,7 @@ le magenta sur l'anneau extérieur de 2 px, nouveau contre courant. Sur les 56 p
 | `tokens` | pièces, sceaux, jetons Revenu, jetons Bonus, jetons PV, jeton 1er joueur |
 | `pawns` | meeples et marqueurs, par couleur (`Blue`, `Orange`, `Red`, `Purple`) |
 | `seasons` | `Winter`, `Spring`, `Summer`, `Autumn` : bannières découpées dans `boards/SeasonBoard.png` |
-| `icons` | symboles isolés (`Gold`, `Magic(Up/Down)`, `Move`, `Move1-5`, `PotionDiscarded`, `Story`, `Strength(Up/Down)`, `Tilt`, `VictoryPoint`, `Villager`) — **provisoires** |
+| `icons` | symboles isolés (`Gold`, `Magic(Up/Down)`, `Move`, `Move1-5`, `PotionDiscarded`, `Story`, `SpendVillager`, `Strength(Up/Down)`, `Tilt`, `VictoryPoint`, `Villager`) — **provisoires** |
 
 Les `icons` sont la seule exception à la règle « une image = une pièce » : la Force, la Magie, les
 points de victoire et la route n'existent comme pièce nulle part, seulement comme symbole imprimé
@@ -142,6 +142,7 @@ en miroir sur les planches de punchboard.
   | `Move3`, `Move5` | `Item10.jpg` (Crin blanc) | idem |
   | `Move4` | `Building7.jpg` (Guilde des voyageurs II) | idem |
   | `Withdraw` | `boards/SeasonBoard.png` | le villageois retiré, sous sa flèche crochue (colonne de l'Été) |
+  | `SpendVillager` | `cards/encounter/fr/Encounter2.jpg` (Tigre) | le villageois à payer, son 1 découpé dedans ; le 1 creusé est laissé opaque (seul le fond relié au bord est retiré) |
   | `seasons/Winter` | `boards/SeasonBoard.png` | le flocon de la colonne de l'Hiver, alpha progressif sur la saturation |
 - `pawns/*` : rendus vectoriels extraits de `MEEPLES GREYLUNE.ai` (fiche de fabrication).
   L'ombre portée directionnelle du gabarit est incrustée dans le dessin d'origine.

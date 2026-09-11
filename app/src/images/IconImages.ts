@@ -13,6 +13,7 @@ import Rider4 from './icons/Move4.png'
 import Rider5 from './icons/Move5.png'
 import DiscardedPotion from './icons/PotionDiscarded.png'
 import SpecialActionHouse from './icons/SpecialAction.png'
+import PaidVillager from './icons/SpendVillager.png'
 import StoryBook from './icons/Story.png'
 import ForceGem from './icons/Strength.png'
 import ForceGemDown from './icons/StrengthDown.png'
@@ -58,6 +59,10 @@ const riderImages: Partial<Record<number, string>> = { 1: Rider1, 2: Rider2, 3: 
  * The Season board adds one more, for the same reason: the Villager under a hooked arrow that its
  * Summer column prints for a Villager taken back out of the Village. It is what the camp is for, and
  * the camp itself is a painted scene with no mark of its own (see `SeasonBoardHelp`).
+ *
+ * And the Encounters one: a Villager to pay, drawn the way the rider is — the figure dark on the
+ * parchment with its 1 cut into it, so that the price is a single symbol. Cut out of the Tigre, which
+ * prints nothing else.
  */
 export {
   CompanionBadge,
@@ -72,6 +77,7 @@ export {
   MagicGemDown,
   MagicGemUp,
   ObjectBadge,
+  PaidVillager,
   Rider,
   riderImages,
   SpecialActionHouse,

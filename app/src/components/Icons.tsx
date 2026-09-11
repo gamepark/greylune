@@ -18,6 +18,7 @@ import {
   MagicGemDown,
   MagicGemUp,
   ObjectBadge,
+  PaidVillager,
   Rider,
   riderImages,
   SpecialActionHouse,
@@ -111,6 +112,12 @@ export const TravelIcon = ({ count, ...props }: { count?: number } & IconProps) 
  * colours, and none of those is what a sentence means: it means a Villager, any Villager.
  */
 export const VillagerIcon = (props: IconProps) => <Icon src={VillagerFigure} {...props} />
+
+/**
+ * One Villager to pay, as the Encounters print the price: the figure with its 1 cut into it, like the
+ * rider with its distance. It is the symbol for *one*, so nothing is written in front of it.
+ */
+export const SpendVillagerIcon = (props: IconProps) => <Icon src={PaidVillager} {...props} />
 
 /**
  * The hooked arrow the cards print in front of everything an Object, or a Companion, is laid on its

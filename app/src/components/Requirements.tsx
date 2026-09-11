@@ -1,6 +1,6 @@
 import { Requirement, RequirementType } from '@gamepark/greylune/material/Effect'
 import { Fragment, ReactNode } from 'react'
-import { CoinIcon, ForceDownIcon, ForceIcon, MagicDownIcon, MagicIcon, VillagerIcon } from './Icons'
+import { CoinIcon, ForceDownIcon, ForceIcon, MagicDownIcon, MagicIcon, SpendVillagerIcon, VillagerIcon } from './Icons'
 
 /**
  * What an effect asks for, written the way the material writes it: a number and the thing — the
@@ -33,9 +33,18 @@ const requirementIcons: Partial<Record<RequirementType, ReactNode>> = {
   [RequirementType.ReturnVillager]: <VillagerIcon />
 }
 
-/** A step down a track is one step, and the arrow drawn on the gem is what says so. */
-const saysItsOwnCount = (requirement: Requirement): boolean =>
-  (requirement.type === RequirementType.SpendForce || requirement.type === RequirementType.SpendMagic) && (requirement.count ?? 1) === 1
+/**
+ * The symbols that are a single one by themselves, drawn instead of "1 <symbol/>": a step down a
+ * track is one step, and the arrow drawn on the gem is what says so; one Villager paid has its 1 cut
+ * into the figure.
+ */
+const singleIcons: Partial<Record<RequirementType, ReactNode>> = {
+  [RequirementType.SpendForce]: <ForceDownIcon />,
+  [RequirementType.SpendMagic]: <MagicDownIcon />,
+  [RequirementType.SpendVillagers]: <SpendVillagerIcon />
+}
+
+const singleIcon = (requirement: Requirement): ReactNode => ((requirement.count ?? 1) === 1 ? singleIcons[requirement.type] : undefined)
 
 /**
  * "1 <coin/>", or "<force-down/> 4 <coin/>" when a condition asks for two things at once. `suffix` is
@@ -50,8 +59,11 @@ export const RequirementsLabel = ({ requirements = [], fallback, suffix }: { req
       {drawn.map((requirement, index) => (
         <Fragment key={index}>
           {index > 0 && ' '}
-          {saysItsOwnCount(requirement) ? '' : `${requirement.count ?? 1} `}
-          {requirementIcons[requirement.type]}
+          {singleIcon(requirement) ?? (
+            <>
+              {requirement.count ?? 1} {requirementIcons[requirement.type]}
+            </>
+          )}
         </Fragment>
       ))}
       {suffix}

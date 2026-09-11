@@ -17,7 +17,7 @@ export const EffectArrow = () => <span css={parchmentArrowCss}>→</span>
  * the Vallée, 3 Magic to open the Trésor — takes nothing from them, and a button can only be pressed
  * by someone who already meets it, so naming it would be naming a price that is not one: the Vallée
  * of a player standing on 1 Force says "2 <travel/>", and it is only the Villager on its other side
- * that ever turns the button into "1 <villager/> → 2 <travel/> 3 <vp/>". What is paid twice is asked
+ * that ever turns the button into "<spend-villager/> → 2 <travel/> 3 <vp/>". What is paid twice is asked
  * for once, exactly as it is taken ({@link gathered}): both halves of the Labyrinthe cost "2
  * <villager/>", not a Villager and then another.
  *

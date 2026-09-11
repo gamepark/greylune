@@ -421,6 +421,16 @@ describe('The Potions', () => {
     expect(items(MaterialType.VillageCard)[potion].location.type).toBe(LocationType.Items)
     expect(items(MaterialType.VillageCard)[potion].location.rotation).toBe(true)
   })
+
+  it('is the only card Selia keeps: an Object given up without the Potion symbol is gone', () => {
+    give(VillageCard.Selia)
+    // Carte mystérieuse: 3 spaces of road for a tilt, a Villager, and the card itself.
+    const map = give(VillageCard.MysteriousMap, LocationType.Items)
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+    game.rule = { id: RuleId.Summer, player: BLUE }
+    playCustom(CustomMoveType.UseItem, (data: { card: number; ability: number }) => data.card === map && data.ability === 1)
+    expect(rules().material(MaterialType.VillageCard).location(LocationType.Items).player(BLUE).length).toBe(0)
+  })
 })
 
 describe('Isandre', () => {
