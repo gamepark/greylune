@@ -42,8 +42,8 @@ const priceTriggers: Partial<Record<RequirementType, TriggerType>> = {
  * window on a tile that only asks for those simply never opens. Reading the tile rather than saying
  * so is what keeps a Companion added later from needing a word changed here.
  *
- * A Villager walking onto the tile is never a {@link TriggerType.RemoveVillager}: Neris pays for a
- * Villager taken back out of the Village, and this one is being put down.
+ * A Villager walking onto the tile never calls on Neris: she answers a Villager taken back out of
+ * the Village, and this one is being put down.
  */
 export const eventTriggers = (tile: EventTile): TriggerType[] => [
   ...new Set(eventTileData[tile].abilities.flatMap((ability) => triggersOf(ability.requirements)))

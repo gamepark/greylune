@@ -406,7 +406,8 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
 
   /**
    * The Companions and Potions that can answer what is happening, and the option each of them
-   * offers. A card that is already tilted, or that the player cannot pay for, is not among them.
+   * offers. A card that is already tilted, or that the player cannot pay for, is not among them, and
+   * neither is an option kept for another moment than this one.
    */
   reactionChoices(triggers: TriggerType[]): ReactionChoice[] {
     const choices: ReactionChoice[] = []
@@ -414,7 +415,9 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
       const reaction = villageCardData[this.playerCard(card)].reaction
       if (!reaction || !reaction.triggers.some((trigger) => triggers.includes(trigger))) continue
       if (!this.canReact(card, reaction)) continue
-      reaction.options.forEach((_, option) => choices.push({ card, option }))
+      reaction.options.forEach((effect, option) => {
+        if (effect.trigger === undefined || triggers.includes(effect.trigger)) choices.push({ card, option })
+      })
     }
     return choices
   }
@@ -553,7 +556,6 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
         this.reduceCost({ coins: (this.costReduction.coins ?? 0) + 1, itemVp: (this.costReduction.itemVp ?? 0) + 1 })
         return []
       case ReactionType.ExtraCoins:
-        // Handed over there and then rather than queued: they are what pays for the card being bought.
         return this.gainCoins(effect.count)
       case ReactionType.NoSurcharge:
         this.reduceCost({ noSurcharge: true })

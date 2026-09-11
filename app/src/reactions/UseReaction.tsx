@@ -1,11 +1,16 @@
+import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import { RequirementType } from '@gamepark/greylune/material/Effect'
 import { ReactionType } from '@gamepark/greylune/material/Reaction'
 import { VillageCard, villageCardData } from '@gamepark/greylune/material/VillageCard'
+import { Memory } from '@gamepark/greylune/Memory'
+import { useRules } from '@gamepark/react-game'
 import { CustomMove } from '@gamepark/rules-api'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { DiscardedPotionIcon, TiltIcon } from '../components/Icons'
 import { actionButtonSpot } from '../locators/TableLayout'
+import { helpIcons } from '../material/help/HelpLayout'
 import { GreyluneMenuButton } from '../theme/GreyluneMenuButton'
+import { coinsAround } from '../villagers/VillagerActions'
 import { reactionData } from './ReactionActions'
 
 /**
@@ -38,15 +43,19 @@ export const ReactionCardMenu = ({ front, moves }: { front: VillageCard; moves: 
 const reactionButtonStep = 2.4
 
 /**
- * Neris alone offers two things at once — 2 more coins out of the Villager, or the crowd around the
- * card not paid for — so hers are the only options that need saying. Every other card offers one
- * thing, and the word over its own printed text says all there is to say.
+ * Neris prints two things — 2 more coins out of a Villager taken back, or the crowd around a card
+ * activated left unpaid — and only one of them is ever on offer, so hers say which. Every other card
+ * offers one thing, and the word over its own printed text says all there is to say.
  */
 const ReactionLabel = ({ front, option }: { front: VillageCard; option: number }) => {
   const { t } = useTranslation()
+  const rules = useRules<GreyluneRules>()!
   const effect = villageCardData[front].reaction?.options[option]
-  if (effect?.type === ReactionType.ExtraCoins) return <>{t('action.extra-coins', { coins: effect.count })}</>
-  if (effect?.type === ReactionType.NoSurcharge) return <>{t('action.no-surcharge')}</>
+  if (effect?.type === ReactionType.ExtraCoins) return <Trans i18nKey="action.extra-coins" values={{ coins: effect.count }} components={helpIcons} />
+  if (effect?.type === ReactionType.NoSurcharge) {
+    const coins = coinsAround(rules, rules.remind<number>(Memory.ActivatedCard))
+    return <Trans i18nKey="action.no-surcharge" values={{ coins }} components={helpIcons} />
+  }
   return <>{t('action.use')}</>
 }
 

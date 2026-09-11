@@ -33,10 +33,11 @@ const BUY = -1
  * A Villager standing in the Village has designated a card, and the price is settled here: the card
  * itself, plus a coin for every other Villager around it (rulebook p.8).
  *
- * The Companions that can lower that price answer inside this rule rather than before it. A card is
- * offered to a player who could only pay for it with Neris or Dorian, so the answer has to still be
- * available when the price is actually due — and while nothing is affordable, only the answers that
- * help are offered, so the choice can never leave the player stranded.
+ * The Companions that can lower that price answer first, in a window of their own (see
+ * {@link ReactionRule}), and the option is chosen once it has closed. A card is offered to a player
+ * who could only pay for it with Neris or Dorian, so that window reads {@link outOfReach} and
+ * {@link helps} off this rule: while nothing here is affordable it cannot be passed, and only the
+ * answers that help are offered in it, so it can never close on a player left stranded.
  *
  * A Building that works off a Seal is exploited by taking one of its Seals and discarding it (rulebook
  * p.8), so that is the move: the token goes from the card to the discard, and the rest follows. Selia
@@ -70,15 +71,24 @@ export class ActivateCardRule extends GreyluneRule {
     return Math.max(0, villagersAroundSlot(this, { x: location.x ?? 0, y: location.y ?? 0 }).length - 1)
   }
 
-  /** What the card costs to take, once the crowd is paid for and the answers already given count. */
-  get price(): number {
-    const reduction = this.costReduction
-    return Math.max(0, this.data.cost - (reduction.coins ?? 0) + (reduction.noSurcharge ? 0 : this.crowd))
+  /** What the crowd still costs: nothing when nobody else stands around the card, or once Neris has waved it away. */
+  get surcharge(): number {
+    return this.costReduction.noSurcharge ? 0 : this.crowd
   }
 
-  /** What may be answered before an option is chosen. A Seal is only answered once it is spent. */
+  /** What the card costs to take, once the crowd is paid for and the answers already given count. */
+  get price(): number {
+    return Math.max(0, this.data.cost - (this.costReduction.coins ?? 0) + this.surcharge)
+  }
+
+  /**
+   * What the window opened before an option is chosen answers. A Seal is only answered once it is
+   * spent, and the crowd only while it still costs something.
+   */
   get triggers(): TriggerType[] {
-    return activationTriggers(this.front).filter((trigger) => trigger !== TriggerType.ActivateSeal)
+    return activationTriggers(this.front).filter(
+      (trigger) => trigger !== TriggerType.ActivateSeal && (trigger !== TriggerType.PaySurcharge || this.surcharge > 0)
+    )
   }
 
   get isBuilding(): boolean {
@@ -99,19 +109,22 @@ export class ActivateCardRule extends GreyluneRule {
   }
 
   /**
-   * Back from Selia's window, or with nothing to choose and nobody to answer with: the activation goes
-   * on without a click.
+   * Back from Selia's window, or with nothing left to choose: the activation goes on without a click.
    */
   onRuleStart(): GreyluneMove[] {
     if (this.sealSpent) return this.costReduction.freeSealValue ? this.onlyValue() : this.activate({ ability: this.sealAbility })
     const moves = this.abilityMoves()
-    return moves.length === 1 && !this.reactionChoices(this.triggers).length ? moves : []
+    return moves.length === 1 ? moves : []
   }
 
   getPlayerMoves(): GreyluneMove[] {
     if (this.sealSpent) return this.costReduction.freeSealValue ? this.sealValueMoves() : []
-    const moves = this.abilityMoves()
-    return [...moves, ...this.reactionMoves(moves.length === 0)]
+    return this.abilityMoves()
+  }
+
+  /** Nothing on the card can be taken yet: only an answer given before choosing can bring it in reach. */
+  get outOfReach(): boolean {
+    return !this.sealSpent && this.abilityMoves().length === 0
   }
 
   /** Every way this card can be taken: the purchase, or one of the options a Building offers. */
@@ -167,26 +180,18 @@ export class ActivateCardRule extends GreyluneRule {
       .map((seal) => ({ seal, value: this.material(MaterialType.Seal).getItem<Seal>(seal).id }))
   }
 
-  /** While nothing can be paid for, only the answers that find coins are worth offering. */
-  private reactionMoves(onlyHelpful: boolean): GreyluneMove[] {
-    return this.reactionChoices(this.triggers)
-      .filter((choice) => !onlyHelpful || this.helps(choice.card, choice.option))
-      .map((choice) => this.customMove(CustomMoveType.UseReaction, choice))
-  }
-
   /**
    * Whether an answer would take the player any closer to paying. Only those are offered while
    * nothing is affordable, so that a window opened on a price out of reach always closes on one
    * within it: each of them lowers a cost that is actually standing in the way, and each of them
    * puts a card down, so the choice can never go round in circles.
    */
-  private helps(card: number, option: number): boolean {
+  helps(card: number, option: number): boolean {
     const effect = this.reactionEffect(card, option)
     switch (effect.type) {
-      case ReactionType.ExtraCoins:
       case ReactionType.NoSurcharge:
       case ReactionType.CheaperItem:
-        return this.coins < this.price && option === this.bestCoinOption(card)
+        return this.coins < this.price
       case ReactionType.ReduceForceCost:
         return this.blockedBy(RequirementType.SpendForce)
       case ReactionType.ReduceVillagerCost:
@@ -194,30 +199,6 @@ export class ActivateCardRule extends GreyluneRule {
       default:
         return false
     }
-  }
-
-  /**
-   * The coins an answer would find, and which of a card's answers finds the most. Only that one is
-   * offered while the price is out of reach: the rule that offered the card in the first place
-   * counted on the best each Companion could do, so anything less could leave the player short.
-   */
-  private coinRelief(card: number, option: number): number {
-    const effect = this.reactionEffect(card, option)
-    switch (effect.type) {
-      case ReactionType.ExtraCoins:
-        return effect.count
-      case ReactionType.NoSurcharge:
-        return this.costReduction.noSurcharge ? 0 : this.crowd
-      case ReactionType.CheaperItem:
-        return getVillageCardType(this.front) === VillageCardType.Item ? 1 : 0
-      default:
-        return 0
-    }
-  }
-
-  private bestCoinOption(card: number): number {
-    const options = villageCardData[this.playerCard(card)].reaction!.options
-    return options.reduce((best, _, option) => (this.coinRelief(card, option) > this.coinRelief(card, best) ? option : best), 0)
   }
 
   /** An option the player cannot pay for, and that asks for exactly that. */
@@ -228,10 +209,6 @@ export class ActivateCardRule extends GreyluneRule {
   }
 
   onCustomMove(move: CustomMove): GreyluneMove[] {
-    if (isCustomMoveType(CustomMoveType.UseReaction)(move)) {
-      const { card, option } = move.data as { card: number; option: number }
-      return this.useReaction(card, option)
-    }
     if (isCustomMoveType(CustomMoveType.ChooseAbility)(move)) return this.activate(move.data as ChooseAbilityData)
     return super.onCustomMove(move)
   }

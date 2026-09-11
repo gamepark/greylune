@@ -33,8 +33,10 @@ export enum TriggerType {
   SpendForce,
   /** Villagers are about to be spent on one of the player's own cards: Bran. */
   SpendVillagers,
-  /** A Villager is being taken out of the Village and onto the camp: Neris. Never the Event tile. */
-  RemoveVillager,
+  /** A Villager is being taken back to the camp for the coins around a card: Neris. Never the Event tile. */
+  GainCoinsAround,
+  /** A card is being activated, and the other Villagers standing around it are about to be paid for: Neris. */
+  PaySurcharge,
   /** A Seal is being spent: Selia. */
   ActivateSeal,
   /** Force or Magic is being gained: Lucan. */
@@ -60,9 +62,9 @@ export enum ReactionType {
   ReduceVillagerCost,
   /** Dorian: the Object costs 1 coin less and is worth 1 victory point. */
   CheaperItem,
-  /** Neris: 2 more coins out of the Villager leaving the Village. */
+  /** Neris: 2 more coins out of the Villager taken back for the coins around a card. */
   ExtraCoins,
-  /** Neris: the Villagers standing around the card are not paid for. */
+  /** Neris: the Villagers standing around the card being activated are not paid for. */
   NoSurcharge,
   /** Lucan: gaining one skill gains the other. */
   OtherSkill,
@@ -72,7 +74,12 @@ export enum ReactionType {
   StraightenTilted
 }
 
-export type ReactionEffect =
+/**
+ * `trigger` narrows an option to one of the moments its card answers. Neris is worded "when you take
+ * a Villager out of the Village", but that is two actions: the 2 coins only mean something to the
+ * Villager going back for coins, and the crowd is only paid for by the one activating a card.
+ */
+export type ReactionEffect = { trigger?: TriggerType } & (
   | { type: ReactionType.ExtraTravel | ReactionType.ExtraCoins; count: number }
   | { type: ReactionType.TemporarySkills; force?: number; magic?: number }
   | {
@@ -88,10 +95,11 @@ export type ReactionEffect =
         | ReactionType.ChooseSealValue
         | ReactionType.StraightenTilted
     }
+)
 
 /**
  * A reaction printed at the bottom of a Companion, or the one thing a Potion is drunk for. `options`
- * holds more than one entry only when the card offers a choice, which only Neris does.
+ * holds more than one entry only on Neris, and each of hers answers a different moment.
  */
 export type Reaction = { triggers: TriggerType[]; requirements: Requirement[]; options: ReactionEffect[] }
 

@@ -1,8 +1,9 @@
 import { CustomMove, isCustomMoveType } from '@gamepark/rules-api'
 import { Memory } from '../Memory'
 import { TriggerType } from '../material/Reaction'
+import { ActivateCardRule } from './ActivateCardRule'
 import { CustomMoveType } from './CustomMoveType'
-import { GreyluneMove, GreyluneRule } from './GreyluneRule'
+import { GreyluneMove, GreyluneRule, ReactionChoice } from './GreyluneRule'
 import { RuleId } from './RuleId'
 
 /**
@@ -11,16 +12,46 @@ import { RuleId } from './RuleId'
  * It stays open while there is anything left to answer with — a player may tilt two Companions on
  * the same journey — and it closes on its own the moment there is nothing, so nobody is ever asked
  * to pass on an empty hand.
+ *
+ * One window cannot be passed: the one opened on a card offered to a player who can only pay for it
+ * with a Companion (see {@link ActivateCardRule}). There, answering is the only way on, and only the
+ * answers that bring the card within reach are offered.
  */
 export class ReactionRule extends GreyluneRule {
+  /**
+   * What the window was opened on, and what has been tilted since. The crowd around a card being
+   * activated is only answered while it still costs something: once Neris has waved it away, a Neris
+   * stood back up by Isandre would have nothing left to answer.
+   */
   get triggers(): TriggerType[] {
-    return this.remind<TriggerType[]>(Memory.Trigger) ?? []
+    const triggers = this.remind<TriggerType[]>(Memory.Trigger) ?? []
+    return this.activation?.surcharge === 0 ? triggers.filter((trigger) => trigger !== TriggerType.PaySurcharge) : triggers
+  }
+
+  get resumeRule(): RuleId {
+    return this.remind<RuleId>(Memory.Resume) ?? RuleId.ResolveEffects
+  }
+
+  /** The card being activated, when the window was opened on one. */
+  get activation(): ActivateCardRule | undefined {
+    return this.resumeRule === RuleId.ActivateCard ? new ActivateCardRule(this.game) : undefined
+  }
+
+  /** The card being activated, when nothing on it can be taken without an answer. */
+  get blockedActivation(): ActivateCardRule | undefined {
+    const activation = this.activation
+    return activation?.outOfReach ? activation : undefined
+  }
+
+  get choices(): ReactionChoice[] {
+    const blocked = this.blockedActivation
+    return this.reactionChoices(this.triggers).filter((choice) => !blocked || blocked.helps(choice.card, choice.option))
   }
 
   getPlayerMoves(): GreyluneMove[] {
     return [
-      ...this.reactionChoices(this.triggers).map((choice) => this.customMove(CustomMoveType.UseReaction, choice)),
-      this.customMove(CustomMoveType.Pass)
+      ...this.choices.map((choice) => this.customMove(CustomMoveType.UseReaction, choice)),
+      ...(this.blockedActivation ? [] : [this.customMove(CustomMoveType.Pass)])
     ]
   }
 
@@ -30,11 +61,11 @@ export class ReactionRule extends GreyluneRule {
     const { card, option } = move.data as { card: number; option: number }
     const moves = this.useReaction(card, option)
     // The card just spent is gone from the window, though the move that puts it down is not played yet.
-    const left = this.reactionChoices(this.triggers).filter((choice) => choice.card !== card)
+    const left = this.choices.filter((choice) => choice.card !== card)
     return left.length ? moves : [...moves, ...this.close()]
   }
 
   private close(): GreyluneMove[] {
-    return [this.startRule(this.remind<RuleId>(Memory.Resume) ?? RuleId.ResolveEffects)]
+    return [this.startRule(this.resumeRule)]
   }
 }

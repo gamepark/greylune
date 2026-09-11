@@ -6,21 +6,21 @@
   "gains": "<gain1/> et <gain2/>",
   "action": {
     "exploit": "Exploiter",
-    "exploit-price": "Exploiter ({{price}} <coin/>)",
+    "exploit-price": "Exploiter ({price} <coin/>)",
     "buy": "Acheter",
-    "buy-price": "Acheter ({{price}} <coin/>)",
+    "buy-price": "Acheter ({price} <coin/>)",
     "recruit": "Recruter",
-    "recruit-price": "Recruter ({{price}} <coin/>)",
+    "recruit-price": "Recruter ({price} <coin/>)",
     "activate": "Activer",
     "resolve": "Résoudre",
     "use": "Utiliser",
     "tell": "Raconter",
     "end-story": "Terminer le récit",
     "gain-magic": "Gagner 1 Magie",
-    "extra-coins": "Gagner {{coins}} <coin/> de plus",
-    "no-surcharge": "Ne pas payer les villageois",
+    "extra-coins": "Gagner {coins} <coin/> de plus",
+    "no-surcharge": "Payer {coins} <coin/> de moins",
     "camp": "Aller au campement",
-    "camp-coins": "Gagner {{coins}} <coin/>",
+    "camp-coins": "Gagner {coins} <coin/>",
     "travel": "Voyager",
     "stay": "Rester sur place",
     "summer": "Passer à l'été",
@@ -39,6 +39,14 @@
     },
     "activate-card": {
       "you": "Choisissez une option de la carte",
+      "player": "{player} active une carte"
+    },
+    "must-react-card": {
+      "you": "Vous devez activer {card}",
+      "player": "{player} active une carte"
+    },
+    "must-react": {
+      "you": "Vous devez activer un compagnon",
       "player": "{player} active une carte"
     },
     "activate-seal": {

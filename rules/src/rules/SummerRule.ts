@@ -10,6 +10,7 @@ import { Seal } from '../material/Tokens'
 import { cardsAroundGap, gapOf, Slot, villagersAroundSlot } from '../material/Village'
 import { activationTriggers, getVillageCardType, VillageCardId, VillageCardType, villageCardData } from '../material/VillageCard'
 import { Season } from '../Season'
+import { ActivateCardRule } from './ActivateCardRule'
 import { CustomMoveType } from './CustomMoveType'
 import { CostReduction, GreyluneMove } from './GreyluneRule'
 import { RuleId } from './RuleId'
@@ -102,25 +103,18 @@ export class SummerRule extends SeasonRule {
 
   /**
    * The coins a reaction could still find for this purchase: Dorian knocks one off an Object, Neris
-   * either hands over 2 or waves the crowd away. Counted before the choice is made, so that a card a
-   * player can only afford with a Companion is still offered to them.
+   * waves the crowd away. Counted before the choice is made, so that a card a player can only afford
+   * with a Companion is still offered to them.
    */
   reliefFor(card: number): number {
     const front = this.villageCards.getItem<VillageCardId>(card).id.front!
     const isItem = getVillageCardType(front) === VillageCardType.Item
-    const surcharge = this.surcharge(card)
-    const helpers = new Set(this.reactionChoices([TriggerType.BuyItem, TriggerType.RemoveVillager]).map((choice) => choice.card))
-    let relief = 0
-    for (const helper of helpers) {
-      let best = 0
-      for (const option of villageCardData[this.playerCard(helper)].reaction!.options) {
-        if (option.type === ReactionType.CheaperItem && isItem) best = Math.max(best, 1)
-        if (option.type === ReactionType.ExtraCoins) best = Math.max(best, option.count)
-        if (option.type === ReactionType.NoSurcharge) best = Math.max(best, surcharge)
-      }
-      relief += best
-    }
-    return relief
+    return this.reactionChoices([TriggerType.BuyItem, TriggerType.PaySurcharge]).reduce((relief, { card: helper, option }) => {
+      const effect = this.reactionEffect(helper, option)
+      if (effect.type === ReactionType.CheaperItem && isItem) return relief + 1
+      if (effect.type === ReactionType.NoSurcharge) return relief + this.surcharge(card)
+      return relief
+    }, 0)
   }
 
   // ------------------------------------------------------------------ the cards of the player
@@ -180,15 +174,15 @@ export class SummerRule extends SeasonRule {
     if (data.card !== undefined) this.pushGains([coins(this.surcharge(data.card))])
     return [
       this.villagers.index(data.villager).moveItem({ type: LocationType.Camp }),
-      ...this.openReactions([TriggerType.RemoveVillager], RuleId.ResolveEffects)
+      ...this.openReactions([TriggerType.GainCoinsAround], RuleId.ResolveEffects)
     ]
   }
 
-  /** The Companions answer inside {@link ActivateCardRule}, where the price is actually due. */
+  /** The Companions that can lower the price answer first, and the option is chosen after them. */
   private startActivation(data: VillagerActionData): GreyluneMove[] {
     this.memorize(Memory.SpentVillager, data.villager)
     this.memorize(Memory.ActivatedCard, data.card)
-    return [this.startRule(RuleId.ActivateCard)]
+    return this.openReactions(new ActivateCardRule(this.game).triggers, RuleId.ActivateCard)
   }
 
   private startUseItem(data: { card: number; ability: number }): GreyluneMove[] {

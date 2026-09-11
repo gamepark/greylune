@@ -1,4 +1,4 @@
-import { applyAutomaticMoves, isCustomMoveType, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { applyAutomaticMoves, getEnumValues, isCustomMoveType, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { GreyluneRules } from './GreyluneRules'
 import { GreyluneSetup } from './GreyluneSetup'
@@ -114,6 +114,12 @@ const travelTo = (area: Area): MaterialMove =>
 const useReaction = (index: number, option = 0) =>
   playCustom(CustomMoveType.UseReaction, (data: { card: number; option: number }) => data.card === index && data.option === option)
 
+const reactionsOffered = () =>
+  rules()
+    .getLegalMoves(BLUE)
+    .filter(isCustomMoveType(CustomMoveType.UseReaction))
+    .map((move) => move.data)
+
 beforeEach(() => {
   game = new GreyluneSetup().setup({ players: [{ id: BLUE }, { id: ORANGE }] })
   emptyVillage()
@@ -159,15 +165,12 @@ describe('Kael', () => {
     items(MaterialType.SeasonMarker).find((item) => item.id === BLUE)!.location.id = Season.Summer
     game.rule = { id: RuleId.Summer, player: BLUE }
     playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === villager)
-    // Nothing is affordable without him, so Kael is the only thing the rule has to offer.
-    expect(game.rule!.id).toBe(RuleId.ActivateCard)
-    expect(
-      rules()
-        .getLegalMoves(BLUE)
-        .every((move) => isCustomMoveType(CustomMoveType.UseReaction)(move))
-    ).toBe(true)
+    // Nothing is affordable without him, so the window cannot be passed and Kael is all it offers.
+    expect(game.rule!.id).toBe(RuleId.Reaction)
+    expect(reactionsOffered()).toEqual([{ card: kael, option: 0 }])
+    expect(rules().getLegalMoves(BLUE)).toHaveLength(1)
+    // Only the first option is now within reach, and it is taken without a click.
     useReaction(kael)
-    playCustom(CustomMoveType.ChooseAbility, (data: { ability: number }) => data.ability === 0)
     expect(playerVp(rules(), BLUE)).toBe(3)
     expect(playerForce(rules(), BLUE)).toBe(0)
     expect(items(MaterialType.VillageCard)[building].location.type).toBe(LocationType.VillageGrid)
@@ -187,17 +190,81 @@ describe('Neris', () => {
     items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
     game.rule = { id: RuleId.Summer, player: BLUE }
     playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === villager)
-    expect(game.rule!.id).toBe(RuleId.ActivateCard)
-    // 10 coins are due and only 7 are there: the only thing offered is the answer that helps most.
-    expect(
-      rules()
-        .getLegalMoves(BLUE)
-        .every((move) => isCustomMoveType(CustomMoveType.UseReaction)(move))
-    ).toBe(true)
+    expect(game.rule!.id).toBe(RuleId.Reaction)
+    // 10 coins are due and only 7 are there: waving the crowd away is the only thing offered.
+    expect(reactionsOffered()).toEqual([{ card: neris, option: 1 }])
+    expect(rules().getLegalMoves(BLUE)).toHaveLength(1)
     useReaction(neris, 1)
-    playCustom(CustomMoveType.ChooseAbility)
     expect(playerCoins(rules(), BLUE)).toBe(0)
     expect(items(MaterialType.VillageCard)[item].location.type).toBe(LocationType.Items)
+  })
+
+  /** Le chêne fendu, free, with 3 more Villagers standing around it: 3 coins for the crowd. */
+  const activateRivenOak = () => {
+    const neris = give(VillageCard.Neris)
+    placeCard(VillageCard.RivenOak, 1, 1)
+    const villager = standVillager(BLUE, 0.5, 1)
+    standVillager(ORANGE, 1.5, 1)
+    standVillager(ORANGE, 1, 0.5)
+    standVillager(ORANGE, 1, 1.5)
+    setCoins(BLUE, 9)
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+    game.rule = { id: RuleId.Summer, player: BLUE }
+    playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === villager)
+    return neris
+  }
+
+  it('is asked about before the option of the card is chosen, and may be passed on', () => {
+    activateRivenOak()
+    expect(game.rule!.id).toBe(RuleId.Reaction)
+    playCustom(CustomMoveType.Pass)
+    expect(game.rule!.id).not.toBe(RuleId.ActivateCard)
+    expect(playerCoins(rules(), BLUE)).toBe(6)
+  })
+
+  it('leaves the crowd unpaid for a card the player could have paid for anyway', () => {
+    const neris = activateRivenOak()
+    useReaction(neris, 1)
+    expect(game.rule!.id).not.toBe(RuleId.ActivateCard)
+    expect(playerCoins(rules(), BLUE)).toBe(9)
+  })
+
+  it('is not asked again once the crowd costs nothing, though Isandre stands her back up', () => {
+    const isandre = give(VillageCard.Isandre)
+    const neris = activateRivenOak()
+    useReaction(neris, 1)
+    useReaction(isandre)
+    expect(items(MaterialType.VillageCard)[neris].location.rotation).toBe(false)
+    // Nothing left to answer with: the window closed on its own and the card was taken.
+    expect(game.rule!.id).not.toBe(RuleId.Reaction)
+    expect(playerCoins(rules(), BLUE)).toBe(9)
+  })
+
+  it('stays out of the way of a card nobody else stands around', () => {
+    give(VillageCard.Neris)
+    const item = placeCard(VillageCard.MagicRing, 1, 1)
+    const villager = standVillager(BLUE, 0.5, 1)
+    setCoins(BLUE, 7)
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+    game.rule = { id: RuleId.Summer, player: BLUE }
+    playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === villager)
+    expect(playerCoins(rules(), BLUE)).toBe(0)
+    expect(items(MaterialType.VillageCard)[item].location.type).toBe(LocationType.Items)
+  })
+
+  it('hands over 2 more coins to a Villager taken back for the coins around a card', () => {
+    const neris = give(VillageCard.Neris)
+    placeCard(VillageCard.MagicRing, 1, 1)
+    const villager = standVillager(BLUE, 0.5, 1)
+    standVillager(ORANGE, 1.5, 1)
+    setCoins(BLUE, 0)
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+    game.rule = { id: RuleId.Summer, player: BLUE }
+    playCustom(CustomMoveType.GainCoinsAround, (data: { villager: number; card?: number }) => data.villager === villager && data.card !== undefined)
+    expect(game.rule!.id).toBe(RuleId.Reaction)
+    expect(reactionsOffered()).toEqual([{ card: neris, option: 0 }])
+    useReaction(neris, 0)
+    expect(playerCoins(rules(), BLUE)).toBe(3)
   })
 })
 
@@ -211,7 +278,6 @@ describe('Dorian', () => {
     game.rule = { id: RuleId.Summer, player: BLUE }
     playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === villager)
     useReaction(dorian)
-    playCustom(CustomMoveType.ChooseAbility)
     expect(playerCoins(rules(), BLUE)).toBe(1)
     expect(playerVp(rules(), BLUE)).toBe(1)
     expect(items(MaterialType.VillageCard)[item].location.type).toBe(LocationType.Items)
@@ -383,6 +449,24 @@ describe('Isandre', () => {
     expect(items(MaterialType.VillageCard)[elwen].location.rotation).toBe(false)
     expect(items(MaterialType.VillageCard)[isandre].location.rotation).toBe(true)
   })
+
+  it('answers a Companion tilted for a card being activated', () => {
+    const isandre = give(VillageCard.Isandre)
+    const dorian = give(VillageCard.Dorian)
+    placeCard(VillageCard.MagicRing, 0, 0)
+    const villager = standVillager(BLUE, 0.5, 0)
+    setCoins(BLUE, 7)
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+    game.rule = { id: RuleId.Summer, player: BLUE }
+    playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === villager)
+    useReaction(dorian)
+    // The window opened on the purchase now holds the tilt Dorian paid with.
+    expect(game.rule!.id).toBe(RuleId.Reaction)
+    expect(reactionsOffered()).toContainEqual({ card: isandre, option: 0 })
+    useReaction(isandre)
+    expect(items(MaterialType.VillageCard)[dorian].location.rotation).toBe(false)
+    expect(items(MaterialType.VillageCard)[isandre].location.rotation).toBe(true)
+  })
 })
 
 describe('Seren', () => {
@@ -455,7 +539,7 @@ describe('Every Companion', () => {
       game.rule = { id: RuleId.Reaction, player: BLUE }
       game.memory[Memory.Resume] = RuleId.ResolveEffects
       // Opened on every trigger at once: what matters is that the card knows how to answer.
-      game.memory[Memory.Trigger] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      game.memory[Memory.Trigger] = getEnumValues(TriggerType)
       game.memory[Memory.LastTilted] = give(VillageCard.Horn, LocationType.Items)
       const choices = rules()
         .getLegalMoves(BLUE)

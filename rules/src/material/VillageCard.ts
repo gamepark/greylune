@@ -429,9 +429,14 @@ export const villageCardData: Record<VillageCard, VillageCardData> = {
     reaction: reaction([TriggerType.ActivateSeal], [tilt], { type: ReactionType.ChooseSealValue }),
     score: { vp: 2, per: Countable.Potion }
   }),
-  /** The rogue: 2 coins more, or the Villagers standing around the card left unpaid. */
+  /** The rogue: 2 coins more for the coins around a card, or the Villagers around a card activated left unpaid. */
   [VillageCard.Neris]: companion({
-    reaction: reaction([TriggerType.RemoveVillager], [tilt], { type: ReactionType.ExtraCoins, count: 2 }, { type: ReactionType.NoSurcharge }),
+    reaction: reaction(
+      [TriggerType.GainCoinsAround, TriggerType.PaySurcharge],
+      [tilt],
+      { type: ReactionType.ExtraCoins, count: 2, trigger: TriggerType.GainCoinsAround },
+      { type: ReactionType.NoSurcharge, trigger: TriggerType.PaySurcharge }
+    ),
     score: { vp: 1, per: Countable.Coins, divide: 2 }
   }),
 
@@ -468,12 +473,13 @@ export const villageCardData: Record<VillageCard, VillageCardData> = {
 export const isPotion = (card: VillageCard): boolean => villageCardData[card].potion === true
 
 /**
- * What answering a card being activated can be about: a Villager always leaves the Village, an
- * Object is always a purchase, and the rest depends on what the options of a Building ask for.
+ * What answering a card being activated can be about: the crowd around it may have to be paid for,
+ * an Object is always a purchase, and the rest depends on what the options of a Building ask for.
+ * Whether there is a crowd at all is read off the Village, by the rule the price is settled in.
  */
 export const activationTriggers = (front: VillageCard): TriggerType[] => {
   const data = villageCardData[front]
-  const triggers = [TriggerType.RemoveVillager]
+  const triggers = [TriggerType.PaySurcharge]
   if (getVillageCardType(front) === VillageCardType.Item) triggers.push(TriggerType.BuyItem)
   const abilities = data.abilities ?? []
   if (abilities.some((ability) => (ability.requirements ?? []).some((requirement) => requirement.type === RequirementType.SpendForce))) {
