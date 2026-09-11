@@ -5,6 +5,7 @@ import { Gain } from '../material/Effect'
 import { EncounterCardId, encounterCardData } from '../material/EncounterCard'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
+import { ReactionType } from '../material/Reaction'
 import { CustomMoveType } from './CustomMoveType'
 import { GreyluneMove, GreyluneRule } from './GreyluneRule'
 
@@ -74,10 +75,28 @@ export class TellStoryRule extends GreyluneRule {
     return this.untold.index((index) => this.fits(index))
   }
 
+  /**
+   * A story is only ended once something has been told: the Tavern and the special action are only
+   * offered to a player with a story to tell (see `GreyluneRule.hasStoryToTell`), and ending it at 0
+   * would spend the Villager on nothing.
+   */
   getPlayerMoves(): GreyluneMove[] {
     const moves: GreyluneMove[] = this.tellable.moveItems({ type: LocationType.ToldStories, player: this.player })
-    moves.push(this.customMove(CustomMoveType.Pass))
+    if (this.told.length) moves.push(this.customMove(CustomMoveType.Pass))
     return moves
+  }
+
+  /**
+   * Nothing the player holds can be heard yet: their stories are all worth nothing, and only Seren or
+   * a Charisma potion can open one. The window opened before the story then cannot be passed, and
+   * offers those answers only (see `ReactionRule`).
+   */
+  get outOfReach(): boolean {
+    return !this.told.length && !this.tellable.length
+  }
+
+  helps(card: number, option: number): boolean {
+    return this.reactionEffect(card, option).type === ReactionType.StoryValue3
   }
 
   /** A card told for nothing is told as a 3: that is what the boost was spent on. */

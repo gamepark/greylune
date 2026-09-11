@@ -365,10 +365,34 @@ describe('A Tavern', () => {
   })
 
   it('never hears an Encounter worth nothing', () => {
+    const zero = untold(EncounterCard.WorldTree)
+    untold(EncounterCard.Ambush)
+    expect(tellable(zero)).toBe(false)
+  })
+
+  it('cannot end a story before anything is told', () => {
+    const one = untold(EncounterCard.Ambush)
+    const passes = () => rules().getLegalMoves(BLUE).some(isCustomMoveType(CustomMoveType.Pass))
+    expect(passes()).toBe(false)
+    tell(one)
+    expect(passes()).toBe(true)
+  })
+
+  it('is not offered to a player with no story to tell', () => {
+    emptyVillage()
+    const tavern = placeCard(VillageCard.RivenOak, 0, 0)
+    standVillager(BLUE, 0.5, 0)
+    setSeason(BLUE, Season.Summer)
+    startRule(RuleId.Summer)
+    const offered = () =>
+      rules()
+        .getLegalMoves(BLUE)
+        .some((move) => isCustomMoveType(CustomMoveType.ActivateCard)(move) && move.data.card === tavern)
+    expect(offered()).toBe(false)
     untold(EncounterCard.WorldTree)
-    expect(rules().getLegalMoves(BLUE)).toHaveLength(1)
-    playCustom(CustomMoveType.Pass)
-    expect(playerVp(rules(), BLUE)).toBe(0)
+    expect(offered()).toBe(false)
+    untold(EncounterCard.Ambush)
+    expect(offered()).toBe(true)
   })
 })
 

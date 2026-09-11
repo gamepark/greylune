@@ -3,6 +3,7 @@ import { BONUS_TOKEN_SCORES, MAX_SKILL, SCORE_TRACK_SIZE } from '../Constants'
 import { Memory } from '../Memory'
 import { PlayerColor } from '../PlayerColor'
 import { bonusToken, Count, Gain, GainType, gathered, placeVillager, Requirement, RequirementType, SEAL } from '../material/Effect'
+import { EncounterCardId, encounterCardData } from '../material/EncounterCard'
 import { EventTile, eventTileData, isFestival } from '../material/EventTile'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
@@ -98,6 +99,28 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
 
   get season(): Season {
     return playerSeason(this, this.player)
+  }
+
+  /**
+   * An Encounter pushed under the board and worth more than nothing, or one worth nothing with Seren
+   * or a Charisma potion ready to make it a 3 — those answer once the story is opened, so a player
+   * holding one is offered the story their own cards cannot tell on their own (see `TellStoryRule`).
+   */
+  get hasStoryToTell(): boolean {
+    const untold = this.encounterCards.location(LocationType.UntoldStories).player(this.player)
+    if (untold.filter<EncounterCardId>((item) => encounterCardData[item.id.front!].story > 0).length) return true
+    return (
+      untold.length > 0 &&
+      this.reactionChoices([TriggerType.TellStory]).some(({ card, option }) => this.reactionEffect(card, option).type === ReactionType.StoryValue3)
+    )
+  }
+
+  /**
+   * Whether what an action hands over is within the player's reach: a story needs a story to tell,
+   * and a Tavern or the special action taken without one would spend a Villager on nothing.
+   */
+  canReceive(gains: Gain[] = []): boolean {
+    return !gains.some((gain) => gain.type === GainType.TellStory) || this.hasStoryToTell
   }
 
   /** Force lent by a Potion for the length of one adventure: it counts, and it cannot be spent. */

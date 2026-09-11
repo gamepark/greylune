@@ -199,10 +199,14 @@ describe('Neris', () => {
     expect(items(MaterialType.VillageCard)[item].location.type).toBe(LocationType.Items)
   })
 
-  /** Le chêne fendu, free, with 3 more Villagers standing around it: 3 coins for the crowd. */
+  /**
+   * Le chêne fendu, free, with 3 more Villagers standing around it: 3 coins for the crowd. A Tavern is
+   * only offered to a player with a story to tell, so one is waiting under the board.
+   */
   const activateRivenOak = () => {
     const neris = give(VillageCard.Neris)
     placeCard(VillageCard.RivenOak, 1, 1)
+    items(MaterialType.EncounterCard)[encounter(EncounterCard.Ambush)].location = { type: LocationType.UntoldStories, player: BLUE }
     const villager = standVillager(BLUE, 0.5, 1)
     standVillager(ORANGE, 1.5, 1)
     standVillager(ORANGE, 1, 0.5)
@@ -478,6 +482,8 @@ describe('Seren', () => {
     game.memory[Memory.Gains] = [{ type: 10, rewards: [[vp(2)], [force()], [vp(5)]] }]
     play(rules().startRule(RuleId.ResolveEffects) as MaterialMove)
     expect(game.rule!.id).toBe(RuleId.Reaction)
+    // She is the only way the story can be told at all, so the window cannot be passed.
+    expect(rules().getLegalMoves(BLUE).some(isCustomMoveType(CustomMoveType.Pass))).toBe(false)
     useReaction(seren)
     expect(game.rule!.id).toBe(RuleId.TellStory)
     play(rules().getLegalMoves(BLUE)[0])

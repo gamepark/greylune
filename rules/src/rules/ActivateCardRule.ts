@@ -134,7 +134,7 @@ export class ActivateCardRule extends GreyluneRule {
       return this.purchaseVariants().map((variant) => this.customMove(CustomMoveType.ChooseAbility, { ability: BUY, ...variant }))
     }
     return (this.data.abilities ?? []).flatMap((ability, index) => {
-      if (!this.canPay(ability.requirements)) return []
+      if (!this.canPay(ability.requirements) || !this.canReceive(ability.gains)) return []
       if (index === this.sealAbility) return this.sealMoves()
       return [this.customMove(CustomMoveType.ChooseAbility, { ability: index })]
     })

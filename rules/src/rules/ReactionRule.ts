@@ -5,6 +5,7 @@ import { ActivateCardRule } from './ActivateCardRule'
 import { CustomMoveType } from './CustomMoveType'
 import { GreyluneMove, GreyluneRule, ReactionChoice } from './GreyluneRule'
 import { RuleId } from './RuleId'
+import { TellStoryRule } from './TellStoryRule'
 
 /**
  * The window a Companion or a Potion steps into.
@@ -13,9 +14,10 @@ import { RuleId } from './RuleId'
  * the same journey — and it closes on its own the moment there is nothing, so nobody is ever asked
  * to pass on an empty hand.
  *
- * One window cannot be passed: the one opened on a card offered to a player who can only pay for it
- * with a Companion (see {@link ActivateCardRule}). There, answering is the only way on, and only the
- * answers that bring the card within reach are offered.
+ * Two windows cannot be passed: the one opened on a card offered to a player who can only pay for it
+ * with a Companion (see {@link ActivateCardRule}), and the one opened on a story that only Seren or a
+ * Charisma potion can make heard (see {@link TellStoryRule}). There, answering is the only way on,
+ * and only the answers that bring the card or the story within reach are offered.
  */
 export class ReactionRule extends GreyluneRule {
   /**
@@ -37,21 +39,21 @@ export class ReactionRule extends GreyluneRule {
     return this.resumeRule === RuleId.ActivateCard ? new ActivateCardRule(this.game) : undefined
   }
 
-  /** The card being activated, when nothing on it can be taken without an answer. */
-  get blockedActivation(): ActivateCardRule | undefined {
-    const activation = this.activation
-    return activation?.outOfReach ? activation : undefined
+  /** The card being activated or the story about to be told, when nothing can go on without an answer. */
+  get blocked(): ActivateCardRule | TellStoryRule | undefined {
+    const next = this.resumeRule === RuleId.TellStory ? new TellStoryRule(this.game) : this.activation
+    return next?.outOfReach ? next : undefined
   }
 
   get choices(): ReactionChoice[] {
-    const blocked = this.blockedActivation
+    const blocked = this.blocked
     return this.reactionChoices(this.triggers).filter((choice) => !blocked || blocked.helps(choice.card, choice.option))
   }
 
   getPlayerMoves(): GreyluneMove[] {
     return [
       ...this.choices.map((choice) => this.customMove(CustomMoveType.UseReaction, choice)),
-      ...(this.blockedActivation ? [] : [this.customMove(CustomMoveType.Pass)])
+      ...(this.blocked ? [] : [this.customMove(CustomMoveType.Pass)])
     ]
   }
 

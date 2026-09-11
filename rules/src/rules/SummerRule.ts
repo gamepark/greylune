@@ -77,10 +77,11 @@ export class SummerRule extends SeasonRule {
     if (getVillageCardType(front) === VillageCardType.Companion && playerCompanions(this, this.player).length >= MAX_COMPANIONS) return false
     const price = data.cost + this.surcharge(card)
     if (this.coins + this.reliefFor(card) < price) return false
-    // A Building is only worth activating if one of the options it offers can be paid for.
+    // A Building is only worth activating if one of the options it offers can be paid for, and gives
+    // something: a Tavern with no story to hear is not offered.
     if (getVillageCardType(front) !== VillageCardType.Building) return true
     const reduction = this.potentialReduction(activationTriggers(front))
-    return (data.abilities ?? []).some((ability) => this.canUseAbility(card, ability.requirements, price, reduction))
+    return (data.abilities ?? []).some((ability) => this.canReceive(ability.gains) && this.canUseAbility(card, ability.requirements, price, reduction))
   }
 
   /** An option of a Building, with the Seal it may need and the coins left once the card is paid. */

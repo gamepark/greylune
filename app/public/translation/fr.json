@@ -81,6 +81,10 @@
       "you": "Racontez {count, plural, one {# histoire} other {# histoires}}",
       "player": "{player} raconte {count, plural, one {# histoire} other {# histoires}}"
     },
+    "start-story": {
+      "you": "Racontez une histoire",
+      "player": "{player} raconte une histoire"
+    },
     "tell-story": {
       "you": "Racontez une histoire ({value}/{max}) ou <end>terminez votre récit</end>",
       "player": "{player} raconte une histoire"

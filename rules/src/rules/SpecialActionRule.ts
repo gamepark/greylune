@@ -1,9 +1,6 @@
 import { CustomMove, isCustomMoveType } from '@gamepark/rules-api'
 import { MAX_SKILL } from '../Constants'
-import { EncounterCardId, encounterCardData } from '../material/EncounterCard'
 import { coins, force, Gain, magic, tellStory, travel, vp } from '../material/Effect'
-import { LocationType } from '../material/LocationType'
-import { ReactionType, TriggerType } from '../material/Reaction'
 import { CustomMoveType } from './CustomMoveType'
 import { GreyluneMove, GreyluneRule } from './GreyluneRule'
 
@@ -44,25 +41,9 @@ export class SpecialActionRule extends GreyluneRule {
     switch (option) {
       case SpecialAction.Magic:
         return this.magic < MAX_SKILL
-      case SpecialAction.Story:
-        return this.hasStoryToTell
       default:
-        return true
+        return this.canReceive(specialActions[option])
     }
-  }
-
-  /**
-   * An Encounter pushed under the board and worth more than nothing, or one worth nothing with Seren
-   * or a Charisma potion ready to make it a 3 — those answer once the Tavern is open, so a player
-   * holding one is offered the story their own cards cannot tell on their own (see `TellStoryRule`).
-   */
-  private get hasStoryToTell(): boolean {
-    const untold = this.encounterCards.location(LocationType.UntoldStories).player(this.player)
-    if (untold.filter<EncounterCardId>((item) => encounterCardData[item.id.front!].story > 0).length) return true
-    return (
-      untold.length > 0 &&
-      this.reactionChoices([TriggerType.TellStory]).some(({ card, option }) => this.reactionEffect(card, option).type === ReactionType.StoryValue3)
-    )
   }
 
   onCustomMove(move: CustomMove): GreyluneMove[] {
