@@ -612,7 +612,20 @@ export const magicTrackSpot = (area: XYCoordinates, level: number) => onPlayerBo
 export const questMarkerSpot = (area: XYCoordinates, index: number) =>
   onPlayerBoard(area, 12.44 + markerDrop.quest.x + 1.415 * index, 7.66 + markerDrop.quest.y)
 export const incomeTokenSpot = (area: XYCoordinates, index: number) => onPlayerBoard(area, 4.83, 5.85 + 2.3 * index)
-export const activeVillagersSpot = (area: XYCoordinates) => onPlayerBoard(area, 14.08, 10)
+
+/**
+ * The frame at the foot of the board, where the Villagers ready to be sent out stand: the middle of
+ * its row of 3, which is the middle of the frame (see {@link ActiveVillagersLocator}).
+ */
+export const activeVillagersSpot = (area: XYCoordinates) => onPlayerBoard(area, 13.85, 10.2)
+
+/**
+ * From one Villager of the frame to the next: across a row, a hair more than the figure itself is
+ * wide once its halo of shadow is left out, so neighbours stand shoulder to shoulder; from one row to
+ * the next, much less than a figure is tall, so the row behind shows its heads between the ones in
+ * front. A row nearer the eye is drawn over the one behind it, hence the step up in height.
+ */
+export const activeVillagersStep: Coordinates = { x: 1.5, y: 0.9, z: 0.1 }
 
 /**
  * The house printed in the upper right of the board, where the Villager of the year stands: the

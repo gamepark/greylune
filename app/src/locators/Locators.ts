@@ -6,6 +6,7 @@ import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
 import { DeckLocator, ListLocator, Locator, MaterialContext, PileLocator } from '@gamepark/react-game'
 import { Location, MaterialItem } from '@gamepark/rules-api'
+import { ActiveVillagersLocator } from './ActiveVillagersLocator'
 import { AreaLocator } from './AreaLocator'
 import { CampLocator } from './CampLocator'
 import { CenteredFlexLocator } from './CenteredFlexLocator'
@@ -19,7 +20,6 @@ import { VillagerReserveLocator } from './VillagerReserveLocator'
 import { hideBandOfOtherPlayers, showsBandOf } from './DisplayedPlayer'
 import { companionsDependencies, companionsMaxSpread, encounterRowArea, encounterRowDependencies, encounterRowSpread } from './CrowdedRows'
 import {
-  activeVillagersSpot,
   bonusTokensGap,
   bonusTokensSpot,
   coinReserveSpot,
@@ -218,10 +218,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     getCoordinates: (location: Location, context: MaterialContext) => itemsSpot(areaOf(context, location.player))
   }),
 
-  [LocationType.ActiveVillagers]: new CenteredListLocator({
-    gap: { x: 1.8 },
-    getCenter: (location: Location, context: MaterialContext) => activeVillagersSpot(areaOf(context, location.player))
-  }),
+  [LocationType.ActiveVillagers]: new ActiveVillagersLocator(),
 
   [LocationType.StrengthTrack]: new Locator({
     getCoordinates: (location: Location, context: MaterialContext) => strengthTrackSpot(areaOf(context, location.player), location.x ?? 0)
