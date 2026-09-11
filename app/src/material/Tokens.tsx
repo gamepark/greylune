@@ -1,11 +1,12 @@
+/** @jsxImportSource @emotion/react */
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { BonusToken, Coin, IncomeToken, Seal } from '@gamepark/greylune/material/Tokens'
 import { VpToken } from '@gamepark/greylune/material/VpToken'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
-import { MoneyDescription, TokenDescription } from '@gamepark/react-game'
+import { ItemContext, MoneyDescription, TokenDescription } from '@gamepark/react-game'
 import { ComponentSize } from '@gamepark/react-game'
-import { Location, MaterialItem } from '@gamepark/rules-api'
+import { isMoveItemType, Location, MaterialItem, MaterialMove, MoveItem } from '@gamepark/rules-api'
 import {
   bonusTokenImages,
   coinImages,
@@ -18,6 +19,7 @@ import {
   vpTokenImages
 } from '../images/TokenImages'
 import { sealSize } from '../locators/TableLayout'
+import { ActivateSealButton } from '../village/ActivateSeal'
 
 export class CoinDescription extends MoneyDescription<PlayerColor, MaterialType, LocationType, Coin> {
   transparency = true
@@ -53,6 +55,23 @@ export class SealDescription extends TokenDescription<PlayerColor, MaterialType,
   transparency = true
   images = sealImages
   backImage = SealBack
+
+  /** A Seal that can be spent says so as soon as it can, like the card it lies on. */
+  isMenuAlwaysVisible(): boolean {
+    return true
+  }
+
+  /** The offer to spend it, while a Building is being exploited with it (see {@link ActivateSealButton}). */
+  getItemMenu(
+    _item: MaterialItem<PlayerColor, LocationType, Seal>,
+    context: ItemContext<PlayerColor, MaterialType, LocationType>,
+    legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
+  ) {
+    const move = legalMoves.find(
+      (move): move is MoveItem => isMoveItemType(MaterialType.Seal)(move) && move.itemIndex === context.index && move.location.type === LocationType.SealDiscard
+    )
+    return move && <ActivateSealButton move={move} rules={context.rules} />
+  }
 }
 
 /**

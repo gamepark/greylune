@@ -11,6 +11,7 @@
     "buy-price": "Acheter ({{price}} <coin/>)",
     "recruit": "Recruter",
     "recruit-price": "Recruter ({{price}} <coin/>)",
+    "activate": "Activer",
     "resolve": "Résoudre",
     "use": "Utiliser",
     "tell": "Raconter",
@@ -39,6 +40,14 @@
     "activate-card": {
       "you": "Choisissez une option de la carte",
       "player": "{player} active une carte"
+    },
+    "activate-seal": {
+      "you": "Activez un jeton Sceau",
+      "player": "{player} active un jeton Sceau"
+    },
+    "seal-value": {
+      "you": "Choisissez la valeur du jeton Sceau",
+      "player": "{player} choisit la valeur du jeton Sceau"
     },
     "discard-item": {
       "you": "Défaussez un objet",
@@ -98,6 +107,10 @@
     },
     "reaction": {
       "you": "Utilisez un compagnon, une potion, ou <pass>passez</pass>",
+      "player": "{player} peut réagir"
+    },
+    "reaction-card": {
+      "you": "Activez {card} ou <pass>passez</pass>",
       "player": "{player} peut réagir"
     },
     "or": "ou"

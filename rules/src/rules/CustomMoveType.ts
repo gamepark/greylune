@@ -33,8 +33,9 @@ export enum CustomMoveType {
   ActivateCard,
 
   /**
-   * Which option of the card being activated, and the Seal it spends. Data:
-   * `{ ability, seal?, value? }`, `value` being named only when Selia lets the player choose it.
+   * Which option of the card being activated. Data: `{ ability, seal?, value? }` — `seal` the one an
+   * Object is bought with, `value` the one Selia lets the player name. A Building's Seal is not named
+   * here: taking it off the card is a move of its own, the token going to the discard.
    */
   ChooseAbility,
 

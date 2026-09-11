@@ -582,8 +582,8 @@ describe('Winter', () => {
   })
 
   /**
-   * A Seal spent is gone for good, so the stack does run out. The rulebook then makes a new stack of
-   * the discard and shuffles it (p.6) — here the stack is emptied into the discard beforehand, so
+   * A Seal spent goes to the discard, so the stack does run out. The rulebook then makes a new stack
+   * of the discard and shuffles it (p.6) — here the stack is emptied into the discard beforehand, so
    * that the very first card of the new grid has nothing left to be paid with.
    */
   it('makes a new stack of the discard, shuffled, when the Seals run out', () => {

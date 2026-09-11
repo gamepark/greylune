@@ -45,6 +45,7 @@ import {
   questRewardSpot,
   questTileSpots,
   scoreTrackSpot,
+  sealColumnGap,
   sealDiscardRadius,
   sealDiscardSpot,
   sealStackSpot,
@@ -98,7 +99,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
    */
   [LocationType.CardSeal]: new ListLocator({
     parentItemType: MaterialType.VillageCard,
-    gap: { y: 1.4 },
+    gap: { y: sealColumnGap },
     positionOnParent: { x: 86, y: 30 }
   }),
 

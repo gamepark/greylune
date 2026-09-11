@@ -9,6 +9,7 @@ import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { playerCoins, playerForce, playerMagic, playerVp } from './material/PlayerState'
 import { TriggerType } from './material/Reaction'
+import { Seal } from './material/Tokens'
 import { getVillageCardPeriod, VillageCard, VillageCardId } from './material/VillageCard'
 import { Memory } from './Memory'
 import { PlayerColor } from './PlayerColor'
@@ -214,6 +215,86 @@ describe('Dorian', () => {
     expect(playerCoins(rules(), BLUE)).toBe(1)
     expect(playerVp(rules(), BLUE)).toBe(1)
     expect(items(MaterialType.VillageCard)[item].location.type).toBe(LocationType.Items)
+  })
+})
+
+/** Lays Seals of these values on a card, taken out of the stack. */
+const laySeals = (card: number, ...values: Seal[]): number[] =>
+  values.map((value) => {
+    const seal = items(MaterialType.Seal).findIndex((item) => item.location.type === LocationType.SealStack && item.id === value)
+    items(MaterialType.Seal)[seal].location = { type: LocationType.CardSeal, parent: card }
+    return seal
+  })
+
+/** Magical school, alone in the Village with a Villager of Blue beside it: 1 Magic for the Seal's worth in coins. */
+const activateMagicalSchool = (coins: number, ...seals: Seal[]): { school: number; seals: number[] } => {
+  const school = placeCard(VillageCard.MagicalSchool, 0, 0)
+  const indexes = laySeals(school, ...seals)
+  const villager = standVillager(BLUE, 0.5, 0)
+  setCoins(BLUE, coins)
+  setSkill(BLUE, 0, 0)
+  items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+  game.rule = { id: RuleId.Summer, player: BLUE }
+  playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === villager)
+  return { school, seals: indexes }
+}
+
+const sealLocation = (seal: number) => items(MaterialType.Seal)[seal].location.type
+
+describe('A Building worked off a Seal', () => {
+  it('is exploited by taking one of its Seals to the discard, spent at the value printed on it', () => {
+    const { seals } = activateMagicalSchool(5, Seal.Two, Seal.Three)
+    expect(game.rule!.id).toBe(RuleId.ActivateCard)
+    const moves = rules().getLegalMoves(BLUE)
+    expect(moves).toHaveLength(2)
+    play(moves.find((move) => 'itemIndex' in move && move.itemIndex === seals[0])!)
+    expect(sealLocation(seals[0])).toBe(LocationType.SealDiscard)
+    expect(sealLocation(seals[1])).toBe(LocationType.CardSeal)
+    expect(playerCoins(rules(), BLUE)).toBe(3)
+    expect(playerMagic(rules(), BLUE)).toBe(1)
+  })
+
+  it('only offers the Seals the player can pay for', () => {
+    const { seals } = activateMagicalSchool(2, Seal.Two, Seal.Three)
+    // A single Seal within reach, and nobody to answer with: it is taken without a click.
+    expect(sealLocation(seals[0])).toBe(LocationType.SealDiscard)
+    expect(sealLocation(seals[1])).toBe(LocationType.CardSeal)
+    expect(playerCoins(rules(), BLUE)).toBe(0)
+  })
+})
+
+describe('Selia', () => {
+  it('answers the Seal once it is spent, and lets the player name its value', () => {
+    const selia = give(VillageCard.Selia)
+    const { seals } = activateMagicalSchool(5, Seal.Three)
+    // The Seal is gone before she is asked: her card answers a Seal being activated.
+    expect(sealLocation(seals[0])).toBe(LocationType.SealDiscard)
+    expect(game.rule!.id).toBe(RuleId.Reaction)
+    useReaction(selia)
+    expect(game.rule!.id).toBe(RuleId.ActivateCard)
+    playCustom(CustomMoveType.ChooseAbility, (data: { value: number }) => data.value === 1)
+    expect(playerCoins(rules(), BLUE)).toBe(4)
+    expect(playerMagic(rules(), BLUE)).toBe(1)
+    expect(items(MaterialType.VillageCard)[selia].location.rotation).toBe(true)
+  })
+
+  it('leaves the Seal at its printed value when the player passes', () => {
+    const selia = give(VillageCard.Selia)
+    activateMagicalSchool(5, Seal.Three)
+    playCustom(CustomMoveType.Pass)
+    expect(playerCoins(rules(), BLUE)).toBe(2)
+    expect(playerMagic(rules(), BLUE)).toBe(1)
+    expect(items(MaterialType.VillageCard)[selia].location.rotation).toBeFalsy()
+  })
+
+  it('makes a Seal the player cannot pay for worth taking, and is tilted for it without asking', () => {
+    const selia = give(VillageCard.Selia)
+    const { seals } = activateMagicalSchool(1, Seal.Three)
+    expect(sealLocation(seals[0])).toBe(LocationType.SealDiscard)
+    expect(items(MaterialType.VillageCard)[selia].location.rotation).toBe(true)
+    // 1 coin: the only value that can be named is named for the player.
+    expect(playerCoins(rules(), BLUE)).toBe(0)
+    expect(playerMagic(rules(), BLUE)).toBe(1)
   })
 })
 

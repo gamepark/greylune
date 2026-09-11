@@ -129,13 +129,13 @@ export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, Loc
   /**
    * The Seals a card of the grid is owed, drawn from the top of the stack.
    *
-   * The stack does run out: a Seal spent on a card is gone for good, and only the ones nobody took
-   * come back, when the year is put away. The rulebook then makes a new stack of the discard and
-   * shuffles it (p.6), which is what the three lines below and the two reactions above do together —
-   * the card is given whatever the stack still holds, the discard is turned over in one move, the
-   * new stack is shuffled, and the shuffle comes back here to finish paying. Neither of those two
-   * can be written on the next line rather than as a reaction: a move is built against the state it
-   * starts from, and both need the one the move before them leaves.
+   * The stack does run out: a Seal spent and a Seal nobody took both end up in the discard (rulebook
+   * p.8), which only comes back once the stack is empty. The rulebook then makes a new stack of the
+   * discard and shuffles it (p.6), which is what the three lines below and the two reactions above
+   * do together — the card is given whatever the stack still holds, the discard is turned over in
+   * one move, the new stack is shuffled, and the shuffle comes back here to finish paying. Neither of
+   * those two can be written on the next line rather than as a reaction: a move is built against the
+   * state it starts from, and both need the one the move before them leaves.
    *
    * @param card The card to pay, the one that has just landed. Only the last card dealt can be owed
    * anything — every card before it was paid as it landed — so the shuffle needs no argument.

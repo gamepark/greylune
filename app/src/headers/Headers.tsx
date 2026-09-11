@@ -2,6 +2,7 @@ import { RuleId } from '@gamepark/greylune/rules/RuleId'
 import { HeaderText } from '@gamepark/react-game'
 import { ComponentType } from 'react'
 import { Trans } from 'react-i18next'
+import { ActivateCardHeader } from './ActivateCardHeader'
 import { BonusTokenHeader } from './BonusTokenHeader'
 import { ChooseSkillHeader } from './ChooseSkillHeader'
 import { EventHeader } from './EventHeader'
@@ -47,7 +48,7 @@ export const Headers: Partial<Record<RuleId, ComponentType>> = {
   [RuleId.Summer]: SummerHeader,
 
   // ------------------------------------------------------------------ what an action leaves to decide
-  [RuleId.ActivateCard]: () => <HeaderText code="activate-card" />,
+  [RuleId.ActivateCard]: ActivateCardHeader,
   [RuleId.DiscardItem]: () => <HeaderText code="discard-item" />,
   [RuleId.Travel]: TravelHeader,
   [RuleId.ResolveEncounter]: ResolveEncounterHeader,

@@ -430,6 +430,25 @@ export const campRadius: XYCoordinates = {
  */
 export const actionButtonSpot: XYCoordinates = { x: -1, y: 1 }
 
+/** The Seals of a card overlap in their column, each one this far below the one before it. */
+export const sealColumnGap = 1.4
+
+/** A little more than a button is tall, so that the buttons of one card stand clear of one another. */
+const sealButtonStep = 2.4
+
+/**
+ * Where the button that spends a Seal sits on it: just off its right side, over the gap between the
+ * card and its neighbour, so the value printed on the token stays in sight (see `ActivateSealButton`).
+ *
+ * A button is taller than the step between two Seals, so the buttons of one card fan out from the
+ * middle of the column until they stand {@link sealButtonStep} apart. A Seal keeps its place in the
+ * column when another is spent, so `position` and `middle` are places in the column, not ranks.
+ */
+export const sealButtonSpot = (position: number, middle: number): XYCoordinates => ({
+  x: sealSize.width / 2 + 1.3,
+  y: (position - middle) * (sealButtonStep - sealColumnGap)
+})
+
 /**
  * Where the buttons an Object of the player's own wears sit on it (see `ItemCardMenu`). Its own spot
  * rather than the one above: an Object lies in a row along the player's board, hard against its

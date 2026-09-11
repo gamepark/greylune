@@ -66,6 +66,10 @@ export enum Memory {
   /** What a reaction has promised the cost about to be paid: Force, Villagers, coins. */
   CostReduction,
 
-  /** The value the Seal of the activation is spent at. */
+  /**
+   * The value the Seal of the activation is spent at. A Building's Seal is spent before the rest of
+   * the activation — Selia answers in between — so this being set is also how the activation knows
+   * the Seal has already left the card.
+   */
   SealValue
 }
