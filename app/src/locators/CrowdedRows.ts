@@ -9,7 +9,8 @@
  * - everybody else's do, down to the sliver of a row that is left showing where their cards are, and
  *   where the next one is going to land;
  * - the band above a board, when it is drawn, never does either. It is a block of tokens rather than
- *   a row that tightens, and it is authored to reach no further than a full row of Companions.
+ *   a row that tightens, and over the Companions it holds the gold and the Villagers alone: low, on
+ *   the line of the cards, and over the 2 of them nearest the board.
  *
  * A row that meets nobody is left alone all the way to the line the Companions of every player start
  * on, which is where the column of areas is set and the strip ends. Only the 3 rows leaving the right
@@ -24,6 +25,7 @@ import { MaterialContext } from '@gamepark/react-game'
 import { Location } from '@gamepark/rules-api'
 import { getBandRow, getDisplayedPlayer, showsAllBands } from './DisplayedPlayer'
 import {
+  companionsBandSpread,
   companionsGap,
   companionsMinSpread,
   crowdedRowsRoom,
@@ -62,14 +64,15 @@ const companionsDemand = (player: PlayerColor, context: Context): number =>
 
 /**
  * How much of the strip a seat holds against an Encounter row, of the 2 things of theirs that can lie
- * across it: their band, which holds a full row of Companions, and their Companions, which hold the
- * whole of what they are asking for when they are the ones being read, and their bare row otherwise.
+ * across it: their band, which holds the 2 Companions nearest the board, and their Companions, which
+ * hold the whole of what they are asking for when they are the ones being read, and their bare row
+ * otherwise.
  */
 const heldBy = (seat: number, area: EncounterRowArea, context: Context): number => {
   const player = context.rules.players[seat]
   const read = player === getDisplayedPlayer(context)
   const y = seatY(seat, context)
-  const band = (read || showsAllBands(context)) && rowCrossesBand(area, y) ? playerCardsFullSpread : 0
+  const band = (read || showsAllBands(context)) && rowCrossesBand(area, y) ? companionsBandSpread : 0
   const companions = rowCrossesCompanions(area, y) ? (read ? companionsDemand(player, context) : companionsMinSpread) : 0
   return Math.max(band, companions)
 }

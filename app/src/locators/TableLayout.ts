@@ -713,10 +713,9 @@ export const crowdedRowsRoom = (area: EncounterRowArea): number =>
 
 /**
  * The 2 strips of a player area an Encounter row can run into, measured from the middle of the board:
- * the row of Companions, and the band above it.
+ * the row of Companions, and what the band holds over it (see {@link companionsBandStrip}).
  */
 const companionsStrip = { top: -villageCardSize.height / 2, bottom: villageCardSize.height / 2 }
-const bandStrip = { top: bandTop, bottom: -printedHalf }
 
 const crossesStrip = (area: EncounterRowArea, areaY: number, strip: { top: number; bottom: number }): boolean => {
   const { y } = encounterRowSpot(area)
@@ -724,7 +723,6 @@ const crossesStrip = (area: EncounterRowArea, areaY: number, strip: { top: numbe
 }
 
 export const rowCrossesCompanions = (area: EncounterRowArea, areaY: number): boolean => crossesStrip(area, areaY, companionsStrip)
-export const rowCrossesBand = (area: EncounterRowArea, areaY: number): boolean => crossesStrip(area, areaY, bandStrip)
 
 /**
  * The 2 Companion cards nearest the board, which is all the room the gold and the Villagers are given:
@@ -833,11 +831,24 @@ const bandEndSlot = 3.44 + 2 * 0.315
 export const bonusTokensGap: Partial<XYCoordinates> = { y: 2.1 }
 export const bonusTokensSpot = (area: XYCoordinates) =>
   besidePlayerBoard(area, sideRowX - sideRowWidth / 2 + bandEndSlot / 2, standingOnCards(2 * bonusTokensGap.y! + 2))
-export const playerCoinsSpot = (area: XYCoordinates) => besidePlayerBoard(area, twoCompanionsRight - 7.52 / 2, standingOnCards(4.31))
+const playerCoinsHeight = 4.31
+export const playerCoinsSpot = (area: XYCoordinates) => besidePlayerBoard(area, twoCompanionsRight - 7.52 / 2, standingOnCards(playerCoinsHeight))
 /** The stretch of table the 4 Villagers of the reserve stand on: a row of them, and no more. */
 export const villagerReserveSize = { width: 6.67, height: villagerHeight }
 export const villagerReserveSpot = (area: XYCoordinates) =>
   besidePlayerBoard(area, twoCompanionsLeft + villagerReserveSize.width / 2, standingOnCards(villagerReserveSize.height))
+
+/**
+ * What the band holds over the Companions, as an Encounter row running at it sees it: the gold and the
+ * Villagers, from the line they stand on up to the top of the gold, the taller of the 2 piles, and over
+ * the 2 cards nearest the board — first card to second, in the terms a row of Companions is spread in.
+ * The rest of the band on that side is open table, the air above the piles and the far card of the
+ * row, and an Encounter row passing there takes nothing from anybody.
+ */
+const companionsBandStrip = { top: standingOnCards(playerCoinsHeight) - playerCoinsHeight / 2, bottom: standingOnCards(0) }
+export const companionsBandSpread = playerCardsGap
+
+export const rowCrossesBand = (area: EncounterRowArea, areaY: number): boolean => crossesStrip(area, areaY, companionsBandStrip)
 
 /** The one point token a player can hold, in the middle of the band, between the 2 rows of Stories. */
 export const playerVpTokensSpot = (area: XYCoordinates) => besidePlayerBoard(area, 0, bandCenterY)
