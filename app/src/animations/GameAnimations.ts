@@ -2,7 +2,7 @@ import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { ItemContext, MaterialGameAnimations } from '@gamepark/react-game'
-import { Coordinates, isMoveItemType, MaterialMove } from '@gamepark/rules-api'
+import { Coordinates, isMoveItem, isMoveItemType, MaterialMove } from '@gamepark/rules-api'
 import { areaOf } from '../locators/Seats'
 import { spread } from '../locators/spread'
 import { storiesCeiling, storiesGap, storiesMaxGap, storiesPush, toldStoriesSpot, untoldStoriesSpot } from '../locators/TableLayout'
@@ -50,6 +50,22 @@ gameAnimations
  * has just decided on is not something they then wait for.
  */
 gameAnimations.configure((move) => isMoveItemType(MaterialType.Adventurer)(move) && move.location.type === LocationType.Area).duration(500)
+
+/**
+ * The new year laid out in Winter (see `WinterRule`): 9 Village cards, the Seals each of them is
+ * owed, the row of Encounters and their Income tokens — a few dozen pieces dealt one after another,
+ * with nobody choosing anything. At the usual duration that is a long wait watching a table being
+ * set, so each piece is given a third of a second: the deal still reads card by card, and the year
+ * is ready without being waited for. None of these places is reached by any other rule.
+ */
+const winterDeal: Partial<Record<MaterialType, LocationType>> = {
+  [MaterialType.VillageCard]: LocationType.VillageGrid,
+  [MaterialType.Seal]: LocationType.CardSeal,
+  [MaterialType.EncounterCard]: LocationType.EncounterRow,
+  [MaterialType.IncomeToken]: LocationType.CardIncome
+}
+
+gameAnimations.configure((move) => isMoveItem(move) && winterDeal[move.itemType] === move.location.type).duration(300)
 
 /** Where the flight ends and the push begins: the card spends the last quarter of it sliding in. */
 const SLIDE_START = 0.75
