@@ -1,6 +1,6 @@
 import { BASE_INCOME } from '../Constants'
 import { Area } from '../material/Area'
-import { coins, Gain } from '../material/Effect'
+import { coins, Gain, GainType, vp } from '../material/Effect'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { playerCompanions } from '../material/PlayerState'
@@ -40,7 +40,11 @@ export class AutumnRule extends GreyluneRule {
     return this.playerCards.rotation(true).rotateItems(false)
   }
 
-  /** 3 coins, one less for every Companion, and whatever the Income tokens pay every year. */
+  /**
+   * 3 coins, one less for every Companion, and whatever the Income tokens pay every year. The coins
+   * and the victory points are each added up into a single gain, so that the year pays out in one
+   * move of each rather than one per token; an amount that comes to nothing is not handed over.
+   */
   get income(): Gain[] {
     const wages = Math.max(0, BASE_INCOME - playerCompanions(this, this.player).length)
     const tokens = this.material(MaterialType.IncomeToken)
@@ -48,10 +52,13 @@ export class AutumnRule extends GreyluneRule {
       .player(this.player)
       .getItems()
       .flatMap((item) => incomeTokenGains[item.id as IncomeToken])
-    return [coins(wages), ...tokens]
-  }
-
-  getPlayerMoves(): GreyluneMove[] {
-    return []
+    const total = (type: GainType) => tokens.reduce((sum, gain) => (gain.type === type && 'count' in gain ? sum + this.amount(gain.count) : sum), 0)
+    const coinTotal = wages + total(GainType.Coins)
+    const vpTotal = total(GainType.Vp)
+    return [
+      ...(coinTotal ? [coins(coinTotal)] : []),
+      ...(vpTotal ? [vp(vpTotal)] : []),
+      ...tokens.filter((gain) => gain.type !== GainType.Coins && gain.type !== GainType.Vp)
+    ]
   }
 }

@@ -90,8 +90,4 @@ export class ResolveEffectsRule extends GreyluneRule {
   get canPlaceVillager(): boolean {
     return this.activeVillagers.length > 0 && villageGaps.some((gap) => cardsAroundGap(this, gap).length > 0)
   }
-
-  getPlayerMoves(): GreyluneMove[] {
-    return []
-  }
 }

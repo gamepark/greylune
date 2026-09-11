@@ -35,8 +35,4 @@ export class UseItemRule extends GreyluneRule {
     if (tilted) this.memorize(Memory.LastTilted, this.card)
     return [...moves, ...(tilted ? this.openReactions([TriggerType.TiltCard], RuleId.ResolveEffects) : this.endOfAction())]
   }
-
-  getPlayerMoves(): GreyluneMove[] {
-    return []
-  }
 }
