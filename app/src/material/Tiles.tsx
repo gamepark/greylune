@@ -4,8 +4,11 @@ import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { QuestTile } from '@gamepark/greylune/material/QuestTile'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
+import { CustomMoveType } from '@gamepark/greylune/rules/CustomMoveType'
+import { ResolveEncounterRule } from '@gamepark/greylune/rules/ResolveEncounterRule'
 import { ItemContext, TokenDescription } from '@gamepark/react-game'
-import { MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { CustomMove, isCustomMoveType, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { AchieveQuestButton } from '../encounters/AchieveQuest'
 import { eventOptions, joinEventMoves } from '../event/EventMoves'
 import { EventTileMenu } from '../event/EventTileMenu'
 import { eventTileImages, EventTileBack, questTileImages, QuestTileBack } from '../images/TileImages'
@@ -50,4 +53,25 @@ export class QuestTileDescription extends TokenDescription<PlayerColor, Material
   images = questTileImages
   backImage = QuestTileBack
   help = QuestTileHelp
+
+  /** Like the Event: the Quest asks to be pressed, and its button is there as soon as it is due. */
+  isMenuAlwaysVisible(): boolean {
+    return true
+  }
+
+  /**
+   * The Quest lying where the Adventurer has stopped wears the offer to achieve it, for as long as it
+   * is one of the ways out of the space (see {@link AchieveQuestButton}). The move names no tile — a
+   * space carries one Quest at most — so the tile is told apart by where the player stands.
+   */
+  getItemMenu(
+    item: MaterialItem<PlayerColor, LocationType, QuestTile>,
+    context: ItemContext<PlayerColor, MaterialType, LocationType>,
+    legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
+  ) {
+    const move = legalMoves.find((move): move is CustomMove => isCustomMoveType(CustomMoveType.ResolveQuest)(move))
+    if (!move || item.location.type !== LocationType.QuestTileSpace) return undefined
+    if (item.location.id !== new ResolveEncounterRule(context.rules.game).questSpace) return undefined
+    return <AchieveQuestButton move={move} player={context.rules.game.rule?.player} />
+  }
 }

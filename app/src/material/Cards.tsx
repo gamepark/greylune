@@ -11,7 +11,8 @@ import { EncounterCardMenu } from '../encounters/ResolveEncounter'
 import { EndStoryButton, TellStoryButton } from '../encounters/TellStory'
 import { encounterCardBacks, encounterCardImagesEn, encounterCardImagesFr } from '../images/EncounterCardImages'
 import { villageCardBacks, villageCardImagesEn, villageCardImagesFr } from '../images/VillageCardImages'
-import { itemActionMoves } from '../items/ItemActions'
+import { DiscardItemButton } from '../items/DiscardItem'
+import { discardItemMove, itemActionMoves } from '../items/ItemActions'
 import { ItemCardMenu } from '../items/UseItem'
 import { encounterCardSize, villageCardBorderRadius, villageCardSize } from '../locators/TableLayout'
 import { reactionMoves } from '../reactions/ReactionActions'
@@ -55,6 +56,9 @@ export class VillageCardDescription extends CardDescription<PlayerColor, Materia
    * as long as it can be tilted: an Object is used out of the player's own turn order, waiting on
    * nothing, so what it offers is worn the whole time it is on offer. That, too, never meets a
    * reaction: an Object is used in Summer, and Summer opens no window on the player using it.
+   *
+   * While one of the player's Objects has to go, every one of them wears the offer to give it up
+   * instead (see {@link DiscardItemButton}): nothing else is on offer in the meantime.
    */
   getItemMenu(
     item: MaterialItem<PlayerColor, LocationType, VillageCardId>,
@@ -64,6 +68,8 @@ export class VillageCardDescription extends CardDescription<PlayerColor, Materia
     const reactions = reactionMoves(legalMoves, context.index)
     if (reactions.length && item.id?.front !== undefined) return <ReactionCardMenu front={item.id.front} moves={reactions} />
     if (item.location.type === LocationType.Items) {
+      const discard = discardItemMove(legalMoves, context.index)
+      if (discard) return <DiscardItemButton move={discard} />
       const uses = itemActionMoves(legalMoves, context.index)
       return uses.length && item.id?.front !== undefined ? <ItemCardMenu front={item.id.front} moves={uses} /> : undefined
     }

@@ -1,5 +1,6 @@
+import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { CustomMoveType } from '@gamepark/greylune/rules/CustomMoveType'
-import { CustomMove, isCustomMoveType, MaterialMove } from '@gamepark/rules-api'
+import { CustomMove, isCustomMoveType, isDeleteItemType, MaterialMove } from '@gamepark/rules-api'
 
 /**
  * Using one of the player's Objects (see `SummerRule` and `UseItemRule`).
@@ -17,3 +18,10 @@ export const itemActionData = (move: CustomMove): { card: number; ability: numbe
 /** The options this Object is offering, if it is offering any: one move per option it can pay for. */
 export const itemActionMoves = (legalMoves: MaterialMove[], card: number): CustomMove[] =>
   legalMoves.filter((move): move is CustomMove => isUseItem(move) && itemActionData(move).card === card)
+
+/**
+ * Giving this Object up, when one has to go (see `DiscardItemRule`): the card goes back in the box,
+ * there being no discard pile for the Village cards, so the move deletes it.
+ */
+export const discardItemMove = (legalMoves: MaterialMove[], card: number): MaterialMove | undefined =>
+  legalMoves.find((move) => isDeleteItemType(MaterialType.VillageCard)(move) && move.itemIndex === card)
