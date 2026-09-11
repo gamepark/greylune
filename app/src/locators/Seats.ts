@@ -15,8 +15,8 @@ export const areaOf = (context: MaterialContext, player?: PlayerColor) =>
   playerAreaSpot(seatOf(context, player), context.rules.players.length, getBandRow(context))
 
 /**
- * Several players share one space: the Village, a season circle, a score shield, the tents of the
- * camp. Spread them around the middle of that space rather than stacking them out of sight.
+ * Several players share one space: the Village, a season circle, a score shield. Spread them around
+ * the middle of that space rather than stacking them out of sight.
  */
 export const fanBySeat = (context: Context, player: number | undefined, step: number): number =>
   (seatOf(context, player) - (context.rules.players.length - 1) / 2) * step

@@ -201,7 +201,7 @@ export class ActivateCardRule extends GreyluneRule {
     const requirements = data.ability === BUY ? [] : (this.data.abilities![data.ability].requirements ?? [])
     const moves: GreyluneMove[] = [
       ...this.payCoins(this.price + this.coinCost(requirements)),
-      this.villagers.index(this.villager).moveItem({ type: LocationType.Camp, player: this.player }),
+      this.villagers.index(this.villager).moveItem({ type: LocationType.Camp }),
       ...(data.seal !== undefined ? [this.material(MaterialType.Seal).index(data.seal).deleteItem()] : [])
     ]
     return data.ability === BUY ? [...moves, ...this.take()] : [...moves, ...this.exploit(data.ability, requirements)]

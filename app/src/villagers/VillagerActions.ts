@@ -77,8 +77,5 @@ export const bestCoinsMove = (moves: CustomMove[], rules: MaterialSource): Custo
     undefined
   )
 
-/** The Camp of the player a Villager belongs to: where it is going, and what it is dropped on. */
-export const campOf = (rules: MaterialSource, villager: number): Location<PlayerColor, LocationType> => ({
-  type: LocationType.Camp,
-  player: rules.material(MaterialType.Villager).getItem(villager).location.player
-})
+/** The camp, everybody's: where a Villager taken back is going, and what it is dropped on. */
+export const camp: Location<PlayerColor, LocationType> = { type: LocationType.Camp }

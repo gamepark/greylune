@@ -391,7 +391,7 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
   /** A Villager spent rests in the camp until Autumn (rulebook p.14). */
   spendVillagers(amount: number): GreyluneMove[] {
     if (amount <= 0) return []
-    return this.activeVillagers.limit(amount).moveItems({ type: LocationType.Camp, player: this.player })
+    return this.activeVillagers.limit(amount).moveItems({ type: LocationType.Camp })
   }
 
   // ------------------------------------------------------------------ reactions

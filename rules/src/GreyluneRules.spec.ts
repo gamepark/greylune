@@ -12,6 +12,7 @@ import { playerCoins, playerForce, playerMagic, playerVp } from './material/Play
 import { QuestTile } from './material/QuestTile'
 import { IncomeToken } from './material/Tokens'
 import { getVillageCardPeriod, PLAYERS_MINUS_ONE, VillageCard, VillageCardId, villageCardData } from './material/VillageCard'
+import { getVillagerPlayer, Villager } from './material/Villager'
 import { getVpToken, VpTokenValue } from './material/VpToken'
 import { Memory } from './Memory'
 import { PlayerColor } from './PlayerColor'
@@ -45,6 +46,13 @@ const items = (type: MaterialType): MaterialItem<PlayerColor, LocationType>[] =>
 
 /** How many pieces of a type are really on the table: a deleted item leaves its slot behind. */
 const count = (type: MaterialType, location: LocationType, player?: PlayerColor): number => rules().material(type).location(location).player(player).length
+
+/** The camp is everybody's: whose Villagers are resting there is read off the figures themselves. */
+const inCamp = (player: PlayerColor): number =>
+  rules()
+    .material(MaterialType.Villager)
+    .location(LocationType.Camp)
+    .id<Villager>((villager) => getVillagerPlayer(villager) === player).length
 
 const put = (type: MaterialType, index: number, location: MaterialItem<PlayerColor, LocationType>['location']) => {
   items(type)[index].location = location
@@ -444,7 +452,7 @@ describe('The areas', () => {
     expect(game.rule!.id).toBe(RuleId.ChooseOutcome)
     expect(rules().getLegalMoves(BLUE)).toHaveLength(1)
     playCustom(CustomMoveType.ResolveOutcome)
-    expect(count(MaterialType.Villager, LocationType.Camp, BLUE)).toBe(1)
+    expect(inCamp(BLUE)).toBe(1)
     expect(playerVp(rules(), BLUE)).toBe(4)
   })
 
@@ -454,7 +462,7 @@ describe('The areas', () => {
     playCustom(CustomMoveType.ChooseEncounter)
     expect(game.rule!.id).toBe(RuleId.ChooseOutcome)
     playCustom(CustomMoveType.ResolveOutcome, (data: { outcomes: number[] }) => data.outcomes.length === 2)
-    expect(count(MaterialType.Villager, LocationType.Camp, BLUE)).toBe(2)
+    expect(inCamp(BLUE)).toBe(2)
   })
 
   it('never lets a player walk away from an Encounter they can resolve', () => {
@@ -519,7 +527,7 @@ describe('A Heroic Quest', () => {
 describe('Autumn', () => {
   it('brings everything home, straightens the cards and pays 3 coins less one per Companion', () => {
     const villager = items(MaterialType.Villager).findIndex((item) => item.location.type === LocationType.ActiveVillagers && item.location.player === BLUE)
-    put(MaterialType.Villager, villager, { type: LocationType.Camp, player: BLUE })
+    put(MaterialType.Villager, villager, { type: LocationType.Camp })
     items(MaterialType.Adventurer).find((item) => item.id === BLUE)!.location = { type: LocationType.Area, id: Area.Swords }
     const companion = placeCard(VillageCard.Kael, 0, 0)
     put(MaterialType.VillageCard, companion, { type: LocationType.Companions, player: BLUE })

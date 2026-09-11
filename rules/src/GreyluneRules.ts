@@ -107,7 +107,9 @@ export class GreyluneRules
    * space lies at), {@link LocationType.VillageGrid} (a 3x3 grid, `x` and `y` are the column and the
    * row), {@link LocationType.StrengthTrack} and {@link LocationType.MagicTrack} (`x` is the level,
    * and a track is one player's own). So is {@link LocationType.PlayerCoins}, where coins are money:
-   * identical pieces merge into one item with a quantity, which a sequence would prevent.
+   * identical pieces merge into one item with a quantity, which a sequence would prevent. And so is
+   * {@link LocationType.Camp}: the Villagers resting there are a crowd, not a row, and a rank would
+   * tell nothing about where one of them stands.
    */
   locationsStrategies = {
     [MaterialType.VillageCard]: {
@@ -127,7 +129,6 @@ export class GreyluneRules
     [MaterialType.Villager]: {
       [LocationType.ActiveVillagers]: new PositiveSequenceStrategy(),
       [LocationType.VillagerReserve]: new PositiveSequenceStrategy(),
-      [LocationType.Camp]: new PositiveSequenceStrategy(),
       [LocationType.VillageGap]: new StackingStrategy(),
       [LocationType.EventSpace]: new StackingStrategy()
     },

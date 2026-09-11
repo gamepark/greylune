@@ -18,7 +18,7 @@ import { gapsToPlaceVillager } from '../village/PlaceVillager'
 import { canSelectVillager } from '../villagers/SelectVillager'
 import { SpecialActionOption } from '../villagers/SpecialAction'
 import { specialActionOptions } from '../villagers/SpecialActionMoves'
-import { campOf, isActivateCard, isGainCoinsAround, slotOfCard, villagerActionData } from '../villagers/VillagerActions'
+import { camp, isActivateCard, isGainCoinsAround, slotOfCard, villagerActionData } from '../villagers/VillagerActions'
 import { SelectedVillager } from '../villagers/SelectedVillager'
 import { adventurerImages, MagicMarker, questMarkerImages, scoreMarkerImages, seasonMarkerImages, StrengthMarker, villagerImages } from '../images/PawnImages'
 
@@ -144,7 +144,7 @@ export class VillagerDescription extends TokenDescription<PlayerColor, MaterialT
     move: MaterialMove<PlayerColor, MaterialType, LocationType>
   ): Location<PlayerColor, LocationType>[] {
     if (isActivateCard(move)) return [{ type: LocationType.VillageGrid, ...slotOfCard(context.rules, villagerActionData(move).card!) }]
-    if (isGainCoinsAround(move)) return [campOf(context.rules, context.index)]
+    if (isGainCoinsAround(move)) return [camp]
     return super.getMoveDropLocations(context, move)
   }
 }

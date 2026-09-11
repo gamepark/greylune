@@ -12,7 +12,7 @@ import { CenteredFlexLocator } from './CenteredFlexLocator'
 import { CenteredListLocator } from './CenteredListLocator'
 import { EventSpaceLocator } from './EventSpaceLocator'
 import { playerPanelLocator } from './PlayerPanelLocator'
-import { areaOf, fanBySeat } from './Seats'
+import { areaOf } from './Seats'
 import { VillageGapLocator } from './VillageGapLocator'
 import { VillageGridLocator } from './VillageGridLocator'
 import { VillagerReserveLocator } from './VillagerReserveLocator'
@@ -22,8 +22,6 @@ import {
   activeVillagersSpot,
   bonusTokensGap,
   bonusTokensSpot,
-  campRowGap,
-  campSpot,
   coinReserveSpot,
   companionsGap,
   companionsSpot,
@@ -191,13 +189,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     getCoordinates: (location: Location) => stacked(seasonSpots[(location.id as Season) ?? Season.Spring], location.x)
   }),
 
-  [LocationType.Camp]: new CampLocator({
-    gap: { x: 1.7 },
-    getCenter: (location: Location, context: MaterialContext) => ({
-      ...campSpot,
-      y: campSpot.y + fanBySeat(context, location.player, campRowGap)
-    })
-  }),
+  [LocationType.Camp]: new CampLocator(),
 
   // ---------------------------------------------------------------- personal board
 

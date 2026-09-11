@@ -1,12 +1,11 @@
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
-import { DropAreaDescription, ItemContext } from '@gamepark/react-game'
-import { Coordinates, Location, MaterialMove } from '@gamepark/rules-api'
+import { DropAreaDescription, ItemContext, PileLocator } from '@gamepark/react-game'
+import { Location, MaterialMove } from '@gamepark/rules-api'
 import { CampArea } from '../villagers/CampAction'
 import { isGainCoinsAround, villagerActionData } from '../villagers/VillagerActions'
-import { CenteredListLocator } from './CenteredListLocator'
-import { campAreaSize, campSpot } from './TableLayout'
+import { campAreaSize, campRadius, campSpot } from './TableLayout'
 
 /**
  * The tents, offered to a Villager coming back from the Village. Every way back is the same move,
@@ -29,19 +28,18 @@ class CampAreaDescription extends DropAreaDescription<PlayerColor, MaterialType,
 }
 
 /**
- * Where spent Villagers rest until Autumn, and what the tents become while a Villager is carried
- * over the table. The area is never listed here: the framework opens it only for a pawn whose own
- * move names it, so the camps of the other players are never anybody's to drop on.
+ * Where spent Villagers rest until Autumn, all the players' mixed up, and what the tents become while
+ * a Villager is carried over the table. The area is never listed here: the framework opens it only
+ * for a pawn whose own move names it.
+ *
+ * The figures stand upright, so they are scattered without being turned, and the one lower down is
+ * the one nearer to the eye: it is drawn in front of the ones behind it, whatever order they came in.
  */
-export class CampLocator extends CenteredListLocator<PlayerColor, MaterialType, LocationType> {
+export class CampLocator extends PileLocator<PlayerColor, MaterialType, LocationType> {
   locationDescription = new CampAreaDescription()
-
-  /**
-   * The area is the camp itself and not one player's row of it, so it stays on the tents rather than
-   * following the row the Villagers of a player line up on — which is what the coordinates of the
-   * location say, and what the Villagers themselves go on using.
-   */
-  protected getAreaCoordinates(): Partial<Coordinates> {
-    return campSpot
-  }
+  coordinates = campSpot
+  radius = campRadius
+  maxAngle = 0
+  zFromY = true
+  minimumDistance = 0.3
 }

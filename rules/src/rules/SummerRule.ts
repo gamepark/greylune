@@ -179,7 +179,7 @@ export class SummerRule extends SeasonRule {
   private gainCoinsAround(data: VillagerActionData): GreyluneMove[] {
     if (data.card !== undefined) this.pushGains([coins(this.surcharge(data.card))])
     return [
-      this.villagers.index(data.villager).moveItem({ type: LocationType.Camp, player: this.player }),
+      this.villagers.index(data.villager).moveItem({ type: LocationType.Camp }),
       ...this.openReactions([TriggerType.RemoveVillager], RuleId.ResolveEffects)
     ]
   }

@@ -81,7 +81,10 @@ export enum LocationType {
 
   /** The 3 season spaces of the Season board: `id` is a {@link Season}, `x` the rank in the pile. */
   SeasonTrack,
-  /** Where spent Villagers rest until Autumn. */
+  /**
+   * Where spent Villagers rest until Autumn. One camp for everybody, the Villagers of all the players
+   * mixed up in it: whose a Villager is, is sculpted into the figure (see {@link Villager}).
+   */
   Camp,
 
   // ---------------------------------------------------------------- personal board and its surroundings

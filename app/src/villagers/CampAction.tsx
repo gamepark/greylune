@@ -3,14 +3,13 @@ import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
-import { LocationDescription, useLegalMoves, useMaterialContext, useRules } from '@gamepark/react-game'
+import { LocationDescription, useLegalMoves, useRules } from '@gamepark/react-game'
 import { CustomMove, Location } from '@gamepark/rules-api'
 import { HTMLAttributes, Ref } from 'react'
 import { Trans } from 'react-i18next'
 import { ActionArea } from '../components/ActionArea'
 import { VillagerIcon } from '../components/Icons'
-import { fanBySeat } from '../locators/Seats'
-import { campBoardOffset, campRowGap } from '../locators/TableLayout'
+import { campBoardOffset } from '../locators/TableLayout'
 import { helpIcons } from '../material/help/HelpLayout'
 import { GreyluneMenuButton } from '../theme/GreyluneMenuButton'
 import { useActingVillager } from './SelectVillager'
@@ -35,20 +34,17 @@ const CampActionLabel = ({ coins }: { coins: number }) =>
  * The button that sends the aimed-at Villager home, drawn on the Season board.
  *
  * The camp is a corner of that board and carries no piece of its own, so the button is hung on the
- * board and walks back out to the right row of tents: the tents themselves, then the row this
- * player's Villagers line up on (see {@link campBoardOffset}). It stands on that spot rather than
- * off to the side of it the way it does on a card — the rows are barely a Villager apart, and there
- * is nowhere to step aside to without stepping into the camp of the player below. Its label is
- * written towards the board, the table having nothing to spare on the other side.
+ * board and walks back out to the tents (see {@link campBoardOffset}). It stands in the middle of
+ * them rather than off to the side the way it does on a card: the tents are the whole of the corner,
+ * and there is nowhere to step aside to. Its label is written towards the board, the table having
+ * nothing to spare on the other side.
  */
 export const CampMenu = ({ move }: { move: CustomMove }) => {
-  const context = useMaterialContext<PlayerColor, MaterialType, LocationType>()
   const rules = useRules<GreyluneRules>()!
-  const player = rules.material(MaterialType.Villager).getItem(villagerActionData(move).villager).location.player
   return (
     <GreyluneMenuButton
       x={campBoardOffset.x}
-      y={campBoardOffset.y + fanBySeat(context, player, campRowGap)}
+      y={campBoardOffset.y}
       move={move}
       label={<CampActionLabel coins={coinsAround(rules, villagerActionData(move).card)} />}
       labelPosition="right"
@@ -64,7 +60,7 @@ type AreaProps = {
   ref?: Ref<HTMLDivElement>
 } & HTMLAttributes<HTMLDivElement>
 
-/** The tents as a place to let a Villager go, over the row its player's own Villagers rest on. */
+/** The tents as a place to let a Villager go. */
 export const CampArea = ({ location, description, ref, ...props }: AreaProps) => {
   const rules = useRules<GreyluneRules>()!
   const villager = useActingVillager()

@@ -41,6 +41,7 @@ export const eventTileSize = { width: 7.71, height: 9.94 }
 export const questTileSize = { width: 3.75, height: 4.13 }
 export const sealSize = { width: 2.12, height: 2.23 }
 /** A Villager figure, its baked-in shadow included, as `VillagerDescription` draws it. */
+const villagerWidth = 1.87
 const villagerHeight = 3.04
 
 /** Anything laid on a board has to clear its thickness, or it disappears inside it. */
@@ -413,15 +414,14 @@ export const campBoardOffset: XYCoordinates = {
   y: campOnBoard.y - seasonBoardSize.height / 2
 }
 
-/** The step from one player's row of tents to the next: they share the space and never overlap. */
-export const campRowGap = 2.6
-
-/**
- * The drop area of the camp covers the tents printed on the board, all of them: a Villager coming
- * home is aimed at the camp rather than at the row of it its player's own Villagers line up on, and
- * only ever one player's Villager is ever in the air.
- */
+/** The tents printed on the board, all of them: what the camp covers, and what a Villager is dropped on. */
 export const campAreaSize = { width: 6.3, height: 6.3 }
+
+/** The Villagers resting in the camp are scattered over the tents, and every figure stays whole on them. */
+export const campRadius: XYCoordinates = {
+  x: (campAreaSize.width - villagerWidth) / 2,
+  y: (campAreaSize.height - villagerHeight) / 2
+}
 
 /**
  * Where a button offering a card sits on it: low and to the right, off the middle so that what is
