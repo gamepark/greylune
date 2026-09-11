@@ -17,7 +17,7 @@ import { MaterialHelpProps, useRules } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
 import { IncomeTokenIcon } from '../../components/Icons'
 import { cardInk } from '../../theme/colors'
-import { HelpFact, HelpFacts, HelpNote, HelpOutcome, HelpOutcomes, HelpTitle, helpDialogCss, helpIcons, romanNumeral } from './HelpLayout'
+import { HelpFact, HelpFacts, HelpNote, HelpOutcome, HelpOutcomes, HelpTitle, helpDialogCss, helpTexts, romanNumeral } from './HelpLayout'
 
 /**
  * What an Encounter card says, for a card that says nothing.
@@ -66,15 +66,15 @@ const EncounterCardDetails = ({ card }: { card: EncounterCard }) => {
         {data.outcomes.map((outcome, index) => (
           <HelpOutcome
             key={index}
-            requirement={outcome.requirements?.length ? <Trans i18nKey={`encounter-card.${card}.${index}.requirement`} components={helpIcons} /> : '—'}
-            reward={outcome.gains?.length ? <Trans i18nKey={`encounter-card.${card}.${index}.reward`} components={helpIcons} /> : '—'}
+            requirement={outcome.requirements?.length ? <Trans i18nKey={`encounter-card.${card}.${index}.requirement`} components={helpTexts} /> : '—'}
+            reward={outcome.gains?.length ? <Trans i18nKey={`encounter-card.${card}.${index}.reward`} components={helpTexts} /> : '—'}
           />
         ))}
       </HelpOutcomes>
 
       {notes(data, token !== undefined).map((key) => (
         <HelpNote key={key}>
-          <Trans i18nKey={key} components={helpIcons} />
+          <Trans i18nKey={key} components={helpTexts} />
         </HelpNote>
       ))}
     </div>
@@ -103,7 +103,7 @@ const EncounterDeckHelp = ({ back }: { back?: Period }) => {
         <HelpFact label={t('help.encounter-deck.left')}>{left}</HelpFact>
       </HelpFacts>
       <p>
-        <Trans i18nKey="help.encounter-deck.note" components={helpIcons} />
+        <Trans i18nKey="help.encounter-deck.note" components={helpTexts} />
       </p>
     </div>
   )

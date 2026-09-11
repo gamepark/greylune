@@ -921,3 +921,9 @@ export const getTableBoundaries = (players: number, allBands: boolean) => {
     yMax: Math.max(commonZoneBottom, columnCenter + columnHalf + tableMargin)
   }
 }
+
+/** The table less the air it keeps all round: what a card seen up close is kept inside (see `CardHover`). */
+export const getTableInside = (players: number, allBands: boolean) => {
+  const { xMin, xMax, yMin, yMax } = getTableBoundaries(players, allBands)
+  return { xMin: xMin + tableMargin, xMax: xMax - tableMargin, yMin: yMin + tableMargin, yMax: yMax - tableMargin }
+}

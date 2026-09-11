@@ -3,9 +3,10 @@ import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { Slot } from '@gamepark/greylune/material/Village'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { DropAreaDescription, ItemContext, Locator } from '@gamepark/react-game'
-import { Coordinates, Location, MaterialMove } from '@gamepark/rules-api'
+import { Coordinates, Location, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { VillageCardActionArea } from '../village/CardAction'
 import { isActivateCard, isCardOnSlot, villagerActionData } from '../villagers/VillagerActions'
+import { cardHoverTransform } from './CardHover'
 import { villageCardBorderRadius, villageCardSize, villageGridSpot } from './TableLayout'
 
 const slotOf = (location: Location<PlayerColor, LocationType>): Slot => ({ x: location.x ?? 0, y: location.y ?? 0 })
@@ -48,5 +49,9 @@ export class VillageGridLocator extends Locator<PlayerColor, MaterialType, Locat
 
   getCoordinates(location: Location<PlayerColor, LocationType>): Partial<Coordinates> {
     return villageGridSpot(location.x ?? 0, location.y ?? 0)
+  }
+
+  getHoverTransform(item: MaterialItem<PlayerColor, LocationType>, context: ItemContext<PlayerColor, MaterialType, LocationType>): string[] {
+    return cardHoverTransform(item, context)
   }
 }

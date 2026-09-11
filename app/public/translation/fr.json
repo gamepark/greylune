@@ -147,7 +147,7 @@
       },
       "3": {
         "name": "Compagnon",
-        "note": "Un Compagnon coûte 7 <coin/> à recruter et se place à gauche de votre plateau personnel. Il vous fait gagner 1 <villager/>, directement disponible, mais réduit d'une pièce votre revenu en Automne. Vous ne pouvez jamais recruter plus de 3 Compagnons au cours de la partie."
+        "note": "Un Compagnon coûte 7 <coin/> à recruter et se place à gauche de votre plateau personnel. Il vous fait gagner 1 <villager>Villageois</villager>, directement disponible, mais réduit d'une pièce votre revenu en Automne. Vous ne pouvez jamais recruter plus de 3 Compagnons au cours de la partie."
       }
     },
     "tavern": {
@@ -180,7 +180,7 @@
     "reward": "Récompense",
     "encounter": {
       "name": "Rencontre",
-      "note": "Une carte Rencontre se résout depuis la case où votre <adventurer/> s'est arrêté, en satisfaisant sa condition pour gagner sa récompense. Après l'avoir résolue, glissez-la dans la colonne des histoires non racontées de votre plateau personnel.",
+      "note": "Une carte Rencontre se résout depuis la case où votre <adventurer>Aventurier</adventurer> s'est arrêté, en satisfaisant sa condition pour gagner sa récompense. Après l'avoir résolue, glissez-la dans la colonne des histoires non racontées de votre plateau personnel.",
       "both": "Cette Rencontre possède 2 conditions et 2 récompenses : vous devez satisfaire au moins l'une des 2 pour la résoudre. Si vous ne satisfaites que la condition de gauche, vous ne gagnez que la récompense de gauche ; vous pouvez aussi satisfaire les 2 conditions pour obtenir les 2 récompenses.",
       "story-only": "Cette Rencontre n'a pas de récompense : elle ne rapporte que lorsque vous la racontez.",
       "untellable": "Valeur de récit 0 : vous ne pouvez pas raconter cette Rencontre, sauf si vous réussissez à en augmenter la valeur (Potion de charisme, Seren) ou pour valider la Quête Tournoi des Bardes."
@@ -197,8 +197,8 @@
     "vp": "{count} PV",
     "event": {
       "name": "Événement",
-      "note": "Une fois par année, au Printemps ou en Été, vous pouvez participer à l'Événement en guise d'action : placez l'un de vos <villager/> actifs — ou, en Été, l'un de ceux qui se trouvent au Village — sur la tuile Événement, en étant en mesure de l'activer (en payant le coût éventuel) pour en obtenir les bénéfices.",
-      "festival": "Festival : choisissez une case libre de la tuile et gagnez les 2 bonus adjacents. Votre <villager/> y reste jusqu'à l'Automne."
+      "note": "Une fois par année, au Printemps ou en Été, vous pouvez participer à l'Événement en guise d'action : placez l'un de vos <villager>Villageois</villager> actifs — ou, en Été, l'un de ceux qui se trouvent au Village — sur la tuile Événement, en étant en mesure de l'activer (en payant le coût éventuel) pour en obtenir les bénéfices.",
+      "festival": "Festival : choisissez une case libre de la tuile et gagnez les 2 bonus adjacents. Votre <villager>Villageois</villager> y reste jusqu'à l'Automne."
     },
     "event-pile": {
       "name": "Pile d'Événements",
@@ -209,7 +209,7 @@
       "name": "Quête Héroïque",
       "first": "Au premier",
       "others": "Aux suivants",
-      "note": "Une fois votre <adventurer/> arrêté sur la case d'une Quête Héroïque, vous pouvez décider de ne pas résoudre de Rencontre pour résoudre la Quête à la place, si vous ne l'avez pas encore faite et que vous en satisfaites les conditions. Si vous êtes le premier joueur à le faire, placez l'un de vos marqueurs Quête sur l'emplacement rapportant le plus de PV en fin de partie ; sinon, placez-le sur l'emplacement situé à côté : plusieurs marqueurs (de joueurs différents) peuvent se trouver sur cet emplacement.",
+      "note": "Une fois votre <adventurer>Aventurier</adventurer> arrêté sur la case d'une Quête Héroïque, vous pouvez décider de ne pas résoudre de Rencontre pour résoudre la Quête à la place, si vous ne l'avez pas encore faite et que vous en satisfaites les conditions. Si vous êtes le premier joueur à le faire, placez l'un de vos marqueurs Quête sur l'emplacement rapportant le plus de PV en fin de partie ; sinon, placez-le sur l'emplacement situé à côté : plusieurs marqueurs (de joueurs différents) peuvent se trouver sur cet emplacement.",
       "score": "Vous ne pouvez résoudre une même Quête qu'une seule fois. Ses PV ne sont ajoutés qu'à la fin de la partie, après la cinquième année."
     },
     "player-board": {
@@ -237,10 +237,10 @@
       },
       "special-action": {
         "name": "Action spéciale",
-        "text": "Cette case spéciale, utilisable seulement en Été, vous permet de placer 1 de vos <villager/> actifs pour l'une de ces options, au choix. Il y reste jusqu'à l'Automne.",
-        "0": "Raconter une histoire : 2 <coin/> + 1 <force/> + 2 <vp/>",
-        "1": "Déplacer votre <adventurer/> d'une case",
-        "2": "Gagner 1 <magic/>"
+        "text": "Cette case spéciale, utilisable seulement en Été, vous permet de placer 1 de vos <villager>Villageois</villager> actifs pour l'une de ces options, au choix. Il y reste jusqu'à l'Automne.",
+        "0": "Raconter une histoire : 2 <coin/> + 1 <force>Force</force> + 2 <vp/>",
+        "1": "Déplacer votre <adventurer>Aventurier</adventurer> d'une case",
+        "2": "Gagner 1 <magic>Magie</magic>"
       },
       "quests": {
         "name": "Marqueurs Quête",
@@ -264,15 +264,15 @@
       },
       "village": {
         "name": "Village",
-        "text": "À la mise en place, chaque joueur place son <adventurer/> au Village. Lorsque vous partez à l'aventure, votre Aventurier se déplace d'abord depuis le Village ; au cours d'une même année, il se déplace ensuite depuis la case où il s'est arrêté. À l'Automne, il retourne au Village."
+        "text": "À la mise en place, chaque joueur place son <adventurer>Aventurier</adventurer> au Village. Lorsque vous partez à l'aventure, votre Aventurier se déplace d'abord depuis le Village ; au cours d'une même année, il se déplace ensuite depuis la case où il s'est arrêté. À l'Automne, il retourne au Village."
       },
       "road": {
         "name": "Partir à l'aventure",
-        "text": "Lorsque vous voyagez, vous pouvez déplacer votre <adventurer/> jusqu'au nombre de cases indiqué, dans la direction de votre choix, ou rester sur place. Plusieurs Aventuriers peuvent se trouver sur la même case. Le blason en haut à gauche de chaque carte Rencontre indique où la placer : à droite du plateau, à côté de la case qui porte le même blason."
+        "text": "Lorsque vous voyagez, vous pouvez déplacer votre <adventurer>Aventurier</adventurer> jusqu'au nombre de cases indiqué, dans la direction de votre choix, ou rester sur place. Plusieurs Aventuriers peuvent se trouver sur la même case. Le blason en haut à gauche de chaque carte Rencontre indique où la placer : à droite du plateau, à côté de la case qui porte le même blason."
       },
       "stops": {
         "name": "Pièce et PV",
-        "text": "Une fois votre <adventurer/> arrêté sur la case marquée d'une <coin/>, vous pouvez décider de ne pas résoudre de Rencontre pour gagner 1 <coin/>. Sur la case marquée d'un <vp/>, vous pouvez faire de même pour gagner 1 <vp/>."
+        "text": "Une fois votre <adventurer>Aventurier</adventurer> arrêté sur la case marquée d'une <coin/>, vous pouvez décider de ne pas résoudre de Rencontre pour gagner 1 <coin/>. Sur la case marquée d'un <vp/>, vous pouvez faire de même pour gagner 1 <vp/>."
       },
       "quests": {
         "name": "Quêtes Héroïques",
@@ -303,50 +303,63 @@
       },
       "spring": {
         "name": "Printemps",
-        "0": "Placer un Villageois : prenez l'un de vos <villager/> actifs et placez-le au Village, entre deux cartes voisines ou entre une carte et un emplacement de carte vide",
-        "1": "Participer à l'Événement, une fois par année, avec l'un de vos <villager/> actifs",
+        "0": "Placer un Villageois : prenez l'un de vos <villager>Villageois</villager> actifs et placez-le au Village, entre deux cartes voisines ou entre une carte et un emplacement de carte vide",
+        "1": "Participer à l'Événement, une fois par année, avec l'un de vos <villager>Villageois</villager> actifs",
         "2": "Passer en Été et effectuer immédiatement une action d'Été"
       },
       "summer": {
         "name": "Été",
-        "0": "Gagner des pièces : choisissez l'un de vos <villager/> au Village et une carte adjacente à celui-ci, et gagnez 1 <coin/> pour chaque autre Villageois adjacent à cette carte, quel qu'en soit le propriétaire",
-        "1": "Activer une carte : choisissez l'un de vos <villager/> au Village et une carte voisine de celui-ci, et payez son prix plus 1 <coin/> pour chaque autre Villageois voisin de cette carte, quel qu'en soit le propriétaire",
-        "2": "Participer à l'Événement, une fois par année, avec l'un de vos <villager/> actifs ou l'un de ceux qui se trouvent au Village",
+        "0": "Gagner des pièces : choisissez l'un de vos <villager>Villageois</villager> au Village et une carte adjacente à celui-ci, et gagnez 1 <coin/> pour chaque autre Villageois adjacent à cette carte, quel qu'en soit le propriétaire",
+        "1": "Activer une carte : choisissez l'un de vos <villager>Villageois</villager> au Village et une carte voisine de celui-ci, et payez son prix plus 1 <coin/> pour chaque autre Villageois voisin de cette carte, quel qu'en soit le propriétaire",
+        "2": "Participer à l'Événement, une fois par année, avec l'un de vos <villager>Villageois</villager> actifs ou l'un de ceux qui se trouvent au Village",
         "3": "Utiliser l'un de vos Objets redressés, en l'inclinant",
         "4": "Utiliser l'action spéciale de votre plateau personnel",
-        "5": "Passer en Automne et effectuer immédiatement une action d'Automne, uniquement si vous n'avez plus de <villager/> au Village"
+        "5": "Passer en Automne et effectuer immédiatement une action d'Automne, uniquement si vous n'avez plus de <villager>Villageois</villager> au Village"
       },
       "autumn": {
         "name": "Automne",
         "text": "Une fois en Automne, vous ne pouvez plus effectuer d'action au cours de cette année, et vous résolvez immédiatement ces étapes, dans cet ordre.",
-        "0": "Renvoyez votre <adventurer/> au Village",
-        "1": "Remettez vos <villager/> du campement, de l'Événement et de l'action spéciale dans la zone des Villageois actifs de votre plateau personnel",
+        "0": "Renvoyez votre <adventurer>Aventurier</adventurer> au Village",
+        "1": "Remettez vos <villager>Villageois</villager> du campement, de l'Événement et de l'action spéciale dans la zone des Villageois actifs de votre plateau personnel",
         "2": "Redressez toutes vos cartes",
         "3": "Gagnez votre revenu : 3 <coin/>, moins 1 <coin/> par Compagnon, ainsi que les gains éventuels de vos jetons Revenu"
       },
       "camp": {
         "name": "Campement",
-        "text": "Lorsqu'un de vos <villager/> est utilisé et devient inactif, placez-le dans le campement pour signifier que vous ne pouvez plus l'utiliser cette année. C'est aussi là que vont les Villageois que vous dépensez, pris dans votre zone des Villageois actifs. À l'Automne, ils retournent dans cette zone."
+        "text": "Lorsqu'un de vos <villager>Villageois</villager> est utilisé et devient inactif, placez-le dans le campement pour signifier que vous ne pouvez plus l'utiliser cette année. C'est aussi là que vont les Villageois que vous dépensez, pris dans votre zone des Villageois actifs. À l'Automne, ils retournent dans cette zone."
       }
     },
     "villager-reserve": {
       "name": "Réserve de Villageois",
       "owned": "À votre disposition",
-      "text": "À la mise en place, 4 de vos 7 <villager/> sont mis de côté et ne sont pas disponibles pour le moment : vous commencez la partie avec 3 Villageois actifs. Chaque fois que vous gagnez un <villager/>, il vient d'ici et rejoint la zone des Villageois actifs de votre plateau personnel. La Quête Piège mortel vous fait remettre l'un de vos Villageois disponibles dans cette réserve."
+      "text": "À la mise en place, 4 de vos 7 <villager>Villageois</villager> sont mis de côté et ne sont pas disponibles pour le moment : vous commencez la partie avec 3 Villageois actifs. Chaque fois que vous gagnez un <villager>Villageois</villager>, il vient d'ici et rejoint la zone des Villageois actifs de votre plateau personnel. La Quête Piège mortel vous fait remettre l'un de vos Villageois disponibles dans cette réserve."
+    },
+    "adventurer": {
+      "name": "Aventurier",
+      "travel": "Lorsque vous voyagez, vous pouvez déplacer votre Aventurier jusqu'au nombre de cases indiqué, dans la direction de votre choix (vous pouvez également choisir de rester sur place), et résoudre une Rencontre sur votre case d'arrivée, si possible. Plusieurs Aventuriers peuvent se trouver sur la même case."
+    },
+    "villager": {
+      "name": "Villageois",
+      "active": "Les Villageois que vous contrôlez au début de chaque année sont dits « actifs » et se trouvent toujours dans la zone « Villageois actifs » de votre plateau personnel, tout comme ceux que vous gagnez en cours d'année."
+    },
+    "skill": {
+      "force": "Force",
+      "magic": "Magie",
+      "level": "Niveau"
     }
   },
   "village-card": {
     "101": {
       "name": "Guilde des voyageurs",
-      "ability": "Déplacez votre <adventurer/> jusqu'à 2 cases."
+      "ability": "Déplacez votre <adventurer>Aventurier</adventurer> jusqu'à 2 cases."
     },
     "102": {
       "name": "Guilde des éclaireurs",
-      "ability": "Défaussez un jeton <seal/> et déplacez votre <adventurer/> jusqu'à un nombre de cases égal à la valeur du jeton."
+      "ability": "Défaussez un jeton <seal/> et déplacez votre <adventurer>Aventurier</adventurer> jusqu'à un nombre de cases égal à la valeur du jeton."
     },
     "103": {
       "name": "Le chêne fendu",
-      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 2 PV + 1 <force/> + 1 <villager/>."
+      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 2 PV + 1 <force>Force</force> + 1 <villager>Villageois</villager>."
     },
     "104": {
       "name": "Le lion d'or",
@@ -354,27 +367,27 @@
     },
     "105": {
       "name": "École de magie",
-      "ability": "Défaussez un jeton <seal/>, dépensez autant de <coin/> que sa valeur et gagnez 1 <magic/>."
+      "ability": "Défaussez un jeton <seal/>, dépensez autant de <coin/> que sa valeur et gagnez 1 <magic>Magie</magic>."
     },
     "106": {
       "name": "Forge",
-      "ability": "Gagnez 1 <force/>."
+      "ability": "Gagnez 1 <force>Force</force>."
     },
     "107": {
       "name": "Guilde des voyageurs",
-      "ability": "Dépensez 2 <coin/> et déplacez votre <adventurer/> jusqu'à 4 cases."
+      "ability": "Dépensez 2 <coin/> et déplacez votre <adventurer>Aventurier</adventurer> jusqu'à 4 cases."
     },
     "108": {
       "name": "Guilde des éclaireurs",
-      "ability": "Défaussez un jeton <seal/> et déplacez votre <adventurer/> jusqu'à un nombre de cases égal à la valeur du jeton."
+      "ability": "Défaussez un jeton <seal/> et déplacez votre <adventurer>Aventurier</adventurer> jusqu'à un nombre de cases égal à la valeur du jeton."
     },
     "109": {
       "name": "Salle des héros",
-      "ability": "Dépensez 1 <force/> pour gagner 3 PV, et/ou dépensez 1 <magic/> pour gagner 4 PV."
+      "ability": "Dépensez 1 <force>Force</force> pour gagner 3 PV, et/ou dépensez 1 <magic>Magie</magic> pour gagner 4 PV."
     },
     "110": {
       "name": "Hôtel de ville",
-      "ability": "Défaussez un jeton <seal/>, dépensez autant de <coin/> que sa valeur et gagnez 1 <force/> et 1 <magic/>."
+      "ability": "Défaussez un jeton <seal/>, dépensez autant de <coin/> que sa valeur et gagnez 1 <force>Force</force> et 1 <magic>Magie</magic>."
     },
     "111": {
       "name": "Le loup gris",
@@ -382,7 +395,7 @@
     },
     "112": {
       "name": "Le sanglier rieur",
-      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 3 PV + 2 <coin/> + 1 <force/> ou 1 <magic/>."
+      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 3 PV + 2 <coin/> + 1 <force>Force</force> ou 1 <magic>Magie</magic>."
     },
     "113": {
       "name": "Forteresse",
@@ -390,7 +403,7 @@
     },
     "114": {
       "name": "Guilde des voyageurs",
-      "ability": "Dépensez 2 <coin/> et déplacez votre <adventurer/> jusqu'à 5 cases."
+      "ability": "Dépensez 2 <coin/> et déplacez votre <adventurer>Aventurier</adventurer> jusqu'à 5 cases."
     },
     "115": {
       "name": "Bibliothèque",
@@ -402,28 +415,28 @@
     },
     "201": {
       "name": "Statue de jade",
-      "immediate": "Gagnez 1 <force/> ou 1 <magic/>.",
+      "immediate": "Gagnez 1 <force>Force</force> ou 1 <magic>Magie</magic>.",
       "score": "5 PV."
     },
     "202": {
       "name": "Tommy",
-      "ability": "Inclinez cette carte pour déplacer votre <adventurer/> jusqu'à 1 case, ou inclinez-la et dépensez 1 <villager/> pour le déplacer jusqu'à 2 cases.",
+      "ability": "Inclinez cette carte pour déplacer votre <adventurer>Aventurier</adventurer> jusqu'à 1 case, ou inclinez-la et dépensez 1 <villager>Villageois</villager> pour le déplacer jusqu'à 2 cases.",
       "score": "1 PV."
     },
     "203": {
       "name": "Bottes de cent lieues",
       "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
-      "ability": "Inclinez cette carte et défaussez-la pour déplacer votre <adventurer/> jusqu'à 5 cases."
+      "ability": "Inclinez cette carte et défaussez-la pour déplacer votre <adventurer>Aventurier</adventurer> jusqu'à 5 cases."
     },
     "204": {
       "name": "Bâton de magicien",
-      "immediate": "Gagnez 1 <magic/>.",
-      "ability": "Inclinez cette carte et dépensez 1 <villager/> pour gagner 1 <magic/>.",
+      "immediate": "Gagnez 1 <magic>Magie</magic>.",
+      "ability": "Inclinez cette carte et dépensez 1 <villager>Villageois</villager> pour gagner 1 <magic>Magie</magic>.",
       "score": "1 PV."
     },
     "205": {
       "name": "Carte mystérieuse",
-      "ability": "Inclinez cette carte pour déplacer votre <adventurer/> jusqu'à 1 case, ou inclinez-la, dépensez 1 <villager/> et défaussez-la pour le déplacer jusqu'à 3 cases.",
+      "ability": "Inclinez cette carte pour déplacer votre <adventurer>Aventurier</adventurer> jusqu'à 1 case, ou inclinez-la, dépensez 1 <villager>Villageois</villager> et défaussez-la pour le déplacer jusqu'à 3 cases.",
       "score": "1 PV."
     },
     "206": {
@@ -438,28 +451,28 @@
     },
     "208": {
       "name": "Épée courte",
-      "immediate": "Gagnez 1 <force/>.",
-      "ability": "Inclinez cette carte et dépensez 1 <villager/> pour gagner 1 <force/>.",
+      "immediate": "Gagnez 1 <force>Force</force>.",
+      "ability": "Inclinez cette carte et dépensez 1 <villager>Villageois</villager> pour gagner 1 <force>Force</force>.",
       "score": "1 PV."
     },
     "209": {
       "name": "Statue en or",
-      "immediate": "Gagnez 1 <force/> ou 1 <magic/>.",
+      "immediate": "Gagnez 1 <force>Force</force> ou 1 <magic>Magie</magic>.",
       "score": "5 PV."
     },
     "210": {
       "name": "Crin blanc",
-      "ability": "Inclinez cette carte et dépensez 1 ou 2 <villager/> pour déplacer votre <adventurer/> jusqu'à 3 ou 5 cases.",
+      "ability": "Inclinez cette carte et dépensez 1 ou 2 <villager>Villageois</villager> pour déplacer votre <adventurer>Aventurier</adventurer> jusqu'à 3 ou 5 cases.",
       "score": "2 PV."
     },
     "211": {
       "name": "Cor",
-      "ability": "Inclinez cette carte et dépensez 1 ou 2 <villager/> pour gagner 3 ou 5 PV.",
+      "ability": "Inclinez cette carte et dépensez 1 ou 2 <villager>Villageois</villager> pour gagner 3 ou 5 PV.",
       "score": "1 PV."
     },
     "212": {
       "name": "Carte au trésor",
-      "ability": "Inclinez cette carte pour déplacer votre <adventurer/> jusqu'à 2 cases, ou inclinez-la, dépensez 1 <villager/> et défaussez-la pour le déplacer jusqu'à 4 cases.",
+      "ability": "Inclinez cette carte pour déplacer votre <adventurer>Aventurier</adventurer> jusqu'à 2 cases, ou inclinez-la, dépensez 1 <villager>Villageois</villager> et défaussez-la pour le déplacer jusqu'à 4 cases.",
       "score": "1 PV."
     },
     "213": {
@@ -470,7 +483,7 @@
     "214": {
       "name": "Potion d'endurance",
       "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
-      "reaction": "Quand vous partez à l'aventure, vous pouvez défausser cette carte pour placer un <villager/> actif au Village."
+      "reaction": "Quand vous partez à l'aventure, vous pouvez défausser cette carte pour placer un <villager>Villageois</villager> actif au Village."
     },
     "215": {
       "name": "Potion de vol",
@@ -479,7 +492,7 @@
     },
     "216": {
       "name": "Chantelame",
-      "ability": "Inclinez cette carte pour gagner 1 <force/> ou 1 <magic/>, ou inclinez-la et dépensez 1 <villager/> pour gagner 1 <force/> et 1 <magic/>.",
+      "ability": "Inclinez cette carte pour gagner 1 <force>Force</force> ou 1 <magic>Magie</magic>, ou inclinez-la et dépensez 1 <villager>Villageois</villager> pour gagner 1 <force>Force</force> et 1 <magic>Magie</magic>.",
       "score": "1 PV."
     },
     "217": {
@@ -489,24 +502,24 @@
     },
     "218": {
       "name": "Statue de rubis",
-      "immediate": "Gagnez 1 <force/> ou 1 <magic/>.",
+      "immediate": "Gagnez 1 <force>Force</force> ou 1 <magic>Magie</magic>.",
       "score": "6 PV."
     },
     "219": {
       "name": "Mandoline",
-      "ability": "Inclinez cette carte et dépensez 1 <villager/> pour marquer 1 PV par histoire non racontée.",
+      "ability": "Inclinez cette carte et dépensez 1 <villager>Villageois</villager> pour marquer 1 PV par histoire non racontée.",
       "score": "5 PV."
     },
     "220": {
       "name": "Sac de voyage",
-      "ability": "Inclinez cette carte et dépensez 1 <villager/> pour gagner 1 PV par Objet que vous possédez.",
+      "ability": "Inclinez cette carte et dépensez 1 <villager>Villageois</villager> pour gagner 1 PV par Objet que vous possédez.",
       "permanent": "Votre limite d'Objets est augmentée de 1. Cet effet fonctionne même si cette carte est inclinée et si vous avez atteint votre limite d'Objets avant de l'acquérir.",
       "score": "4 PV."
     },
     "221": {
       "name": "Pierre philosophale",
       "immediate": "Défaussez le jeton <seal/> et gagnez autant de PV que sa valeur.",
-      "ability": "Inclinez cette carte et dépensez 1 <villager/> pour gagner 5 PV."
+      "ability": "Inclinez cette carte et dépensez 1 <villager>Villageois</villager> pour gagner 5 PV."
     },
     "222": {
       "name": "Anneau magique",
@@ -515,22 +528,22 @@
     "301": {
       "name": "Kael",
       "role": "Guerrier",
-      "immediate": "Gagnez 1 <villager/>.",
+      "immediate": "Gagnez 1 <villager>Villageois</villager>.",
       "reaction": "Quand vous devez dépenser de la Force, vous pouvez incliner cette carte pour en dépenser 1 de moins.",
       "permanent": "Votre limite d'Objets est augmentée de 1.",
-      "score": "1 PV par niveau de <force/>."
+      "score": "1 PV par niveau de <force>Force</force>."
     },
     "302": {
       "name": "Elwen",
       "role": "Archer",
-      "immediate": "Gagnez 1 <villager/>.",
-      "reaction": "Quand vous partez à l'aventure, vous pouvez incliner cette carte pour déplacer votre <adventurer/> jusqu'à 2 cases supplémentaires.",
+      "immediate": "Gagnez 1 <villager>Villageois</villager>.",
+      "reaction": "Quand vous partez à l'aventure, vous pouvez incliner cette carte pour déplacer votre <adventurer>Aventurier</adventurer> jusqu'à 2 cases supplémentaires.",
       "score": "1 PV par carte Rencontre se trouvant à une distance de 3 ou plus du Village (racontée ou non)."
     },
     "303": {
       "name": "Dorian",
       "role": "Marchand",
-      "immediate": "Gagnez 1 <villager/>.",
+      "immediate": "Gagnez 1 <villager>Villageois</villager>.",
       "reaction": "Quand vous achetez un Objet, vous pouvez incliner cette carte pour réduire son coût de 1 <coin/> et gagner 1 PV.",
       "permanent": "Votre limite d'Objets est augmentée de 2.",
       "score": "1 PV par Objet que vous possédez."
@@ -538,14 +551,14 @@
     "304": {
       "name": "Ariok",
       "role": "Magicien",
-      "immediate": "Gagnez 1 <villager/> et 1 <magic/>.",
-      "reaction": "Quand vous partez à l'aventure, vous pouvez incliner cette carte et dépenser 1 <magic/> pour ignorer une condition d'une carte Rencontre.",
-      "score": "1 PV par niveau de <magic/>."
+      "immediate": "Gagnez 1 <villager>Villageois</villager> et 1 <magic>Magie</magic>.",
+      "reaction": "Quand vous partez à l'aventure, vous pouvez incliner cette carte et dépenser 1 <magic>Magie</magic> pour ignorer une condition d'une carte Rencontre.",
+      "score": "1 PV par niveau de <magic>Magie</magic>."
     },
     "305": {
       "name": "Selia",
       "role": "Alchimiste",
-      "immediate": "Gagnez 1 <villager/>.",
+      "immediate": "Gagnez 1 <villager>Villageois</villager>.",
       "reaction": "Quand vous activez un jeton <seal/>, vous pouvez incliner cette carte pour en choisir la valeur (entre 1 et 3).",
       "permanent": "Quand vous utilisez une Potion, inclinez-la au lieu de la défausser. Rappel : vous pouvez utiliser plusieurs Potions dans le même tour.",
       "score": "2 PV par Potion que vous possédez."
@@ -553,43 +566,43 @@
     "306": {
       "name": "Neris",
       "role": "Roublarde",
-      "immediate": "Gagnez 1 <villager/>.",
-      "reaction": "Quand vous retirez un <villager/> du Village, vous pouvez incliner cette carte pour gagner 2 <coin/> supplémentaires, ou pour ne pas payer le surcoût.",
+      "immediate": "Gagnez 1 <villager>Villageois</villager>.",
+      "reaction": "Quand vous retirez un <villager>Villageois</villager> du Village, vous pouvez incliner cette carte pour gagner 2 <coin/> supplémentaires, ou pour ne pas payer le surcoût.",
       "score": "1 PV par 2 <coin/> restantes."
     },
     "307": {
       "name": "Bran",
       "role": "Gardien",
-      "immediate": "Gagnez 1 <villager/>.",
-      "reaction": "Quand vous devez dépenser 1 ou plusieurs <villager/> en activant une de vos cartes, vous pouvez incliner cette carte pour réduire ce nombre de 1.",
-      "score": "PV = nombre de <villager/> à votre disposition moins 2."
+      "immediate": "Gagnez 1 <villager>Villageois</villager>.",
+      "reaction": "Quand vous devez dépenser 1 ou plusieurs <villager>Villageois</villager> en activant une de vos cartes, vous pouvez incliner cette carte pour réduire ce nombre de 1.",
+      "score": "PV = nombre de <villager>Villageois</villager> à votre disposition moins 2."
     },
     "308": {
       "name": "Lucan",
       "role": "Paladin",
-      "immediate": "Gagnez 1 <villager/>.",
-      "reaction": "Quand vous gagnez de la Magie, vous pouvez incliner cette carte pour gagner 1 <force/> (ou inversement).",
+      "immediate": "Gagnez 1 <villager>Villageois</villager>.",
+      "reaction": "Quand vous gagnez de la Magie, vous pouvez incliner cette carte pour gagner 1 <force>Force</force> (ou inversement).",
       "score": "PV = niveau le plus bas entre votre Force et votre Magie."
     },
     "309": {
       "name": "Isandre",
       "role": "Clerc",
-      "immediate": "Gagnez 1 <villager/>.",
+      "immediate": "Gagnez 1 <villager>Villageois</villager>.",
       "reaction": "Quand vous inclinez une de vos cartes, vous pouvez incliner cette carte pour la redresser. Vous pouvez immédiatement incliner la carte que vous venez de redresser pour déclencher de nouveau son effet.",
       "score": "2 PV par Compagnon."
     },
     "310": {
       "name": "Seren",
       "role": "Barde",
-      "immediate": "Gagnez 1 <villager/>.",
+      "immediate": "Gagnez 1 <villager>Villageois</villager>.",
       "reaction": "Quand vous racontez une histoire, vous pouvez incliner cette carte pour que la valeur de récit d'une de vos cartes Rencontre soit de 3.",
       "score": "1 PV par histoire racontée."
     },
     "311": {
       "name": "Mira",
       "role": "Éclaireuse",
-      "immediate": "Gagnez 1 <villager/>.",
-      "reaction": "Quand vous partez à l'aventure (avant ou après avoir résolu une Rencontre), vous pouvez incliner cette carte pour placer 1 <villager/> actif au Village.",
+      "immediate": "Gagnez 1 <villager>Villageois</villager>.",
+      "reaction": "Quand vous partez à l'aventure (avant ou après avoir résolu une Rencontre), vous pouvez incliner cette carte pour placer 1 <villager>Villageois</villager> actif au Village.",
       "score": "1 PV par carte Rencontre avec un blason différent (racontée ou non)."
     }
   },
@@ -597,24 +610,24 @@
     "1": {
       "name": "Vallée",
       "0": {
-        "requirement": "Avoir au moins 1 <force/>",
-        "reward": "Déplacez votre <adventurer/> jusqu'à 2 cases"
+        "requirement": "Avoir au moins 1 <force>Force</force>",
+        "reward": "Déplacez votre <adventurer>Aventurier</adventurer> jusqu'à 2 cases"
       },
       "1": {
-        "requirement": "Dépensez 1 <villager/>",
+        "requirement": "Dépensez 1 <villager>Villageois</villager>",
         "reward": "Gagnez 3 PV"
       }
     },
     "2": {
       "name": "Tigre",
       "0": {
-        "requirement": "Dépensez 1 <villager/>"
+        "requirement": "Dépensez 1 <villager>Villageois</villager>"
       }
     },
     "3": {
       "name": "Passe rocheuse",
       "0": {
-        "reward": "Gagnez 1 <force/>"
+        "reward": "Gagnez 1 <force>Force</force>"
       }
     },
     "4": {
@@ -626,21 +639,21 @@
     "5": {
       "name": "Mine",
       "0": {
-        "requirement": "Dépensez 1 <villager/>",
+        "requirement": "Dépensez 1 <villager>Villageois</villager>",
         "reward": "Prenez le jeton Revenu : 2 <coin/> tout de suite, puis autant à chaque Automne"
       }
     },
     "6": {
       "name": "Meute de loups",
       "0": {
-        "requirement": "Avoir au moins 2 <force/>",
+        "requirement": "Avoir au moins 2 <force>Force</force>",
         "reward": "Gagnez 3 PV"
       }
     },
     "7": {
       "name": "Maraudeurs",
       "0": {
-        "requirement": "Avoir un total de <force/> et de <magic/> d'au moins 2",
+        "requirement": "Avoir un total de <force>Force</force> et de <magic>Magie</magic> d'au moins 2",
         "reward": "Gagnez 4 <coin/>"
       }
     },
@@ -648,58 +661,58 @@
       "name": "Initiation",
       "0": {
         "requirement": "Dépensez 4 <coin/>",
-        "reward": "Gagnez 1 <force/> et 1 <magic/>"
+        "reward": "Gagnez 1 <force>Force</force> et 1 <magic>Magie</magic>"
       }
     },
     "9": {
       "name": "Ermite",
       "0": {
-        "requirement": "Avoir au moins 2 <force/>",
-        "reward": "Gagnez 1 <magic/>"
+        "requirement": "Avoir au moins 2 <force>Force</force>",
+        "reward": "Gagnez 1 <magic>Magie</magic>"
       }
     },
     "10": {
       "name": "Embuscade",
       "0": {
-        "requirement": "Avoir au moins 1 <magic/>",
+        "requirement": "Avoir au moins 1 <magic>Magie</magic>",
         "reward": "Prenez le jeton Revenu : 1 <coin/> tout de suite, puis autant à chaque Automne"
       }
     },
     "11": {
       "name": "Crâne maudit",
       "0": {
-        "requirement": "Avoir au moins 2 <magic/>",
+        "requirement": "Avoir au moins 2 <magic>Magie</magic>",
         "reward": "Redressez une de vos cartes"
       }
     },
     "12": {
       "name": "Cercle de pierres",
       "0": {
-        "reward": "Gagnez 1 <magic/>"
+        "reward": "Gagnez 1 <magic>Magie</magic>"
       }
     },
     "13": {
       "name": "Campement",
       "0": {
-        "requirement": "Avoir un total de <force/> et de <magic/> d'au moins 1",
-        "reward": "Gagnez 1 <villager/>"
+        "requirement": "Avoir un total de <force>Force</force> et de <magic>Magie</magic> d'au moins 1",
+        "reward": "Gagnez 1 <villager>Villageois</villager>"
       }
     },
     "14": {
       "name": "Auberge",
       "0": {
         "requirement": "Dépensez 2 <coin/>",
-        "reward": "Gagnez 1 <villager/>"
+        "reward": "Gagnez 1 <villager>Villageois</villager>"
       }
     },
     "15": {
       "name": "Ours",
       "0": {
-        "requirement": "Avoir au moins 1 <force/>",
+        "requirement": "Avoir au moins 1 <force>Force</force>",
         "reward": "Gagnez 2 PV"
       },
       "1": {
-        "requirement": "Avoir au moins 1 <magic/>",
+        "requirement": "Avoir au moins 1 <magic>Magie</magic>",
         "reward": "Gagnez 2 PV"
       }
     },
@@ -712,81 +725,81 @@
     "17": {
       "name": "Trésor",
       "0": {
-        "requirement": "Avoir au moins 3 <magic/>",
+        "requirement": "Avoir au moins 3 <magic>Magie</magic>",
         "reward": "Gagnez 3 <coin/>"
       },
       "1": {
-        "requirement": "Dépensez 1 <magic/>",
+        "requirement": "Dépensez 1 <magic>Magie</magic>",
         "reward": "Gagnez 4 <coin/>"
       }
     },
     "18": {
       "name": "Tour isolée",
       "0": {
-        "requirement": "Dépensez 1 <magic/>",
-        "reward": "Repartez à l'aventure — déplacez votre <adventurer/> jusqu'à 3 cases — et gagnez 3 PV"
+        "requirement": "Dépensez 1 <magic>Magie</magic>",
+        "reward": "Repartez à l'aventure — déplacez votre <adventurer>Aventurier</adventurer> jusqu'à 3 cases — et gagnez 3 PV"
       }
     },
     "19": {
       "name": "Sorcellerie",
       "0": {
         "requirement": "Dépensez 4 <coin/>",
-        "reward": "Gagnez 2 <magic/>"
+        "reward": "Gagnez 2 <magic>Magie</magic>"
       }
     },
     "20": {
       "name": "Incantation",
       "0": {
-        "requirement": "Dépensez 1 <villager/>",
-        "reward": "Gagnez 1 <magic/>"
+        "requirement": "Dépensez 1 <villager>Villageois</villager>",
+        "reward": "Gagnez 1 <magic>Magie</magic>"
       }
     },
     "21": {
       "name": "Licorne",
       "0": {
-        "requirement": "Avoir au moins 3 <magic/>",
+        "requirement": "Avoir au moins 3 <magic>Magie</magic>",
         "reward": "Redressez une de vos cartes, et prenez le jeton Revenu : 1 PV tout de suite, puis autant à chaque Automne"
       }
     },
     "22": {
       "name": "Joute",
       "0": {
-        "requirement": "Dépensez 1 <villager/>",
+        "requirement": "Dépensez 1 <villager>Villageois</villager>",
         "reward": "Gagnez 3 PV"
       },
       "1": {
-        "requirement": "Avoir au moins 4 <force/>",
+        "requirement": "Avoir au moins 4 <force>Force</force>",
         "reward": "Gagnez 4 PV"
       }
     },
     "23": {
       "name": "Diamant",
       "0": {
-        "requirement": "Dépensez 1 <force/>",
+        "requirement": "Dépensez 1 <force>Force</force>",
         "reward": "Gagnez 5 <coin/>"
       }
     },
     "24": {
       "name": "Ferme",
       "0": {
-        "reward": "Gagnez 1 <villager/>"
+        "reward": "Gagnez 1 <villager>Villageois</villager>"
       }
     },
     "25": {
       "name": "Démon",
       "0": {
-        "requirement": "Avoir au moins 3 <force/>",
+        "requirement": "Avoir au moins 3 <force>Force</force>",
         "reward": "Gagnez 3 PV"
       },
       "1": {
-        "requirement": "Avoir au moins 3 <magic/>",
+        "requirement": "Avoir au moins 3 <magic>Magie</magic>",
         "reward": "Gagnez 3 PV"
       }
     },
     "26": {
       "name": "Épée légendaire",
       "0": {
-        "requirement": "Dépensez 1 <villager/>",
+        "requirement": "Dépensez 1 <villager>Villageois</villager>",
         "reward": "Gagnez 3 PV"
       }
     },
@@ -801,34 +814,34 @@
       "name": "Entrainement",
       "0": {
         "requirement": "Dépensez 4 <coin/>",
-        "reward": "Prenez le jeton Revenu : 1 <force/> tout de suite, puis autant à chaque Automne"
+        "reward": "Prenez le jeton Revenu : 1 <force>Force</force> tout de suite, puis autant à chaque Automne"
       }
     },
     "29": {
       "name": "Vagabond",
       "0": {
-        "requirement": "Avoir un total de <force/> et de <magic/> d'au moins 4",
-        "reward": "Gagnez 1 <villager/>"
+        "requirement": "Avoir un total de <force>Force</force> et de <magic>Magie</magic> d'au moins 4",
+        "reward": "Gagnez 1 <villager>Villageois</villager>"
       }
     },
     "30": {
       "name": "Chevalier errant",
       "0": {
         "requirement": "Dépensez 2 <coin/>",
-        "reward": "Gagnez 1 <force/> et 2 PV"
+        "reward": "Gagnez 1 <force>Force</force> et 2 PV"
       }
     },
     "31": {
       "name": "Caravane",
       "0": {
-        "requirement": "Dépensez 2 <villager/>",
+        "requirement": "Dépensez 2 <villager>Villageois</villager>",
         "reward": "Prenez le jeton Revenu : 4 <coin/> tout de suite, puis autant à chaque Automne"
       }
     },
     "32": {
       "name": "Bandits",
       "0": {
-        "requirement": "Avoir au moins 3 <force/>",
+        "requirement": "Avoir au moins 3 <force>Force</force>",
         "reward": "Gagnez 4 <coin/> et 2 PV"
       }
     },
@@ -836,49 +849,49 @@
       "name": "Archerie",
       "0": {
         "requirement": "Dépensez 3 <coin/>",
-        "reward": "Gagnez 1 <force/> et 3 PV"
+        "reward": "Gagnez 1 <force>Force</force> et 3 PV"
       }
     },
     "34": {
       "name": "Passe enneigée",
       "0": {
-        "requirement": "Avoir au moins 5 <force/>",
+        "requirement": "Avoir au moins 5 <force>Force</force>",
         "reward": "Gagnez 5 <coin/> et 3 PV"
       }
     },
     "35": {
       "name": "Nécromancien",
       "0": {
-        "requirement": "Avoir un total de <force/> et de <magic/> d'au moins 8",
+        "requirement": "Avoir un total de <force>Force</force> et de <magic>Magie</magic> d'au moins 8",
         "reward": "Gagnez 9 PV"
       }
     },
     "36": {
       "name": "Mine d'or",
       "0": {
-        "requirement": "Dépensez 1 <villager/>",
+        "requirement": "Dépensez 1 <villager>Villageois</villager>",
         "reward": "Gagnez 7 <coin/>"
       }
     },
     "37": {
       "name": "Dragon",
       "0": {
-        "requirement": "Avoir au moins 5 <force/>",
+        "requirement": "Avoir au moins 5 <force>Force</force>",
         "reward": "Gagnez 4 PV"
       },
       "1": {
-        "requirement": "Avoir au moins 5 <magic/>",
+        "requirement": "Avoir au moins 5 <magic>Magie</magic>",
         "reward": "Gagnez 4 PV"
       }
     },
     "38": {
       "name": "Labyrinthe",
       "0": {
-        "requirement": "Dépensez 1 <villager/>",
+        "requirement": "Dépensez 1 <villager>Villageois</villager>",
         "reward": "Gagnez 4 PV"
       },
       "1": {
-        "requirement": "Dépensez 1 <villager/>",
+        "requirement": "Dépensez 1 <villager>Villageois</villager>",
         "reward": "Gagnez 4 PV"
       }
     },
@@ -886,20 +899,20 @@
       "name": "Relais",
       "0": {
         "requirement": "Dépensez 4 <coin/>",
-        "reward": "Repartez à l'aventure — déplacez votre <adventurer/> jusqu'à 3 cases — et gagnez 2 PV"
+        "reward": "Repartez à l'aventure — déplacez votre <adventurer>Aventurier</adventurer> jusqu'à 3 cases — et gagnez 2 PV"
       }
     },
     "40": {
       "name": "Cercle des fées",
       "0": {
-        "requirement": "Dépensez 1 <villager/>",
-        "reward": "Gagnez 1 <magic/> et 3 PV"
+        "requirement": "Dépensez 1 <villager>Villageois</villager>",
+        "reward": "Gagnez 1 <magic>Magie</magic> et 3 PV"
       }
     },
     "41": {
       "name": "Calice sacré",
       "0": {
-        "requirement": "Avoir au moins 5 <magic/>",
+        "requirement": "Avoir au moins 5 <magic>Magie</magic>",
         "reward": "Redressez une de vos cartes et gagnez 4 PV"
       }
     }
@@ -921,35 +934,35 @@
       "name": "Grande foire",
       "0": {
         "requirement": "Dépensez 3 <coin/>",
-        "reward": "Gagnez 1 <force/> et 1 <magic/>"
+        "reward": "Gagnez 1 <force>Force</force> et 1 <magic>Magie</magic>"
       }
     },
     "4": {
       "name": "Spectacle de magie",
       "0": {
-        "requirement": "Dépensez 1 <magic/>",
-        "reward": "Déplacez votre <adventurer/> jusqu'à 5 cases"
+        "requirement": "Dépensez 1 <magic>Magie</magic>",
+        "reward": "Déplacez votre <adventurer>Aventurier</adventurer> jusqu'à 5 cases"
       }
     },
     "5": {
       "name": "Rassemblement",
       "0": {
-        "requirement": "Dépensez 1 <force/>",
-        "reward": "Gagnez 1 <villager/>"
+        "requirement": "Dépensez 1 <force>Force</force>",
+        "reward": "Gagnez 1 <villager>Villageois</villager>"
       },
       "1": {
         "requirement": "Dépensez 3 <coin/>",
-        "reward": "Gagnez 1 <villager/>"
+        "reward": "Gagnez 1 <villager>Villageois</villager>"
       }
     },
     "6": {
       "name": "Tournoi",
       "0": {
-        "requirement": "Dépensez 1 <force/>",
+        "requirement": "Dépensez 1 <force>Force</force>",
         "reward": "Gagnez 6 <coin/>"
       },
       "1": {
-        "requirement": "Dépensez 1 <force/>",
+        "requirement": "Dépensez 1 <force>Force</force>",
         "reward": "Gagnez 4 PV"
       }
     }
@@ -957,15 +970,15 @@
   "quest-tile": {
     "1": {
       "name": "Géant",
-      "requirement": "Avoir au moins 4 <force/>"
+      "requirement": "Avoir au moins 4 <force>Force</force>"
     },
     "2": {
       "name": "Dragon",
-      "requirement": "Avoir un total de <force/> et de <magic/> d'au moins 6"
+      "requirement": "Avoir un total de <force>Force</force> et de <magic>Magie</magic> d'au moins 6"
     },
     "3": {
       "name": "Spectres",
-      "requirement": "Avoir au moins 4 <magic/>"
+      "requirement": "Avoir au moins 4 <magic>Magie</magic>"
     },
     "4": {
       "name": "Tournoi des Bardes",
@@ -977,11 +990,11 @@
     },
     "6": {
       "name": "Morts-vivants",
-      "requirement": "Dépensez 1 <force/> et 1 <magic/>"
+      "requirement": "Dépensez 1 <force>Force</force> et 1 <magic>Magie</magic>"
     },
     "7": {
       "name": "Piège mortel",
-      "requirement": "Remettez dans la réserve l'un de vos <villager/> disponibles"
+      "requirement": "Remettez dans la réserve l'un de vos <villager>Villageois</villager> disponibles"
     },
     "8": {
       "name": "Rançon",
@@ -989,7 +1002,7 @@
     },
     "9": {
       "name": "Mariage",
-      "requirement": "Dépensez 2 <villager/>"
+      "requirement": "Dépensez 2 <villager>Villageois</villager>"
     }
   }
 }

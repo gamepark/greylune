@@ -9,6 +9,7 @@ import { Location, MaterialItem } from '@gamepark/rules-api'
 import { ActiveVillagersLocator } from './ActiveVillagersLocator'
 import { AreaLocator } from './AreaLocator'
 import { CampLocator } from './CampLocator'
+import { cardHoverTransform } from './CardHover'
 import { CenteredFlexLocator } from './CenteredFlexLocator'
 import { CenteredListLocator } from './CenteredListLocator'
 import { EventSpaceLocator } from './EventSpaceLocator'
@@ -115,7 +116,8 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     gap: encounterRowGap,
     getMaxGap: (location: Location, context: MaterialContext) => ({ x: encounterRowSpread(encounterRowArea(location), context) }),
     getPositionDependencies: (location: Location, context: MaterialContext) => encounterRowDependencies(location, context),
-    getCoordinates: (location: Location) => encounterRowSpot(encounterRowArea(location))
+    getCoordinates: (location: Location) => encounterRowSpot(encounterRowArea(location)),
+    getHoverTransform: cardHoverTransform
   }),
 
   /** The Income token an Encounter carries, laid over the reward half of its scroll, flush with the right edge of the card. */
@@ -208,14 +210,16 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     gap: companionsGap,
     getMaxGap: (location: Location, context: MaterialContext) => ({ x: -companionsMaxSpread(location.player as PlayerColor, context) }),
     getPositionDependencies: (location: Location, context: MaterialContext) => companionsDependencies(location.player as PlayerColor, context),
-    getCoordinates: (location: Location, context: MaterialContext) => companionsSpot(areaOf(context, location.player))
+    getCoordinates: (location: Location, context: MaterialContext) => companionsSpot(areaOf(context, location.player)),
+    getHoverTransform: cardHoverTransform
   }),
 
   [LocationType.Items]: new ListLocator({
     getItemRotateZ: tilt,
     maxCount: playerCardsMaxCount,
     gap: itemsGap,
-    getCoordinates: (location: Location, context: MaterialContext) => itemsSpot(areaOf(context, location.player))
+    getCoordinates: (location: Location, context: MaterialContext) => itemsSpot(areaOf(context, location.player)),
+    getHoverTransform: cardHoverTransform
   }),
 
   [LocationType.ActiveVillagers]: new ActiveVillagersLocator(),
@@ -252,14 +256,16 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     gap: storiesGap,
     maxGap: storiesMaxGap,
     hide: hideBandOfOtherPlayers,
-    getCoordinates: (location: Location, context: MaterialContext) => untoldStoriesSpot(areaOf(context, location.player))
+    getCoordinates: (location: Location, context: MaterialContext) => untoldStoriesSpot(areaOf(context, location.player)),
+    getHoverTransform: cardHoverTransform
   }),
 
   [LocationType.ToldStories]: new ListLocator({
     gap: storiesGap,
     maxGap: storiesMaxGap,
     hide: hideBandOfOtherPlayers,
-    getCoordinates: (location: Location, context: MaterialContext) => toldStoriesSpot(areaOf(context, location.player))
+    getCoordinates: (location: Location, context: MaterialContext) => toldStoriesSpot(areaOf(context, location.player)),
+    getHoverTransform: cardHoverTransform
   }),
 
   /**

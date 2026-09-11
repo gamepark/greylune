@@ -8,7 +8,7 @@ import { MaterialHelpProps, useRules } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
 import { GainsLabel } from '../../components/Gains'
 import { cardInk } from '../../theme/colors'
-import { HelpFact, HelpFacts, HelpList, HelpListItem, HelpNote, HelpOutcome, HelpOutcomes, HelpTitle, helpDialogCss, helpIcons } from './HelpLayout'
+import { HelpFact, HelpFacts, HelpList, HelpListItem, HelpNote, HelpOutcome, HelpOutcomes, HelpTitle, helpDialogCss, helpTexts } from './HelpLayout'
 
 /**
  * What the Event of the year offers, for a tile that carries no title.
@@ -46,8 +46,8 @@ const EventTileDetails = ({ tile }: { tile: EventTile }) => {
           {abilities.map((ability, index) => (
             <HelpOutcome
               key={index}
-              requirement={ability.requirements?.length ? <Trans i18nKey={`event-tile.${tile}.${index}.requirement`} components={helpIcons} /> : '—'}
-              reward={<Trans i18nKey={`event-tile.${tile}.${index}.reward`} components={helpIcons} />}
+              requirement={ability.requirements?.length ? <Trans i18nKey={`event-tile.${tile}.${index}.requirement`} components={helpTexts} /> : '—'}
+              reward={<Trans i18nKey={`event-tile.${tile}.${index}.reward`} components={helpTexts} />}
             />
           ))}
         </HelpOutcomes>
@@ -58,7 +58,7 @@ const EventTileDetails = ({ tile }: { tile: EventTile }) => {
               {isFestival(tile) ? (
                 <GainsLabel gains={ability.gains ?? []} />
               ) : (
-                <Trans i18nKey={`event-tile.${tile}.${index}.reward`} components={helpIcons} />
+                <Trans i18nKey={`event-tile.${tile}.${index}.reward`} components={helpTexts} />
               )}
             </HelpListItem>
           ))}
@@ -66,11 +66,11 @@ const EventTileDetails = ({ tile }: { tile: EventTile }) => {
       )}
 
       <HelpNote>
-        <Trans i18nKey="help.event.note" components={helpIcons} />
+        <Trans i18nKey="help.event.note" components={helpTexts} />
       </HelpNote>
       {isFestival(tile) && (
         <HelpNote>
-          <Trans i18nKey="help.event.festival" components={helpIcons} />
+          <Trans i18nKey="help.event.festival" components={helpTexts} />
         </HelpNote>
       )}
     </div>
@@ -96,7 +96,7 @@ const EventPileHelp = () => {
         <HelpFact label={t('help.event-pile.left')}>{hidden}</HelpFact>
       </HelpFacts>
       <p>
-        <Trans i18nKey="help.event-pile.note" components={helpIcons} />
+        <Trans i18nKey="help.event-pile.note" components={helpTexts} />
       </p>
     </div>
   )

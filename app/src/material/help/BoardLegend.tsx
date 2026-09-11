@@ -2,7 +2,7 @@
 import { css } from '@emotion/react'
 import { ReactNode } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { HelpList, HelpListItem, HelpNote, HelpSection, helpIcons } from './HelpLayout'
+import { HelpList, HelpListItem, HelpNote, HelpSection, helpTexts } from './HelpLayout'
 
 /**
  * What the dialogs of the three boards are written with: a legend.
@@ -28,7 +28,7 @@ export const Zone = ({ i18nKey, note, mark }: { i18nKey: string; note?: string; 
   return (
     <>
       <HelpSection title={t(`${i18nKey}.name`)} mark={<Mark>{mark}</Mark>}>
-        <Trans i18nKey={`${i18nKey}.text`} components={helpIcons} />
+        <Trans i18nKey={`${i18nKey}.text`} components={helpTexts} />
       </HelpSection>
       {note !== undefined && <ZoneNote i18nKey={note} />}
     </>
@@ -48,7 +48,7 @@ export const ZoneList = ({ i18nKey, count, note, mark }: { i18nKey: string; coun
       <HelpList title={t(`${i18nKey}.name`)} mark={<Mark>{mark}</Mark>}>
         {Array.from({ length: count }, (_, line) => (
           <HelpListItem key={line}>
-            <Trans i18nKey={`${i18nKey}.${line}`} components={helpIcons} />
+            <Trans i18nKey={`${i18nKey}.${line}`} components={helpTexts} />
           </HelpListItem>
         ))}
       </HelpList>
@@ -59,7 +59,7 @@ export const ZoneList = ({ i18nKey, count, note, mark }: { i18nKey: string; coun
 
 const ZoneNote = ({ i18nKey }: { i18nKey: string }) => (
   <HelpNote>
-    <Trans i18nKey={i18nKey} components={helpIcons} />
+    <Trans i18nKey={i18nKey} components={helpTexts} />
   </HelpNote>
 )
 

@@ -23,7 +23,7 @@ import { ReactNode } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { CoinIcon, SealIcon } from '../../components/Icons'
 import { cardInk, colors } from '../../theme/colors'
-import { HelpFact, HelpFacts, helpDialogCss, helpIcons, HelpNote, HelpSection, HelpTitle, HelpWarning, romanNumeral } from './HelpLayout'
+import { HelpFact, HelpFacts, helpDialogCss, helpTexts, HelpNote, HelpSection, HelpTitle, HelpWarning, romanNumeral } from './HelpLayout'
 
 /**
  * What a Village card says, for a card that says nothing.
@@ -103,13 +103,13 @@ const VillageCardDetails = ({ card, item, itemIndex }: { card: VillageCard; item
 
       {inVillage && data.seals !== undefined && !seals.length && onlySealAbilities(data) && (
         <HelpWarning>
-          <Trans i18nKey="help.seals.spent" components={helpIcons} />
+          <Trans i18nKey="help.seals.spent" components={helpTexts} />
         </HelpWarning>
       )}
 
       {notes(data, type).map((key) => (
         <HelpNote key={key}>
-          <Trans i18nKey={key} components={helpIcons} />
+          <Trans i18nKey={key} components={helpTexts} />
         </HelpNote>
       ))}
     </div>
@@ -118,7 +118,7 @@ const VillageCardDetails = ({ card, item, itemIndex }: { card: VillageCard; item
 
 const Line = ({ title, text }: { title: ReactNode; text: string }) => (
   <HelpSection title={title}>
-    <Trans i18nKey={text} components={helpIcons} />
+    <Trans i18nKey={text} components={helpTexts} />
   </HelpSection>
 )
 
@@ -160,7 +160,7 @@ const VillageDeckHelp = ({ back }: { back?: Period }) => {
         <HelpFact label={t('help.village-deck.left')}>{left}</HelpFact>
       </HelpFacts>
       <p>
-        <Trans i18nKey="help.village-deck.note" components={helpIcons} />
+        <Trans i18nKey="help.village-deck.note" components={helpTexts} />
       </p>
     </div>
   )

@@ -6,7 +6,7 @@ import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { MaterialHelpProps } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
 import { cardInk } from '../../theme/colors'
-import { HelpFact, HelpFacts, HelpNote, HelpSection, HelpTitle, helpDialogCss, helpIcons } from './HelpLayout'
+import { HelpFact, HelpFacts, HelpNote, HelpSection, HelpTitle, helpDialogCss, helpTexts } from './HelpLayout'
 
 /**
  * What a Heroic Quest asks, and what it is worth.
@@ -37,14 +37,14 @@ export const QuestTileHelp = ({ item }: MaterialHelpProps<PlayerColor, MaterialT
       )}
 
       <HelpSection title={t('help.requirement')}>
-        <Trans i18nKey={`quest-tile.${quest}.requirement`} components={helpIcons} />
+        <Trans i18nKey={`quest-tile.${quest}.requirement`} components={helpTexts} />
       </HelpSection>
 
       <HelpNote>
-        <Trans i18nKey="help.quest.note" components={helpIcons} />
+        <Trans i18nKey="help.quest.note" components={helpTexts} />
       </HelpNote>
       <HelpNote>
-        <Trans i18nKey="help.quest.score" components={helpIcons} />
+        <Trans i18nKey="help.quest.score" components={helpTexts} />
       </HelpNote>
     </div>
   )

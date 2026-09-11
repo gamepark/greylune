@@ -21,6 +21,9 @@ import { specialActionOptions } from '../villagers/SpecialActionMoves'
 import { camp, isActivateCard, isGainCoinsAround, slotOfCard, villagerActionData } from '../villagers/VillagerActions'
 import { SelectedVillager } from '../villagers/SelectedVillager'
 import { adventurerImages, MagicMarker, questMarkerImages, scoreMarkerImages, seasonMarkerImages, StrengthMarker, villagerImages } from '../images/PawnImages'
+import { AdventurerHelp } from './help/AdventurerHelp'
+import { MagicMarkerHelp, StrengthMarkerHelp } from './help/SkillMarkerHelp'
+import { VillagerHelp } from './help/VillagerHelp'
 
 /**
  * Meeples and markers. Their artwork already carries its drop shadow, so they are declared with the
@@ -37,6 +40,7 @@ export class AdventurerDescription extends TokenDescription<PlayerColor, Materia
   transparency = true
   images = adventurerImages
   soundKit = SoundKit.Wood
+  help = AdventurerHelp
 
   /** The pawn is aimed at to be walked, so the offer it wears has to be read without taking it. */
   isMenuAlwaysVisible(): boolean {
@@ -91,6 +95,7 @@ export class VillagerDescription extends TokenDescription<PlayerColor, MaterialT
   transparency = true
   images = villagerImages
   soundKit = SoundKit.Wood
+  help = VillagerHelp
 
   /**
    * A figure in the reserve answers for the place it is standing in rather than for itself: what a
@@ -211,6 +216,7 @@ export class StrengthMarkerDescription extends TokenDescription<PlayerColor, Mat
   transparency = true
   image = StrengthMarker
   soundKit = SoundKit.Wood
+  help = StrengthMarkerHelp
 }
 
 export class MagicMarkerDescription extends TokenDescription<PlayerColor, MaterialType, LocationType> {
@@ -219,6 +225,7 @@ export class MagicMarkerDescription extends TokenDescription<PlayerColor, Materi
   transparency = true
   image = MagicMarker
   soundKit = SoundKit.Wood
+  help = MagicMarkerHelp
 
   /** The marker is pressed, not picked up: what it offers has to be read where it stands. */
   isMenuAlwaysVisible(): boolean {

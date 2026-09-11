@@ -7,7 +7,7 @@ import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { LocationHelpProps, useRules, usePlayerName } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
 import { playerColors } from '../../PlayerColors'
-import { HelpFact, HelpFacts, HelpTitle, helpDialogCss, helpIcons } from './HelpLayout'
+import { HelpFact, HelpFacts, HelpTitle, helpDialogCss, helpTexts } from './HelpLayout'
 
 /**
  * The Villagers a player does not own yet.
@@ -40,7 +40,7 @@ export const VillagerReserveHelp = ({ location }: LocationHelpProps<PlayerColor,
       </HelpFacts>
 
       <p>
-        <Trans i18nKey="help.villager-reserve.text" components={helpIcons} />
+        <Trans i18nKey="help.villager-reserve.text" components={helpTexts} />
       </p>
     </div>
   )

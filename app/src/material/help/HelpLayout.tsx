@@ -6,6 +6,7 @@ import { ReactNode } from 'react'
 import { AdventurerIcon, CoinIcon, ForceIcon, MagicIcon, SealIcon, VillagerIcon, VpIcon } from '../../components/Icons'
 import { colors } from '../../theme/colors'
 import { fontDisplay } from '../../theme/typography'
+import { AdventurerLink, ForceLink, MagicLink, VillagerLink } from './HelpLinks'
 
 /**
  * What every help dialog of the game is built out of.
@@ -22,14 +23,20 @@ import { fontDisplay } from '../../theme/typography'
  * grammar.
  *
  * The second is that the pieces named in those sentences are the pieces on the table. `<coin/>`,
- * `<force/>`, `<villager/>` and the rest are the very images the player is looking at (see
- * {@link Icons}), which is what lets a line stay short and still be unambiguous.
+ * `<force/>`, `<seal/>` and the rest are the very images the player is looking at (see
+ * {@link Icons}), which is what lets a line stay short and still be unambiguous. The Adventurer and
+ * the Villagers are written out instead, as the rulebook writes them, and Force and Magic are given
+ * their word after their symbol: each word leads to the dialog of the piece itself (see
+ * {@link helpTexts}).
  */
 
 /** The period a card belongs to, as the back of the card and the rulebook write it. */
 export const romanNumeral: Record<Period, string> = { [Period.I]: 'I', [Period.II]: 'II', [Period.III]: 'III' }
 
-/** The pieces a help text may name, as `<coin/>`, `<vp/>`, `<force/>`… in the translation files. */
+/**
+ * The pieces a text may name, as `<coin/>`, `<vp/>`, `<force/>`… in the translation files, all drawn:
+ * what a button or a menu reads the texts of the material with, where every word counts.
+ */
 export const helpIcons = {
   coin: <CoinIcon />,
   vp: <VpIcon />,
@@ -38,6 +45,19 @@ export const helpIcons = {
   villager: <VillagerIcon />,
   adventurer: <AdventurerIcon />,
   seal: <SealIcon />
+}
+
+/**
+ * The same pieces as a help dialog names them: the Adventurer and the Villagers in the rulebook's
+ * words, Force and Magic in their symbol followed by their word, each word a link to the dialog of the
+ * reader's own piece (see {@link HelpLinks}); the rest drawn.
+ */
+export const helpTexts = {
+  ...helpIcons,
+  force: <ForceLink />,
+  magic: <MagicLink />,
+  villager: <VillagerLink />,
+  adventurer: <AdventurerLink />
 }
 
 export const helpDialogCss = css`
