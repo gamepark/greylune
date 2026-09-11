@@ -192,10 +192,15 @@ export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, Loc
    * player leaves and the first thing the next one needs. So the turn is started in reaction to its
    * move (see {@link afterItemMove}) rather than beside it: the player who opens the year is named
    * once, and read back off the board.
+   *
+   * The markers go back together, in one move. The track numbers them in the order the move lists
+   * them, so they are sorted first and stand in Spring in the order they stood in Autumn.
    */
   private newRound(): GreyluneMove[] {
     return [
-      ...this.material(MaterialType.SeasonMarker).moveItems({ type: LocationType.SeasonTrack, id: Season.Spring }),
+      this.material(MaterialType.SeasonMarker)
+        .sort((item) => item.location.x!)
+        .moveItemsAtOnce({ type: LocationType.SeasonTrack, id: Season.Spring }),
       this.material(MaterialType.FirstPlayerToken).moveItem({ type: LocationType.FirstPlayerTokenSpace, player: this.nextFirstPlayer })
     ]
   }
