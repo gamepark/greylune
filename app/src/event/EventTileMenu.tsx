@@ -1,11 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { EventTile, eventTileData, isFestival } from '@gamepark/greylune/material/EventTile'
-import { Trans, useTranslation } from 'react-i18next'
-import { EffectArrow } from '../components/Effect'
+import { useTranslation } from 'react-i18next'
+import { EffectLabel } from '../components/Effect'
 import { GainsLabel } from '../components/Gains'
 import { VillagerIcon } from '../components/Icons'
 import { festivalSpaceSpot } from '../locators/TableLayout'
-import { helpIcons } from '../material/help/HelpLayout'
 import { GreyluneMenuButton } from '../theme/GreyluneMenuButton'
 import { moveOfSelectedVillager, useSelectedVillager } from '../villagers/SelectVillager'
 import { EventOption, eventOptions, GreyluneMove, joinEventMoves } from './EventMoves'
@@ -46,33 +45,27 @@ export const EventTileMenu = ({ tile, legalMoves }: { tile: EventTile; legalMove
  *
  * Those tiles print their options as one line of icons at the foot of the scroll and give them no
  * space of their own, so nothing on the tile tells the two apart: the buttons have to say it
- * themselves, and each is lettered the way the tile prints it — what it takes, an arrow, what it
- * gives. No tile has more than 2, so they stack.
+ * themselves, and each says it the way the tile prints it and the way every other button of the game
+ * does (see {@link EffectLabel}) — what it takes, an arrow, what it gives, in symbols rather than in
+ * words. No tile has more than 2, so they stack.
+ *
+ * The Banquet is the one that needs a word after all: its second option straightens a card, which the
+ * box draws no symbol for, and a button has to say something.
  */
-const OptionButtons = ({ tile, options }: { tile: EventTile; options: EventOption[] }) => (
-  <>
-    {options.map(({ option, move }, index) => {
-      const { requirements } = eventTileData[tile].abilities[option]
-      return (
+const OptionButtons = ({ tile, options }: { tile: EventTile; options: EventOption[] }) => {
+  const { t } = useTranslation()
+  return (
+    <>
+      {options.map(({ option, move }, index) => (
         <GreyluneMenuButton key={option} x={0} y={(index - (options.length - 1) / 2) * 2.6} move={move} labelPosition="right"
-          label={
-            <>
-              {!!requirements?.length && (
-                <>
-                  <Trans i18nKey={`event-tile.${tile}.${option}.requirement`} components={helpIcons} />
-                  <EffectArrow />
-                </>
-              )}
-              <Trans i18nKey={`event-tile.${tile}.${option}.reward`} components={helpIcons} />
-            </>
-          }
+          label={<EffectLabel {...eventTileData[tile].abilities[option]} fallback={t('action.straighten')} />}
         >
           <VillagerIcon />
         </GreyluneMenuButton>
-      )
-    })}
-  </>
-)
+      ))}
+    </>
+  )
+}
 
 /**
  * The 5 spaces of the Festival, each one claimed by a button of its own.
