@@ -45,17 +45,18 @@ const villagerWidth = 1.87
 const villagerHeight = 3.04
 
 /** Anything laid on a board has to clear its thickness, or it disappears inside it. */
-const onBoard = 0.1
+const onBoard = 0.6
 
 /**
- * A board a card is pushed *under* is itself lifted a hair off the table, so that the card can pass
- * below it and still stand above the table. Nothing is ever drawn at a negative height: the table is
- * a plane of its own and takes every click aimed at what lies behind it, so a card slid under the
- * table rather than under the board is not merely hidden, it is out of reach.
+ * A board a card is pushed *under* is itself lifted off the table, so that the card can pass below it
+ * and still stand above the table. Nothing is ever drawn at a negative height: the table is a plane of
+ * its own and takes every click aimed at what lies behind it, so a card slid under the table rather
+ * than under the board is not merely hidden, it is out of reach.
  *
- * The lift is smaller than {@link onBoard}, so everything laid on the board stays over it.
+ * The lift is smaller than {@link onBoard}, so everything laid on the board stays over it, and larger
+ * than the whole depth a full fan of Stories takes: that fan is what sizes it, see {@link storiesDepth}.
  */
-const boardLevel = 0.04
+const boardLevel = 0.4
 
 /**
  * The other side of {@link boardLevel}: where a card pushed under a board comes to rest, between the
@@ -63,7 +64,7 @@ const boardLevel = 0.04
  * order — what it has to hold is a whole game of Stories sinking under one another (see
  * {@link storiesGap}) without ever reaching the table.
  */
-const underBoard = 0.03
+const underBoard = 0.35
 
 /**
  * How high the Village gaps, and everything standing in them, are drawn. It is not a height on the
@@ -750,10 +751,19 @@ export const untoldStoriesSpot = (area: XYCoordinates): Coordinates => ({ ...bes
 export const toldStoriesSpot = (area: XYCoordinates): Coordinates => ({ ...besidePlayerBoard(area, storiesX, storiesAnchorY), z: underBoard })
 
 /**
- * The hair of depth each Story takes from the one before it. The whole Encounter deck is 41 cards, so
- * a fan sinks at most 0.02 below {@link underBoard} and never touches the table.
+ * The depth each Story takes from the one before it, which is the whole of what puts a fan in order:
+ * every card of it lies in the same plane, and only this figure says which is in front.
+ *
+ * It is not a hair, and cannot be one. A browser sorts a scene in depth with a tolerance of its own,
+ * and two cards nearer than that are taken for one plane and drawn in the order they stand in the
+ * page — the order the cards were created in, which owes nothing to the fan. Measured on a fan of 20,
+ * the order comes apart at 0.03 px of separation and holds from 0.06 px up; this figure is a third of
+ * a pixel on a table drawn at its usual size, and still clear of the tolerance on the smallest window.
+ *
+ * The whole Encounter deck is 41 cards, so a fan sinks at most 0.32 below {@link underBoard} and stands
+ * clear of the table — which is what {@link boardLevel} is sized on.
  */
-const storiesDepth = 0.0005
+const storiesDepth = 0.008
 
 /**
  * Every Story after the first is pushed in *under* the ones already there and a quarter of a card
@@ -888,13 +898,16 @@ export const playerPanelSpot = (area: XYCoordinates, hasBand: boolean) =>
  * panel when that player is not read: wherever the panel is, the token is the piece pinned to it.
  */
 const firstPlayerTokenSize = { width: 3.44, height: 5.7 }
-export const firstPlayerTokenSpot = (area: XYCoordinates, hasBand: boolean): XYCoordinates => ({
+const firstPlayerTokenZ = 1
+export const firstPlayerTokenSpot = (area: XYCoordinates, hasBand: boolean): Coordinates => ({
   ...besidePlayerBoard(
     area,
     sideRowX + sideRowWidth / 2 - playerPanelWidth - bandEndSlot / 2,
     /** Its foot on the line the bottom of the panel is drawn on, whichever of the 2 lines that is. */
     (hasBand ? -villageCardSize.height / 2 : -printedHalf + playerPanelHeight + overCardsAir) - firstPlayerTokenSize.height / 2
-  )
+  ),
+  /** A standing figure, not a flat piece: it is raised above the table so it reads as such. */
+  z: firstPlayerTokenZ
 })
 
 /**
