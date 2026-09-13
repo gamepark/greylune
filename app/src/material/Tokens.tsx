@@ -20,6 +20,9 @@ import {
 } from '../images/TokenImages'
 import { sealSize } from '../locators/TableLayout'
 import { ActivateSealButton } from '../village/ActivateSeal'
+import { chooseBonusMove } from '../bonus/BonusActions'
+import { ChooseBonusButton } from '../bonus/ChooseBonus'
+import { BonusTokenHelp } from './help/BonusTokenHelp'
 
 export class CoinDescription extends MoneyDescription<PlayerColor, MaterialType, LocationType, Coin> {
   transparency = true
@@ -96,6 +99,22 @@ export class BonusTokenDescription extends TokenDescription<PlayerColor, Materia
   height = 2
   transparency = true
   images = bonusTokenImages
+  help = BonusTokenHelp
+
+  /** Like the Seal: a token that is to be spent says so as soon as it is. */
+  isMenuAlwaysVisible(): boolean {
+    return true
+  }
+
+  /** The offer to spend it, while the score has just crossed 8 or 20 (see {@link ChooseBonusButton}). */
+  getItemMenu(
+    item: MaterialItem<PlayerColor, LocationType, BonusToken>,
+    context: ItemContext<PlayerColor, MaterialType, LocationType>,
+    legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
+  ) {
+    const move = chooseBonusMove(legalMoves, context.index)
+    return move && <ChooseBonusButton token={item.id} move={move} />
+  }
 }
 
 /** Two double-sided tokens per player, waiting on the board until their owner has the points. */

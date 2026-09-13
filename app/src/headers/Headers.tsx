@@ -32,8 +32,8 @@ import { TravelHeader } from './TravelHeader'
  * à l'été" — so the bar reads as one sentence and the alternatives read as alternatives. Each sentence
  * is written whole, conjunction included, and a rule that offers different things in different places
  * gets one sentence per offer rather than a stem with clauses hung off it: what a translator can read
- * from end to end, they can put in the order their own language wants. The only two that cannot be
- * written that way are the ones whose alternatives are the pieces themselves (see {@link Alternatives}).
+ * from end to end, they can put in the order their own language wants. The only ones that cannot be
+ * written that way are those whose alternatives are the pieces themselves (see {@link Alternatives}).
  *
  * Four rules are missing on purpose. {@link RuleId.Autumn}, {@link RuleId.UseItem} and
  * {@link RuleId.ResolveEffects} ask nobody anything and hand the turn on the moment they start, so a

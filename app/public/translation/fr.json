@@ -116,8 +116,8 @@
       "player": "{player} choisit Force ou Magie"
     },
     "bonus": {
-      "you": "Choisissez",
-      "player": "{player} choisit un jeton bonus"
+      "you": "Choisissez un jeton Bonus",
+      "player": "{player} choisit un jeton Bonus"
     },
     "reaction": {
       "you": "Utilisez un compagnon, une potion, ou <pass>passez</pass>",
@@ -343,6 +343,9 @@
     "villager": {
       "name": "Villageois",
       "active": "Les Villageois que vous contrôlez au début de chaque année sont dits « actifs » et se trouvent toujours dans la zone « Villageois actifs » de votre plateau personnel, tout comme ceux que vous gagnez en cours d'année."
+    },
+    "bonus-token": {
+      "name": "Jeton Bonus"
     },
     "skill": {
       "force": "Force",
