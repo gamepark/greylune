@@ -42,9 +42,6 @@ export enum CustomMoveType {
   /** Summer, "Utiliser un Objet". Data: `{ card, ability }`. */
   UseItem,
 
-  /** Force or Magic, wherever a card leaves it open. Data: true for Force. */
-  ChooseSkill,
-
   /**
    * Which Encounter of the row the Adventurer resolves. Data: the index of the card.
    *

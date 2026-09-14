@@ -21,6 +21,9 @@ import { RuleId } from './RuleId'
 export type GreyluneMove = MaterialMove<PlayerColor, MaterialType, LocationType, RuleId>
 export type GreyluneMaterial = Material<PlayerColor, MaterialType, LocationType>
 
+/** A skill is named by its marker: the level is where the marker stands on its track. */
+export type SkillMarker = MaterialType.StrengthMarker | MaterialType.MagicMarker
+
 /** What a reaction may promise before a price is settled. */
 export type CostReduction = {
   force?: number
@@ -225,8 +228,8 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
   onCustomMove(move: CustomMove): GreyluneMove[] {
     if (isCustomMoveType(CustomMoveType.GainCoins)(move)) return [...this.gainCoins(move.data as number), ...this.resume()]
     if (isCustomMoveType(CustomMoveType.GainVp)(move)) return [...this.gainVp(move.data as number), ...this.resume()]
-    if (isCustomMoveType(CustomMoveType.GainForce)(move)) return this.gainSkill(move.data as number, true)
-    if (isCustomMoveType(CustomMoveType.GainMagic)(move)) return this.gainSkill(move.data as number, false)
+    if (isCustomMoveType(CustomMoveType.GainForce)(move)) return this.gainSkill(MaterialType.StrengthMarker, move.data as number)
+    if (isCustomMoveType(CustomMoveType.GainMagic)(move)) return this.gainSkill(MaterialType.MagicMarker, move.data as number)
     if (isCustomMoveType(CustomMoveType.GainVillagers)(move)) return [...this.gainVillagers(move.data as number), ...this.resume()]
     return []
   }
@@ -302,14 +305,23 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
    * A track stops at 5. Lucan turns one skill into the other, so the window opens on the way back to
    * the queue, and only when the marker actually moved.
    */
-  gainSkill(amount: number, isForce: boolean): GreyluneMove[] {
-    const level = isForce ? this.force : this.magic
-    const target = Math.min(MAX_SKILL, level + amount)
-    if (target === level) return this.resume()
-    const marker = this.material(isForce ? MaterialType.StrengthMarker : MaterialType.MagicMarker).player(this.player)
-    const move = marker.moveItem({ type: isForce ? LocationType.StrengthTrack : LocationType.MagicTrack, player: this.player, x: target })
-    this.memorize(Memory.CurrentGain, { type: isForce ? GainType.Force : GainType.Magic, count: amount })
-    return [move, ...this.resume([TriggerType.GainSkill])]
+  gainSkill(marker: SkillMarker, amount: number): GreyluneMove[] {
+    const moves = this.moveSkillMarker(marker, amount)
+    return moves.length ? [...moves, ...this.skillGained(marker, amount)] : this.resume()
+  }
+
+  /** The marker moved along its track, up for a gain and down for a cost: the track runs from 0 to 5. */
+  moveSkillMarker(marker: SkillMarker, amount: number): GreyluneMove[] {
+    const markers = this.material(marker).player(this.player)
+    const { location } = markers.getItem()!
+    const x = Math.min(MAX_SKILL, Math.max(0, (location.x ?? 0) + amount))
+    return x === location.x ? [] : [markers.moveItem({ ...location, x })]
+  }
+
+  /** What follows a marker that moved up: the gain is remembered for Lucan, who may answer it. */
+  skillGained(marker: SkillMarker, amount: number): GreyluneMove[] {
+    this.memorize(Memory.CurrentGain, { type: marker === MaterialType.StrengthMarker ? GainType.Force : GainType.Magic, count: amount })
+    return this.resume([TriggerType.GainSkill])
   }
 
   /** Villagers come out of the reserve. A player who has none left gains nothing (rulebook p.8). */
@@ -386,9 +398,9 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
       case RequirementType.SealCoins:
         return this.payCoins(this.coinCost([requirement]))
       case RequirementType.SpendForce:
-        return this.spendSkill(Math.max(0, count - (reduction.force ?? 0)), true)
+        return this.moveSkillMarker(MaterialType.StrengthMarker, -Math.max(0, count - (reduction.force ?? 0)))
       case RequirementType.SpendMagic:
-        return this.spendSkill(count, false)
+        return this.moveSkillMarker(MaterialType.MagicMarker, -count)
       case RequirementType.SpendVillagers:
         return this.spendVillagers(Math.max(0, count - (reduction.villagers ?? 0)))
       case RequirementType.ReturnVillager:
@@ -396,19 +408,6 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
       default:
         return []
     }
-  }
-
-  spendSkill(amount: number, isForce: boolean): GreyluneMove[] {
-    if (amount <= 0) return []
-    const level = isForce ? this.force : this.magic
-    const marker = this.material(isForce ? MaterialType.StrengthMarker : MaterialType.MagicMarker).player(this.player)
-    return [
-      marker.moveItem({
-        type: isForce ? LocationType.StrengthTrack : LocationType.MagicTrack,
-        player: this.player,
-        x: Math.max(0, level - amount)
-      })
-    ]
   }
 
   /** A Villager spent rests in the camp until Autumn (rulebook p.14). */

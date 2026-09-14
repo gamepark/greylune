@@ -1,11 +1,16 @@
-import { CustomMove, isCustomMoveType } from '@gamepark/rules-api'
-import { MAX_SKILL } from '../Constants'
+import { isMoveItemType, ItemMove } from '@gamepark/rules-api'
 import { Memory } from '../Memory'
 import { Gain, GainType } from '../material/Effect'
-import { CustomMoveType } from './CustomMoveType'
-import { GreyluneMove, GreyluneRule } from './GreyluneRule'
+import { LocationType } from '../material/LocationType'
+import { MaterialType } from '../material/MaterialType'
+import { GreyluneMove, GreyluneRule, SkillMarker } from './GreyluneRule'
 
-/** Force or Magic: what the cards that print the two gems side by side leave to the player. */
+const skillMarkers: SkillMarker[] = [MaterialType.StrengthMarker, MaterialType.MagicMarker]
+
+/**
+ * Force or Magic: what the cards that print the two gems side by side leave to the player. The choice
+ * is the marker moved up its track, the Force one or the Magic one; a track already at 5 is not offered.
+ */
 export class ChooseSkillRule extends GreyluneRule {
   get count(): number {
     const gain = this.remind<Gain>(Memory.CurrentGain)
@@ -13,14 +18,11 @@ export class ChooseSkillRule extends GreyluneRule {
   }
 
   getPlayerMoves(): GreyluneMove[] {
-    const moves: GreyluneMove[] = []
-    if (this.force < MAX_SKILL) moves.push(this.customMove(CustomMoveType.ChooseSkill, true))
-    if (this.magic < MAX_SKILL) moves.push(this.customMove(CustomMoveType.ChooseSkill, false))
-    return moves
+    return skillMarkers.flatMap((marker) => this.moveSkillMarker(marker, this.count))
   }
 
-  onCustomMove(move: CustomMove): GreyluneMove[] {
-    if (isCustomMoveType(CustomMoveType.ChooseSkill)(move)) return this.gainSkill(this.count, move.data === true)
-    return super.onCustomMove(move)
+  afterItemMove(move: ItemMove<number, MaterialType, LocationType>): GreyluneMove[] {
+    const marker = skillMarkers.find((marker) => isMoveItemType(marker)(move))
+    return marker ? this.skillGained(marker, this.count) : []
   }
 }

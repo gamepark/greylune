@@ -645,7 +645,7 @@ describe('The Objects', () => {
     expect(count(MaterialType.VillageCard, LocationType.Items, BLUE)).toBe(MAX_ITEMS)
     // The Object bought is worth its points even when it is the one given up (rulebook p.8).
     expect(game.rule!.id).toBe(RuleId.ChooseSkill)
-    playCustom(CustomMoveType.ChooseSkill)
+    play(rules().getLegalMoves(BLUE).find(isMoveItemType(MaterialType.MagicMarker))!)
     expect(playerMagic(rules(), BLUE) + playerForce(rules(), BLUE)).toBe(1)
   })
 
