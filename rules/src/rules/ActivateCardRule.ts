@@ -10,7 +10,6 @@ import { villagersAroundSlot } from '../material/Village'
 import {
   activationTriggers,
   getVillageCardType,
-  PermanentType,
   VillageCard,
   VillageCardId,
   VillageCardType,
@@ -217,6 +216,7 @@ export class ActivateCardRule extends GreyluneRule {
    * offered because of her (see {@link sealMoves}), so she is tilted without asking.
    */
   afterItemMove(move: ItemMove): GreyluneMove[] {
+    if (isMoveItemType(MaterialType.VillageCard)(move) && move.itemIndex === this.card) return this.afterTake()
     if (!isMoveItemType(MaterialType.Seal)(move) || move.location.type !== LocationType.SealDiscard || !this.isBuilding) return []
     const value = this.material(MaterialType.Seal).getItem<Seal>(move.itemIndex).id
     this.memorize(Memory.SealValue, value)
@@ -249,15 +249,14 @@ export class ActivateCardRule extends GreyluneRule {
 
   /**
    * An Object is bought and a Companion recruited: the card leaves the Village for the player's own
-   * area, and what it gives on arrival is queued. An Object over the limit is given up right after,
-   * the one just bought included, once its points have been counted (rulebook p.8).
+   * area, and what it gives on arrival is queued.
    */
   private take(): GreyluneMove[] {
     const isItem = getVillageCardType(this.front) === VillageCardType.Item
     const gains = [...(this.data.immediate?.gains ?? [])]
     if (isItem && this.costReduction.itemVp) gains.push(vp(this.costReduction.itemVp))
     this.pushGains(gains)
-    const moves: GreyluneMove[] = [
+    return [
       ...this.payRequirements(this.data.immediate?.requirements),
       this.villageCards.index(this.card).moveItem({
         type: isItem ? LocationType.Items : LocationType.Companions,
@@ -265,17 +264,19 @@ export class ActivateCardRule extends GreyluneRule {
         rotation: false
       })
     ]
-    if (isItem && playerItems(this, this.player).length + 1 > this.limitWithNewCard()) {
-      this.memorize(Memory.Resume, RuleId.ResolveEffects)
-      return [...moves, this.startRule(RuleId.DiscardItem)]
-    }
-    return [...moves, ...this.endOfAction()]
   }
 
-  /** The Bag of holding raises the limit even for the purchase that brings it in (rulebook p.17). */
-  private limitWithNewCard(): number {
-    const permanent = this.data.permanent
-    return itemLimit(this, this.player) + (permanent?.type === PermanentType.ItemLimit ? (permanent.count ?? 1) : 0)
+  /**
+   * The card is in the player's area, so the limit is counted with it: the Bag of holding raises it
+   * even for the purchase that brings it in (rulebook p.17). An Object over the limit is given up right
+   * after, the one just bought included, once its points have been counted (rulebook p.8).
+   */
+  private afterTake(): GreyluneMove[] {
+    if (playerItems(this, this.player).length > itemLimit(this, this.player)) {
+      this.memorize(Memory.Resume, RuleId.ResolveEffects)
+      return [this.startRule(RuleId.DiscardItem)]
+    }
+    return this.endOfAction()
   }
 }
 

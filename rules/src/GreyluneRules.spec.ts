@@ -648,4 +648,19 @@ describe('The Objects', () => {
     playCustom(CustomMoveType.ChooseSkill)
     expect(playerMagic(rules(), BLUE) + playerForce(rules(), BLUE)).toBe(1)
   })
+
+  it('counts the Bag of holding in the limit of the very purchase that brings it in', () => {
+    emptyVillage()
+    for (let slot = 0; slot < MAX_ITEMS; slot++) {
+      const owned = placeCard([VillageCard.Tommy, VillageCard.WizardsStaff, VillageCard.MysteriousMap][slot], 2, 2)
+      put(MaterialType.VillageCard, owned, { type: LocationType.Items, player: BLUE })
+    }
+    placeCard(VillageCard.BagOfHolding, 0, 0)
+    const mine = standVillager(BLUE, 0.5, 0)
+    setSeason(BLUE, Season.Summer)
+    startRule(RuleId.Summer)
+    playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === mine)
+    expect(game.rule?.id).not.toBe(RuleId.DiscardItem)
+    expect(count(MaterialType.VillageCard, LocationType.Items, BLUE)).toBe(MAX_ITEMS + 1)
+  })
 })
