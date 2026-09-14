@@ -35,20 +35,22 @@ import { TravelHeader } from './TravelHeader'
  * from end to end, they can put in the order their own language wants. The only ones that cannot be
  * written that way are those whose alternatives are the pieces themselves (see {@link Alternatives}).
  *
- * Four rules are missing on purpose. {@link RuleId.Autumn}, {@link RuleId.UseItem} and
- * {@link RuleId.ResolveEffects} ask nobody anything and hand the turn on the moment they start, so a
- * header would only ever flash; {@link RuleId.Winter} does the same, and is named all the same
- * because a new year is worth announcing. {@link RuleId.Event} is the one step that sometimes asks
- * and sometimes does not, and it says which (see {@link EventHeader}).
+ * {@link RuleId.Winter}, {@link RuleId.Autumn}, {@link RuleId.UseItem} and {@link RuleId.ResolveEffects}
+ * ask nobody anything and hand the turn on the moment they start, but the moves they play are still
+ * animated, and the bar stays on them for as long as that lasts: they say what is happening rather
+ * than what to do. {@link RuleId.Event} is the one step that sometimes asks and sometimes does not,
+ * and it says which (see {@link EventHeader}).
  */
-export const Headers: Partial<Record<RuleId, ComponentType>> = {
+export const Headers: Record<RuleId, ComponentType> = {
   // ------------------------------------------------------------------ the four seasons
   [RuleId.Winter]: () => <Trans i18nKey="header.winter" />,
   [RuleId.Spring]: SpringHeader,
   [RuleId.Summer]: SummerHeader,
+  [RuleId.Autumn]: () => <HeaderText code="autumn" />,
 
   // ------------------------------------------------------------------ what an action leaves to decide
   [RuleId.ActivateCard]: ActivateCardHeader,
+  [RuleId.UseItem]: () => <HeaderText code="use-item" />,
   [RuleId.DiscardItem]: () => <HeaderText code="discard-item" />,
   [RuleId.Travel]: TravelHeader,
   [RuleId.ResolveEncounter]: ResolveEncounterHeader,
@@ -61,5 +63,6 @@ export const Headers: Partial<Record<RuleId, ComponentType>> = {
   [RuleId.SpecialAction]: () => <HeaderText code="special-action" />,
   [RuleId.ChooseSkill]: ChooseSkillHeader,
   [RuleId.BonusToken]: BonusTokenHeader,
-  [RuleId.Reaction]: ReactionHeader
+  [RuleId.Reaction]: ReactionHeader,
+  [RuleId.ResolveEffects]: () => <HeaderText code="resolve-effects" />
 }

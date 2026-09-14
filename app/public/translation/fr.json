@@ -112,6 +112,18 @@
       "you": "Résolution de l'événement",
       "player": "{player} participe à l'événement"
     },
+    "autumn": {
+      "you": "Vous passez à l'automne",
+      "player": "{player} passe à l'automne"
+    },
+    "use-item": {
+      "you": "Vous utilisez un objet",
+      "player": "{player} utilise un objet"
+    },
+    "resolve-effects": {
+      "you": "Résolution de vos gains",
+      "player": "Résolution des gains de {player}"
+    },
     "skill": {
       "you": "Gagnez",
       "player": "{player} choisit Force ou Magie"
