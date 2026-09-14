@@ -14,11 +14,6 @@ export enum CustomMoveType {
   GainCoins = 1,
   /** Gaining victory points. Data: the amount. The marker, the token and the Bonus tokens follow. */
   GainVp,
-  /** Gaining Force, or Magic. Data: the amount. The track stops at 5. */
-  GainForce,
-  GainMagic,
-  /** Gaining Villagers out of the reserve. Data: the amount. */
-  GainVillagers,
 
   /**
    * Summer, "Gagner des pièces". Data: `{ villager, card }` — the Villager leaving the Village and

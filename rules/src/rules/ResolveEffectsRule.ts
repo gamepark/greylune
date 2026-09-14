@@ -12,10 +12,11 @@ import { RuleId } from './RuleId'
 /**
  * The queue of everything the action still owes the player.
  *
- * It takes one gain at a time and either hands it over — as a custom move, so that the next one is
- * counted against the state this one leaves — or starts the rule that asks the player what to do
- * with it. A gain that can give nothing at all is dropped where it stands: a Villager with an empty
- * reserve, a card to straighten with none tilted, a Bonus token with none left.
+ * It takes one gain at a time and either hands it over, or starts the rule that asks the player what
+ * to do with it. Whatever it hands over ends by starting this rule again, so the next gain is counted
+ * against the state this one leaves. A gain that can give nothing at all is dropped where it stands:
+ * a skill whose track is full, a Villager with an empty reserve, a card to straighten with none
+ * tilted, a Bonus token with none left.
  *
  * When there is nothing left, the action is over and the turn passes.
  */
@@ -50,6 +51,14 @@ export class ResolveEffectsRule extends GreyluneRule {
     const move = this.gainMove(gain)
     if (move) return [move]
     switch (gain.type) {
+      case GainType.Force:
+        return this.gainSkill(MaterialType.StrengthMarker, this.amount(gain.count))
+      case GainType.Magic:
+        return this.gainSkill(MaterialType.MagicMarker, this.amount(gain.count))
+      case GainType.Villager: {
+        const villagers = this.gainVillagers(this.amount(gain.count))
+        return villagers.length ? [...villagers, this.startRule(RuleId.ResolveEffects)] : []
+      }
       case GainType.Skill:
         if (this.force >= MAX_SKILL && this.magic >= MAX_SKILL) return []
         this.memorize(Memory.CurrentGain, gain)

@@ -201,10 +201,10 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
   // ------------------------------------------------------------------ handing gains over
 
   /**
-   * Every amount is handed over as a custom move rather than as the moves it comes down to. The
-   * history then reads "gains 2 Force" instead of a marker sliding, and — what matters more — the
-   * coins, the track and the score are counted when the move is played, against the state the gain
-   * before it left behind.
+   * Coins and victory points are handed over as a custom move rather than as the moves they come down
+   * to: the history then reads "gains 7 coins" instead of the denominations they are counted out in,
+   * or the marker, the token and the Bonus tokens a score moves. A skill or a Villager needs no such
+   * thing, being a marker moved or figures taken out of the reserve.
    */
   gainMove(gain: Gain): GreyluneMove | undefined {
     switch (gain.type) {
@@ -212,12 +212,6 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
         return this.customMove(CustomMoveType.GainCoins, this.amount(gain.count))
       case GainType.Vp:
         return this.customMove(CustomMoveType.GainVp, this.amount(gain.count))
-      case GainType.Force:
-        return this.customMove(CustomMoveType.GainForce, this.amount(gain.count))
-      case GainType.Magic:
-        return this.customMove(CustomMoveType.GainMagic, this.amount(gain.count))
-      case GainType.Villager:
-        return this.customMove(CustomMoveType.GainVillagers, this.amount(gain.count))
       case GainType.Score:
         return this.customMove(CustomMoveType.GainVp, scoreValue(this, this.player, gain.score))
       default:
@@ -228,9 +222,6 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
   onCustomMove(move: CustomMove): GreyluneMove[] {
     if (isCustomMoveType(CustomMoveType.GainCoins)(move)) return [...this.gainCoins(move.data as number), ...this.resume()]
     if (isCustomMoveType(CustomMoveType.GainVp)(move)) return [...this.gainVp(move.data as number), ...this.resume()]
-    if (isCustomMoveType(CustomMoveType.GainForce)(move)) return this.gainSkill(MaterialType.StrengthMarker, move.data as number)
-    if (isCustomMoveType(CustomMoveType.GainMagic)(move)) return this.gainSkill(MaterialType.MagicMarker, move.data as number)
-    if (isCustomMoveType(CustomMoveType.GainVillagers)(move)) return [...this.gainVillagers(move.data as number), ...this.resume()]
     return []
   }
 
@@ -303,11 +294,11 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
 
   /**
    * A track stops at 5. Lucan turns one skill into the other, so the window opens on the way back to
-   * the queue, and only when the marker actually moved.
+   * the queue, and only when the marker actually moved: a track already full gives nothing.
    */
   gainSkill(marker: SkillMarker, amount: number): GreyluneMove[] {
     const moves = this.moveSkillMarker(marker, amount)
-    return moves.length ? [...moves, ...this.skillGained(marker, amount)] : this.resume()
+    return moves.length ? [...moves, ...this.skillGained(marker, amount)] : []
   }
 
   /** The marker moved along its track, up for a gain and down for a cost: the track runs from 0 to 5. */
