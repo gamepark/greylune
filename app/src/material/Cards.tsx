@@ -14,9 +14,11 @@ import { villageCardBacks, villageCardImagesEn, villageCardImagesFr } from '../i
 import { DiscardItemButton } from '../items/DiscardItem'
 import { discardItemMove, itemActionMoves } from '../items/ItemActions'
 import { ItemCardMenu } from '../items/UseItem'
-import { encounterCardSize, villageCardBorderRadius, villageCardSize } from '../locators/TableLayout'
+import { encounterCardSize, itemActionSpot, villageCardBorderRadius, villageCardSize } from '../locators/TableLayout'
 import { reactionMoves } from '../reactions/ReactionActions'
 import { ReactionCardMenu } from '../reactions/UseReaction'
+import { straightenCardMove } from '../straighten/StraightenActions'
+import { StraightenCardButton } from '../straighten/StraightenCard'
 import { VillageCardMenu } from '../village/CardAction'
 import { selectedVillager } from '../villagers/SelectVillager'
 import { isActivateCard, villagerActionData } from '../villagers/VillagerActions'
@@ -59,6 +61,9 @@ export class VillageCardDescription extends CardDescription<PlayerColor, Materia
    *
    * While one of the player's Objects has to go, every one of them wears the offer to give it up
    * instead (see {@link DiscardItemButton}): nothing else is on offer in the meantime.
+   *
+   * While an effect straightens a card, every tilted card of the player's own, Object or Companion,
+   * wears the offer to stand it back up (see {@link StraightenCardButton}), and nothing else either.
    */
   getItemMenu(
     item: MaterialItem<PlayerColor, LocationType, VillageCardId>,
@@ -67,9 +72,15 @@ export class VillageCardDescription extends CardDescription<PlayerColor, Materia
   ) {
     const reactions = reactionMoves(legalMoves, context.index)
     if (reactions.length && item.id?.front !== undefined) return <ReactionCardMenu front={item.id.front} moves={reactions} />
+    if (item.location.type === LocationType.Companions) {
+      const straighten = straightenCardMove(legalMoves, context.index)
+      return straighten && <StraightenCardButton move={straighten} x={0} y={0} />
+    }
     if (item.location.type === LocationType.Items) {
       const position = item.location.x ?? 0
       const count = context.rules.material(MaterialType.VillageCard).location(LocationType.Items).player(item.location.player).length
+      const straighten = straightenCardMove(legalMoves, context.index)
+      if (straighten) return <StraightenCardButton move={straighten} {...itemActionSpot(position, count)} />
       const discard = discardItemMove(legalMoves, context.index)
       if (discard) return <DiscardItemButton move={discard} position={position} count={count} />
       const uses = itemActionMoves(legalMoves, context.index)
