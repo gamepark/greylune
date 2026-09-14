@@ -83,7 +83,7 @@ export const SpecialActionOption = ({
   const move = moves.find((move) => move.data === option)
   if (!move) return null
   return (
-    <GreyluneMenuButton x={x} y={y} move={move} label={t(optionLabels[option])} labelPosition={labelPosition}>
+    <GreyluneMenuButton x={x} y={y} move={move} label={t(optionLabels[option], { count: 1 })} labelPosition={labelPosition}>
       {optionIcons[option]}
     </GreyluneMenuButton>
   )

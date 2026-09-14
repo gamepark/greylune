@@ -4,6 +4,8 @@ import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { Villager } from '@gamepark/greylune/material/Villager'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
+import { ChooseSkillRule } from '@gamepark/greylune/rules/ChooseSkillRule'
+import { SkillMarker } from '@gamepark/greylune/rules/GreyluneRule'
 import { RuleId } from '@gamepark/greylune/rules/RuleId'
 import { SpecialAction } from '@gamepark/greylune/rules/SpecialActionRule'
 import { Season } from '@gamepark/greylune/Season'
@@ -11,6 +13,7 @@ import { ItemContext, SoundKit, TokenDescription } from '@gamepark/react-game'
 import { isMoveItemType, Location, MaterialItem, MaterialMove, MaterialMoveBuilder } from '@gamepark/rules-api'
 import { isSameGap } from '@gamepark/greylune/material/Village'
 import { ChangeSeasonMenu } from '../season/SeasonMenu'
+import { ChooseSkillMenu } from '../skills/ChooseSkillMenu'
 import { StayPutMenu } from '../travel/TravelMenu'
 import { stayPutMove } from '../travel/TravelMoves'
 import { specialActionMagicSpot, specialActionTravelSpot } from '../locators/TableLayout'
@@ -210,6 +213,20 @@ export class QuestMarkerDescription extends TokenDescription<PlayerColor, Materi
   soundKit = SoundKit.Wood
 }
 
+/**
+ * The offer to climb its track, while a card printing the two gems leaves the choice to the player
+ * (see {@link ChooseSkillMenu}). Only the acting player's marker, and a track already at 5 is offered
+ * nothing (see `ChooseSkillRule`).
+ */
+const chooseSkillMenu = (
+  marker: SkillMarker,
+  context: ItemContext<PlayerColor, MaterialType, LocationType>,
+  legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
+) => {
+  const move = legalMoves.find((move) => isMoveItemType(marker)(move) && move.itemIndex === context.index)
+  return move && <ChooseSkillMenu marker={marker} move={move} count={new ChooseSkillRule(context.rules.game).count} />
+}
+
 export class StrengthMarkerDescription extends TokenDescription<PlayerColor, MaterialType, LocationType> {
   width = 1.62
   height = 1.98
@@ -217,6 +234,20 @@ export class StrengthMarkerDescription extends TokenDescription<PlayerColor, Mat
   image = StrengthMarker
   soundKit = SoundKit.Wood
   help = StrengthMarkerHelp
+
+  /** The marker is pressed, not picked up: what it offers has to be read where it stands. */
+  isMenuAlwaysVisible(): boolean {
+    return true
+  }
+
+  getItemMenu(
+    item: MaterialItem<PlayerColor, LocationType>,
+    context: ItemContext<PlayerColor, MaterialType, LocationType>,
+    legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
+  ) {
+    if (item.location.player !== context.rules.game.rule?.player) return undefined
+    return chooseSkillMenu(MaterialType.StrengthMarker, context, legalMoves)
+  }
 }
 
 export class MagicMarkerDescription extends TokenDescription<PlayerColor, MaterialType, LocationType> {
@@ -235,7 +266,8 @@ export class MagicMarkerDescription extends TokenDescription<PlayerColor, Materi
   /**
    * The Magic of the special action, worn by the marker itself, one step above where it stands — the
    * very space it would climb to. Only the acting player's marker: the moves are the reader's own,
-   * and a track already at 5 is offered nothing at all (see `SpecialActionRule`).
+   * and a track already at 5 is offered nothing at all (see `SpecialActionRule`). The same spot wears
+   * the choice between Force and Magic, which never comes at the same time.
    */
   getItemMenu(
     item: MaterialItem<PlayerColor, LocationType>,
@@ -243,6 +275,8 @@ export class MagicMarkerDescription extends TokenDescription<PlayerColor, Materi
     legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
   ) {
     if (item.location.player !== context.rules.game.rule?.player) return undefined
+    const chooseSkill = chooseSkillMenu(MaterialType.MagicMarker, context, legalMoves)
+    if (chooseSkill) return chooseSkill
     return <SpecialActionOption moves={specialActionOptions(legalMoves)} option={SpecialAction.Magic} labelPosition="left" {...specialActionMagicSpot} />
   }
 }

@@ -673,6 +673,12 @@ export const specialActionBoardOffset: XYCoordinates = {
 }
 
 /**
+ * Where a skill marker wears the offer to climb its track (see `ChooseSkillMenu`): a step above it,
+ * which is where it would go.
+ */
+export const skillMarkerMenuSpot: XYCoordinates = { x: 0, y: -2 }
+
+/**
  * Where each of the 3 options of the special action is offered (see `SpecialActionOption`).
  *
  * Not under the doorway, where the board prints them closer together than 3 buttons could stand, but
@@ -683,7 +689,7 @@ export const specialActionBoardOffset: XYCoordinates = {
  */
 export const specialActionStoryOffset: XYCoordinates = { x: 16.5 - playerBoardSize.width / 2, y: 6.05 - playerBoardSize.height / 2 }
 export const specialActionTravelSpot: XYCoordinates = { x: 2, y: 0 }
-export const specialActionMagicSpot: XYCoordinates = { x: 0, y: -2 }
+export const specialActionMagicSpot: XYCoordinates = skillMarkerMenuSpot
 
 /** Where the first card of each row goes, and which way the ones after it run. */
 export const companionsSpot = (area: XYCoordinates) => besidePlayerBoard(area, -sideRowStart, 0)
