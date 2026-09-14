@@ -30,6 +30,9 @@ gameAnimations
  * a second is a hand turning a card, where the second a journey across the table is given would read
  * as the card thinking it over. Autumn stands a whole row of them back up one after another, which
  * is the other reason to keep it short.
+ *
+ * For the same reason it stays flat on the table: the arc a move rises into is a card being carried
+ * somewhere, and a card turned where it lies is never picked up.
  */
 gameAnimations
   .configure(
@@ -39,6 +42,7 @@ gameAnimations
       context.rules.material(MaterialType.VillageCard).getItem(move.itemIndex).location.type === move.location.type
   )
   .duration(300)
+  .flat()
 
 /**
  * The Adventurer riding out of Greylune, or further along the road (see `TravelRule`).
