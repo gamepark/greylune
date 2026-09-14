@@ -52,6 +52,7 @@ export enum Memory {
   /**
    * What a Potion lends for the length of one adventure: skill levels that count towards the
    * condition of an Encounter but cannot be spent, and conditions that may be ignored outright.
+   * Dropped when the Adventurer sets off again (see {@link ResolveEffectsRule}).
    */
   TemporaryForce,
   TemporaryMagic,
@@ -63,7 +64,10 @@ export enum Memory {
   /** The rule to go back to once a window, or a side step, is over. */
   Resume,
 
-  /** What a reaction has promised the cost about to be paid: Force, Villagers, coins. */
+  /**
+   * What a reaction has promised the cost about to be paid: Force, Villagers, coins. Dropped once that
+   * cost is paid (see {@link ResolveEffectsRule}).
+   */
   CostReduction,
 
   /**

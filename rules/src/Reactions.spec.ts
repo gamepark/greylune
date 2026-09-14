@@ -177,6 +177,25 @@ describe('Kael', () => {
   })
 })
 
+describe('Bran', () => {
+  it('lowers the cost he was tilted for, and not the one of the Encounter at the end of the road', () => {
+    const bran = give(VillageCard.Bran)
+    // Tommy: 2 spaces of road for a tilt and a Villager, and the Tigre at the end of it asks a Villager too.
+    const tommy = give(VillageCard.Tommy, LocationType.Items)
+    placeEncounter(EncounterCard.Tiger, Area.Wand)
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+    game.rule = { id: RuleId.Summer, player: BLUE }
+    const villagers = () => rules().material(MaterialType.Villager).location(LocationType.ActiveVillagers).player(BLUE).length
+    const before = villagers()
+    playCustom(CustomMoveType.UseItem, (data: { card: number; ability: number }) => data.card === tommy && data.ability === 1)
+    useReaction(bran)
+    expect(villagers()).toBe(before)
+    play(travelTo(Area.Wand))
+    playCustom(CustomMoveType.ChooseEncounter)
+    expect(villagers()).toBe(before - 1)
+  })
+})
+
 describe('Neris', () => {
   it('waves away the coins the crowd around a card would cost', () => {
     const neris = give(VillageCard.Neris)
@@ -403,10 +422,32 @@ describe('The Potions', () => {
     // The Force the Vallée asks for is waved away, and the road it pays with is taken.
     playCustom(CustomMoveType.ChooseEncounter)
     playCustom(CustomMoveType.ResolveOutcome, (data: { outcomes: number[] }) => data.outcomes.length === 1 && data.outcomes[0] === 0)
-    expect(rules().remind(Memory.IgnoredConditions)).toBe(0)
+    // Setting off again is a new adventure: the favour drunk for the last one is gone.
+    expect(rules().remind(Memory.IgnoredConditions)).toBeUndefined()
     expect(game.rule!.id).toBe(RuleId.Travel)
     play(travelTo(Area.Bow))
     // The favour was spent on the Vallée: the wolves are out of reach, and the green space pays instead.
+    expect(game.rule!.id).toBe(RuleId.ResolveEncounter)
+    expect(rules().getLegalMoves(BLUE).some(isCustomMoveType(CustomMoveType.ChooseEncounter))).toBe(false)
+  })
+
+  it('lends its Force to one adventure, and not to the next one the road opens', () => {
+    const potion = give(VillageCard.StrengthPotion, LocationType.Items)
+    // Vallée: 2 spaces of road for 1 Force, and the road leads to a Meute de loups asking 2 Force.
+    placeEncounter(EncounterCard.Valley, Area.Wand)
+    const wolves = encounter(EncounterCard.PackOfWolves)
+    items(MaterialType.EncounterCard)[wolves].location = { type: LocationType.EncounterRow, id: Area.Bow }
+    delete items(MaterialType.EncounterCard)[wolves].quantity
+    setSkill(BLUE, 0, 0)
+    game.rule = { id: RuleId.Travel, player: BLUE }
+    game.memory[Memory.TravelDistance] = 1
+    play(rules().getLegalMoves(BLUE)[0])
+    useReaction(potion)
+    playCustom(CustomMoveType.ChooseEncounter)
+    playCustom(CustomMoveType.ResolveOutcome, (data: { outcomes: number[] }) => data.outcomes.length === 1 && data.outcomes[0] === 0)
+    expect(game.rule!.id).toBe(RuleId.Travel)
+    play(travelTo(Area.Bow))
+    // The 2 Force were lent to the Vallée: the wolves are out of reach, and the green space pays instead.
     expect(game.rule!.id).toBe(RuleId.ResolveEncounter)
     expect(rules().getLegalMoves(BLUE).some(isCustomMoveType(CustomMoveType.ChooseEncounter))).toBe(false)
   })

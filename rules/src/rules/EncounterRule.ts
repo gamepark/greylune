@@ -83,9 +83,8 @@ export abstract class EncounterRule extends GreyluneRule {
    * Without a Potion or Ariok there is exactly one: the empty list.
    *
    * A favour is only ever offered where it is needed — every condition waved away has to be one the
-   * subset could not be paid for without. Waving away a condition the player meets anyway spends the
-   * Potion for nothing, and an action can meet a second Encounter (the Vallée and the Tour solitaire
-   * put the Adventurer back on the road) where the favour would still have been worth having.
+   * subset could not be paid for without. Waving away a condition the player meets anyway would spend
+   * the Potion on nothing.
    */
   private ignoreVariants(front: EncounterCard, subset: number[]): Ignored[][] {
     const all = subset.flatMap((outcome) =>
@@ -98,11 +97,6 @@ export abstract class EncounterRule extends GreyluneRule {
 
   /**
    * The conditions are paid, the rewards queued and the card pushed under the personal board.
-   *
-   * A waiver is spent here, and only as far as it was used: the Potion d'invisibilité and Ariok each
-   * take a condition off *one* Encounter (rulebook), and an action can meet a second one — the Valley
-   * and the Lone tower put the Adventurer back on the road, Encounter included — so a favour left in
-   * the memory would serve twice.
    *
    * The Income token the card may carry is lifted off it first, and taken straight to the row it
    * will be paid from every Autumn. It is a piece lying on the card, so anything else would carry it
@@ -119,7 +113,6 @@ export abstract class EncounterRule extends GreyluneRule {
     // The token is printed in the reward of one side: the other side leaves it where it lies.
     const taken = income.length > 0 && gains.some((gain) => gain.type === GainType.IncomeToken)
     this.pushGains(gains.flatMap((gain) => (gain.type === GainType.IncomeToken ? (taken ? incomeTokenGains[gain.token] : []) : [gain])))
-    if (data.ignored?.length) this.memorize(Memory.IgnoredConditions, this.ignores - data.ignored.length)
     return [
       ...this.payRequirements(requirements.filter((requirement) => !isCheck(requirement))),
       ...(taken ? income.moveItems({ type: LocationType.IncomeTokenSpace, player: this.player }) : []),

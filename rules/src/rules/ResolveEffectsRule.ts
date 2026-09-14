@@ -21,7 +21,13 @@ import { RuleId } from './RuleId'
  * When there is nothing left, the action is over and the turn passes.
  */
 export class ResolveEffectsRule extends GreyluneRule {
+  /**
+   * A price is always settled before the rule that settles it hands over to the queue, so what the
+   * reactions promised for it is dropped here: Bran tilted for an Object must not also pay for the
+   * Encounter at the end of the road it opens.
+   */
   onRuleStart(): GreyluneMove[] {
+    this.forget(Memory.CostReduction)
     let gains = this.gains
     while (gains.length) {
       const [gain, ...rest] = gains
@@ -64,6 +70,10 @@ export class ResolveEffectsRule extends GreyluneRule {
         this.memorize(Memory.CurrentGain, gain)
         return [this.startRule(RuleId.ChooseSkill)]
       case GainType.Travel:
+        // Setting off again is a new adventure: what the Potions lent for the last one is gone.
+        this.forget(Memory.TemporaryForce)
+        this.forget(Memory.TemporaryMagic)
+        this.forget(Memory.IgnoredConditions)
         this.memorize(Memory.TravelDistance, this.amount(gain.count))
         this.memorize(Memory.WentAdventuring, true)
         return this.openReactions([TriggerType.Travel], RuleId.Travel)
