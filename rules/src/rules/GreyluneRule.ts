@@ -439,6 +439,8 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
     const item = this.villageCards.getItem(card)
     for (const requirement of reaction.requirements) {
       if (requirement.type === RequirementType.Tilt && item.location.rotation === true) return false
+      // A Potion Selia has tilted rather than emptied is spent until it stands back up, like any card tilted.
+      if (requirement.type === RequirementType.DiscardCard && item.location.rotation === true) return false
       if (!this.canPayOne(requirement)) return false
     }
     // Isandre may not answer her own tilting: she would straighten herself, over and over.

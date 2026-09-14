@@ -463,6 +463,20 @@ describe('The Potions', () => {
     expect(items(MaterialType.VillageCard)[potion].location.rotation).toBe(true)
   })
 
+  it('kept by Selia, is not drunk a second time before it stands back up', () => {
+    give(VillageCard.Selia)
+    const potion = give(VillageCard.InvisibilityPotion, LocationType.Items)
+    items(MaterialType.VillageCard)[potion].location.rotation = true
+    game.rule = { id: RuleId.Reaction, player: BLUE }
+    game.memory[Memory.Trigger] = [TriggerType.ResolveEncounter]
+    game.memory[Memory.Resume] = RuleId.ResolveEffects
+    const offered = rules()
+      .getLegalMoves(BLUE)
+      .filter(isCustomMoveType(CustomMoveType.UseReaction))
+      .some((move) => (move.data as { card: number }).card === potion)
+    expect(offered).toBe(false)
+  })
+
   it('is the only card Selia keeps: an Object given up without the Potion symbol is gone', () => {
     give(VillageCard.Selia)
     // Carte mystérieuse: 3 spaces of road for a tilt, a Villager, and the card itself.
