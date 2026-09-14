@@ -30,8 +30,8 @@ export enum Memory {
   /** The Villager taken out of the Village by the action being played, before it reaches the camp. */
   SpentVillager,
 
-  /** How far the Adventurer may still travel. */
-  TravelLeft,
+  /** How far the Adventurer may travel on this journey, reactions included. */
+  TravelDistance,
 
   /**
    * That the action took the Adventurer out of Greylune. Set when the journey starts and read when

@@ -10,5 +10,5 @@ import { AdventurerIcon } from '../components/Icons'
  */
 export const TravelHeader = () => {
   const rules = useRules<GreyluneRules>()!
-  return <HeaderText code="travel" values={{ count: new TravelRule(rules.game).travelLeft }} components={{ adventurer: <AdventurerIcon /> }} />
+  return <HeaderText code="travel" values={{ count: new TravelRule(rules.game).travelDistance }} components={{ adventurer: <AdventurerIcon /> }} />
 }

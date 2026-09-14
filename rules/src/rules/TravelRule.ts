@@ -21,14 +21,14 @@ export class TravelRule extends GreyluneRule {
     return adventurerArea(this, this.player)
   }
 
-  get travelLeft(): number {
-    return this.remind<number>(Memory.TravelLeft) ?? 0
+  get travelDistance(): number {
+    return this.remind<number>(Memory.TravelDistance) ?? 0
   }
 
   getPlayerMoves(): GreyluneMove[] {
     const from = this.area
     const moves: GreyluneMove[] = []
-    for (let area = Math.max(Area.Village, from - this.travelLeft); area <= Math.min(Area.Edge, from + this.travelLeft); area++) {
+    for (let area = Math.max(Area.Village, from - this.travelDistance); area <= Math.min(Area.Edge, from + this.travelDistance); area++) {
       if (area !== from) moves.push(this.adventurer.moveItem({ type: LocationType.Area, id: area }))
     }
     moves.push(this.customMove(CustomMoveType.Pass))
@@ -48,7 +48,7 @@ export class TravelRule extends GreyluneRule {
    * for the journey are drunk, since what they lend is only ever worth anything against a condition.
    */
   private arrive(): GreyluneMove[] {
-    this.forget(Memory.TravelLeft)
+    this.forget(Memory.TravelDistance)
     if (this.area === Area.Village) return this.endOfAction()
     return this.openReactions([TriggerType.ResolveEncounter], RuleId.ResolveEncounter)
   }

@@ -132,7 +132,7 @@ describe('Elwen', () => {
     expect(game.rule!.id).toBe(RuleId.Reaction)
     useReaction(elwen)
     expect(game.rule!.id).toBe(RuleId.Travel)
-    expect(rules().remind(Memory.TravelLeft)).toBe(3)
+    expect(rules().remind(Memory.TravelDistance)).toBe(3)
     expect(items(MaterialType.VillageCard)[elwen].location.rotation).toBe(true)
   })
 
@@ -375,7 +375,7 @@ describe('The Potions', () => {
     placeEncounter(EncounterCard.PackOfWolves, Area.Wand)
     setSkill(BLUE, 0, 0)
     game.rule = { id: RuleId.Travel, player: BLUE }
-    game.memory[Memory.TravelLeft] = 1
+    game.memory[Memory.TravelDistance] = 1
     play(rules().getLegalMoves(BLUE)[0])
     expect(game.rule!.id).toBe(RuleId.Reaction)
     useReaction(potion)
@@ -396,7 +396,7 @@ describe('The Potions', () => {
     delete items(MaterialType.EncounterCard)[wolves].quantity
     setSkill(BLUE, 0, 0)
     game.rule = { id: RuleId.Travel, player: BLUE }
-    game.memory[Memory.TravelLeft] = 1
+    game.memory[Memory.TravelDistance] = 1
     play(rules().getLegalMoves(BLUE)[0])
     useReaction(potion)
     expect(rules().remind(Memory.IgnoredConditions)).toBe(1)
@@ -455,7 +455,7 @@ describe('Isandre', () => {
     game.rule = { id: RuleId.Reaction, player: BLUE }
     game.memory[Memory.Trigger] = [TriggerType.Travel]
     game.memory[Memory.Resume] = RuleId.ResolveEffects
-    game.memory[Memory.TravelLeft] = 1
+    game.memory[Memory.TravelDistance] = 1
     useReaction(elwen)
     // The window was opened on the journey and now holds the tilt Elwen paid with.
     expect(game.rule!.id).toBe(RuleId.Reaction)

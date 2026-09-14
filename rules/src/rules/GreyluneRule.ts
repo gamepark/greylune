@@ -544,7 +544,7 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
     const effect = this.reactionEffect(card, option)
     switch (effect.type) {
       case ReactionType.ExtraTravel:
-        this.memorize(Memory.TravelLeft, (this.remind<number>(Memory.TravelLeft) ?? 0) + effect.count)
+        this.memorize(Memory.TravelDistance, (this.remind<number>(Memory.TravelDistance) ?? 0) + effect.count)
         return []
       case ReactionType.PlaceVillager:
         this.pushGains([placeVillager], true)

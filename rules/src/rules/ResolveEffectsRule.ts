@@ -64,7 +64,7 @@ export class ResolveEffectsRule extends GreyluneRule {
         this.memorize(Memory.CurrentGain, gain)
         return [this.startRule(RuleId.ChooseSkill)]
       case GainType.Travel:
-        this.memorize(Memory.TravelLeft, this.amount(gain.count))
+        this.memorize(Memory.TravelDistance, this.amount(gain.count))
         this.memorize(Memory.WentAdventuring, true)
         return this.openReactions([TriggerType.Travel], RuleId.Travel)
       case GainType.Straighten:
