@@ -1,6 +1,7 @@
 import { ItemMove } from '@gamepark/rules-api'
 import { Memory } from '../Memory'
 import { RequirementType } from '../material/Effect'
+import { EncounterCardId, encounterCardData } from '../material/EncounterCard'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { adventurerArea } from '../material/PlayerState'
@@ -34,12 +35,17 @@ export class ResolveQuestRule extends GreyluneRule {
       this.memorize(Memory.Resume, RuleId.ResolveEffects)
       return [...moves, this.startRule(RuleId.DiscardItem)]
     }
-    const stories = requirements.find((requirement) => requirement.type === RequirementType.TellStories)
-    if (stories) {
-      this.memorize(Memory.StoriesOwed, stories.count ?? 1)
+    if (this.storiesAsked) {
+      // A Tavern earlier in the same action may have left its story behind.
+      this.memorize(Memory.StoryTold, [])
       return moves
     }
     return [...moves, ...this.endOfAction()]
+  }
+
+  get storiesAsked(): number {
+    const stories = questRequirements[this.tile].find((requirement) => requirement.type === RequirementType.TellStories)
+    return stories ? (stories.count ?? 1) : 0
   }
 
   /** The higher shield is free only until somebody has stood on it. */
@@ -52,8 +58,12 @@ export class ResolveQuestRule extends GreyluneRule {
       .moveItems({ type: LocationType.QuestRewardSpace, id: this.space, x: taken ? 1 : 0 })
   }
 
+  get told(): number[] {
+    return this.remind<number[]>(Memory.StoryTold) ?? []
+  }
+
   get storiesOwed(): number {
-    return this.remind<number>(Memory.StoriesOwed) ?? 0
+    return this.storiesAsked - this.told.length
   }
 
   getPlayerMoves(): GreyluneMove[] {
@@ -65,9 +75,9 @@ export class ResolveQuestRule extends GreyluneRule {
   }
 
   afterItemMove(move: ItemMove<number, MaterialType, LocationType>): GreyluneMove[] {
-    if (move.itemType !== MaterialType.EncounterCard) return []
-    const owed = this.storiesOwed - 1
-    this.memorize(Memory.StoriesOwed, owed)
-    return owed > 0 ? [] : this.endOfAction()
+    if (move.itemType !== MaterialType.EncounterCard || !('itemIndex' in move)) return []
+    const story = encounterCardData[this.encounterCards.getItem<EncounterCardId>(move.itemIndex).id.front!].story
+    this.memorize(Memory.StoryTold, [...this.told, story])
+    return this.storiesOwed > 0 ? [] : this.endOfAction()
   }
 }

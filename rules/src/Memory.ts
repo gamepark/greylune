@@ -40,14 +40,14 @@ export enum Memory {
    */
   WentAdventuring,
 
-  /** The rewards a Tavern pays, one per story value, and what each Encounter told so far is worth. */
+  /**
+   * The rewards a Tavern pays, one per story value, and what each Encounter told so far is worth —
+   * in a Tavern, or for the Heroic Quest of the Bards, which counts them instead.
+   */
   StoryRewards,
   StoryTold,
   /** Set by Seren or a Charisma potion: the next Encounter told counts as a 3. */
   StoryBoost,
-
-  /** How many Encounters the Heroic Quest of the Bardes still asks to be told. */
-  StoriesOwed,
 
   /**
    * What a Potion lends for the length of one adventure: skill levels that count towards the
