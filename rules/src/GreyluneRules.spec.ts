@@ -663,4 +663,30 @@ describe('The Objects', () => {
     expect(game.rule?.id).not.toBe(RuleId.DiscardItem)
     expect(count(MaterialType.VillageCard, LocationType.Items, BLUE)).toBe(MAX_ITEMS + 1)
   })
+
+  it('makes a player who gives up the Bag of holding give up another Object while still past the limit', () => {
+    emptyVillage()
+    let bag = -1
+    for (const owned of [VillageCard.Tommy, VillageCard.WizardsStaff, VillageCard.MysteriousMap, VillageCard.BagOfHolding]) {
+      const index = placeCard(owned, 2, 2)
+      put(MaterialType.VillageCard, index, { type: LocationType.Items, player: BLUE })
+      if (owned === VillageCard.BagOfHolding) bag = index
+    }
+    placeCard(VillageCard.JadeStatue, 0, 0)
+    const mine = standVillager(BLUE, 0.5, 0)
+    setSeason(BLUE, Season.Summer)
+    startRule(RuleId.Summer)
+    playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === mine)
+    expect(game.rule!.id).toBe(RuleId.DiscardItem)
+    play(
+      rules()
+        .getLegalMoves(BLUE)
+        .find((move) => 'itemIndex' in move && move.itemIndex === bag)!
+    )
+    expect(count(MaterialType.VillageCard, LocationType.Items, BLUE)).toBe(MAX_ITEMS + 1)
+    expect(game.rule!.id).toBe(RuleId.DiscardItem)
+    play(rules().getLegalMoves(BLUE)[0])
+    expect(count(MaterialType.VillageCard, LocationType.Items, BLUE)).toBe(MAX_ITEMS)
+    expect(game.rule!.id).not.toBe(RuleId.DiscardItem)
+  })
 })
