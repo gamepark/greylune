@@ -13,6 +13,7 @@ import { itemActionData } from './ItemActions'
  * It carries the hooked arrow the cards themselves print in front of every use of an Object, because
  * that is what pressing it does — the card goes down on its side — and it is the same for all of
  * them. An Object offering 2 options wears 2 buttons, stacked the way the sides of an Encounter are.
+ * Their labels open to the left: the row of Objects runs out to the right edge of the screen.
  */
 export const ItemCardMenu = ({ front, moves }: { front: VillageCard; moves: CustomMove[] }) => (
   <>
@@ -22,6 +23,7 @@ export const ItemCardMenu = ({ front, moves }: { front: VillageCard; moves: Cust
         x={itemActionSpot.x}
         y={itemActionSpot.y + (index - (moves.length - 1) / 2) * useButtonStep}
         move={move}
+        labelPosition="left"
         label={<UseItemLabel front={front} ability={itemActionData(move).ability} />}
       >
         <TiltIcon />
