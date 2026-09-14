@@ -9,9 +9,8 @@
  * player who is acting and hand the turn back through {@link RuleId.ResolveEffects}, which is where
  * every action ends.
  *
- * The final scoring is deliberately not a rule: the victory points of the Quests, the Companions,
- * the Objects and the skills are read off the state at the end of the 5th year. They are computed,
- * not played (see `finalScore`).
+ * The last rules are the count at the end of the 5th year, one per line of the rulebook: nobody
+ * chooses anything, and the markers climb the score track.
  *
  * **The numbers are written down.** Every move carries the rule it starts as the number this enum
  * gives it, and a game is that list of moves replayed from the setup. So adding a rule anywhere but
@@ -155,5 +154,17 @@ export enum RuleId {
    * over whatever needs no decision and starts the rule that does, one gain at a time, until the
    * action is over and the turn passes.
    */
-  ResolveEffects
+  ResolveEffects,
+
+  // ---------------------------------------------------------------------------- the end of the game
+
+  /**
+   * The 5th year is over, and every player adds to their score what the game has not paid yet
+   * (rulebook p.13): the Heroic Quests, then the Companions, the Objects and the skills — one rule
+   * for each, all the players counted in it (see `FinalScoringRule`).
+   */
+  QuestsScoring,
+  CompanionsScoring,
+  ItemsScoring,
+  SkillsScoring
 }

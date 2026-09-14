@@ -9,6 +9,7 @@ import { gameAnimations } from './animations/GameAnimations'
 import { App } from './App'
 import { Locators } from './locators/Locators'
 import { Material, MaterialI18n } from './material/Material'
+import { GreyluneScoring } from './scoring/GreyluneScoring'
 import { theme } from './theme'
 
 createRoot(document.getElementById('root')!).render(
@@ -24,6 +25,7 @@ createRoot(document.getElementById('root')!).render(
       animations={gameAnimations}
       theme={theme}
       ai={GreyluneAI}
+      scoring={new GreyluneScoring()}
     >
       <App />
     </GameProvider>

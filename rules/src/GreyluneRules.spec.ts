@@ -570,6 +570,24 @@ describe('A Heroic Quest', () => {
   })
 })
 
+describe('The end of the game', () => {
+  it('walks every marker up the track with what the game has not paid yet, then ends', () => {
+    const questMarker = items(MaterialType.QuestMarker).findIndex((item) => item.id === BLUE)
+    put(MaterialType.QuestMarker, questMarker, { type: LocationType.QuestRewardSpace, id: Area.Hammer, x: 0 })
+    items(MaterialType.ScoreMarker).find((item) => item.id === BLUE)!.location.x = 20
+    setSkill(BLUE, 5, 5)
+    setSkill(ORANGE, 3, 4)
+    const scores = [BLUE, ORANGE].map((player) => rules().getScore(player))
+    expect(scores).toEqual([20 + 7 + 5, 2])
+    startRule(RuleId.QuestsScoring)
+    play(rules().startRule(RuleId.QuestsScoring) as MaterialMove)
+    expect(game.rule).toBeUndefined()
+    expect([BLUE, ORANGE].map((player) => playerVp(rules(), player))).toEqual(scores)
+    expect([BLUE, ORANGE].map((player) => rules().getScore(player))).toEqual(scores)
+    expect(rules().material(MaterialType.VpToken).location(LocationType.PlayerVpTokens).player(BLUE).length).toBe(1)
+  })
+})
+
 describe('Autumn', () => {
   it('brings everything home, straightens the cards and pays 3 coins less one per Companion', () => {
     const villager = items(MaterialType.Villager).findIndex((item) => item.location.type === LocationType.ActiveVillagers && item.location.player === BLUE)

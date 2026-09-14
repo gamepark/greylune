@@ -39,7 +39,8 @@ import { TravelHeader } from './TravelHeader'
  * ask nobody anything and hand the turn on the moment they start, but the moves they play are still
  * animated, and the bar stays on them for as long as that lasts: they say what is happening rather
  * than what to do. {@link RuleId.Event} is the one step that sometimes asks and sometimes does not,
- * and it says which (see {@link EventHeader}).
+ * and it says which (see {@link EventHeader}). The final count is the same, for everybody at once:
+ * the bar names what the markers climbing the track are being paid for.
  */
 export const Headers: Record<RuleId, ComponentType> = {
   // ------------------------------------------------------------------ the four seasons
@@ -64,5 +65,11 @@ export const Headers: Record<RuleId, ComponentType> = {
   [RuleId.ChooseSkill]: ChooseSkillHeader,
   [RuleId.BonusToken]: BonusTokenHeader,
   [RuleId.Reaction]: ReactionHeader,
-  [RuleId.ResolveEffects]: () => <HeaderText code="resolve-effects" />
+  [RuleId.ResolveEffects]: () => <HeaderText code="resolve-effects" />,
+
+  // ------------------------------------------------------------------ the final count
+  [RuleId.QuestsScoring]: () => <Trans i18nKey="header.scoring.quests" />,
+  [RuleId.CompanionsScoring]: () => <Trans i18nKey="header.scoring.companions" />,
+  [RuleId.ItemsScoring]: () => <Trans i18nKey="header.scoring.items" />,
+  [RuleId.SkillsScoring]: () => <Trans i18nKey="header.scoring.skills" />
 }

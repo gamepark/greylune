@@ -7,7 +7,8 @@ import { EncounterCardId, encounterCardData } from '../material/EncounterCard'
 import { EventTile, eventTileData, isFestival } from '../material/EventTile'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { activeVillagers, keepsPotions, playerCoins, playerForce, playerMagic, playerSeason, playerVp, scoreValue } from '../material/PlayerState'
+import { MaterialSource } from '../material/MaterialSource'
+import { activeVillagers, keepsPotions, playerCoins, playerForce, playerMagic, playerSeason, playerVp, scoreValue, vpTokenTotal } from '../material/PlayerState'
 import { Reaction, ReactionEffect, ReactionType, TriggerType } from '../material/Reaction'
 import { Coin, coinUnits } from '../material/Tokens'
 import { getVillagerPlayer, Villager } from '../material/Villager'
@@ -253,43 +254,7 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
     const tokens = this.material(MaterialType.BonusToken).location(LocationType.BonusTokens).player(this.player).length
     if (total >= BONUS_TOKEN_SCORES[0] && tokens === 3) this.pushGains([bonusToken], true)
     if (total >= BONUS_TOKEN_SCORES[1] && tokens >= 2) this.pushGains([bonusToken], true)
-    return [...this.setVpToken(total), ...this.moveScoreMarker(total)]
-  }
-
-  private moveScoreMarker(total: number): GreyluneMove[] {
-    const marker = this.material(MaterialType.ScoreMarker).id(this.player)
-    const x = total - vpTokenFor(total)
-    return marker.getItem()?.location.x === x ? [] : [marker.moveItem({ type: LocationType.ScoreTrack, x })]
-  }
-
-  /**
-   * The token the score calls for, taken out of its pile or turned over. A score never comes back down,
-   * so the token it replaces is taken off the table rather than handed back to a pile it would only
-   * leave once: the 25 is gone for good the moment the 75 comes out.
-   */
-  private setVpToken(total: number): GreyluneMove[] {
-    const value = vpTokenFor(total)
-    const held = this.material(MaterialType.VpToken).location(LocationType.PlayerVpTokens).player(this.player).getItem()
-    const heldValue = held
-      ? getVpTokenValue(held.id as VpToken) === VpTokenValue.Vp25
-        ? held.location.rotation
-          ? 50
-          : 25
-        : held.location.rotation
-          ? 100
-          : 75
-      : 0
-    if (value === heldValue) return []
-    const moves: GreyluneMove[] = []
-    const wanted: VpTokenValue = value >= 75 ? VpTokenValue.Vp75 : VpTokenValue.Vp25
-    if (held && getVpTokenValue(held.id as VpToken) !== wanted) {
-      moves.push(this.material(MaterialType.VpToken).location(LocationType.PlayerVpTokens).player(this.player).deleteItem())
-    }
-    if (value === 0) return moves
-    const token = this.material(MaterialType.VpToken).id(getVpToken(this.player, wanted))
-    const flipped = value === 50 || value === 100
-    moves.push(token.moveItem({ type: LocationType.PlayerVpTokens, player: this.player, rotation: flipped }))
-    return moves
+    return scoreMoves(this, this.player, total)
   }
 
   /**
@@ -616,7 +581,7 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
     this.forgetAction()
     const next = this.nextActivePlayer()
     if (next !== undefined) return [this.startPlayerTurn(this.seasonRule(next), next)]
-    return isLastYear(this) ? [this.endGame()] : [this.startRule(RuleId.Winter)]
+    return [this.startRule(isLastYear(this) ? RuleId.QuestsScoring : RuleId.Winter)]
   }
 
   /**
@@ -631,3 +596,41 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
 
 /** The token a score calls for: none below 25, then one lap of the track for each 25 up to 100. */
 export const vpTokenFor = (total: number): number => Math.min(100, Math.floor(total / SCORE_TRACK_SIZE) * SCORE_TRACK_SIZE)
+
+/**
+ * A player's score brought up to a new total: the token first, then the marker, wrapping round the 25
+ * spaces of the track (rulebook p.13). What crossing 8 or 20 is worth is not settled here: that is a
+ * gain of the game being played (see {@link GreyluneRule.gainVp}), and the final count has none.
+ */
+export const scoreMoves = (source: MaterialSource, player: PlayerColor, total: number): GreyluneMove[] => [
+  ...vpTokenMoves(source, player, total),
+  ...scoreMarkerMoves(source, player, total)
+]
+
+const scoreMarkerMoves = (source: MaterialSource, player: PlayerColor, total: number): GreyluneMove[] => {
+  const marker = source.material(MaterialType.ScoreMarker).id(player)
+  const x = total - vpTokenFor(total)
+  return marker.getItem()?.location.x === x ? [] : [marker.moveItem({ type: LocationType.ScoreTrack, x })]
+}
+
+/**
+ * The token the score calls for, taken out of its pile or turned over. A score never comes back down,
+ * so the token it replaces is taken off the table rather than handed back to a pile it would only
+ * leave once: the 25 is gone for good the moment the 75 comes out.
+ */
+const vpTokenMoves = (source: MaterialSource, player: PlayerColor, total: number): GreyluneMove[] => {
+  const value = vpTokenFor(total)
+  const tokens = source.material(MaterialType.VpToken)
+  const held = tokens.location(LocationType.PlayerVpTokens).player(player).getItem()
+  const heldValue = held ? vpTokenTotal(held.id as VpToken, held.location.rotation === true) : 0
+  if (value === heldValue) return []
+  const moves: GreyluneMove[] = []
+  const wanted: VpTokenValue = value >= 75 ? VpTokenValue.Vp75 : VpTokenValue.Vp25
+  if (held && getVpTokenValue(held.id as VpToken) !== wanted) {
+    moves.push(tokens.location(LocationType.PlayerVpTokens).player(player).deleteItem())
+  }
+  if (value === 0) return moves
+  const flipped = value === 50 || value === 100
+  moves.push(tokens.id(getVpToken(player, wanted)).moveItem({ type: LocationType.PlayerVpTokens, player, rotation: flipped }))
+  return moves
+}

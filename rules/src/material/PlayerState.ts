@@ -152,14 +152,16 @@ export const skillScore = (source: MaterialSource, player: PlayerColor): number 
   return 0
 }
 
-/** The victory points printed on the Companions and the Objects a player ends the game with. */
-export const cardsScore = (source: MaterialSource, player: PlayerColor): number =>
-  playerCards(source, player)
-    .getItems<VillageCardId>()
-    .reduce((total, item) => {
-      const score = villageCardData[item.id.front! as VillageCard].score
-      return score ? total + scoreValue(source, player, score) : total
-    }, 0)
+/** The victory points printed on the cards of a row a player ends the game with. */
+const cardsScore = (source: MaterialSource, player: PlayerColor, cards: ReturnType<typeof playerCards>): number =>
+  cards.getItems<VillageCardId>().reduce((total, item) => {
+    const score = villageCardData[item.id.front! as VillageCard].score
+    return score ? total + scoreValue(source, player, score) : total
+  }, 0)
+
+export const companionsScore = (source: MaterialSource, player: PlayerColor): number => cardsScore(source, player, playerCompanions(source, player))
+
+export const itemsScore = (source: MaterialSource, player: PlayerColor): number => cardsScore(source, player, playerItems(source, player))
 
 /**
  * What the Heroic Quests a player achieved are worth: the shield their marker stands on, which is
@@ -175,7 +177,3 @@ export const questScore = (source: MaterialSource, player: PlayerColor): number 
       const reward = questRewards[item.location.id as HeroicQuestArea]
       return total + (item.location.x === 0 ? reward.first : reward.others)
     }, 0)
-
-/** Everything a player is worth once the 5th year is over (rulebook p.13). */
-export const finalScore = (source: MaterialSource, player: PlayerColor): number =>
-  playerVp(source, player) + questScore(source, player) + cardsScore(source, player) + skillScore(source, player)

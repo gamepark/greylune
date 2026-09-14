@@ -1,12 +1,14 @@
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
+import { SCORE_TRACK_SIZE } from '@gamepark/greylune/Constants'
 import { ItemContext, MaterialGameAnimations } from '@gamepark/react-game'
-import { Coordinates, isMoveItem, isMoveItemType, MaterialMove } from '@gamepark/rules-api'
+import { Coordinates, isMoveItem, isMoveItemType, MaterialMove, MoveItem } from '@gamepark/rules-api'
+import { range } from 'es-toolkit'
 import { getBandRow } from '../locators/DisplayedPlayer'
 import { areaOf } from '../locators/Seats'
 import { spread } from '../locators/spread'
-import { storiesCeiling, storiesGap, storiesMaxGap, storiesPush, toldStoriesSpot, untoldStoriesSpot } from '../locators/TableLayout'
+import { scoreTrackSpot, storiesCeiling, storiesGap, storiesMaxGap, storiesPush, toldStoriesSpot, untoldStoriesSpot } from '../locators/TableLayout'
 
 export const gameAnimations = new MaterialGameAnimations<PlayerColor, MaterialType, LocationType>()
 
@@ -71,6 +73,45 @@ const winterDeal: Partial<Record<MaterialType, LocationType>> = {
 }
 
 gameAnimations.configure((move) => isMoveItem(move) && winterDeal[move.itemType] === move.location.type).duration(300)
+
+/** How long a score marker takes to hop from one space of the track to the next. */
+const SCORE_STEP_DURATION = 150
+
+/** How high it rises between two spaces, in em: a hop, not a flight. */
+const SCORE_STEP_HOP = 1.5
+
+/**
+ * The spaces a marker is about to cross, wrapping round the track: the token is moved first (see
+ * `scoreMoves`), so the marker only ever goes forward, and 25 points or more at once walk the lap left
+ * over.
+ */
+const scoreSteps = (move: MaterialMove<PlayerColor, MaterialType, LocationType>, rules: ItemContext['rules']): number => {
+  if (!isMoveItemType(MaterialType.ScoreMarker)(move) || move.location.type !== LocationType.ScoreTrack) return 0
+  const from = rules.material(MaterialType.ScoreMarker).getItem(move.itemIndex).location.x ?? 0
+  return ((move.location.x ?? 0) - from + SCORE_TRACK_SIZE) % SCORE_TRACK_SIZE
+}
+
+/**
+ * A score marker is walked up the track point by point, as the rulebook has the players do it (p.13),
+ * rather than flown straight over the board to its new space: it hops through every space in between,
+ * round the bend at the top and back to the foot of the track past 24. So the time it takes is the
+ * number of points, which is why there is one configuration per distance.
+ */
+for (let steps = 1; steps < SCORE_TRACK_SIZE; steps++) {
+  gameAnimations
+    .configure((move, context) => scoreSteps(move, context.rules) === steps)
+    .duration(Math.max(400, steps * SCORE_STEP_DURATION))
+    .trajectory((context, move) => {
+      const from = context.rules.material(MaterialType.ScoreMarker).getItem((move as MoveItem).itemIndex).location.x ?? 0
+      return {
+        easing: 'linear',
+        waypoints: [
+          ...range(1, steps).map((step) => ({ at: step / steps, coordinates: scoreTrackSpot((from + step) % SCORE_TRACK_SIZE), elevation: 0 })),
+          ...range(steps).map((step) => ({ at: (step + 0.5) / steps, elevation: SCORE_STEP_HOP }))
+        ]
+      }
+    })
+}
 
 /** Where the flight ends and the push begins: the card spends the last quarter of it sliding in. */
 const SLIDE_START = 0.75

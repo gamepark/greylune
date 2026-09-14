@@ -140,7 +140,21 @@
       "you": "Activez {card} ou <pass>passez</pass>",
       "player": "{player} peut réagir"
     },
+    "scoring": {
+      "quests": "Fin de partie : PV des Quêtes",
+      "companions": "Fin de partie : PV des Compagnons",
+      "items": "Fin de partie : PV des Objets",
+      "skills": "Fin de partie : PV des compétences"
+    },
     "or": "ou"
+  },
+  "scoring": {
+    "game": "PV accumulés pendant la partie",
+    "quests": "Quêtes",
+    "companions": "Compagnons",
+    "items": "Objets",
+    "skills": "Compétences",
+    "total": "Total"
   },
   "help": {
     "period": "Période {period}",

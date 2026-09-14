@@ -13,7 +13,7 @@ import {
 } from '@gamepark/rules-api'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
-import { finalScore } from './material/PlayerState'
+import { playerVp } from './material/PlayerState'
 import { PlayerColor } from './PlayerColor'
 import { ActivateCardRule } from './rules/ActivateCardRule'
 import { AutumnRule } from './rules/AutumnRule'
@@ -22,6 +22,7 @@ import { ChooseOutcomeRule } from './rules/ChooseOutcomeRule'
 import { ChooseSkillRule } from './rules/ChooseSkillRule'
 import { DiscardItemRule } from './rules/DiscardItemRule'
 import { EventRule } from './rules/EventRule'
+import { FinalScoringRule, scoreStillToCount } from './rules/FinalScoringRule'
 import { PlaceVillagerRule } from './rules/PlaceVillagerRule'
 import { ReactionRule } from './rules/ReactionRule'
 import { ResolveEffectsRule } from './rules/ResolveEffectsRule'
@@ -72,7 +73,11 @@ export class GreyluneRules
     [RuleId.ChooseSkill]: ChooseSkillRule,
     [RuleId.BonusToken]: BonusTokenRule,
     [RuleId.Reaction]: ReactionRule,
-    [RuleId.ResolveEffects]: ResolveEffectsRule
+    [RuleId.ResolveEffects]: ResolveEffectsRule,
+    [RuleId.QuestsScoring]: FinalScoringRule,
+    [RuleId.CompanionsScoring]: FinalScoringRule,
+    [RuleId.ItemsScoring]: FinalScoringRule,
+    [RuleId.SkillsScoring]: FinalScoringRule
   }
 
   /**
@@ -185,10 +190,12 @@ export class GreyluneRules
 
   /**
    * Everything a player is worth at the end of the 5th year: the points scored along the way, then
-   * the Heroic Quests, the Companions, the Objects and the two skill tracks (rulebook p.13).
+   * the Heroic Quests, the Companions, the Objects and the two skill tracks (rulebook p.13). The
+   * count moves those onto the score track, so what the track shows is completed with what it does
+   * not show yet.
    */
   getScore(player: PlayerColor): number {
-    return finalScore(this, player)
+    return playerVp(this, player) + scoreStillToCount(this, player, this.game.rule?.id)
   }
 
   giveTime(): number {
