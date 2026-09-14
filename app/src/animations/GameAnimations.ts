@@ -3,6 +3,7 @@ import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { ItemContext, MaterialGameAnimations } from '@gamepark/react-game'
 import { Coordinates, isMoveItem, isMoveItemType, MaterialMove } from '@gamepark/rules-api'
+import { getBandRow } from '../locators/DisplayedPlayer'
 import { areaOf } from '../locators/Seats'
 import { spread } from '../locators/spread'
 import { storiesCeiling, storiesGap, storiesMaxGap, storiesPush, toldStoriesSpot, untoldStoriesSpot } from '../locators/TableLayout'
@@ -151,6 +152,8 @@ const storyFlight = (
   const area = areaOf(context, player)
   const anchor = move.location.type === LocationType.ToldStories ? toldStoriesSpot(area) : untoldStoriesSpot(area)
   const gaps = context.rules.material(MaterialType.EncounterCard).location(move.location.type).player(player).length
-  const to = { x: anchor.x, y: anchor.y + spread(storiesGap.y!, gaps, storiesMaxGap.y), z: anchor.z + gaps * storiesGap.z! }
-  return { from, to, pushFrom: Math.max(to.y - storiesPush, storiesCeiling(area)) }
+  const rows = context.rules.players.length
+  const bandRow = getBandRow(context)
+  const to = { x: anchor.x, y: anchor.y + spread(storiesGap.y!, gaps, storiesMaxGap(rows, bandRow).y), z: anchor.z + gaps * storiesGap.z! }
+  return { from, to, pushFrom: Math.max(to.y - storiesPush, storiesCeiling(area, rows, bandRow)) }
 }

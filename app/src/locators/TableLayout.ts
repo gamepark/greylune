@@ -807,8 +807,24 @@ const storiesDepth = 0.008
  */
 export const storiesGap: Partial<Coordinates> = { y: -storyReveal, z: -storiesDepth }
 
-/** A full fan reaches the top of the band; past that the cards close up rather than climb out of it. */
-export const storiesMaxGap: Partial<XYCoordinates> = { y: -(storiesFan - 1) * storyReveal }
+/**
+ * What a full fan keeps between its top edge and whatever is above the band: half the button it wears
+ * there (see {@link endStoryButtonSpot}), 2.2 tall, and a hair more. On the top row that is the edge of
+ * the table, which the button must not cross; lower down it is the board of the row above, which the
+ * button may overlap a little without hiding anything anybody reads.
+ */
+const storiesClearance = 1.2
+
+/**
+ * A full fan reaches the top of the band — and on into the air the column leaves above it, when there
+ * is any: at 2 players the rows are given more room than they need (see {@link playerRowAir}), and a
+ * fan closing up under open table would hide Stories for nothing. Past that the cards close up rather
+ * than climb out of it. At 4 players there is no such room and the fan stops at the band.
+ */
+export const storiesMaxGap = (rows: number, bandRow?: number): Partial<XYCoordinates> => {
+  const climb = Math.max(0, playerRowAir(rows, bandRow === undefined) - storiesClearance)
+  return { y: -(storiesFan - 1) * storyReveal - climb }
+}
 
 /** Everything but the quarter it shows: how far a Story travels while it is being pushed in. */
 export const storiesPush = encounterCardSize.height - storyReveal
@@ -832,26 +848,23 @@ export const storyButtonSpot: XYCoordinates = {
  * Where the offer to close a story is worn, measured from the middle of the Story it is hung on (see
  * `EndStoryButton`): the last one told, on its top edge.
  *
- * Half over the card and half in the air above it, which is the whole of the room there is — a fan of
- * 4 reaches the top of the band and goes no further (see {@link storiesMaxGap}), so a button lifted
- * clear of the card would climb out of the band and into the row above. It rides the head of the pile
- * and is never buried: the Story that has just joined is the one wearing it.
+ * Half over the card and half in the air above it, which is the whole of the room there is — a full
+ * fan goes no higher than the room above it allows (see {@link storiesMaxGap}), so a button lifted
+ * clear of the card would climb into the row above. It rides the head of the pile and is never buried:
+ * the Story that has just joined is the one wearing it.
  */
 export const endStoryButtonSpot: XYCoordinates = { x: 0, y: -encounterCardSize.height / 2 }
 
 /**
- * The air the band has above it before the printed board of the row above starts: at the very least
- * what that row leaves it (see {@link playerRowAir}), and the top row has the edge of the table rather
- * than a neighbour, which is no nearer.
- */
-const storiesApproach = Math.min(minPlayerRowAir, tableMargin)
-
-/**
  * The highest a Story may be lined up before it is pushed in: its top edge meets the board of the row
  * above and goes no further. A card that has to travel further than the band affords starts here
- * instead — the fan is 4 cards deep and only the first of them is given the whole {@link storiesPush}.
+ * instead — only the first cards of a fan are given the whole {@link storiesPush}.
+ *
+ * The air above the band is what the row above leaves it (see {@link playerRowAir}); the top row has
+ * the edge of the table rather than a neighbour, and the column is centred so that it is exactly as far.
  */
-export const storiesCeiling = (area: XYCoordinates): number => area.y + bandTop + encounterCardSize.height / 2 - storiesApproach
+export const storiesCeiling = (area: XYCoordinates, rows: number, bandRow?: number): number =>
+  area.y + bandTop + encounterCardSize.height / 2 - playerRowAir(rows, bandRow === undefined)
 
 /**
  * What a player keeps out of their board is not floated in the middle of the band: each pile stands on

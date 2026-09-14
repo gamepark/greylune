@@ -19,7 +19,7 @@ import { areaOf } from './Seats'
 import { VillageGapLocator } from './VillageGapLocator'
 import { VillageGridLocator } from './VillageGridLocator'
 import { VillagerReserveLocator } from './VillagerReserveLocator'
-import { hideBandOfOtherPlayers, showsBandOf } from './DisplayedPlayer'
+import { getBandRow, hideBandOfOtherPlayers, showsBandOf } from './DisplayedPlayer'
 import { companionsDependencies, companionsMaxSpread, encounterRowArea, encounterRowDependencies, encounterRowSpread } from './CrowdedRows'
 import {
   bonusTokensGap,
@@ -255,7 +255,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
    */
   [LocationType.UntoldStories]: new ListLocator({
     gap: storiesGap,
-    maxGap: storiesMaxGap,
+    getMaxGap: (_location: Location, context: MaterialContext) => storiesMaxGap(context.rules.players.length, getBandRow(context)),
     hide: hideBandOfOtherPlayers,
     getCoordinates: (location: Location, context: MaterialContext) => untoldStoriesSpot(areaOf(context, location.player)),
     getHoverTransform: cardHoverTransform
@@ -263,7 +263,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
 
   [LocationType.ToldStories]: new ListLocator({
     gap: storiesGap,
-    maxGap: storiesMaxGap,
+    getMaxGap: (_location: Location, context: MaterialContext) => storiesMaxGap(context.rules.players.length, getBandRow(context)),
     hide: hideBandOfOtherPlayers,
     getCoordinates: (location: Location, context: MaterialContext) => toldStoriesSpot(areaOf(context, location.player)),
     getHoverTransform: cardHoverTransform
