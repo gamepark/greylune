@@ -1,3 +1,4 @@
+import { GreyluneAI } from '@gamepark/greylune/ai/GreyluneAI'
 import { GreyluneOptionsSpecV2 } from '@gamepark/greylune/GreyluneOptions'
 import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import { GreyluneSetup } from '@gamepark/greylune/GreyluneSetup'
@@ -22,6 +23,7 @@ createRoot(document.getElementById('root')!).render(
       locators={Locators}
       animations={gameAnimations}
       theme={theme}
+      ai={GreyluneAI}
     >
       <App />
     </GameProvider>
