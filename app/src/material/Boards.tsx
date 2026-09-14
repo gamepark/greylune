@@ -126,7 +126,9 @@ export class PlayerBoardDescription extends BoardDescription<PlayerColor, Materi
       }
     }
     const moves = specialActionMoves(legalMoves, item.location.player)
-    return moves.length ? <SpecialActionMenu moves={moves} /> : undefined
+    if (!moves.length) return undefined
+    const items = context.rules.material(MaterialType.VillageCard).location(LocationType.Items).player(item.location.player).length
+    return <SpecialActionMenu moves={moves} items={items} />
   }
 
   /**

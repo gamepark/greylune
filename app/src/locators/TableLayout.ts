@@ -474,7 +474,7 @@ export const sealButtonSpot = (position: number, middle: number): XYCoordinates 
  */
 export const itemActionSpot = (position: number, count: number, index = 0, buttons = 1): XYCoordinates => {
   const stacked = (index - (buttons - 1) / 2) * itemButtonStep
-  if (count <= playerCardsMaxCount) return { x: 0, y: stacked }
+  if (!crowdedItems(count)) return { x: 0, y: stacked }
   return { x: -2, y: stacked + ((position % 2 ? 1 : -1) * buttons * itemButtonStep) / 2 }
 }
 
@@ -682,12 +682,15 @@ export const specialActionSpot = (area: XYCoordinates) => onPlayerBoard(area, sp
  * spent on are printed as a line of icons under it, on nothing anybody puts anything on — so both
  * the offer to go there and the offer of each option are hung on the board itself and walk back out
  * to the space. Beside it rather than on it: the doorway is where the pawn is about to stand, or
- * already stands, and the buttons keep off both. To the right, which is where the board leaves room.
+ * already stands, and the buttons keep off both. To the right, which is where the board leaves room —
+ * until the row of Objects runs long: its buttons then gather on the last card, whose labels open to
+ * the left over that very room (see {@link itemActionSpot}), so the offer crosses over to the left of
+ * the house, its label opening to the left in turn.
  */
-export const specialActionBoardOffset: XYCoordinates = {
-  x: specialActionHouse.x + 2.6 - playerBoardSize.width / 2,
+export const specialActionBoardOffset = (items: number): XYCoordinates => ({
+  x: specialActionHouse.x + (crowdedItems(items) ? -2.6 : 2.6) - playerBoardSize.width / 2,
   y: specialActionHouse.y - playerBoardSize.height / 2
-}
+})
 
 /**
  * Where a skill marker wears the offer to climb its track (see `ChooseSkillMenu`): a step above it,
@@ -716,6 +719,9 @@ export const itemsGap: Partial<XYCoordinates> = { x: playerCardsGap }
 
 /** A card raising the limit can bring a 4th Object: the row tightens up rather than leaving its space. */
 export const playerCardsMaxCount = 3
+
+/** Past {@link playerCardsMaxCount} Objects, the row tightens up and its buttons move over to its last card. */
+export const crowdedItems = (count: number) => count > playerCardsMaxCount
 
 /** The 2 ends of a full row of cards: 3 of them, first to last. */
 export const playerCardsFullSpread = playerCardsGap * (playerCardsMaxCount - 1)
