@@ -21,13 +21,11 @@ import { GreyluneMove, GreyluneRule } from './GreyluneRule'
 import { RuleId } from './RuleId'
 
 /**
- * Which option of the card, and what is left to say about its Seal: the one an Object is bought with,
- * or the value Selia lets the player name for the one a Building has just spent.
+ * Which option of a Building, and what is left to say about the Seal: the one an Object is bought with,
+ * or the value Selia lets the player name for the one a Building has just spent. A card that is bought
+ * or recruited offers no option, so it names none.
  */
-export type ChooseAbilityData = { ability: number; seal?: number; value?: number }
-
-/** The option index a purchase or a recruitment is filed under: a card bought offers no choice. */
-const BUY = -1
+export type ChooseAbilityData = { ability?: number; seal?: number; value?: number }
 
 /**
  * A Villager standing in the Village has designated a card, and the price is settled here: the card
@@ -131,7 +129,7 @@ export class ActivateCardRule extends GreyluneRule {
   private abilityMoves(): GreyluneMove[] {
     if (this.coins < this.price) return []
     if (!this.isBuilding) {
-      return this.purchaseVariants().map((variant) => this.customMove(CustomMoveType.ChooseAbility, { ability: BUY, ...variant }))
+      return this.purchaseVariants().map((variant) => this.customMove(CustomMoveType.ChooseAbility, variant))
     }
     return (this.data.abilities ?? []).flatMap((ability, index) => {
       if (!this.canPay(ability.requirements) || !this.canReceive(ability.gains)) return []
@@ -234,13 +232,13 @@ export class ActivateCardRule extends GreyluneRule {
    */
   private activate(data: ChooseAbilityData): GreyluneMove[] {
     if (data.value !== undefined) this.memorize(Memory.SealValue, data.value)
-    const requirements = data.ability === BUY ? [] : (this.data.abilities![data.ability].requirements ?? [])
+    const requirements = this.isBuilding ? (this.data.abilities![data.ability!].requirements ?? []) : []
     const moves: GreyluneMove[] = [
       ...this.payCoins(this.price + this.coinCost(requirements)),
       this.villagers.index(this.villager).moveItem({ type: LocationType.Camp }),
       ...(data.seal !== undefined ? [this.material(MaterialType.Seal).index(data.seal).moveItem({ type: LocationType.SealDiscard })] : [])
     ]
-    return data.ability === BUY ? [...moves, ...this.take()] : [...moves, ...this.exploit(data.ability, requirements)]
+    return this.isBuilding ? [...moves, ...this.exploit(data.ability!, requirements)] : [...moves, ...this.take()]
   }
 
   /** A Building stays where it is: it is only ever borrowed, and the next Villager may use it too. */
