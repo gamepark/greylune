@@ -59,9 +59,6 @@ export enum CustomMoveType {
   /** Answering with a Companion or a Potion. Data: `{ card, option }`. */
   UseReaction,
 
-  /** Which of the Bonus tokens left is spent. Data: the index of the token. */
-  ChooseBonus,
-
   /**
    * What a Villager standing on the Event tile takes from it. Data: the index of the option.
    *

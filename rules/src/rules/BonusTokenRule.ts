@@ -1,14 +1,14 @@
-import { CustomMove, isCustomMoveType } from '@gamepark/rules-api'
+import { isDeleteItemType, ItemMove } from '@gamepark/rules-api'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { BonusToken, bonusTokenGains } from '../material/Tokens'
-import { CustomMoveType } from './CustomMoveType'
 import { GreyluneMove, GreyluneRule } from './GreyluneRule'
 
 /**
  * Crossing 8 points, and then 20 (rulebook p.12): the player picks one of their Bonus tokens,
- * resolves it and puts it back in the box. The second time, the ones left over go back too — which
- * is what makes the number of tokens still there the record of how far the player has come.
+ * resolves it and puts it back in the box. The rulebook sends the last one back to the box too, but it
+ * is left on the table: it gets in no one's way and shows at a glance what the player passed over. The
+ * number of tokens still there is the record of how far the player has come (see `gainVp`).
  */
 export class BonusTokenRule extends GreyluneRule {
   get tokens() {
@@ -16,18 +16,12 @@ export class BonusTokenRule extends GreyluneRule {
   }
 
   getPlayerMoves(): GreyluneMove[] {
-    return this.tokens.getIndexes().map((token) => this.customMove(CustomMoveType.ChooseBonus, token))
+    return this.tokens.deleteItems()
   }
 
-  onCustomMove(move: CustomMove): GreyluneMove[] {
-    if (!isCustomMoveType(CustomMoveType.ChooseBonus)(move)) return super.onCustomMove(move)
-    const token = move.data as number
-    const isLastThreshold = this.tokens.length <= 2
-    this.pushGains(bonusTokenGains[this.material(MaterialType.BonusToken).getItem(token).id as BonusToken], true)
-    const spent = this.material(MaterialType.BonusToken).index(token).deleteItem()
-    const rest = isLastThreshold
-      ? this.tokens.index((index) => index !== token).deleteItems()
-      : []
-    return [spent, ...rest, ...this.endOfAction()]
+  beforeItemMove(move: ItemMove): GreyluneMove[] {
+    if (!isDeleteItemType(MaterialType.BonusToken)(move)) return []
+    this.pushGains(bonusTokenGains[this.material(MaterialType.BonusToken).getItem<BonusToken>(move.itemIndex).id], true)
+    return this.endOfAction()
   }
 }

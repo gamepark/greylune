@@ -262,7 +262,7 @@
       },
       "bonus": {
         "name": "Jetons Bonus",
-        "text": "Lorsque vous atteignez 8 PV, choisissez l'un de vos 3 jetons Bonus, résolvez son effet et remettez-le dans la boîte. Lorsque vous atteignez 20 PV, choisissez l'un de vos 2 jetons Bonus restants, résolvez son effet et remettez tous vos jetons dans la boîte."
+        "text": "Lorsque vous atteignez 8 PV, choisissez l'un de vos 3 jetons Bonus, résolvez son effet et défaussez-le. Lorsque vous atteignez 20 PV, faites de même avec l'un de vos 2 jetons restants."
       },
       "village": {
         "name": "Village",

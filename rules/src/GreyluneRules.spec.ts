@@ -1,4 +1,4 @@
-import { applyAutomaticMoves, isCustomMoveType, isMoveItemType, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { applyAutomaticMoves, isCustomMoveType, isDeleteItemType, isMoveItemType, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { BASE_INCOME, MAX_ITEMS } from './Constants'
 import { GreyluneRules } from './GreyluneRules'
@@ -241,7 +241,14 @@ describe('The score track', () => {
   /** Same as {@link gain}, but any Bonus token the way up asks for is picked at random and got out of the way. */
   const gainThrough = (amount: number) => {
     gain(amount)
-    while (game.rule?.id === RuleId.BonusToken) playCustom(CustomMoveType.ChooseBonus)
+    while (game.rule?.id === RuleId.BonusToken) spendBonus()
+  }
+
+  /** Spends the first Bonus token on offer. */
+  const spendBonus = () => {
+    const move = rules().getLegalMoves(BLUE).find(isDeleteItemType(MaterialType.BonusToken))
+    expect(move, 'no Bonus token to spend').toBeDefined()
+    play(move!)
   }
 
   /** Through the rules rather than the raw items: a deleted item keeps its slot in the array, with a quantity of 0. */
@@ -276,15 +283,26 @@ describe('The score track', () => {
     expect(held()[0].location.rotation).toBe(true)
   })
 
-  it('spends a Bonus token at 8 and empties the supply at 20', () => {
+  it('spends a Bonus token at 8 and another at 20, leaving the last one on the table', () => {
     gain(8)
     expect(game.rule!.id).toBe(RuleId.BonusToken)
-    playCustom(CustomMoveType.ChooseBonus)
+    spendBonus()
     expect(count(MaterialType.BonusToken, LocationType.BonusTokens, BLUE)).toBe(2)
     gain(12)
     expect(game.rule!.id).toBe(RuleId.BonusToken)
-    playCustom(CustomMoveType.ChooseBonus)
-    expect(count(MaterialType.BonusToken, LocationType.BonusTokens, BLUE)).toBe(0)
+    spendBonus()
+    expect(count(MaterialType.BonusToken, LocationType.BonusTokens, BLUE)).toBe(1)
+    gain(10)
+    expect(game.rule!.id).not.toBe(RuleId.BonusToken)
+  })
+
+  it('spends both Bonus tokens when a single gain crosses 8 and 20', () => {
+    gain(20)
+    spendBonus()
+    expect(game.rule!.id).toBe(RuleId.BonusToken)
+    spendBonus()
+    expect(count(MaterialType.BonusToken, LocationType.BonusTokens, BLUE)).toBe(1)
+    expect(game.rule!.id).not.toBe(RuleId.BonusToken)
   })
 })
 

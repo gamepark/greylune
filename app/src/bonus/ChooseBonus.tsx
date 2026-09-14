@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { bonusTokenGains, BonusToken } from '@gamepark/greylune/material/Tokens'
-import { CustomMove } from '@gamepark/rules-api'
+import { MaterialMove } from '@gamepark/rules-api'
 import { GainsLabel } from '../components/Gains'
 import { VpIcon } from '../components/Icons'
 import { GreyluneMenuButton } from '../theme/GreyluneMenuButton'
@@ -11,7 +11,7 @@ import { GreyluneMenuButton } from '../theme/GreyluneMenuButton'
  * over — a figure and a symbol, no word (see {@link GainsLabel}) — and carries the laurel, because
  * reaching the points is what spends it.
  */
-export const ChooseBonusButton = ({ token, move }: { token: BonusToken; move: CustomMove }) => (
+export const ChooseBonusButton = ({ token, move }: { token: BonusToken; move: MaterialMove }) => (
   <GreyluneMenuButton x={2} y={0} move={move} label={<GainsLabel gains={bonusTokenGains[token]} />} labelPosition="right">
     <VpIcon />
   </GreyluneMenuButton>
