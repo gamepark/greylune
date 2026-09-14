@@ -2,10 +2,10 @@ import { Area } from '@gamepark/greylune/material/Area'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
-import { ComponentSize, DropAreaDescription } from '@gamepark/react-game'
+import { ComponentSize, DropAreaDescription, MaterialContext } from '@gamepark/react-game'
 import { Coordinates, Location } from '@gamepark/rules-api'
 import { CenteredListLocator } from './CenteredListLocator'
-import { areaGap, areaSize, areaSpot } from './TableLayout'
+import { areaGap, areaSize, areaSpot, villagePairGap } from './TableLayout'
 
 const areaOf = (location: Location<PlayerColor, LocationType>): Area => (location.id as Area) ?? Area.Village
 
@@ -34,8 +34,10 @@ export class AreaLocator extends CenteredListLocator<PlayerColor, MaterialType, 
     return areaSpot(areaOf(location))
   }
 
-  getGap(location: Location<PlayerColor, LocationType>): Partial<Coordinates> {
-    return areaGap(areaOf(location))
+  getGap(location: Location<PlayerColor, LocationType>, context: MaterialContext<PlayerColor, MaterialType, LocationType>): Partial<Coordinates> {
+    const area = areaOf(location)
+    if (area === Area.Village && this.countListItems(location, context) === 2) return villagePairGap
+    return areaGap(area)
   }
 
   /**

@@ -175,6 +175,12 @@ export const adventurerStaySpot: XYCoordinates = { x: -2, y: 0 }
 export const areaGap = (area: Area): Partial<XYCoordinates> => (areaSpaces[area].width > areaSpaces[area].height ? { x: 1.4 } : { y: 1.1 })
 
 /**
+ * Two Adventurers alone in Greylune have the whole town to themselves: they stand well apart, each
+ * one still on the ground of the town, instead of crowding its middle the way a group of 3 or 4 must.
+ */
+export const villagePairGap: Partial<XYCoordinates> = { x: 3 }
+
+/**
  * Two markers on the same space of a track are one on top of the other. Each one is set down leaning
  * a little further, so a pile of four still reads as four and the bottom one keeps standing on its
  * space.
