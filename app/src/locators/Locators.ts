@@ -1,11 +1,12 @@
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { HeroicQuestArea } from '@gamepark/greylune/material/QuestTile'
+import { BonusToken } from '@gamepark/greylune/material/Tokens'
 import { VpTokenValue } from '@gamepark/greylune/material/VpToken'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
 import { DeckLocator, ListLocator, Locator, MaterialContext, PileLocator } from '@gamepark/react-game'
-import { Location, MaterialItem } from '@gamepark/rules-api'
+import { getEnumValues, Location, MaterialItem } from '@gamepark/rules-api'
 import { ActiveVillagersLocator } from './ActiveVillagersLocator'
 import { AreaLocator } from './AreaLocator'
 import { CampLocator } from './CampLocator'
@@ -277,10 +278,17 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
       firstPlayerTokenSpot(areaOf(context, location.player), showsBandOf(context, location.player as PlayerColor))
   }),
 
-  [LocationType.BonusTokens]: new CenteredListLocator({
+  /**
+   * Each token keeps the slot its `x` gives it (a `FillGapStrategy`): the column is centred on the
+   * 3 slots, not on the tokens left, so spending one leaves a hole and the others do not move.
+   */
+  [LocationType.BonusTokens]: new ListLocator({
     gap: bonusTokensGap,
     hide: hideBandOfOtherPlayers,
-    getCenter: (location: Location, context: MaterialContext) => bonusTokensSpot(areaOf(context, location.player))
+    getCoordinates: (location: Location, context: MaterialContext) => {
+      const { x, y } = bonusTokensSpot(areaOf(context, location.player))
+      return { x, y: y - (bonusTokensGap.y! * (getEnumValues(BonusToken).length - 1)) / 2 }
+    }
   }),
 
   /** The one place of the table with an explanation of its own: see {@link VillagerReserveLocator}. */

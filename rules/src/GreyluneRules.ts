@@ -84,8 +84,8 @@ export class GreyluneRules
    * pile that stands on it.
    *
    * {@link FillGapStrategy} is for the places where the slots are printed and stay: the 3 Quest
-   * marker spaces of a personal board. What leaves one of those leaves a hole, and what comes back
-   * fills it.
+   * marker spaces of a personal board, the 3 Bonus tokens beside it. What leaves one of those leaves a
+   * hole, and what comes back fills it.
    *
    * A strategy is only ever handed the items of one area — same `id`, same `player`, same `parent`.
    * {@link StackingStrategy} is what is left when `x` or `y` still names a space inside that area and

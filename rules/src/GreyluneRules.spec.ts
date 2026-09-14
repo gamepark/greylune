@@ -288,6 +288,10 @@ describe('The score track', () => {
     expect(game.rule!.id).toBe(RuleId.BonusToken)
     spendBonus()
     expect(count(MaterialType.BonusToken, LocationType.BonusTokens, BLUE)).toBe(2)
+    // The tokens left keep their printed slot: spending one leaves a hole, the others do not move.
+    for (const token of rules().material(MaterialType.BonusToken).location(LocationType.BonusTokens).player(BLUE).getItems()) {
+      expect(token.location.x).toBe(token.id - 1)
+    }
     gain(12)
     expect(game.rule!.id).toBe(RuleId.BonusToken)
     spendBonus()
