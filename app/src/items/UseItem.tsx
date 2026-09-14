@@ -15,13 +15,12 @@ import { itemActionData } from './ItemActions'
  * them. An Object offering 2 options wears 2 buttons, stacked the way the sides of an Encounter are.
  * Their labels open to the left: the row of Objects runs out to the right edge of the screen.
  */
-export const ItemCardMenu = ({ front, moves }: { front: VillageCard; moves: CustomMove[] }) => (
+export const ItemCardMenu = ({ front, moves, position, count }: { front: VillageCard; moves: CustomMove[]; position: number; count: number }) => (
   <>
     {moves.map((move, index) => (
       <GreyluneMenuButton
         key={index}
-        x={itemActionSpot.x}
-        y={itemActionSpot.y + (index - (moves.length - 1) / 2) * useButtonStep}
+        {...itemActionSpot(position, count, index, moves.length)}
         move={move}
         labelPosition="left"
         label={<UseItemLabel front={front} ability={itemActionData(move).ability} />}
@@ -31,9 +30,6 @@ export const ItemCardMenu = ({ front, moves }: { front: VillageCard; moves: Cust
     ))}
   </>
 )
-
-/** A little more than a button is wide, so that two of them stand clear of one another. */
-const useButtonStep = 2.4
 
 /**
  * What a button says, which is what every button offering an effect says (see {@link EffectLabel}):

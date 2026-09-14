@@ -461,8 +461,25 @@ export const sealButtonSpot = (position: number, middle: number): XYCoordinates 
  * rather than the one above: an Object lies in a row along the player's board, hard against its
  * neighbours and away from the Village, so the room a button has there is not the room it has in the
  * grid, and the two are free to move apart.
+ *
+ * Up to {@link playerCardsMaxCount} Objects the row keeps its gap and each card is whole: the buttons
+ * sit in its middle. Past that the row tightens up and every card but the last shows only its left
+ * part, so the buttons move over to it, and a label opening to the left would lie over the buttons of
+ * the card before: they take turns, the way the cards of an Encounter row do (see `EncounterCardMenu`),
+ * one card stacking its buttons up from the middle line and the next down from it. Half a step either
+ * way would do for one button a card, but not for an Object offering 2 options next to another one:
+ * a row of each would still meet on the middle line.
+ *
+ * `index` is the rank of the button among the `buttons` the card wears.
  */
-export const itemActionSpot: XYCoordinates = { x: 0, y: 0 }
+export const itemActionSpot = (position: number, count: number, index = 0, buttons = 1): XYCoordinates => {
+  const stacked = (index - (buttons - 1) / 2) * itemButtonStep
+  if (count <= playerCardsMaxCount) return { x: 0, y: stacked }
+  return { x: -2, y: stacked + ((position % 2 ? 1 : -1) * buttons * itemButtonStep) / 2 }
+}
+
+/** A little more than a button is wide, so that two of them stand clear of one another. */
+const itemButtonStep = 2.4
 
 /**
  * The Seals already spent lie in the strip the bottom-left corner of the table leaves open, between

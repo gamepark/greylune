@@ -68,10 +68,14 @@ export class VillageCardDescription extends CardDescription<PlayerColor, Materia
     const reactions = reactionMoves(legalMoves, context.index)
     if (reactions.length && item.id?.front !== undefined) return <ReactionCardMenu front={item.id.front} moves={reactions} />
     if (item.location.type === LocationType.Items) {
+      const position = item.location.x ?? 0
+      const count = context.rules.material(MaterialType.VillageCard).location(LocationType.Items).player(item.location.player).length
       const discard = discardItemMove(legalMoves, context.index)
-      if (discard) return <DiscardItemButton move={discard} />
+      if (discard) return <DiscardItemButton move={discard} position={position} count={count} />
       const uses = itemActionMoves(legalMoves, context.index)
-      return uses.length && item.id?.front !== undefined ? <ItemCardMenu front={item.id.front} moves={uses} /> : undefined
+      return uses.length && item.id?.front !== undefined ? (
+        <ItemCardMenu front={item.id.front} moves={uses} position={position} count={count} />
+      ) : undefined
     }
     if (item.location.type !== LocationType.VillageGrid) return undefined
     const villager = selectedVillager(context.rules)
