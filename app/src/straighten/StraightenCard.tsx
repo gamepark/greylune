@@ -2,8 +2,7 @@
 import { css } from '@emotion/react'
 import { faRotateLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { XYCoordinates } from '@gamepark/react-game'
-import { MaterialMove } from '@gamepark/rules-api'
+import { MaterialMove, XYCoordinates } from '@gamepark/rules-api'
 import { GreyluneMenuButton } from '../theme/GreyluneMenuButton'
 
 /**
