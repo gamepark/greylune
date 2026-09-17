@@ -7,29 +7,20 @@ import { MaterialItem } from '@gamepark/rules-api'
 type Context = MaterialContext<PlayerColor, MaterialType, LocationType>
 
 /**
- * Past 2 players the column of areas no longer affords a band of material above every personal board,
- * so only one is drawn at a time: the player whose panel was clicked last, which the framework keeps in
- * `game.view`. Keeping the choice there rather than in a store of our own is what makes react-game move
- * the items — it hands `game.view` to every locator's position dependencies for free.
+ * The table has room for one player area, so one player is read at a time: the player whose panel was
+ * clicked last, which the framework keeps in `game.view`, or else the player at the screen, or else
+ * the first seat. Keeping the choice there rather than in a store of our own is what makes react-game
+ * redraw the items — it hands `game.view` to every locator for free.
  */
 export const getDisplayedPlayer = (context: Context): PlayerColor | undefined =>
   (context.rules.game.view as PlayerColor) ?? context.player ?? context.rules.players[0]
 
-/** At 2 players the height is there for both bands: nothing to choose, and nothing to hide. */
-export const showsAllBandsFor = (players: number): boolean => players <= 2
+/**
+ * Every player's material is laid out on the same spots of the one area, so whatever belongs to a
+ * player who is not read is not drawn at all.
+ */
+export const hideOtherPlayers = (item: MaterialItem<PlayerColor, LocationType>, context: ItemContext<PlayerColor, MaterialType, LocationType>): boolean =>
+  item.location.player !== getDisplayedPlayer(context)
 
-export const showsAllBands = (context: Context): boolean => showsAllBandsFor(context.rules.players.length)
-
-/** Whether a player has their band out: at 2 players everyone does, past that the read player alone. */
-export const showsBandOf = (context: Context, player?: PlayerColor): boolean =>
-  showsAllBands(context) || player === getDisplayedPlayer(context)
-
-/** The row whose band is drawn, or `undefined` while every row draws its own. */
-export const getBandRow = (context: Context): number | undefined =>
-  showsAllBands(context) ? undefined : Math.max(0, context.rules.players.indexOf(getDisplayedPlayer(context) as PlayerColor))
-
-/** Whatever a player keeps above their board belongs to the band, and is drawn for the read player alone. */
-export const hideBandOfOtherPlayers = (
-  item: MaterialItem<PlayerColor, LocationType>,
-  context: ItemContext<PlayerColor, MaterialType, LocationType>
-): boolean => !showsAllBands(context) && item.location.player !== getDisplayedPlayer(context)
+/** Which of the 4 seats a player sits in. Fixed for the whole game, so positions never move. */
+export const seatOf = (context: Context, player?: number): number => Math.max(0, context.rules.players.indexOf(player as PlayerColor))

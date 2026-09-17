@@ -177,12 +177,12 @@ export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, Loc
     return this.material(MaterialType.VillageCard).location(LocationType.VillageGrid)
   }
 
-  /** The token drawn on the card's reward scroll: the stock holds exactly one, and no other card asks for it. */
+  /** The token drawn on the card's reward scroll: no other card asks for it, so it is created right on the card. */
   private placeIncomeToken(card: number): GreyluneMove[] {
     const income = encounterIncomeToken(this.material(MaterialType.EncounterCard).getItem<EncounterCardId>(card).id.front!)
     return income === undefined
       ? []
-      : this.material(MaterialType.IncomeToken).location(LocationType.IncomeTokenStock).id(income).moveItems({ type: LocationType.CardIncome, parent: card })
+      : [this.material(MaterialType.IncomeToken).createItem({ id: income, location: { type: LocationType.CardIncome, parent: card } })]
   }
 
   // ------------------------------------------------------------------ everybody back to Spring

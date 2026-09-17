@@ -3,7 +3,7 @@ import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { ItemContext, Locator, MaterialContext } from '@gamepark/react-game'
 import { Coordinates, Location, MaterialItem } from '@gamepark/rules-api'
-import { areaOf } from './Seats'
+import { hideOtherPlayers } from './DisplayedPlayer'
 import { activeVillagersSpot, activeVillagersStep } from './TableLayout'
 
 type GreyluneContext = MaterialContext<PlayerColor, MaterialType, LocationType>
@@ -24,8 +24,10 @@ const outerRowSize = 2
  * hold, the row in front before the one behind, and they keep to the gaps of the full row of 3.
  */
 export class ActiveVillagersLocator extends Locator<PlayerColor, MaterialType, LocationType> {
-  getCoordinates(location: Location<PlayerColor, LocationType>, context: GreyluneContext): Coordinates {
-    return activeVillagersSpot(areaOf(context, location.player))
+  hide = hideOtherPlayers
+
+  getCoordinates(): Coordinates {
+    return activeVillagersSpot
   }
 
   getPositionDependencies(location: Location<PlayerColor, LocationType>, context: GreyluneContext): unknown {
@@ -33,7 +35,7 @@ export class ActiveVillagersLocator extends Locator<PlayerColor, MaterialType, L
   }
 
   getItemCoordinates(item: MaterialItem<PlayerColor, LocationType>, context: ItemContext<PlayerColor, MaterialType, LocationType>): Partial<Coordinates> {
-    const { x, y, z } = this.getCoordinates(item.location, context)
+    const { x, y, z } = this.getCoordinates()
     const { row, column } = hexagonPlace(this.getItemIndex(item, context), this.countItems(item.location, context))
     return {
       x: x + column * activeVillagersStep.x,

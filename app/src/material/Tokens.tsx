@@ -78,9 +78,8 @@ export class SealDescription extends TokenDescription<PlayerColor, MaterialType,
 }
 
 /**
- * The stock shows the symbol side of the tokens; earning one turns it over onto a personal board,
- * income side up, and it never turns back. Which side shows is the location and nothing else, so
- * these tokens carry no `rotation` of their own.
+ * An Income token is only ever seen income side up: created on the Encounter that carries it, then laid
+ * on the personal board of whoever takes that Encounter.
  */
 export class IncomeTokenDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, IncomeToken> {
   width = 2.52
@@ -88,10 +87,6 @@ export class IncomeTokenDescription extends TokenDescription<PlayerColor, Materi
   transparency = true
   images = incomeTokenImages
   backImages = incomeTokenBacks
-
-  isFlipped(item: Partial<MaterialItem<PlayerColor, LocationType>>): boolean {
-    return item.location?.type === LocationType.IncomeTokenStock
-  }
 }
 
 export class BonusTokenDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, BonusToken> {

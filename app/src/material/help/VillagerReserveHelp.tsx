@@ -13,7 +13,7 @@ import { HelpFact, HelpFacts, HelpTitle, helpDialogCss, helpTexts } from './Help
  * The Villagers a player does not own yet.
  *
  * The reserve is a place with no piece of its own and no mark printed anywhere: 4 figures set aside
- * at setup, standing on the table above the personal board. A player looking at them has one
+ * at setup, standing on the table over the main board. A player looking at them has one
  * question — why are those 4 out of reach — and the only thing they can click to ask it is a figure.
  * So the pawns of the reserve send the reader here rather than to the Villager dialog (see
  * `VillagerDescription.displayHelp`): what a Villager is, is the same everywhere, and being in the

@@ -10,7 +10,7 @@ import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { Period } from './material/Period'
 import { heroicQuestAreas, QuestTile } from './material/QuestTile'
-import { BonusToken, coinUnits, IncomeToken, Seal } from './material/Tokens'
+import { BonusToken, coinUnits, Seal } from './material/Tokens'
 import { getVillageCardPeriod, VillageCard, villageCardsOfPeriod } from './material/VillageCard'
 import { playerVillagers } from './material/Villager'
 import { getVpToken, VpTokenValue } from './material/VpToken'
@@ -95,13 +95,13 @@ export class GreyluneSetup extends MaterialGameSetup<PlayerColor, MaterialType, 
   }
 
   /**
-   * Coins are unlimited, so the bank never enters the state: it only holds the face-down Seal stack
-   * and the 8 Income tokens.
+   * Coins are unlimited, so the bank never enters the state: it only holds the face-down Seal stack.
+   * The 8 Income tokens are not laid out either: each one is printed on a single Encounter, and it is
+   * created on that card when the card is revealed (see `WinterRule`).
    */
   private setupBank() {
     const seals = shuffle(getEnumValues(Seal).flatMap((seal) => range(SEALS_PER_VALUE).map(() => seal)))
     this.material(MaterialType.Seal).createItems(seals.map((id) => ({ id, location: { type: LocationType.SealStack } })))
-    this.material(MaterialType.IncomeToken).createItems(getEnumValues(IncomeToken).map((id) => ({ id, location: { type: LocationType.IncomeTokenStock } })))
   }
 
   private setupPlayer(player: PlayerColor) {

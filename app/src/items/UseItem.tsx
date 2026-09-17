@@ -13,14 +13,14 @@ import { itemActionData } from './ItemActions'
  * It carries the hooked arrow the cards themselves print in front of every use of an Object, because
  * that is what pressing it does — the card goes down on its side — and it is the same for all of
  * them. An Object offering 2 options wears 2 buttons, stacked the way the sides of an Encounter are.
- * Their labels open to the left: the row of Objects runs out to the right edge of the screen.
+ * Their labels open to the left: the column of Objects stands against the right edge of the table.
  */
-export const ItemCardMenu = ({ front, moves, position, count }: { front: VillageCard; moves: CustomMove[]; position: number; count: number }) => (
+export const ItemCardMenu = ({ front, moves, count, players }: { front: VillageCard; moves: CustomMove[]; count: number; players: number }) => (
   <>
     {moves.map((move, index) => (
       <GreyluneMenuButton
         key={index}
-        {...itemActionSpot(position, count, index, moves.length)}
+        {...itemActionSpot(count, players, index, moves.length)}
         move={move}
         labelPosition="left"
         label={<UseItemLabel front={front} ability={itemActionData(move).ability} />}
@@ -41,6 +41,4 @@ export const ItemCardMenu = ({ front, moves, position, count }: { front: Village
  * owns say nothing at all, cost included: both offer that one option, so their button is
  * unambiguous, and the card under it says the rest.
  */
-const UseItemLabel = ({ front, ability }: { front: VillageCard; ability: number }) => (
-  <EffectLabel {...villageCardData[front].abilities![ability]} />
-)
+const UseItemLabel = ({ front, ability }: { front: VillageCard; ability: number }) => <EffectLabel {...villageCardData[front].abilities![ability]} />

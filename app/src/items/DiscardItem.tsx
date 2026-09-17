@@ -12,8 +12,8 @@ import { GreyluneMenuButton } from '../theme/GreyluneMenuButton'
  * A red cross and no word: the header already says an Object is to be discarded, and the button is
  * then the whole of the question — this one, or not this one.
  */
-export const DiscardItemButton = ({ move, position, count }: { move: MaterialMove; position: number; count: number }) => (
-  <GreyluneMenuButton {...itemActionSpot(position, count)} move={move}>
+export const DiscardItemButton = ({ move, count, players }: { move: MaterialMove; count: number; players: number }) => (
+  <GreyluneMenuButton {...itemActionSpot(count, players)} move={move}>
     <FontAwesomeIcon icon={faXmark} css={crossCss} />
   </GreyluneMenuButton>
 )

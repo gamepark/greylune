@@ -156,7 +156,6 @@ export class GreyluneRules
       [LocationType.CardSeal]: new FillGapStrategy()
     },
     [MaterialType.IncomeToken]: {
-      [LocationType.IncomeTokenStock]: new PositiveSequenceStrategy(),
       [LocationType.IncomeTokenSpace]: new PositiveSequenceStrategy()
     },
     [MaterialType.BonusToken]: {

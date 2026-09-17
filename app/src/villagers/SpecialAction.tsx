@@ -3,7 +3,7 @@ import { CustomMove } from '@gamepark/rules-api'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MagicUpIcon, StoryIcon, TravelIcon, VillagerIcon } from '../components/Icons'
-import { crowdedItems, specialActionBoardOffset } from '../locators/TableLayout'
+import { specialActionBoardOffset } from '../locators/TableLayout'
 import { GreyluneMenuButton } from '../theme/GreyluneMenuButton'
 import { moveOfSelectedVillager, useSelectedVillager } from './SelectVillager'
 import { VillagerMove } from './SpecialActionMoves'
@@ -19,16 +19,11 @@ import { VillagerMove } from './SpecialActionMoves'
  */
 
 /** The offer to take the action, before anything is said about what for. */
-export const SpecialActionMenu = ({ moves, items }: { moves: VillagerMove[]; items: number }) => {
+export const SpecialActionMenu = ({ moves }: { moves: VillagerMove[] }) => {
   const { t } = useTranslation()
   const selected = useSelectedVillager()
   return (
-    <GreyluneMenuButton
-      {...specialActionBoardOffset(items)}
-      move={moveOfSelectedVillager(moves, selected)}
-      label={t('action.special-action')}
-      labelPosition={crowdedItems(items) ? 'left' : 'right'}
-    >
+    <GreyluneMenuButton {...specialActionBoardOffset} move={moveOfSelectedVillager(moves, selected)} label={t('action.special-action')} labelPosition="right">
       <VillagerIcon />
     </GreyluneMenuButton>
   )

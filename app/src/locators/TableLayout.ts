@@ -8,10 +8,11 @@ import { Coordinates, XYCoordinates } from '@gamepark/rules-api'
 /**
  * The whole table, in centimetres, at the scale of the real components.
  *
- * The main board sits at the origin. The Village grid unfolds to its left, the revealed Encounters
- * line up along its right edge, the Season board lies underneath, and the 4 player areas form a row
- * below everything. Nothing is ever rotated: every player reads their own area, and their
- * opponents', the right way up. At 2 and 3 players the unused areas are simply left empty.
+ * The main board sits at the origin. The Village grid unfolds to its left, the Season board lies
+ * underneath it, and the revealed Encounters line up along the right edge of the main board. The
+ * table is exactly as tall as the 2 Encounter rows lying above and below the main board, and one
+ * player area stands to the right of everything: the area of the player being read, whoever that is.
+ * Nothing is ever rotated.
  *
  * Coordinates printed on a board (a track, a slot) are given in centimetres from the top-left corner
  * of its artwork, exactly as they were measured on the image, and converted here. Keep it that way:
@@ -84,8 +85,14 @@ export const villageGapLevel = 5
  */
 const notchOverlap = 0.34
 
-/** The air left between the outermost component and the edge of the table. */
+/** The air left between the outermost component and the left and right edges of the table. */
 const tableMargin = 1
+
+/**
+ * The air left above the Encounter row lying over the main board, and under the one lying below it: a
+ * millimetre and a half, so the table is as tall as the main board and its 2 rows and nothing more.
+ */
+const tableEdgeAir = 0.15
 
 /**
  * A marker is drawn seen from a hair above the table: the disc or the shield that has to register
@@ -294,17 +301,60 @@ const encounterRowStart: Record<EncounterRowArea, XYCoordinates> = {
 
 export const encounterRowSpot = (area: EncounterRowArea): Coordinates => onMainBoard(encounterRowStart[area].x, encounterRowStart[area].y)
 
-/** The 5 rows, so that a player's Companions can look up which of them run at their own cards. */
-export const encounterRowAreas = Object.keys(encounterRowStart).map(Number) as EncounterRowArea[]
-
-export const encounterRowGap: Partial<XYCoordinates> = { x: 5.8 }
+export const encounterRowGap = 5.8
 
 /**
- * The length a row has for free: 2 Encounters, which is what the column of player areas is set clear
- * of for the 3 rows that start at the right edge of the board. A longer row is not cut off there —
- * it takes whatever the Companions in its way are not using, see {@link crowdedRowsRoom}.
+ * How many Encounters a row lays side by side. Every row is given 3, which is what the table is made
+ * wide enough for. A year deals 7 cards at most over the 5 rows, and never more than 5 to one Area, so
+ * a row is a line of 3 and 2 cards over.
  */
-const encounterRowReserve = encounterRowGap.x ?? 0
+const encounterRowLine = 3
+
+/** The 5 rows from the top of the board down, so that each one can look up what lies on either side of it. */
+const encounterRowsTopDown = (Object.keys(encounterRowStart).map(Number) as EncounterRowArea[]).sort((a, b) => encounterRowStart[a].y - encounterRowStart[b].y)
+
+/**
+ * The rows a row may lay its 2 extra Encounters over, the one below it first. The board prints its 5
+ * notches barely more than a card apart, so a second line of cards is a line *on top of a neighbouring
+ * row* and nowhere else — and that is room the table really has: a year deals 7 Encounters over the 5
+ * Areas, so an Area that got 4 or 5 of them has left the others 2 cards to share between them, and the
+ * rows on either side of it are all but bare.
+ *
+ * Which of the 2 a row borrows is therefore read off the table rather than fixed here (see
+ * `EncounterRowLocator`): the emptier of them, and the only one there is for the 2 rows slotted into
+ * the top and the bottom edge of the board, whose other side is the edge of the table.
+ */
+export const encounterRowNeighbours = (area: EncounterRowArea): EncounterRowArea[] => {
+  const index = encounterRowsTopDown.indexOf(area)
+  return [encounterRowsTopDown[index + 1], encounterRowsTopDown[index - 1]].filter((row) => row !== undefined)
+}
+
+/**
+ * A line of Encounters is lifted a hair over anything laid on its own line, so a row that borrows the
+ * line of a neighbour never covers the cards the neighbour itself was dealt.
+ */
+const encounterRowLift = 0.05
+
+/**
+ * Where the Encounter of rank `index` lies in the row of an Area. The first 3 make the line, left to
+ * right from the notch the Area is dealt into; the fourth goes over the third and the fifth over the
+ * second — the borrowed line filled backwards, so the card that has just landed is always the one
+ * nearest the board — and `over` is the neighbouring row whose line they are laid on.
+ */
+export const encounterRowSlot = (area: EncounterRowArea, index: number, over?: EncounterRowArea): Coordinates => {
+  const extra = index >= encounterRowLine
+  const column = extra ? Math.max(0, 2 * encounterRowLine - 1 - index) : index
+  const { x } = encounterRowSpot(area)
+  const { y } = encounterRowSpot((extra && over) || area)
+  return { x: x + column * encounterRowGap, y, z: extra ? 0 : encounterRowLift }
+}
+
+/**
+ * The top and the bottom of what the table shows: the outer edges of the 2 rows slotted into the top
+ * and the bottom edge of the main board. Everything else is laid out between those 2 lines.
+ */
+const tableInsideTop = encounterRowSpot(Area.Edge).y - encounterCardSize.height / 2
+const tableInsideBottom = encounterRowSpot(Area.Wand).y + encounterCardSize.height / 2
 
 // ------------------------------------------------------------------ around the main board
 
@@ -317,10 +367,19 @@ export const villageGridSpot = (x: number, y: number): XYCoordinates => ({
 })
 
 /**
- * The Village deck stands above the middle column of the grid it feeds, on the theoretical slot
- * (1, -1): its base card sits where a 4th row would start, and the pile builds up from there.
+ * A full deck leans up and to the left by a hair per card, and a whole centimetre once it holds the
+ * 20 cards the framework draws of it.
  */
-export const villageDeckSpot: XYCoordinates = villageGridSpot(1, -1)
+const deckLean = 1
+
+/**
+ * The row of the Village deck, the bank and the Seal stack, over the grid: as high as a full deck
+ * leaning out of it still stays on the table.
+ */
+const supplyRowY = tableInsideTop + villageCardSize.height / 2 + deckLean
+
+/** The Village deck stands above the middle column of the grid it feeds, and the pile builds up from there. */
+export const villageDeckSpot: XYCoordinates = { x: villageGridSpot(1, 0).x, y: supplyRowY }
 
 /**
  * Villagers standing in the same gap line up across it, so the gap reads as one crowded space: down
@@ -349,24 +408,52 @@ export const villageGapSize = (gap: Gap): Size =>
  * full, so the heap starts a centimetre further still, and it lies flat: a scatter far wider than
  * tall, loose change nobody ever counts out rather than 2 neat stacks.
  */
-export const coinReserveSpot: XYCoordinates = villageGridSpot(0, -1)
-/**
- * The general supply: the Seal stack and the Income tokens. The Encounter deck is the exception: it
- * stands at the head of the Gold row it feeds.
- */
+export const coinReserveSpot: XYCoordinates = { x: villageGridSpot(0, 0).x, y: supplyRowY }
+/** The Encounter deck stands at the head of the Gold row it feeds. */
 export const encounterDeckSpot: XYCoordinates = {
-  x: encounterRowSpot(Area.Wand).x - (encounterRowGap.x ?? 0),
+  x: encounterRowSpot(Area.Wand).x - encounterRowGap,
   y: encounterRowSpot(Area.Wand).y
 }
-export const sealStackSpot: XYCoordinates = villageGridSpot(2, -1)
+/**
+ * The Seal stack, right of the Village deck, in a heap narrower than it is tall: pushed against the
+ * deck, it leaves the strip over the main board to the reserves of Villagers.
+ */
+export const sealStackSpot: XYCoordinates = { x: villageDeckSpot.x + 7, y: supplyRowY }
+export const sealStackRadius: XYCoordinates = { x: 2.2, y: 2.4 }
 
 /**
- * The 8 Income tokens wait in the gap the top band leaves open between the Seal stack and the head of
- * the Black Encounter row, halfway between the two, in 2 rows of 4.
+ * The Villagers every player has set aside (rulebook p.3), all of them always in sight: they stand in
+ * the strip over the main board, between the Seal stack and the head of the Black Encounter row. Each
+ * player's 4 stand in a row, and the rows make 2 columns, one line per pair of seats, centred in the
+ * strip.
  */
-export const incomeTokenStockSpot: XYCoordinates = {
-  x: sealStackSpot.x + 9.5,
-  y: sealStackSpot.y
+const villagerReserveZone = {
+  left: sealStackSpot.x + sealStackRadius.x + sealSize.width / 2 + 0.3,
+  right: encounterRowSpot(Area.Edge).x - encounterCardSize.width / 2 - 0.3,
+  top: tableInsideTop,
+  bottom: -mainBoardSize.height / 2
+}
+
+/** From one Villager of a reserve to the next: a little less than a figure is wide, shadow included. */
+export const villagerReserveGap = 1.4
+
+/** The stretch of table the 4 Villagers of a reserve stand on: a row of them, and no more. */
+export const villagerReserveSize = { width: 3 * villagerReserveGap + villagerWidth, height: villagerHeight }
+
+/**
+ * The middle of the row of a seat's reserve. The lines share the height of the strip the way
+ * `space-around` shares a flex line: as much air under the bottom line, between the 2 and over the top
+ * one, so the block reads as one thing standing in the strip rather than as 2 rows pinned to its edges.
+ */
+export const villagerReserveSpot = (seat: number, players: number): XYCoordinates => {
+  const { left, right, top, bottom } = villagerReserveZone
+  const lines = Math.ceil(players / 2)
+  const line = Math.floor(seat / 2)
+  const air = (bottom - top - lines * villagerReserveSize.height) / (lines + 1)
+  return {
+    x: seat % 2 ? right - villagerReserveSize.width / 2 : left + villagerReserveSize.width / 2,
+    y: (top + bottom) / 2 + (line - (lines - 1) / 2) * (villagerReserveSize.height + air)
+  }
 }
 
 // ------------------------------------------------------------------ season board
@@ -401,10 +488,6 @@ export const seasonSpots: Record<Season, Coordinates> = {
  * still the width of a Villager clear of the bottom of the table itself.
  */
 export const changeSeasonButtonSpot: XYCoordinates = { x: 2, y: 2 }
-
-/** Top and bottom of everything the players share: the row of decks over the Village grid, and the Season board. */
-const commonZoneTop = villageDeckSpot.y - villageCardSize.height / 2 - tableMargin
-const commonZoneBottom = seasonBoardSpot.y + seasonBoardSize.height / 2 + tableMargin
 
 /** The tents to the left of the Season board, where spent Villagers rest until Autumn. */
 const campOnBoard: XYCoordinates = { x: 5.15, y: 6.05 }
@@ -458,24 +541,21 @@ export const sealButtonSpot = (position: number, middle: number): XYCoordinates 
 
 /**
  * Where the buttons an Object of the player's own wears sit on it (see `ItemCardMenu`). Its own spot
- * rather than the one above: an Object lies in a row along the player's board, hard against its
+ * rather than the one above: an Object lies in a column beside the player's board, hard against its
  * neighbours and away from the Village, so the room a button has there is not the room it has in the
  * grid, and the two are free to move apart.
  *
- * Up to {@link playerCardsMaxCount} Objects the row keeps its gap and each card is whole: the buttons
- * sit in its middle. Past that the row tightens up and every card but the last shows only its left
- * part, so the buttons move over to it, and a label opening to the left would lie over the buttons of
- * the card before: they take turns, the way the cards of an Encounter row do (see `EncounterCardMenu`),
- * one card stacking its buttons up from the middle line and the next down from it. Half a step either
- * way would do for one button a card, but not for an Object offering 2 options next to another one:
- * a row of each would still meet on the middle line.
+ * As long as the column has room for them all, each card is whole and the buttons are stacked in its
+ * middle. Once it tightens up, every card but the top one shows only its lower part, so the buttons go
+ * side by side across the middle of that strip (see {@link itemsStep}).
  *
  * `index` is the rank of the button among the `buttons` the card wears.
  */
-export const itemActionSpot = (position: number, count: number, index = 0, buttons = 1): XYCoordinates => {
+export const itemActionSpot = (count: number, players: number, index = 0, buttons = 1): XYCoordinates => {
   const stacked = (index - (buttons - 1) / 2) * itemButtonStep
-  if (!crowdedItems(count)) return { x: 0, y: stacked }
-  return { x: -2, y: stacked + ((position % 2 ? 1 : -1) * buttons * itemButtonStep) / 2 }
+  const step = itemsStep(count, players)
+  if (step >= playerCardsGap) return { x: 0, y: stacked }
+  return { x: stacked, y: villageCardSize.height / 2 - step / 2 }
 }
 
 /** A little more than a button is wide, so that two of them stand clear of one another. */
@@ -499,149 +579,132 @@ export const sealDiscardSpot: XYCoordinates = {
  */
 export const sealDiscardRadius: XYCoordinates = { x: (sealDiscardGap.right - sealDiscardGap.left - sealSize.width) / 2, y: 2 }
 
-// ------------------------------------------------------------------ player areas
+// ------------------------------------------------------------------ player area
 
 /**
- * The 4 areas stand in a column to the right of everything the players share, clear of the longest an
- * Encounter row can ever get. Nothing is ever rotated: everyone reads their own area, and their
- * opponents', the right way up. At 2 and 3 players the unused areas are simply left empty.
+ * One area only, to the right of everything the players share and clear of 2 Encounters in each of
+ * the rows starting at the right edge of the main board. It is the area of the player being read:
+ * every player's material is laid out on the very same spots, and only the one being read is drawn
+ * (see `DisplayedPlayer`).
  *
- * An area is a fixed rectangle: the personal board, a column of 3 Village cards on either side
- * (Companions on the left, Objects on the right), and a band one Encounter card tall above it for
- * everything else. It stops at the bottom edge of the board — nothing is ever displayed below.
+ * The area is as narrow as the material allows: the personal board, a column of Village cards hung on
+ * either side of it (Companions on the left, Objects on the right), and underneath the board, the
+ * pieces a player keeps out of it and the panels of all the players.
  */
 
 /**
  * The personal board is drawn inside its own file with a shadow all round it: the ink stops 1.42 short
  * of the edge of the image and the shadow fades out over the 0.44 beyond it (measured on the alpha
- * channel of PlayerBoard.png). Two boards set a centimetre apart would therefore read as 3.8 apart, so
- * the rows overlap by that margin, and the air below is counted between what is actually printed.
+ * channel of PlayerBoard.png). What is laid against the board is laid against the ink.
  */
 export const playerBoardShadow = 1.42
 
-/**
- * Companions to the left of the board, Objects to the right: 3 cards each, laid side by side, so the
- * margin on either side is 3 Village cards wide. Between the main board and a personal board there is
- * then exactly what has to go there — a row of 2 Encounters, then the 3 Companions.
- *
- * Both rows are anchored on the board rather than centred on the space they are given: the first card
- * is laid against the printed edge, and the row grows away from the board. A player owning one
- * Companion has it where the second one will not push it, and the cards read as belonging to the board
- * they are pushed against.
- */
-const playerCardsGap = villageCardSize.width + 0.2
-const sideRowStart = playerBoardSize.width / 2 - playerBoardShadow + villageCardSize.width / 2
-const sideRowWidth = villageCardSize.width + 2 * playerCardsGap
-const sideRowX = sideRowStart + playerCardsGap
-
-/** How far above the middle of a board its ink reaches, which is the edge a player pushes a card against. */
+/** How far above and below the middle of a board its ink reaches. */
 const printedHalf = playerBoardSize.height / 2 - playerBoardShadow
 
-/** The least air a row is ever left with, when the column asks for more height than the table has. */
-const minPlayerRowAir = 1
+/**
+ * Companions to the left of the board, Objects to the right, each in a column. The first card is laid
+ * against the printed edge, level with the middle of the board, and the column climbs from there: a
+ * player owning one Companion has it where the board says it belongs, and it does not move when the
+ * second one arrives. A column climbs as far as the table allows it and tightens up rather than going
+ * further (see {@link playerColumnMaxGap}).
+ */
+const playerCardsGap = villageCardSize.width + 0.2
+const sideColumnX = playerBoardSize.width / 2 - playerBoardShadow + villageCardSize.width / 2
 
-/** All a Story ever shows once it is pushed home: the top quarter of the card, and nothing more. */
-const storyReveal = encounterCardSize.height / 4
+/** Nobody ever recruits more than 3 Companions (rulebook p.7), so that column is never short of room. */
+export const playerCardsMaxCount = 3
+
+/** From the middle of the board to the outer edge of either column: half the width of the area. */
+const playerAreaHalfWidth = sideColumnX + villageCardSize.width / 2
 
 /**
- * How many Stories a fan lays out at full step before it has to tighten up. Each one is worth a
- * quarter of a card of height, so 4 of them is exactly one card — the band is a card tall, which is
- * what it was when a single Story lay flat in it, and the fan now shows 4 where it used to show 1.
+ * The length a row of Encounters is given: 3 cards in each of the 3 rows that start at the right edge
+ * of the board, which is what the player area is set clear of. The Black and the Gold row start
+ * further left along the board and have that much more; a row that holds more than 3 lays them out on
+ * a line of its own rather than asking for room (see {@link encounterRowSlot}).
  */
-const storiesFan = 4
+const encounterRowReserve = (encounterRowLine - 1) * encounterRowGap
+
+const playerAreaLeft = encounterRowSpot(Area.Hammer).x + encounterRowReserve + encounterCardSize.width / 2 + tableMargin
 
 /**
- * The band above the board is as thin as the material allows, because with 4 areas stacked every
- * centimetre of it is paid 4 times. The Stories set its height: each one is pushed under the printed
- * edge of the board and under the ones already there, so a fan is a stack of quarters climbing away
- * from the board, and what sticks out above the board is the band.
+ * The panels of all the players, 2 at the foot of the area and 2 at its head, each pair filling its
+ * width. The seats are given the bottom line first, so the empty spot of a game of 3 is the top right
+ * corner and a game of 2 has the whole head of the area free. A panel is not the player's material and
+ * is drawn whoever is read: clicking it is how a player is read (see `PlayerPanelContent`).
+ *
+ * StyledPlayerPanel is authored as a box 28 em wide, so the width settles the scale. Its height is
+ * pinned rather than measured: the name, the line the timer is given and the one line of counters come
+ * to a height of type whose exact size is the browser's business and not ours, and the table cannot
+ * have a spot that moves with a font.
  */
-const bandTop = -printedHalf - storiesFan * storyReveal
+const playerPanelGap = 0.4
+export const playerPanelWidth = playerAreaHalfWidth - playerPanelGap / 2
+export const playerPanelScale = playerPanelWidth / 28
+export const playerPanelEms = 12.2
+export const playerPanelHeight = playerPanelEms * playerPanelScale
 
-/** The middle of what the band actually shows, between its own top and the printed edge of the board. */
-const bandCenterY = (bandTop - printedHalf) / 2
+/** The line the bottom panels start on, and the one the top panels end on. */
+const bottomPanelsTop = tableInsideBottom - playerPanelHeight
+const topPanelsBottom = tableInsideTop + playerPanelHeight
 
-/** The rectangle an area has to fit in, measured from the middle of the personal board. */
-export const playerAreaBox = {
-  left: -sideRowX - sideRowWidth / 2,
-  right: sideRowX + sideRowWidth / 2,
-  top: bandTop,
-  bottom: playerBoardSize.height / 2
+/**
+ * The middle of the personal board: as low as the 2 panels at the foot of the area allow, the printed
+ * edge of the board a centimetre over them. Everything the player owns is read upwards from there —
+ * the 2 columns of cards, the 2 fans of Stories and the 2 tokens standing over the board — so the
+ * material is given the whole height of the area and the board itself is where the eye starts.
+ */
+const boardOverPanels = 1
+
+export const playerAreaSpot: XYCoordinates = {
+  x: playerAreaLeft + playerAreaHalfWidth,
+  y: bottomPanelsTop - boardOverPanels - (playerBoardSize.height / 2 - playerBoardShadow)
 }
 
-/** How far above the middle of a board its own material reaches: the whole band, or nothing. */
-const rowTop = (hasBand: boolean) => (hasBand ? -playerAreaBox.top : printedHalf)
-
-/**
- * The areas are stacked in one column to the right of everything the players share. Past 2 players the
- * band above a board is only ever drawn for one of them at a time, so the column reserves the room for
- * a single band: the rows above the one being read close up over the band they are not using, and the
- * rows below are pushed down by it. The height the rows claim, air apart, is what this returns, and it
- * never changes whoever is read, so nothing else on the table moves.
- */
-const playerRowsHeight = (rows: number, allBands: boolean) => {
-  const bands = allBands ? rows : 1
-  const tops = bands * rowTop(true) + (rows - bands) * rowTop(false)
-  return tops + rows * printedHalf
-}
-
-/**
- * The air between two rows: whatever the common zone has left once the rows have taken theirs, shared
- * out over the gaps — one between each pair of rows, and one at either end, so that the column is
- * still centred and every player reads the same amount of open sky over their own board, edge of the
- * table included. Two players are given a whole table's height and are not left huddled in the middle
- * of it; at 4 the rows ask for more than the zone has and are left the bare minimum instead, the
- * column overflowing the zone evenly above and below as it always did.
- */
-const playerRowAir = (rows: number, allBands: boolean) =>
-  Math.max(minPlayerRowAir, (commonZoneBottom - commonZoneTop - playerRowsHeight(rows, allBands)) / (rows + 1))
-
-export const playerColumnHeight = (rows: number, allBands: boolean) =>
-  playerRowsHeight(rows, allBands) + (rows - 1) * playerRowAir(rows, allBands)
-
-const playerAreaX = encounterRowSpot(Area.Hammer).x + encounterRowReserve + encounterCardSize.width / 2 + tableMargin - playerAreaBox.left
-
-/** Every area sits on the same column, so the Companions of every player start on the same line. */
-const companionsX = playerAreaX - sideRowStart
-
-/**
- * Where the middle of a personal board lands. `bandRow` is the row whose band is drawn; leave it out
- * when every row draws its own.
- */
-export const playerAreaSpot = (row: number, rows: number, bandRow?: number): XYCoordinates => {
-  const allBands = bandRow === undefined
-  const top = (commonZoneTop + commonZoneBottom - playerColumnHeight(rows, allBands)) / 2
-  /** The one band the column reserves is inserted before the row that is being read, and only there. */
-  const bandAbove = !allBands && row >= bandRow ? rowTop(true) - rowTop(false) : 0
-  return {
-    x: playerAreaX,
-    y: top + row * (printedHalf + playerRowAir(rows, allBands)) + (row + 1) * rowTop(allBands) + bandAbove
-  }
-}
-
-const onPlayerBoard = (area: XYCoordinates, x: number, y: number): Coordinates => ({
-  x: area.x + x - playerBoardSize.width / 2,
-  y: area.y + y - playerBoardSize.height / 2,
+const onPlayerBoard = (x: number, y: number): Coordinates => ({
+  x: playerAreaSpot.x + x - playerBoardSize.width / 2,
+  y: playerAreaSpot.y + y - playerBoardSize.height / 2,
   z: onBoard
 })
 
-const besidePlayerBoard = (area: XYCoordinates, x: number, y: number): XYCoordinates => ({ x: area.x + x, y: area.y + y })
+const besidePlayerBoard = (x: number, y: number): XYCoordinates => ({ x: playerAreaSpot.x + x, y: playerAreaSpot.y + y })
+
+/**
+ * How high what a player keeps beside their board may climb: the top of the table, or the foot of the
+ * panel lying over that half of the area — the left one is there from 3 players on, the right one at 4.
+ * Nothing of the player's own ever slides under a panel.
+ */
+const panelAir = 0.2
+const playerColumnTop = (players: number, left: boolean): number => ((left ? players >= 3 : players >= 4) ? topPanelsBottom + panelAir : tableInsideTop)
+
+/**
+ * How far a column of cards may climb from the first card: the top card ends against the ceiling of its
+ * half of the area, and the column tightens up rather than going further. A player may own as many as
+ * 7 Objects, far more than the column can lay out whole.
+ */
+export const playerColumnMaxGap = (players: number, left: boolean): Partial<XYCoordinates> => ({
+  y: playerColumnTop(players, left) + villageCardSize.height / 2 - playerAreaSpot.y
+})
+
+/** The step from one Object to the next, which is also the strip each card but the top one shows. */
+export const itemsStep = (count: number, players: number): number =>
+  Math.min(playerCardsGap, Math.abs(playerColumnMaxGap(players, false).y!) / Math.max(1, count - 1))
 
 /** The one board something is slid under, hence the only one lifted off the table: see {@link boardLevel}. */
-export const playerBoardSpot = (area: XYCoordinates): Coordinates => ({ ...area, z: boardLevel })
+export const playerBoardSpot: Coordinates = { ...playerAreaSpot, z: boardLevel }
 
-export const strengthTrackSpot = (area: XYCoordinates, level: number) => onPlayerBoard(area, 8.15, 11.26 - 1.62 * level)
-export const magicTrackSpot = (area: XYCoordinates, level: number) => onPlayerBoard(area, 10.58, 11.26 - 1.62 * level)
+export const strengthTrackSpot = (level: number) => onPlayerBoard(8.15, 11.26 - 1.62 * level)
+export const magicTrackSpot = (level: number) => onPlayerBoard(10.58, 11.26 - 1.62 * level)
 
-export const questMarkerSpot = (area: XYCoordinates, index: number) =>
-  onPlayerBoard(area, 12.44 + markerDrop.quest.x + 1.415 * index, 7.66 + markerDrop.quest.y)
-export const incomeTokenSpot = (area: XYCoordinates, index: number) => onPlayerBoard(area, 4.83, 5.85 + 2.3 * index)
+export const questMarkerSpot = (index: number) => onPlayerBoard(12.44 + markerDrop.quest.x + 1.415 * index, 7.66 + markerDrop.quest.y)
+export const incomeTokenSpot = (index: number) => onPlayerBoard(4.83, 5.85 + 2.3 * index)
 
 /**
  * The frame at the foot of the board, where the Villagers ready to be sent out stand: the middle of
  * its row of 3, which is the middle of the frame (see {@link ActiveVillagersLocator}).
  */
-export const activeVillagersSpot = (area: XYCoordinates) => onPlayerBoard(area, 13.85, 10.2)
+export const activeVillagersSpot = onPlayerBoard(13.85, 10.2)
 
 /**
  * From one Villager of the frame to the next: across a row, a hair more than the figure itself is
@@ -673,7 +736,7 @@ const villagerBaseDrop = (0.925 - 0.5) * villagerHeight
  * way a pawn set down anywhere else on the table stands on the space it is put in. So the spot is
  * that line, raised by everything the pawn's own picture carries under its middle.
  */
-export const specialActionSpot = (area: XYCoordinates) => onPlayerBoard(area, specialActionHouse.x, specialActionHouse.base - villagerBaseDrop)
+export const specialActionSpot = onPlayerBoard(specialActionHouse.x, specialActionHouse.base - villagerBaseDrop)
 
 /**
  * Where the offers the special action carries are hung (see `SpecialActionMenu`).
@@ -682,15 +745,12 @@ export const specialActionSpot = (area: XYCoordinates) => onPlayerBoard(area, sp
  * spent on are printed as a line of icons under it, on nothing anybody puts anything on — so both
  * the offer to go there and the offer of each option are hung on the board itself and walk back out
  * to the space. Beside it rather than on it: the doorway is where the pawn is about to stand, or
- * already stands, and the buttons keep off both. To the right, which is where the board leaves room —
- * until the row of Objects runs long: its buttons then gather on the last card, whose labels open to
- * the left over that very room (see {@link itemActionSpot}), so the offer crosses over to the left of
- * the house, its label opening to the left in turn.
+ * already stands, and the buttons keep off both. To the right, which is where the board leaves room.
  */
-export const specialActionBoardOffset = (items: number): XYCoordinates => ({
-  x: specialActionHouse.x + (crowdedItems(items) ? -2.6 : 2.6) - playerBoardSize.width / 2,
+export const specialActionBoardOffset: XYCoordinates = {
+  x: specialActionHouse.x + 2.6 - playerBoardSize.width / 2,
   y: specialActionHouse.y - playerBoardSize.height / 2
-})
+}
 
 /**
  * Where a skill marker wears the offer to climb its track (see `ChooseSkillMenu`): a step above it,
@@ -711,61 +771,13 @@ export const specialActionStoryOffset: XYCoordinates = { x: 16.5 - playerBoardSi
 export const specialActionTravelSpot: XYCoordinates = { x: 2, y: 0 }
 export const specialActionMagicSpot: XYCoordinates = skillMarkerMenuSpot
 
-/** Where the first card of each row goes, and which way the ones after it run. */
-export const companionsSpot = (area: XYCoordinates) => besidePlayerBoard(area, -sideRowStart, 0)
-export const companionsGap: Partial<XYCoordinates> = { x: -playerCardsGap }
-export const itemsSpot = (area: XYCoordinates) => besidePlayerBoard(area, sideRowStart, 0)
-export const itemsGap: Partial<XYCoordinates> = { x: playerCardsGap }
+/** Where the first card of each column goes, and which way the ones after it climb. */
+export const companionsSpot = besidePlayerBoard(-sideColumnX, 0)
+export const itemsSpot = besidePlayerBoard(sideColumnX, 0)
+export const playerCardsGapUp: Partial<XYCoordinates> = { y: -playerCardsGap }
 
-/** A card raising the limit can bring a 4th Object: the row tightens up rather than leaving its space. */
-export const playerCardsMaxCount = 3
-
-/** Past {@link playerCardsMaxCount} Objects, the row tightens up and its buttons move over to its last card. */
-export const crowdedItems = (count: number) => count > playerCardsMaxCount
-
-/** The 2 ends of a full row of cards: 3 of them, first to last. */
-export const playerCardsFullSpread = playerCardsGap * (playerCardsMaxCount - 1)
-
-/**
- * However crowded the strip gets, 2 neighbouring Companions never come closer than a quarter of a card
- * — a quarter is still a card the eye counts, where a perfect stack is one card. The row keeps that
- * much of itself whatever it holds: it is a place on the table, and the place the next Companion is
- * going to land, so the Encounters stop short of it rather than of the cards that happen to be in it.
- */
-export const companionsMinSpread = (villageCardSize.width / 4) * (playerCardsMaxCount - 1)
-
-/**
- * An Encounter row and a row of Companions run at each other down the same strip: the Encounters grow
- * to the right from the notch they are slotted into, the Companions grow to the left from the board
- * they are pushed against. This is the room the two of them share, from the right edge of the first
- * Encounter to the left edge of the first Companion, less the air between them.
- *
- * The 3 rows starting at the right edge of the main board hold exactly 2 Encounters and a full row of
- * Companions, which is what the column of areas is set on; the Black and the Gold row start further
- * left along the board and have that much more.
- */
-export const crowdedRowsRoom = (area: EncounterRowArea): number =>
-  companionsX - villageCardSize.width / 2 - tableMargin - encounterRowSpot(area).x - encounterCardSize.width / 2
-
-/**
- * The 2 strips of a player area an Encounter row can run into, measured from the middle of the board:
- * the row of Companions, and what the band holds over it (see {@link companionsBandStrip}).
- */
-const companionsStrip = { top: -villageCardSize.height / 2, bottom: villageCardSize.height / 2 }
-
-const crossesStrip = (area: EncounterRowArea, areaY: number, strip: { top: number; bottom: number }): boolean => {
-  const { y } = encounterRowSpot(area)
-  return y + encounterCardSize.height / 2 > areaY + strip.top && y - encounterCardSize.height / 2 < areaY + strip.bottom
-}
-
-export const rowCrossesCompanions = (area: EncounterRowArea, areaY: number): boolean => crossesStrip(area, areaY, companionsStrip)
-
-/**
- * The 2 Companion cards nearest the board, which is all the room the gold and the Villagers are given:
- * the far end of the row is left clear for the Encounter rows that run into the band.
- */
-const twoCompanionsRight = -sideRowStart + villageCardSize.width / 2
-const twoCompanionsLeft = -sideRowStart - playerCardsGap - villageCardSize.width / 2
+/** All a Story ever shows once it is pushed home: the top quarter of the card, and nothing more. */
+const storyReveal = encounterCardSize.height / 4
 
 /**
  * Resolved Encounters are pushed under the board, untold on its left half, told on its right. A fan is
@@ -782,8 +794,8 @@ const storiesX = 4.05
  */
 const storiesAnchorY = -printedHalf - storyReveal + encounterCardSize.height / 2
 
-export const untoldStoriesSpot = (area: XYCoordinates): Coordinates => ({ ...besidePlayerBoard(area, -storiesX, storiesAnchorY), z: underBoard })
-export const toldStoriesSpot = (area: XYCoordinates): Coordinates => ({ ...besidePlayerBoard(area, storiesX, storiesAnchorY), z: underBoard })
+export const untoldStoriesSpot: Coordinates = { ...besidePlayerBoard(-storiesX, storiesAnchorY), z: underBoard }
+export const toldStoriesSpot: Coordinates = { ...besidePlayerBoard(storiesX, storiesAnchorY), z: underBoard }
 
 /**
  * The depth each Story takes from the one before it, which is the whole of what puts a fan in order:
@@ -808,23 +820,15 @@ const storiesDepth = 0.008
 export const storiesGap: Partial<Coordinates> = { y: -storyReveal, z: -storiesDepth }
 
 /**
- * What a full fan keeps between its top edge and whatever is above the band: half the button it wears
- * there (see {@link endStoryButtonSpot}), 2.2 tall, and a hair more. On the top row that is the edge of
- * the table, which the button must not cross; lower down it is the board of the row above, which the
- * button may overlap a little without hiding anything anybody reads.
+ * What a full fan keeps between its top edge and whatever is above it: half the button it wears there
+ * (see {@link endStoryButtonSpot}), 2.2 tall, and a hair more.
  */
 const storiesClearance = 1.2
 
-/**
- * A full fan reaches the top of the band — and on into the air the column leaves above it, when there
- * is any: at 2 players the rows are given more room than they need (see {@link playerRowAir}), and a
- * fan closing up under open table would hide Stories for nothing. Past that the cards close up rather
- * than climb out of it. At 4 players there is no such room and the fan stops at the band.
- */
-export const storiesMaxGap = (rows: number, bandRow?: number): Partial<XYCoordinates> => {
-  const climb = Math.max(0, playerRowAir(rows, bandRow === undefined) - storiesClearance)
-  return { y: -(storiesFan - 1) * storyReveal - climb }
-}
+/** A fan climbs as high as its half of the area allows, and closes up rather than climbing past it. */
+export const storiesMaxGap = (players: number, told: boolean): Partial<XYCoordinates> => ({
+  y: playerColumnTop(players, !told) + storiesClearance - (untoldStoriesSpot.y - encounterCardSize.height / 2)
+})
 
 /** Everything but the quarter it shows: how far a Story travels while it is being pushed in. */
 export const storiesPush = encounterCardSize.height - storyReveal
@@ -846,145 +850,76 @@ export const storyButtonSpot: XYCoordinates = {
 
 /**
  * Where the offer to close a story is worn, measured from the middle of the Story it is hung on (see
- * `EndStoryButton`): the last one told, on its top edge.
- *
- * Half over the card and half in the air above it, which is the whole of the room there is — a full
- * fan goes no higher than the room above it allows (see {@link storiesMaxGap}), so a button lifted
- * clear of the card would climb into the row above. It rides the head of the pile and is never buried:
- * the Story that has just joined is the one wearing it.
+ * `EndStoryButton`): the last one told, on its top edge. It rides the head of the pile and is never
+ * buried: the Story that has just joined is the one wearing it.
  */
 export const endStoryButtonSpot: XYCoordinates = { x: 0, y: -encounterCardSize.height / 2 }
 
 /**
- * The highest a Story may be lined up before it is pushed in: its top edge meets the board of the row
- * above and goes no further. A card that has to travel further than the band affords starts here
- * instead — only the first cards of a fan are given the whole {@link storiesPush}.
- *
- * The air above the band is what the row above leaves it (see {@link playerRowAir}); the top row has
- * the edge of the table rather than a neighbour, and the column is centred so that it is exactly as far.
+ * The highest a Story may be lined up before it is pushed in: its top edge against the ceiling of its
+ * half of the area. A card that has to travel further than that affords starts here instead — only the
+ * first cards of a fan are given the whole {@link storiesPush}.
  */
-export const storiesCeiling = (area: XYCoordinates, rows: number, bandRow?: number): number =>
-  area.y + bandTop + encounterCardSize.height / 2 - playerRowAir(rows, bandRow === undefined)
+export const storiesCeiling = (players: number, told: boolean): number => playerColumnTop(players, !told) + encounterCardSize.height / 2
 
-/**
- * What a player keeps out of their board is not floated in the middle of the band: each pile stands on
- * the row of cards below it and grows upwards from there, so it reads as belonging to that row rather
- * than to the empty air above. They all rest on one line, the same the bottom of the panel is drawn on,
- * and they are 6.2, 4.31 and 3.04 tall — the Bonus tokens, the tallest of them, still clear the top of
- * the band.
- *
- * Over the Companions, the gold and the 4 Villagers held back, and nothing else: 7.52 and 6.67 wide,
- * which is exactly the 14.2 the 2 Companion cards nearest the board cover. They are pushed against that
- * pair rather than centred on the row, the gold over the first card and the Villagers over the second.
- *
- * Over the Objects, only the 3 Bonus tokens, at the near end of the row: the rest of it is the First
- * player token and the panel, both pushed against the outer edge of the area.
- */
-const overCardsAir = 0.2
-const standingOnCards = (height: number) => -villageCardSize.height / 2 - overCardsAir - height / 2
-
-/** The 2 ends of the row of Objects, each wide enough for a token. */
-const bandEndSlot = 3.44 + 2 * 0.315
-
-export const bonusTokensGap: Partial<XYCoordinates> = { y: 2.1 }
-export const bonusTokensSpot = (area: XYCoordinates) =>
-  besidePlayerBoard(area, sideRowX - sideRowWidth / 2 + bandEndSlot / 2, standingOnCards(2 * bonusTokensGap.y! + 2))
-const playerCoinsHeight = 4.31
-export const playerCoinsSpot = (area: XYCoordinates) => besidePlayerBoard(area, twoCompanionsRight - 7.52 / 2, standingOnCards(playerCoinsHeight))
-/** The stretch of table the 4 Villagers of the reserve stand on: a row of them, and no more. */
-export const villagerReserveSize = { width: 6.67, height: villagerHeight }
-export const villagerReserveSpot = (area: XYCoordinates) =>
-  besidePlayerBoard(area, twoCompanionsLeft + villagerReserveSize.width / 2, standingOnCards(villagerReserveSize.height))
-
-/**
- * What the band holds over the Companions, as an Encounter row running at it sees it: the gold and the
- * Villagers, from the line they stand on up to the top of the gold, the taller of the 2 piles, and over
- * the 2 cards nearest the board — first card to second, in the terms a row of Companions is spread in.
- * The rest of the band on that side is open table, the air above the piles and the far card of the
- * row, and an Encounter row passing there takes nothing from anybody.
- */
-const companionsBandStrip = { top: standingOnCards(playerCoinsHeight) - playerCoinsHeight / 2, bottom: standingOnCards(0) }
-export const companionsBandSpread = playerCardsGap
-
-export const rowCrossesBand = (area: EncounterRowArea, areaY: number): boolean => crossesStrip(area, areaY, companionsBandStrip)
-
-/** The one point token a player can hold, in the middle of the band, between the 2 rows of Stories. */
-export const playerVpTokensSpot = (area: XYCoordinates) => besidePlayerBoard(area, 0, bandCenterY)
-
-/**
- * A player's panel is part of the table, over their own row of Objects, pushed against the outer edge
- * of the area: its right edge is the right edge of the last Object card, so the only thing between it
- * and the edge of the table is the margin the table keeps all round. StyledPlayerPanel is authored as a
- * box 28 em wide, so the width settles the scale, and the panel sits right on top of the cards it
- * belongs to.
- *
- * Its height is pinned rather than measured: the name, the line the timer is given and the row of
- * counters come to 11.81 em of type, whose exact size is the browser's business and not ours, and the
- * table cannot have a spot that moves with a font. 12 em is that content with a hair to spare.
- */
-export const playerPanelWidth = sideRowWidth - 2 * bandEndSlot
-export const playerPanelScale = playerPanelWidth / 28
-export const playerPanelEms = 12
-export const playerPanelHeight = playerPanelEms * playerPanelScale
-export const playerPanelSpot = (area: XYCoordinates, hasBand: boolean) =>
-  besidePlayerBoard(
-    area,
-    sideRowX + sideRowWidth / 2 - playerPanelWidth / 2,
-    /**
-     * The player being read has their material out above the board, and the panel keeps clear of the
-     * cards, just over them. A player who is not read has nothing above their board, so the panel drops
-     * onto the Objects instead and hangs from the top edge of the board, where the eye picks up the row.
-     */
-    hasBand ? -villageCardSize.height / 2 - playerPanelHeight / 2 - overCardsAir : -printedHalf + playerPanelHeight / 2
-  )
-
-/**
- * The First player token is not part of the band and not part of that row either: it stands in the slot
- * immediately to the left of the panel, on the same line as the panel of the player holding it. It is
- * the one thing a player keeps out of their board that is drawn for all of them, read or not — there is
- * only ever one on the table, and it says whose turn the round starts on — so it goes down with the
- * panel when that player is not read: wherever the panel is, the token is the piece pinned to it.
- */
-const firstPlayerTokenSize = { width: 3.44, height: 5.7 }
-const firstPlayerTokenZ = 1
-export const firstPlayerTokenSpot = (area: XYCoordinates, hasBand: boolean): Coordinates => ({
-  ...besidePlayerBoard(
-    area,
-    sideRowX + sideRowWidth / 2 - playerPanelWidth - bandEndSlot / 2,
-    /** Its foot on the line the bottom of the panel is drawn on, whichever of the 2 lines that is. */
-    (hasBand ? -villageCardSize.height / 2 : -printedHalf + playerPanelHeight + overCardsAir) - firstPlayerTokenSize.height / 2
-  ),
-  /** A standing figure, not a flat piece: it is raised above the table so it reads as such. */
-  z: firstPlayerTokenZ
+export const playerPanelSpot = (seat: number, _players: number): XYCoordinates => ({
+  x: playerAreaSpot.x + ((seat % 2 ? 1 : -1) * (playerPanelWidth + playerPanelGap)) / 2,
+  y: seat < 2 ? tableInsideBottom - playerPanelHeight / 2 : tableInsideTop + playerPanelHeight / 2
 })
 
 /**
- * Coins are money: identical pieces merge into one item with a quantity, so they have no rank and no
- * spot of their own. A scatter, over a strip wider than tall, with a minimum distance that keeps an
- * edge of every piece showing - a heap of gold, not a countable row.
+ * What a player keeps out of their board stands on the 2 pieces of furniture it belongs to rather than
+ * floating around the board: the gold under the first Companion, the 3 Bonus tokens under the first
+ * Object, both on the one line the strip between those cards and the panels leaves them.
  */
-export const playerCoinsRadius: XYCoordinates = { x: 2.6, y: 1 }
+const underCardsY = (playerAreaSpot.y + villageCardSize.height / 2 + bottomPanelsTop) / 2
+
+export const playerCoinsSpot: XYCoordinates = besidePlayerBoard(-sideColumnX, underCardsY - playerAreaSpot.y)
+
+/**
+ * Coins are money: identical pieces merge into one item with a quantity, so they have no rank and no
+ * spot of their own. A scatter as wide as the card it lies under and no taller than the strip it is
+ * given - a heap of gold, not a countable row.
+ */
+export const playerCoinsRadius: XYCoordinates = { x: villageCardSize.width / 2 - 1.2, y: 0.3 }
+
+export const bonusTokensGap: Partial<XYCoordinates> = { x: 2.1 }
+/** The middle slot of the 3: each token keeps its own, so spending one leaves a hole. */
+export const bonusTokensSpot: XYCoordinates = besidePlayerBoard(sideColumnX, underCardsY - playerAreaSpot.y)
+
+/**
+ * The 2 pieces that stand over the board, in the alley the 2 fans of Stories leave between them: the
+ * point token a player has earned, just over the printed edge, and the First player token above it.
+ * They are the 2 things read at a glance rather than counted, and the alley is the one strip of the
+ * area nothing else ever crosses.
+ */
+const vpTokenSize = { width: 1.86, height: 2.3 }
+const firstPlayerTokenSize = { width: 3.44, height: 5.7 }
+const overBoardAir = 0.2
+
+export const playerVpTokensSpot: XYCoordinates = besidePlayerBoard(0, -printedHalf - overBoardAir - vpTokenSize.height / 2)
+
+const firstPlayerTokenZ = 1
+export const firstPlayerTokenSpot: Coordinates = {
+  ...besidePlayerBoard(0, -printedHalf - 2 * overBoardAir - vpTokenSize.height - firstPlayerTokenSize.height / 2),
+  /** A standing figure, not a flat piece: it is raised above the table so it reads as such. */
+  z: firstPlayerTokenZ
+}
 
 // ------------------------------------------------------------------ table boundaries
 
-/**
- * Left, the Village grid; right, the player column. Up and down, whichever of the common zone and the
- * column is the taller, which is why the table depends on the player count: 4 areas claim half again
- * the height 2 do, and reserving 4 rows for a game of 2 would leave the bottom half of the table empty.
- */
-export const getTableBoundaries = (players: number, allBands: boolean) => {
-  const columnHalf = playerColumnHeight(players, allBands) / 2
-  const columnCenter = (commonZoneTop + commonZoneBottom) / 2
-  return {
-    xMin: villageGridSpot(0, 1).x - villageCardSize.width / 2 - tableMargin,
-    xMax: playerAreaX + playerAreaBox.right + tableMargin,
-    yMin: Math.min(commonZoneTop, columnCenter - columnHalf - tableMargin),
-    yMax: Math.max(commonZoneBottom, columnCenter + columnHalf + tableMargin)
-  }
+/** Left, the Village grid; right, the player area; top and bottom, the 2 Encounter rows over and under the main board. */
+export const tableBoundaries = {
+  xMin: villageGridSpot(0, 1).x - villageCardSize.width / 2 - tableMargin,
+  xMax: playerAreaSpot.x + playerAreaHalfWidth + tableMargin,
+  yMin: tableInsideTop - tableEdgeAir,
+  yMax: tableInsideBottom + tableEdgeAir
 }
 
 /** The table less the air it keeps all round: what a card seen up close is kept inside (see `CardHover`). */
-export const getTableInside = (players: number, allBands: boolean) => {
-  const { xMin, xMax, yMin, yMax } = getTableBoundaries(players, allBands)
-  return { xMin: xMin + tableMargin, xMax: xMax - tableMargin, yMin: yMin + tableMargin, yMax: yMax - tableMargin }
+export const tableInside = {
+  xMin: tableBoundaries.xMin + tableMargin,
+  xMax: tableBoundaries.xMax - tableMargin,
+  yMin: tableInsideTop,
+  yMax: tableInsideBottom
 }

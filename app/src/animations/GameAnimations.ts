@@ -3,10 +3,8 @@ import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { SCORE_TRACK_SIZE } from '@gamepark/greylune/Constants'
 import { ItemContext, MaterialGameAnimations } from '@gamepark/react-game'
-import { Coordinates, isMoveItem, isMoveItemType, MaterialMove, MoveItem } from '@gamepark/rules-api'
+import { Coordinates, isCreateItem, isMoveItem, isMoveItemType, MaterialMove, MoveItem } from '@gamepark/rules-api'
 import { range } from 'es-toolkit'
-import { getBandRow } from '../locators/DisplayedPlayer'
-import { areaOf } from '../locators/Seats'
 import { spread } from '../locators/spread'
 import { scoreTrackSpot, storiesCeiling, storiesGap, storiesMaxGap, storiesPush, toldStoriesSpot, untoldStoriesSpot } from '../locators/TableLayout'
 
@@ -72,7 +70,12 @@ const winterDeal: Partial<Record<MaterialType, LocationType>> = {
   [MaterialType.IncomeToken]: LocationType.CardIncome
 }
 
-gameAnimations.configure((move) => isMoveItem(move) && winterDeal[move.itemType] === move.location.type).duration(300)
+gameAnimations
+  .configure(
+    (move) =>
+      (isMoveItem(move) && winterDeal[move.itemType] === move.location.type) || (isCreateItem(move) && winterDeal[move.itemType] === move.item.location.type)
+  )
+  .duration(300)
 
 /** How long a score marker takes to hop from one space of the track to the next. */
 const SCORE_STEP_DURATION = 150
@@ -127,8 +130,8 @@ const SLIDE_START = 0.75
  * edge it is about to go under, nothing hidden yet — comes back down to table level there, and only
  * then slides straight down into place, disappearing under the board and under the Stories already
  * there as it goes. `ease-in` carries the flight and the waypoint's `ease-out` the push, so the two
- * read as one motion. The band only affords the whole push to the first Story of a fan; the ones
- * after it start at {@link storiesCeiling}, which is as high as the row above allows.
+ * read as one motion. The table only affords the whole push to the first Stories of a fan; the ones
+ * after them start at {@link storiesCeiling}, which is as high as the table allows.
  *
  * The card reaches its full depth at the waypoint rather than at the end, or it would be pushed in
  * *over* the Stories it is meant to slide under and only slip behind them on the very last frame.
@@ -160,7 +163,7 @@ gameAnimations
     }
   })
 
-/** The 2 halves of the band an Encounter is pushed under: the Stories still to tell, and those told. */
+/** The 2 fans an Encounter is pushed into under the board: the Stories still to tell, and those told. */
 const isStoriesFan = (type?: LocationType): type is LocationType.UntoldStories | LocationType.ToldStories =>
   type === LocationType.UntoldStories || type === LocationType.ToldStories
 
@@ -169,7 +172,7 @@ const isStoriesFan = (type?: LocationType): type is LocationType.UntoldStories |
  * the last of its fan, a whole spread above the first one, and the fan it joins is the one that is
  * there now plus itself — the move has not been played yet.
  *
- * A Story told is one crossing from the left half of the band to the right, and it makes the very
+ * A Story told is one crossing from the left fan to the right one, and it makes the very
  * same flight: it is pulled back out from under the board, carried over to the other fan and pushed
  * in there, which is the gesture the player just made and the one the untold fan is read with. What
  * it never does is slide across underneath, where the card would be a quarter of itself gliding
@@ -190,11 +193,10 @@ const storyFlight = (
   })
   if (!spot) return
   const from = { x: spot.x ?? 0, y: spot.y ?? 0, z: spot.z ?? 0 }
-  const area = areaOf(context, player)
-  const anchor = move.location.type === LocationType.ToldStories ? toldStoriesSpot(area) : untoldStoriesSpot(area)
+  const anchor = move.location.type === LocationType.ToldStories ? toldStoriesSpot : untoldStoriesSpot
   const gaps = context.rules.material(MaterialType.EncounterCard).location(move.location.type).player(player).length
-  const rows = context.rules.players.length
-  const bandRow = getBandRow(context)
-  const to = { x: anchor.x, y: anchor.y + spread(storiesGap.y!, gaps, storiesMaxGap(rows, bandRow).y), z: anchor.z + gaps * storiesGap.z! }
-  return { from, to, pushFrom: Math.max(to.y - storiesPush, storiesCeiling(area, rows, bandRow)) }
+  const told = move.location.type === LocationType.ToldStories
+  const players = context.rules.players.length
+  const to = { x: anchor.x, y: anchor.y + spread(storiesGap.y!, gaps, storiesMaxGap(players, told).y), z: anchor.z + gaps * storiesGap.z! }
+  return { from, to, pushFrom: Math.max(to.y - storiesPush, storiesCeiling(players, told)) }
 }

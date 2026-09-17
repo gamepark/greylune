@@ -5,41 +5,36 @@ import { BonusToken } from '@gamepark/greylune/material/Tokens'
 import { VpTokenValue } from '@gamepark/greylune/material/VpToken'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { Season } from '@gamepark/greylune/Season'
-import { DeckLocator, ListLocator, Locator, MaterialContext, PileLocator } from '@gamepark/react-game'
+import { DeckLocator, ItemContext, ListLocator, Locator, MaterialContext, PileLocator } from '@gamepark/react-game'
 import { getEnumValues, Location, MaterialItem } from '@gamepark/rules-api'
 import { ActiveVillagersLocator } from './ActiveVillagersLocator'
 import { AreaLocator } from './AreaLocator'
 import { CampLocator } from './CampLocator'
 import { cardHoverTransform } from './CardHover'
-import { CenteredFlexLocator } from './CenteredFlexLocator'
 import { CenteredListLocator } from './CenteredListLocator'
+import { EncounterRowLocator } from './EncounterRowLocator'
 import { EventSpaceLocator } from './EventSpaceLocator'
 import { playerPanelLocator } from './PlayerPanelLocator'
-import { areaOf } from './Seats'
 import { VillageGapLocator } from './VillageGapLocator'
 import { VillageGridLocator } from './VillageGridLocator'
 import { VillagerReserveLocator } from './VillagerReserveLocator'
-import { getBandRow, hideBandOfOtherPlayers, showsBandOf } from './DisplayedPlayer'
-import { companionsDependencies, companionsMaxSpread, encounterRowArea, encounterRowDependencies, encounterRowSpread } from './CrowdedRows'
+import { getDisplayedPlayer, hideOtherPlayers } from './DisplayedPlayer'
 import {
   bonusTokensGap,
   bonusTokensSpot,
   coinReserveSpot,
-  companionsGap,
   companionsSpot,
   encounterDeckSpot,
-  encounterRowGap,
-  encounterRowSpot,
   eventSpot,
   firstPlayerTokenSpot,
   incomeTokenSpot,
-  incomeTokenStockSpot,
-  itemsGap,
   itemsSpot,
   magicTrackSpot,
   mainBoardSpot,
   playerBoardSpot,
+  playerCardsGapUp,
   playerCardsMaxCount,
+  playerColumnMaxGap,
   playerCoinsRadius,
   playerCoinsSpot,
   playerVpTokensSpot,
@@ -50,6 +45,7 @@ import {
   sealColumnGap,
   sealDiscardRadius,
   sealDiscardSpot,
+  sealStackRadius,
   sealStackSpot,
   seasonBoardSpot,
   seasonSpots,
@@ -67,7 +63,7 @@ import {
 
 /**
  * A card a player has used lies on its side until it is straightened (see {@link tiltedCardAngle}).
- * Both rows of cards a player keeps are tilted the same way: an Object is laid down to be used, a
+ * Both columns of cards a player keeps are tilted the same way: an Object is laid down to be used, a
  * Companion to answer with, and it is the same gesture and the same card standing back up in Autumn.
  */
 const tilt = (item: MaterialItem): number => (item.location.rotation === true ? tiltedCardAngle : 0)
@@ -79,12 +75,11 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
 
   [LocationType.SeasonBoard]: new Locator({ coordinates: seasonBoardSpot }),
 
-  /** Not material: a player's panel, laid on the table over their own area. */
+  /** Not material: the panels of all the players, in the bottom right corner of the player area. */
   [LocationType.PlayerPanel]: playerPanelLocator,
 
-  [LocationType.PlayerBoard]: new Locator({
-    getCoordinates: (location: Location, context: MaterialContext) => playerBoardSpot(areaOf(context, location.player))
-  }),
+  /** Every board lies on the one spot of the player area, and only the one of the player being read is drawn. */
+  [LocationType.PlayerBoard]: new Locator({ coordinates: playerBoardSpot, hide: hideOtherPlayers }),
 
   // ---------------------------------------------------------------- Village cards
 
@@ -109,22 +104,21 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
 
   [LocationType.EncounterDeck]: new DeckLocator({ coordinates: encounterDeckSpot }),
 
-  /**
-   * The row grows to the right until it runs into the Companions of a player, and only then tightens
-   * up, the cards sliding over one another. See {@link CrowdedRows} for who gives way to whom.
-   */
-  [LocationType.EncounterRow]: new ListLocator({
-    gap: encounterRowGap,
-    getMaxGap: (location: Location, context: MaterialContext) => ({ x: encounterRowSpread(encounterRowArea(location), context) }),
-    getPositionDependencies: (location: Location, context: MaterialContext) => encounterRowDependencies(location, context),
-    getCoordinates: (location: Location) => encounterRowSpot(encounterRowArea(location)),
-    getHoverTransform: cardHoverTransform
-  }),
+  /** A line of 3 hanging off the notch the Area is dealt into, and the cards past the third under it. */
+  [LocationType.EncounterRow]: new EncounterRowLocator(),
 
-  /** The Income token an Encounter carries, laid over the reward half of its scroll, flush with the right edge of the card. */
+  /**
+   * The Income token an Encounter carries, laid over the reward half of its scroll, flush with the right
+   * edge of the card. It goes out of sight with its card, when the card lies among the Stories of a
+   * player who is not read.
+   */
   [LocationType.CardIncome]: new Locator({
     parentItemType: MaterialType.EncounterCard,
-    positionOnParent: { x: 79, y: 88 }
+    positionOnParent: { x: 79, y: 88 },
+    hide: (item: MaterialItem, context: ItemContext) => {
+      const owner = context.rules.material(MaterialType.EncounterCard).getItem(item.location.parent!).location.player
+      return owner !== undefined && owner !== getDisplayedPlayer(context)
+    }
   }),
 
   // ---------------------------------------------------------------- Events and Quests
@@ -171,21 +165,13 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
   /** The bank is money, like a player's own gold: a heap, not a row of stacks. */
   [LocationType.CoinReserve]: new PileLocator({ coordinates: coinReserveSpot, radius: 3 }),
 
-  [LocationType.SealStack]: new PileLocator({ coordinates: sealStackSpot, radius: 3 }),
+  [LocationType.SealStack]: new PileLocator({ coordinates: sealStackSpot, radius: sealStackRadius }),
 
   /**
    * The strip between the Season board and the Encounter deck is narrower than it is tall, so the
    * heap is flattened to match: it spreads down the gap instead of over its two neighbours.
    */
   [LocationType.SealDiscard]: new PileLocator({ coordinates: sealDiscardSpot, radius: sealDiscardRadius }),
-
-  /** The 8 tokens of the stock, symbol side up, in 2 rows of 4. */
-  [LocationType.IncomeTokenStock]: new CenteredFlexLocator({
-    center: incomeTokenStockSpot,
-    lineSize: 4,
-    gap: { x: 2.6 },
-    lineGap: { y: 2.3 }
-  }),
 
   // ---------------------------------------------------------------- season board
 
@@ -195,58 +181,63 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
 
   [LocationType.Camp]: new CampLocator(),
 
-  // ---------------------------------------------------------------- personal board
+  // ---------------------------------------------------------------- the player area, drawn for the player being read
 
   /**
-   * The 2 rows of cards hang off the board rather than floating beside it: the first card is laid
-   * against its edge and the row runs outwards, so a player with a single Companion has it where the
-   * board says it belongs, and it does not move when the second one arrives. Past the 3 cards the row
-   * is given, an extra card tightens it up instead of running out over the table.
-   *
-   * The Companions run out towards the main board, into the strip the Encounter rows grow down, and
-   * tighten up as well when an Encounter row lays claim to it: see {@link CrowdedRows}.
+   * The 2 columns of cards hang off the board rather than floating beside it: the first card is laid
+   * against its edge, level with its middle, and the column climbs from there, so a player with a single
+   * Companion has it where the board says it belongs, and it does not move when the second one arrives.
+   * Past the 3 cards a column is given, an extra card tightens it up instead of climbing off the table.
    */
   [LocationType.Companions]: new ListLocator({
     getItemRotateZ: tilt,
-    gap: companionsGap,
-    getMaxGap: (location: Location, context: MaterialContext) => ({ x: -companionsMaxSpread(location.player as PlayerColor, context) }),
-    getPositionDependencies: (location: Location, context: MaterialContext) => companionsDependencies(location.player as PlayerColor, context),
-    getCoordinates: (location: Location, context: MaterialContext) => companionsSpot(areaOf(context, location.player)),
+    maxCount: playerCardsMaxCount,
+    gap: playerCardsGapUp,
+    coordinates: companionsSpot,
+    hide: hideOtherPlayers,
     getHoverTransform: cardHoverTransform
   }),
 
+  /**
+   * A card raising the limit can bring a 4th Object, and another a 5th: a player may end up with as
+   * many as 7, so the column takes the whole height its half of the area has and tightens up from there.
+   */
   [LocationType.Items]: new ListLocator({
     getItemRotateZ: tilt,
-    maxCount: playerCardsMaxCount,
-    gap: itemsGap,
-    getCoordinates: (location: Location, context: MaterialContext) => itemsSpot(areaOf(context, location.player)),
+    gap: playerCardsGapUp,
+    getMaxGap: (_location: Location, context: MaterialContext) => playerColumnMaxGap(context.rules.players.length, false),
+    coordinates: itemsSpot,
+    hide: hideOtherPlayers,
     getHoverTransform: cardHoverTransform
   }),
 
   [LocationType.ActiveVillagers]: new ActiveVillagersLocator(),
 
   [LocationType.StrengthTrack]: new Locator({
-    getCoordinates: (location: Location, context: MaterialContext) => strengthTrackSpot(areaOf(context, location.player), location.x ?? 0)
+    hide: hideOtherPlayers,
+    getCoordinates: (location: Location) => strengthTrackSpot(location.x ?? 0)
   }),
 
   [LocationType.MagicTrack]: new Locator({
-    getCoordinates: (location: Location, context: MaterialContext) => magicTrackSpot(areaOf(context, location.player), location.x ?? 0)
+    hide: hideOtherPlayers,
+    getCoordinates: (location: Location) => magicTrackSpot(location.x ?? 0)
   }),
 
   [LocationType.QuestMarkerSpace]: new Locator({
-    getCoordinates: (location: Location, context: MaterialContext) => questMarkerSpot(areaOf(context, location.player), location.x ?? 0)
+    hide: hideOtherPlayers,
+    getCoordinates: (location: Location) => questMarkerSpot(location.x ?? 0)
   }),
 
   [LocationType.IncomeTokenSpace]: new Locator({
-    getCoordinates: (location: Location, context: MaterialContext) => incomeTokenSpot(areaOf(context, location.player), location.x ?? 0)
+    hide: hideOtherPlayers,
+    getCoordinates: (location: Location) => incomeTokenSpot(location.x ?? 0)
   }),
 
   [LocationType.SpecialAction]: new CenteredListLocator({
     gap: { x: 1.2 },
-    getCenter: (location: Location, context: MaterialContext) => specialActionSpot(areaOf(context, location.player))
+    center: specialActionSpot,
+    hide: hideOtherPlayers
   }),
-
-  // ------------------------------------------------- the band above the personal board, drawn for one player
 
   /**
    * The 2 fans of Stories, pushed under the top edge of the board. Like the Companions and the Objects
@@ -255,40 +246,31 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
    */
   [LocationType.UntoldStories]: new ListLocator({
     gap: storiesGap,
-    getMaxGap: (_location: Location, context: MaterialContext) => storiesMaxGap(context.rules.players.length, getBandRow(context)),
-    hide: hideBandOfOtherPlayers,
-    getCoordinates: (location: Location, context: MaterialContext) => untoldStoriesSpot(areaOf(context, location.player)),
+    getMaxGap: (_location: Location, context: MaterialContext) => storiesMaxGap(context.rules.players.length, false),
+    coordinates: untoldStoriesSpot,
+    hide: hideOtherPlayers,
     getHoverTransform: cardHoverTransform
   }),
 
   [LocationType.ToldStories]: new ListLocator({
     gap: storiesGap,
-    getMaxGap: (_location: Location, context: MaterialContext) => storiesMaxGap(context.rules.players.length, getBandRow(context)),
-    hide: hideBandOfOtherPlayers,
-    getCoordinates: (location: Location, context: MaterialContext) => toldStoriesSpot(areaOf(context, location.player)),
+    getMaxGap: (_location: Location, context: MaterialContext) => storiesMaxGap(context.rules.players.length, true),
+    coordinates: toldStoriesSpot,
+    hide: hideOtherPlayers,
     getHoverTransform: cardHoverTransform
   }),
 
-  /**
-   * Always drawn, whoever is read: there is a single token, and it tells who the round starts on. It
-   * follows the panel of its owner down when that player is not read, so it is always found beside it.
-   */
-  [LocationType.FirstPlayerTokenSpace]: new Locator({
-    getCoordinates: (location: Location, context: MaterialContext) =>
-      firstPlayerTokenSpot(areaOf(context, location.player), showsBandOf(context, location.player as PlayerColor))
-  }),
+  /** Over the board of the player being read, when they are the one the round starts on. */
+  [LocationType.FirstPlayerTokenSpace]: new Locator({ coordinates: firstPlayerTokenSpot, hide: hideOtherPlayers }),
 
   /**
-   * Each token keeps the slot its `x` gives it (a `FillGapStrategy`): the column is centred on the
-   * 3 slots, not on the tokens left, so spending one leaves a hole and the others do not move.
+   * Each token keeps the slot its `x` gives it (a `FillGapStrategy`): the row is centred on the 3 slots,
+   * not on the tokens left, so spending one leaves a hole and the others do not move.
    */
   [LocationType.BonusTokens]: new ListLocator({
     gap: bonusTokensGap,
-    hide: hideBandOfOtherPlayers,
-    getCoordinates: (location: Location, context: MaterialContext) => {
-      const { x, y } = bonusTokensSpot(areaOf(context, location.player))
-      return { x, y: y - (bonusTokensGap.y! * (getEnumValues(BonusToken).length - 1)) / 2 }
-    }
+    hide: hideOtherPlayers,
+    coordinates: { x: bonusTokensSpot.x - (bonusTokensGap.x! * (getEnumValues(BonusToken).length - 1)) / 2, y: bonusTokensSpot.y }
   }),
 
   /** The one place of the table with an explanation of its own: see {@link VillagerReserveLocator}. */
@@ -299,13 +281,10 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     radius: playerCoinsRadius,
     maxAngle: 90,
     minimumDistance: 0.5,
-    hide: hideBandOfOtherPlayers,
-    getCoordinates: (location: Location, context: MaterialContext) => playerCoinsSpot(areaOf(context, location.player))
+    hide: hideOtherPlayers,
+    coordinates: playerCoinsSpot
   }),
 
   /** A player holds one point token at a time: the 25 is handed back when the 75 is taken. */
-  [LocationType.PlayerVpTokens]: new Locator({
-    hide: hideBandOfOtherPlayers,
-    getCoordinates: (location: Location, context: MaterialContext) => playerVpTokensSpot(areaOf(context, location.player))
-  })
+  [LocationType.PlayerVpTokens]: new Locator({ coordinates: playerVpTokensSpot, hide: hideOtherPlayers })
 }

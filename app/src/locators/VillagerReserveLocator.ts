@@ -3,11 +3,10 @@ import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { LocationDescription, MaterialContext } from '@gamepark/react-game'
 import { Coordinates, Location } from '@gamepark/rules-api'
-import { CenteredListLocator } from './CenteredListLocator'
-import { hideBandOfOtherPlayers } from './DisplayedPlayer'
-import { areaOf } from './Seats'
-import { villagerReserveSize, villagerReserveSpot } from './TableLayout'
 import { VillagerReserveHelp } from '../material/help/VillagerReserveHelp'
+import { CenteredListLocator } from './CenteredListLocator'
+import { seatOf } from './DisplayedPlayer'
+import { villagerReserveGap, villagerReserveSize, villagerReserveSpot } from './TableLayout'
 
 /**
  * The reserve draws nothing and takes no drop: it is a stretch of table where the 4 Villagers a
@@ -22,13 +21,15 @@ class VillagerReserveDescription extends LocationDescription<PlayerColor, Materi
   height = villagerReserveSize.height
 }
 
-/** The 4 Villagers set aside at setup, in a row above the personal board (rulebook p.3). */
+/**
+ * The 4 Villagers set aside at setup (rulebook p.3), in a row. Unlike everything else a player keeps,
+ * the reserves of all the players are drawn at once, over the main board, whoever is being read.
+ */
 export class VillagerReserveLocator extends CenteredListLocator<PlayerColor, MaterialType, LocationType> {
   locationDescription = new VillagerReserveDescription()
-  gap = { x: 1.6 }
-  hide = hideBandOfOtherPlayers
+  gap = { x: villagerReserveGap }
 
   getCenter(location: Location<PlayerColor, LocationType>, context: MaterialContext<PlayerColor, MaterialType, LocationType>): Partial<Coordinates> {
-    return villagerReserveSpot(areaOf(context, location.player))
+    return villagerReserveSpot(seatOf(context, location.player), context.rules.players.length)
   }
 }

@@ -77,16 +77,14 @@ export class VillageCardDescription extends CardDescription<PlayerColor, Materia
       return straighten && <StraightenCardButton move={straighten} x={0} y={0} />
     }
     if (item.location.type === LocationType.Items) {
-      const position = item.location.x ?? 0
       const count = context.rules.material(MaterialType.VillageCard).location(LocationType.Items).player(item.location.player).length
+      const players = context.rules.players.length
       const straighten = straightenCardMove(legalMoves, context.index)
-      if (straighten) return <StraightenCardButton move={straighten} {...itemActionSpot(position, count)} />
+      if (straighten) return <StraightenCardButton move={straighten} {...itemActionSpot(count, players)} />
       const discard = discardItemMove(legalMoves, context.index)
-      if (discard) return <DiscardItemButton move={discard} position={position} count={count} />
+      if (discard) return <DiscardItemButton move={discard} count={count} players={players} />
       const uses = itemActionMoves(legalMoves, context.index)
-      return uses.length && item.id?.front !== undefined ? (
-        <ItemCardMenu front={item.id.front} moves={uses} position={position} count={count} />
-      ) : undefined
+      return uses.length && item.id?.front !== undefined ? <ItemCardMenu front={item.id.front} moves={uses} count={count} players={players} /> : undefined
     }
     if (item.location.type !== LocationType.VillageGrid) return undefined
     const villager = selectedVillager(context.rules)

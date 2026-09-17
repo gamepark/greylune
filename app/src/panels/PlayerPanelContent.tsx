@@ -1,30 +1,28 @@
 import { css } from '@emotion/react'
 import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
-import { playerCoins, playerVp } from '@gamepark/greylune/material/PlayerState'
+import { playerCoins, playerForce, playerMagic, playerVp } from '@gamepark/greylune/material/PlayerState'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { StyledPlayerPanel, usePlay, usePlayer, usePlayerId, useRules } from '@gamepark/react-game'
 import { Location, MaterialMoveBuilder } from '@gamepark/rules-api'
-import { GoldCoin, Laurel } from '../images/IconImages'
-import { showsAllBandsFor } from '../locators/DisplayedPlayer'
+import { ForceGem, GoldCoin, Laurel, MagicGem } from '../images/IconImages'
 import { playerPanelEms, playerPanelScale, playerPanelWidth } from '../locators/TableLayout'
 import { playerColors } from '../PlayerColors'
 
 /**
- * A player's panel, laid on the table over their own area rather than floating over it in a corner of
- * the screen. Past 2 players it is also how the material above a board is chosen: clicking a panel
- * reads that player. It is a view change, nothing the others ever see, so the move is played
- * transiently and never leaves the browser. At 2 players every band is out at once and a panel is
- * nothing but a read-out.
+ * A player's panel, laid on the table with the panels of all the others, in the bottom right corner of
+ * the player area. It is also how a player is read: the table has room for one area, and clicking a
+ * panel lays out that player's material in it. It is a view change, nothing the others ever see, so
+ * the move is played transiently and never leaves the browser.
  *
- * It carries the 2 numbers a player is never asked to count off the table: their gold, which is a heap
- * of coins of 2 values, and their score, which is a marker on a track plus the token it may have
- * earned. Everything else a panel could show is already legible on the board it sits on.
+ * It carries the numbers a player would otherwise have to read off an area that may not be the one on
+ * the table: their gold, which is a heap of coins of 2 values, their score, which is a marker on a
+ * track plus the token it may have earned, and their Force and Magic, the 2 tracks of their board.
  *
- * Both are badged with the symbol the game prints them with rather than with a piece: gold is a heap
- * of 2 coins and no single one of them is the amount, and the score marker is a pawn in the player's
- * colour, which at badge size reads as the player and not as points. The coin and the laurel say
- * money and victory points at a glance, and are the same marks the cards are read with.
+ * All of them are badged with the symbol the game prints them with rather than with a piece: gold is
+ * a heap of 2 coins and no single one of them is the amount, and a marker at badge size reads as a
+ * marker and not as what it counts. The coin, the laurel and the 2 gems are the same marks the cards
+ * are read with.
  */
 export const PlayerPanelContent = ({ location }: { location: Location<PlayerColor, LocationType> }) => {
   const rules = useRules<GreyluneRules>()!
@@ -33,7 +31,6 @@ export const PlayerPanelContent = ({ location }: { location: Location<PlayerColo
   const play = usePlay()
   if (!player) return null
 
-  const selectable = !showsAllBandsFor(rules.players.length)
   const displayedPlayer = (rules.game.view as PlayerColor) ?? me ?? rules.players[0]
 
   return (
@@ -42,11 +39,13 @@ export const PlayerPanelContent = ({ location }: { location: Location<PlayerColo
       activeRing
       counters={[
         { image: GoldCoin, value: playerCoins(rules, player.id) },
-        { image: Laurel, value: playerVp(rules, player.id) }
+        { image: Laurel, value: playerVp(rules, player.id) },
+        { image: ForceGem, value: playerForce(rules, player.id) },
+        { image: MagicGem, value: playerMagic(rules, player.id) }
       ]}
-      countersPerLine={2}
-      onClick={selectable ? () => play(MaterialMoveBuilder.changeView(player.id), { transient: true }) : undefined}
-      css={[panelStyle, colouredPanel(playerColors[player.id]), selectable && selectablePanel, selectable && player.id === displayedPlayer && displayedPanel]}
+      countersPerLine={4}
+      onClick={() => play(MaterialMoveBuilder.changeView(player.id), { transient: true })}
+      css={[panelStyle, colouredPanel(playerColors[player.id]), selectablePanel, player.id === displayedPlayer && displayedPanel]}
     />
   )
 }
@@ -70,7 +69,7 @@ const panelStyle = css`
  * The panel is the player's colour, flat, lit from the top and darkened at the foot so that it reads as
  * a plate rather than a swatch. Nothing written on it is written on that colour — the name, the timer
  * and the counters are all set in their own dark badges — so the colour can be worn at full strength,
- * which is the point: 4 panels down a column are told apart at a glance, before a name is read.
+ * which is the point: 4 panels side by side are told apart at a glance, before a name is read.
  */
 const colouredPanel = (colour: string) => css`
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.35), rgba(0, 0, 0, 0.4)), ${colour};
@@ -90,7 +89,7 @@ const selectablePanel = css`
 `
 
 /**
- * The player being read: the one whose material is out above their board. The ring is white, and set
+ * The player being read: the one whose material is laid out in the player area. The ring is white, and set
  * off the panel so that the dark of the table shows between the two — it has to be read against 4
  * colours at once, and any colour of its own would be lost on one of them.
  */

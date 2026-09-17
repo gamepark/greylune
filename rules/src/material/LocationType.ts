@@ -69,9 +69,12 @@ export enum LocationType {
    * short, which is what the rulebook does by reshuffling the discard into a new pile (p.6).
    */
   SealDiscard,
-  IncomeTokenStock,
-  /** The Seal tokens laid on a Village card, `parent` being the card. */
-  CardSeal,
+  /**
+   * The Seal tokens laid on a Village card, `parent` being the card. Numbered by hand: the value
+   * before it belonged to the Income token stock, which is gone — a token is created on the card that
+   * carries it — and the locations after it keep the numbers saved games know them by.
+   */
+  CardSeal = 20,
   /** The Income token laid on an Encounter card, `parent` being the card. */
   CardIncome,
   /** The 4 Villagers per player that are set aside and not available yet. */

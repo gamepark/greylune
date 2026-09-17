@@ -122,8 +122,8 @@ export abstract class EncounterRule extends GreyluneRule {
   }
 
   /**
-   * The Income token laid on a card, if it was ever laid: the stock holds one token per card that
-   * asks for one, and a card revealed in a year the stock had already run dry carries none.
+   * The Income token laid on a card, if the card carries one: it is created on the card when the card
+   * is revealed, and handed over with it.
    */
   private incomeOn(card: number): GreyluneMaterial {
     return this.material(MaterialType.IncomeToken).location(LocationType.CardIncome).parent(card)

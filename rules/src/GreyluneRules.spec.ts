@@ -534,8 +534,7 @@ describe('An Income token', () => {
   it('is handed over with the Encounter and paid again every Autumn', () => {
     // Moutons: nothing to satisfy, and a token worth 1 coin a year.
     const sheep = placeEncounter(EncounterCard.Sheep, Area.Bow)
-    const token = items(MaterialType.IncomeToken).findIndex((item) => item.id === IncomeToken.Income7)
-    put(MaterialType.IncomeToken, token, { type: LocationType.CardIncome, parent: sheep })
+    const token = items(MaterialType.IncomeToken).push({ id: IncomeToken.Income7, location: { type: LocationType.CardIncome, parent: sheep } }) - 1
     items(MaterialType.Adventurer).find((item) => item.id === BLUE)!.location = { type: LocationType.Area, id: Area.Bow }
     startRule(RuleId.ResolveEncounter)
     const coins = playerCoins(rules(), BLUE)
