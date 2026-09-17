@@ -1,1 +1,1040 @@
-{}
+{
+  "Place": "Place",
+  "Participate": "Participate",
+  "cancel": "Cancel",
+  "ok": "Ok",
+  "gains": "<gain1/> and <gain2/>",
+  "action": {
+    "exploit": "Use",
+    "exploit-price": "Use ({price} <coin/>)",
+    "buy": "Buy",
+    "buy-price": "Buy ({price} <coin/>)",
+    "recruit": "Recruit",
+    "recruit-price": "Recruit ({price} <coin/>)",
+    "activate": "Activate",
+    "resolve": "Resolve",
+    "achieve": "Complete",
+    "use": "Use",
+    "tell": "Tell",
+    "end-story": "End the story",
+    "gain-force": "Gain {count} Strength",
+    "gain-magic": "Gain {count} Magic",
+    "extra-coins": "Gain {coins} additional <coin/>",
+    "no-surcharge": "Pay {coins} <coin/> less",
+    "camp": "Go to the Campsite",
+    "camp-coins": "Gain {coins} <coin/>",
+    "travel": "Travel",
+    "stay": "Stay where you are",
+    "summer": "Move to Summer",
+    "autumn": "Move to Autumn",
+    "special-action": "Special action",
+    "straighten": "Ready a card"
+  },
+  "header": {
+    "winter": "New year",
+    "spring": {
+      "you": "Place a <villager/> or <summer>move to Summer <sun/></summer>",
+      "player": "{player} places a Villager"
+    },
+    "summer": {
+      "you": "Activate a <villager/>, an Item, or <autumn>move to Autumn <leaf/></autumn>",
+      "player": "{player} takes their Summer action"
+    },
+    "activate-card": {
+      "you": "Choose one of the card's options",
+      "player": "{player} activates a card"
+    },
+    "must-react-card": {
+      "you": "You must activate {card}",
+      "player": "{player} activates a card"
+    },
+    "must-react": {
+      "you": "You must activate a Companion",
+      "player": "{player} activates a card"
+    },
+    "activate-seal": {
+      "you": "Activate a Seal token",
+      "player": "{player} activates a Seal token"
+    },
+    "seal-value": {
+      "you": "Choose the Seal token's value",
+      "player": "{player} chooses the Seal token's value"
+    },
+    "discard-item": {
+      "you": "Discard an Item",
+      "player": "{player} discards an Item"
+    },
+    "travel": {
+      "you": "Move your <adventurer/> up to {count, plural, one {# space} other {# spaces}}",
+      "player": "{player} goes on an adventure"
+    },
+    "encounter": {
+      "you-none": "Resolve an Encounter",
+      "you-coin": "Resolve an Encounter or <take>take 1 <coin/></take>",
+      "you-vp": "Resolve an Encounter or <take>take 1 <vp/></take>",
+      "you-quest": "Resolve an Encounter or <quest>complete a Quest <crown/></quest>",
+      "player": "{player} resolves an Encounter",
+      "nothing": "You can resolve neither an Encounter nor a Quest here."
+    },
+    "outcome": {
+      "you": "Choose what you pay and what you gain",
+      "player": "{player} chooses what they pay and what they gain"
+    },
+    "quest": {
+      "you": "Tell {count, plural, one {# story} other {# stories}}",
+      "player": "{player} tells {count, plural, one {# story} other {# stories}}"
+    },
+    "start-story": {
+      "you": "Tell a story",
+      "player": "{player} tells a story"
+    },
+    "tell-story": {
+      "you": "Tell a story ({value}/{max}) or <end>end your story</end>",
+      "player": "{player} tells a story"
+    },
+    "straighten": {
+      "you": "Ready a card",
+      "player": "{player} readies a card"
+    },
+    "place-villager": {
+      "you": "Place a <villager/>",
+      "player": "{player} places a Villager"
+    },
+    "event": {
+      "you": "Choose what the Event gives you",
+      "player": "{player} participates in the Event"
+    },
+    "special-action": {
+      "you": "Choose what the special action gives you",
+      "player": "{player} uses their special action"
+    },
+    "resolve-event": {
+      "you": "Resolving the Event",
+      "player": "{player} participates in the Event"
+    },
+    "autumn": {
+      "you": "You move to Autumn",
+      "player": "{player} moves to Autumn"
+    },
+    "use-item": {
+      "you": "You use an Item",
+      "player": "{player} uses an Item"
+    },
+    "resolve-effects": {
+      "you": "Resolving your gains",
+      "player": "Resolving {player}'s gains"
+    },
+    "skill": {
+      "you": "Gain",
+      "player": "{player} chooses Strength or Magic"
+    },
+    "bonus": {
+      "you": "Choose a Bonus token",
+      "player": "{player} chooses a Bonus token"
+    },
+    "reaction": {
+      "you": "Use a Companion, a Potion, or <pass>pass</pass>",
+      "player": "{player} may react"
+    },
+    "reaction-card": {
+      "you": "Activate {card} or <pass>pass</pass>",
+      "player": "{player} may react"
+    },
+    "scoring": {
+      "quests": "End of the game: VP from Quests",
+      "companions": "End of the game: VP from Companions",
+      "items": "End of the game: VP from Items",
+      "skills": "End of the game: VP from skills"
+    },
+    "or": "or"
+  },
+  "scoring": {
+    "game": "VP gained during the game",
+    "quests": "Quests",
+    "companions": "Companions",
+    "items": "Items",
+    "skills": "Skills",
+    "total": "Total"
+  },
+  "help": {
+    "period": "Period {period}",
+    "cost": "Cost",
+    "surcharge": "Extra cost",
+    "immediate": "Immediate effect",
+    "ability": "Ability",
+    "reaction": "Reaction",
+    "permanent": "Permanent effect",
+    "score": "End-game VP",
+    "type": {
+      "1": {
+        "name": "Building",
+        "note": "Buildings cannot be bought or recruited: they remain in the Village after being activated and may be used by other adjacent Villagers, including those belonging to a player who already activated them. They can be activated multiple times during the same year."
+      },
+      "2": {
+        "name": "Item",
+        "note": "An Item is bought and placed to the right of your player board. With some exceptions, you are limited to 3 Items: should you exceed this limit by buying an Item, discard an Item of your choice, exhausted or not (including the one you just acquired, after scoring any immediate VP it may provide)."
+      },
+      "3": {
+        "name": "Companion",
+        "note": "A Companion costs 7 <coin/> to recruit and is placed to the left of your player board. It grants you 1 <villager>Villager</villager>, immediately available, but reduces your income in Autumn by 1 coin. You can never recruit more than 3 Companions during the game."
+      }
+    },
+    "tavern": {
+      "name": "Tavern"
+    },
+    "tell-story": {
+      "name": "Tell a story",
+      "note": "Tell a story using one or more Encounter cards you previously resolved, without exceeding a maximum storytelling value of 3 — exception: two stories each with a storytelling value of 2 still count only as a value-3 story. The rewards are cumulative: if the total storytelling value is 1, gain only the first bonus; if it is 2, the first two bonuses; if it is 3, all bonuses."
+    },
+    "potion": {
+      "name": "Potion",
+      "note": "Potion: it must be discarded after use and returned to the box — unless Selia lets you exhaust it instead of discarding it."
+    },
+    "seals": {
+      "label": "Seals",
+      "none": "none",
+      "spent": "There is no <seal/> token left on this card: it cannot be activated again this year.",
+      "note-players": "When revealed, this card receives a number of <seal/> tokens equal to the number of players minus 1. Each activation uses one of them, which is then discarded.",
+      "note-one": "When revealed, this card receives only one <seal/> token, regardless of player count."
+    },
+    "village-deck": {
+      "name": "Village deck",
+      "left": "Cards left",
+      "note": "Each Winter, the top 9 cards of the Village deck are revealed and laid out in a 3×3 grid. The back shows the period: I for the first 2 years, II for the next 2, III for the last one."
+    },
+    "distance": "Distance",
+    "story": "Story value",
+    "income": "Income",
+    "requirement": "Requirement",
+    "reward": "Reward",
+    "encounter": {
+      "name": "Encounter",
+      "note": "An Encounter card is resolved from the space where your <adventurer>Adventurer</adventurer> stopped, by meeting its requirement to gain its reward. After resolving it, slide it into the Untold Stories column on your player board.",
+      "both": "This Encounter has two requirements and two rewards: you must meet at least one of the two to resolve it. If you meet only the left requirement, you gain only the left reward; you may also meet both requirements to gain both rewards.",
+      "story-only": "This Encounter has no reward: it only pays off when you tell it.",
+      "untellable": "Storytelling value 0: you may not tell this Encounter, unless you increase its value (Charisma potion, Seren) or to complete the Bards' Tournament Quest."
+    },
+    "income-token": {
+      "note": "Income token: after resolving an Encounter card with an Income token, place it on your player board and immediately resolve its effect. You also resolve it again during the Income step in Autumn. The number of Income tokens is not limited."
+    },
+    "encounter-deck": {
+      "name": "Encounter deck",
+      "left": "Cards left",
+      "note": "Each Winter, the top 5/6/7 Encounter cards (2/3/4 players) are revealed and laid out to the right of the main board according to their Distance. The back shows the period: I for the first 2 years, II for the next 2, III for the last one."
+    },
+    "options": "Options",
+    "vp": "{count} VP",
+    "event": {
+      "name": "Event",
+      "note": "Once per year, in Spring or in Summer, you may participate in the Event as an action: place one of your active <villager>Villagers</villager> — or, in Summer, one of your Villagers currently in the Village — on the Event tile, and be able to activate it (paying any cost if applicable) to gain its benefits.",
+      "festival": "Festival: choose an empty space on the tile and gain the 2 adjacent bonuses. Your <villager>Villager</villager> stays there until Autumn."
+    },
+    "event-pile": {
+      "name": "Event stack",
+      "left": "Upcoming tiles",
+      "note": "During setup, one Event tile is removed at random and the remaining 5 tiles are secretly shuffled to form the stack. Each Winter, the top tile of the stack is revealed: this is the active Event for the current year."
+    },
+    "quest": {
+      "name": "Heroic Quest",
+      "first": "First player",
+      "others": "Following players",
+      "note": "After your <adventurer>Adventurer</adventurer> arrives on a Heroic Quest space, you may choose not to resolve an Encounter and instead resolve the Quest, if you have not done it yet and meet its conditions. If you are the first player to do so, place one of your Quest markers on the space worth the most end-game VP; otherwise, place it on the adjacent space: multiple markers (from different players) may be on that space.",
+      "score": "You may resolve each Quest only once. Its VP are only added at the end of the game, after the fifth year."
+    },
+    "player-board": {
+      "name": "Player board",
+      "companions": {
+        "name": "Companions",
+        "text": "Your Companions are placed to the left of your player board. Their Reaction ability, at the bottom of the card, requires exhausting them; their Permanent ability is active whether the Companion is exhausted or not."
+      },
+      "items": {
+        "name": "Items",
+        "text": "Your Items are placed to the right of your player board. Most of them have an ability that requires spending a Summer action to use, by exhausting the card; Potions must be discarded after use. In Autumn, ready all your cards."
+      },
+      "stories": {
+        "name": "Stories",
+        "text": "After resolving each Encounter card, slide it into the Untold Stories column on your player board. Once a story is told, move the card(s) to the right, into the Told Stories area: you may not tell those stories again for the rest of the game."
+      },
+      "income": {
+        "name": "Income",
+        "text": "In Autumn, gain your income: 3 <coin/>, minus 1 <coin/> per Companion, plus any gains from the Income tokens placed on your player board."
+      },
+      "skills": {
+        "name": "Strength and Magic",
+        "text": "The red track is your Strength, the blue one your Magic: both markers start the game on their bottom space. Cards and Quests sometimes require you to have at least a certain level of Strength or Magic, sometimes to spend it.",
+        "score": "At the end of the game, you score 2 VP if you have at least 3 Strength and 3 Magic, or 5 VP if you have 5 Strength and 5 Magic."
+      },
+      "special-action": {
+        "name": "Special action",
+        "text": "This special space, usable only in Summer, allows you to place 1 of your active <villager>Villagers</villager> to do one of the following. It stays there until Autumn.",
+        "0": "Tell a story: 2 <coin/> + 1 <force>Strength</force> + 2 <vp/>",
+        "1": "Move your <adventurer>Adventurer</adventurer> 1 space",
+        "2": "Gain 1 <magic>Magic</magic>"
+      },
+      "quests": {
+        "name": "Quest markers",
+        "text": "During setup, your 3 Heroic Quest markers are placed on these spaces. Each time you resolve a Heroic Quest, you place one of them on one of the spaces below its tile, on the main board: you therefore cannot resolve more than 3."
+      },
+      "villagers": {
+        "name": "Active Villagers",
+        "text": "The Villagers you control at the start of each year are called “active” and are located in this area of your player board, as are those you gain during the year. In Autumn, return your Villagers from the Campsite, the Event and the special action to this area."
+      }
+    },
+    "main-board": {
+      "name": "Main board",
+      "score": {
+        "name": "Score track",
+        "text": "The <vp/> scored during the game advance your marker on the score track, which starts again from 0 after 24. When you reach 25, 50, 75 and then 100 VP, take or flip your 25/50 and 75/100 VP tokens.",
+        "note": "At the end of the fifth year, add to the VP gained during the game the VP from Quests, Companions and Items, and from your skills: 2 VP if you have at least 3 Strength and 3 Magic, 5 VP if you have 5 Strength and 5 Magic."
+      },
+      "bonus": {
+        "name": "Bonus tokens",
+        "text": "When you reach 8 VP, choose one of your 3 Bonus tokens, resolve its effect and return it to the box. When you reach 20 VP, do the same with one of your 2 remaining tokens."
+      },
+      "village": {
+        "name": "Village",
+        "text": "During setup, each player places their <adventurer>Adventurer</adventurer> in the Village. When you go on an adventure, your Adventurer first moves from the Village; during the same year, it then moves from the space where it last stopped. In Autumn, it returns to the Village."
+      },
+      "road": {
+        "name": "Going on an adventure",
+        "text": "When you travel, you may move your <adventurer>Adventurer</adventurer> up to the indicated number of spaces, in the direction of your choice, or stay where you are. Multiple Adventurers may be on the same space. The crest in the top-left corner of each Encounter card indicates where to place it: to the right of the board, next to the space bearing the same crest."
+      },
+      "stops": {
+        "name": "Coin and VP",
+        "text": "After your <adventurer>Adventurer</adventurer> arrives on the space marked with a <coin/>, you may choose not to resolve an Encounter to gain 1 <coin/>. On the space marked with a <vp/>, you may do the same to gain 1 <vp/>."
+      },
+      "quests": {
+        "name": "Heroic Quests",
+        "text": "The 3 Heroic Quest tiles of the game are placed face up on the 3 spaces of the board, near the spaces farthest from the Village. The end-game VP they are worth are printed below each space: 7 and 5, 8 and 6, then 9 and 7 <vp/>, from the nearest space to the farthest."
+      },
+      "event": {
+        "name": "Event",
+        "text": "The Event stack is placed face down on this space. Each Winter, the previous year's Event tile is discarded and the top tile of the stack is revealed: this is the active Event for the current year."
+      }
+    },
+    "season-board": {
+      "name": "Season board",
+      "year": "Year",
+      "period": "Period",
+      "markers": {
+        "name": "Season markers",
+        "text": "On your turn, you must choose one of the actions allowed by the season you are currently in: this is what your Season marker shows. Some players may be in Summer or Autumn while others are still in Spring. A player who is in Summer can never return to Spring during the same year, and a year ends only when all players have reached Autumn."
+      },
+      "winter": {
+        "name": "Winter",
+        "text": "Winter is the setup phase of the year. Skip it for the first year: it has already been done during initial setup.",
+        "0": "Place each player's Season marker on the Spring space",
+        "1": "The First Player passes the 1st Player token to the player on their left",
+        "2": "Discard the Village cards, Encounter cards, and the Event tile from the previous year, as well as any Seal or Income tokens on them",
+        "3": "Reveal the top 9 cards of the Village deck in a 3×3 grid, and place the <seal/> tokens they require on them",
+        "4": "Reveal the top tile of the Event stack: this is the active Event for the current year",
+        "5": "Reveal the top 5/6/7 Encounter cards (2/3/4 players) and lay them out to the right of the main board according to their Distance"
+      },
+      "spring": {
+        "name": "Spring",
+        "0": "Place a Villager: take one of your active <villager>Villagers</villager> and place it in the Village between two adjacent cards, or between a card and an empty card space",
+        "1": "Participate in the Event, once per year, with one of your active <villager>Villagers</villager>",
+        "2": "Move to Summer and immediately take a Summer action"
+      },
+      "summer": {
+        "name": "Summer",
+        "0": "Gain coins: choose one of your <villager>Villagers</villager> in the Village and a card adjacent to it, and gain 1 <coin/> for each other Villager adjacent to that card, regardless of owner",
+        "1": "Activate a card: choose one of your <villager>Villagers</villager> in the Village and a card adjacent to it, and pay its price + 1 <coin/> for each other Villager adjacent to that card, regardless of owner",
+        "2": "Participate in the Event, once per year, with one of your active <villager>Villagers</villager> or one of your Villagers currently in the Village",
+        "3": "Use one of your readied Items, by exhausting it",
+        "4": "Use the special action on your player board",
+        "5": "Move to Autumn and immediately take an Autumn action, only if you no longer have any <villager>Villagers</villager> left in the Village"
+      },
+      "autumn": {
+        "name": "Autumn",
+        "text": "Once in Autumn, you may no longer take any actions during that year, and you immediately resolve the following steps in order.",
+        "0": "Your <adventurer>Adventurer</adventurer> returns to the Village",
+        "1": "Return your <villager>Villagers</villager> from the Campsite, the Event and the special action to the Active Villagers area of your player board",
+        "2": "Ready all your cards",
+        "3": "Gain your income: 3 <coin/>, minus 1 <coin/> per Companion, plus any gains from your Income tokens"
+      },
+      "camp": {
+        "name": "Campsite",
+        "text": "Whenever one of your <villager>Villagers</villager> is used up and becomes inactive, place it in the Campsite to indicate you cannot use it anymore this year. The Villagers you spend, taken from your Active Villagers area, also go there. In Autumn, they return to that area."
+      }
+    },
+    "villager-reserve": {
+      "name": "Villager supply",
+      "owned": "Available to you",
+      "text": "During setup, 4 of your 7 <villager>Villagers</villager> are set aside and are not available yet: you start the game with 3 active Villagers. Each time you gain a <villager>Villager</villager>, it comes from here and joins the Active Villagers area of your player board. The Deadly trap Quest makes you return one of your available Villagers to this supply."
+    },
+    "adventurer": {
+      "name": "Adventurer",
+      "travel": "When you travel, you may move your Adventurer up to the indicated number of spaces, in the direction of your choice (you may also choose to stay where you are), and resolve an Encounter on your destination space, if possible. Multiple Adventurers may be on the same space."
+    },
+    "villager": {
+      "name": "Villager",
+      "active": "The Villagers you control at the start of each year are called “active” and are always located in the “Active Villagers” area of your player board, as are those you gain during the year."
+    },
+    "bonus-token": {
+      "name": "Bonus token"
+    },
+    "skill": {
+      "force": "Strength",
+      "magic": "Magic",
+      "level": "Level"
+    }
+  },
+  "village-card": {
+    "101": {
+      "name": "Travelers' guild",
+      "ability": "Move your <adventurer>Adventurer</adventurer> up to 2 spaces."
+    },
+    "102": {
+      "name": "Scouts' guild",
+      "ability": "Discard a <seal/> token and move your <adventurer>Adventurer</adventurer> up to a number of spaces equal to the token's value."
+    },
+    "103": {
+      "name": "The Riven Oak",
+      "ability": "Tell one or more stories with a total storytelling value of up to 3: 2 VP + 1 <force>Strength</force> + 1 <villager>Villager</villager>."
+    },
+    "104": {
+      "name": "The Golden Lion",
+      "ability": "Discard a <seal/> token and tell one or more stories with a total storytelling value of up to 3: 4 <coin/> + 1 VP + as many <coin/> as the token's value."
+    },
+    "105": {
+      "name": "Magical school",
+      "ability": "Discard a <seal/> token, pay that many <coin/> and gain 1 <magic>Magic</magic>."
+    },
+    "106": {
+      "name": "Smithy",
+      "ability": "Gain 1 <force>Strength</force>."
+    },
+    "107": {
+      "name": "Travelers' guild",
+      "ability": "Pay 2 <coin/> and move your <adventurer>Adventurer</adventurer> up to 4 spaces."
+    },
+    "108": {
+      "name": "Scouts' guild",
+      "ability": "Discard a <seal/> token and move your <adventurer>Adventurer</adventurer> up to a number of spaces equal to the token's value."
+    },
+    "109": {
+      "name": "Hall of the heroes",
+      "ability": "Spend 1 <force>Strength</force> to gain 3 VP, and/or spend 1 <magic>Magic</magic> to gain 4 VP."
+    },
+    "110": {
+      "name": "Town hall",
+      "ability": "Discard a <seal/> token, pay that many <coin/> and gain 1 <force>Strength</force> and 1 <magic>Magic</magic>."
+    },
+    "111": {
+      "name": "The Silver Wolf",
+      "ability": "Discard a <seal/> token and tell one or more stories with a total storytelling value of up to 3: 4 <coin/> + as many VP as the token's value + ready one of your cards."
+    },
+    "112": {
+      "name": "The Jolly Boar",
+      "ability": "Tell one or more stories with a total storytelling value of up to 3: 3 VP + 2 <coin/> + 1 <force>Strength</force> or 1 <magic>Magic</magic>."
+    },
+    "113": {
+      "name": "Fortress",
+      "ability": "Discard a <seal/> token, pay that many <coin/> and gain 2 VP per Companion you have."
+    },
+    "114": {
+      "name": "Travelers' guild",
+      "ability": "Pay 2 <coin/> and move your <adventurer>Adventurer</adventurer> up to 5 spaces."
+    },
+    "115": {
+      "name": "Library",
+      "ability": "Discard a <seal/> token, pay that many <coin/> and gain 1 VP per story told."
+    },
+    "116": {
+      "name": "The Scarlet Dragon",
+      "ability": "Tell one or more stories with a total storytelling value of up to 3: 3 VP + 2 VP + 1 VP."
+    },
+    "201": {
+      "name": "Jade statue",
+      "immediate": "Gain 1 <force>Strength</force> or 1 <magic>Magic</magic>.",
+      "score": "5 VP."
+    },
+    "202": {
+      "name": "Tommy",
+      "ability": "Exhaust this card to move your <adventurer>Adventurer</adventurer> up to 1 space, OR exhaust this card and spend 1 <villager>Villager</villager> to move it up to 2 spaces.",
+      "score": "1 VP."
+    },
+    "203": {
+      "name": "Hundred-league boots",
+      "immediate": "Discard the <seal/> token and gain VP equal to its value.",
+      "ability": "Exhaust this card and discard it to move your <adventurer>Adventurer</adventurer> up to 5 spaces."
+    },
+    "204": {
+      "name": "Wizard's staff",
+      "immediate": "Gain 1 <magic>Magic</magic>.",
+      "ability": "Exhaust this card and spend 1 <villager>Villager</villager> to gain 1 <magic>Magic</magic>.",
+      "score": "1 VP."
+    },
+    "205": {
+      "name": "Mysterious map",
+      "ability": "Exhaust this card to move your <adventurer>Adventurer</adventurer> up to 1 space, OR exhaust this card, spend 1 <villager>Villager</villager> and discard this card to move it up to 3 spaces.",
+      "score": "1 VP."
+    },
+    "206": {
+      "name": "Mana potion",
+      "immediate": "Discard the <seal/> token and gain VP equal to its value.",
+      "reaction": "When you go adventuring, you may discard this card to increase your Magic by 2. This increase is temporary and you don't move your Magic marker: you cannot spend these points."
+    },
+    "207": {
+      "name": "Strength potion",
+      "immediate": "Discard the <seal/> token and gain VP equal to its value.",
+      "reaction": "When you go adventuring, you may discard this card to increase your Strength by 2. This increase is temporary and you don't move your Strength marker: you cannot spend these points."
+    },
+    "208": {
+      "name": "Short sword",
+      "immediate": "Gain 1 <force>Strength</force>.",
+      "ability": "Exhaust this card and spend 1 <villager>Villager</villager> to gain 1 <force>Strength</force>.",
+      "score": "1 VP."
+    },
+    "209": {
+      "name": "Gold statue",
+      "immediate": "Gain 1 <force>Strength</force> or 1 <magic>Magic</magic>.",
+      "score": "5 VP."
+    },
+    "210": {
+      "name": "Snowmane",
+      "ability": "Exhaust this card and spend 1 or 2 <villager>Villagers</villager> to move your <adventurer>Adventurer</adventurer> up to 3 or 5 spaces.",
+      "score": "2 VP."
+    },
+    "211": {
+      "name": "Horn",
+      "ability": "Exhaust this card and spend 1 or 2 <villager>Villagers</villager> to score 3 or 5 VP.",
+      "score": "1 VP."
+    },
+    "212": {
+      "name": "Treasure map",
+      "ability": "Exhaust this card to move your <adventurer>Adventurer</adventurer> up to 2 spaces, OR exhaust this card, spend 1 <villager>Villager</villager> and discard this card to move it up to 4 spaces.",
+      "score": "1 VP."
+    },
+    "213": {
+      "name": "Charisma potion",
+      "immediate": "Discard the <seal/> token and gain VP equal to its value.",
+      "reaction": "When you tell a story, you may discard this card to make the storytelling value of one of your Encounter cards equal to 3."
+    },
+    "214": {
+      "name": "Endurance potion",
+      "immediate": "Discard the <seal/> token and gain VP equal to its value.",
+      "reaction": "When you go adventuring, you may discard this card to place 1 active <villager>Villager</villager> in the Village."
+    },
+    "215": {
+      "name": "Flying potion",
+      "immediate": "Discard the <seal/> token and gain VP equal to its value.",
+      "reaction": "When you go adventuring, you may discard this card to increase your Strength and Magic by 1. This increase is temporary and you don't move your Strength and Magic markers: you cannot spend these points."
+    },
+    "216": {
+      "name": "Bladechant",
+      "ability": "Exhaust this card to gain 1 <force>Strength</force> or 1 <magic>Magic</magic>, OR exhaust this card and spend 1 <villager>Villager</villager> to gain 1 <force>Strength</force> AND 1 <magic>Magic</magic>.",
+      "score": "1 VP."
+    },
+    "217": {
+      "name": "Invisibility potion",
+      "immediate": "Discard the <seal/> token and gain VP equal to its value.",
+      "reaction": "When you go adventuring, you may discard this card to ignore one requirement on an Encounter card."
+    },
+    "218": {
+      "name": "Ruby statue",
+      "immediate": "Gain 1 <force>Strength</force> or 1 <magic>Magic</magic>.",
+      "score": "6 VP."
+    },
+    "219": {
+      "name": "Mandolin",
+      "ability": "Exhaust this card and spend 1 <villager>Villager</villager> to score 1 VP per untold story.",
+      "score": "5 VP."
+    },
+    "220": {
+      "name": "Bag of holding",
+      "ability": "Exhaust this card and spend 1 <villager>Villager</villager> to gain 1 VP per Item you have.",
+      "permanent": "Your Item limit is increased by 1. This effect works even if this card is exhausted and if you were already at your Item limit before acquiring it.",
+      "score": "4 VP."
+    },
+    "221": {
+      "name": "Philosopher stone",
+      "immediate": "Discard the <seal/> token and gain VP equal to its value.",
+      "ability": "Exhaust this card and spend 1 <villager>Villager</villager> to gain 5 VP."
+    },
+    "222": {
+      "name": "Magic ring",
+      "score": "9 VP."
+    },
+    "301": {
+      "name": "Kael",
+      "role": "Warrior",
+      "immediate": "Gain 1 <villager>Villager</villager>.",
+      "reaction": "When you must spend Strength, you may exhaust this card to spend 1 less.",
+      "permanent": "Your Item limit is increased by 1.",
+      "score": "1 VP per <force>Strength</force> level."
+    },
+    "302": {
+      "name": "Elwen",
+      "role": "Archer",
+      "immediate": "Gain 1 <villager>Villager</villager>.",
+      "reaction": "When you go adventuring, you may exhaust this card to move your <adventurer>Adventurer</adventurer> up to 2 additional spaces.",
+      "score": "1 VP per Encounter card with a distance of 3 or more from the Village (told or untold)."
+    },
+    "303": {
+      "name": "Dorian",
+      "role": "Merchant",
+      "immediate": "Gain 1 <villager>Villager</villager>.",
+      "reaction": "When you buy an Item, you may exhaust this card to reduce its cost by 1 <coin/> and gain 1 VP.",
+      "permanent": "Your Item limit is increased by 2.",
+      "score": "1 VP per Item you have."
+    },
+    "304": {
+      "name": "Arick",
+      "role": "Wizard",
+      "immediate": "Gain 1 <villager>Villager</villager> and 1 <magic>Magic</magic>.",
+      "reaction": "When you go adventuring, you may exhaust this card and spend 1 <magic>Magic</magic> to ignore one requirement on an Encounter card.",
+      "score": "1 VP per <magic>Magic</magic> level."
+    },
+    "305": {
+      "name": "Selia",
+      "role": "Alchemist",
+      "immediate": "Gain 1 <villager>Villager</villager>.",
+      "reaction": "When you activate a <seal/> token, you may exhaust this card to choose its value (1 to 3).",
+      "permanent": "When you use a Potion, exhaust it instead of discarding it. Reminder: you may use multiple Potions in the same turn.",
+      "score": "2 VP per Potion you have."
+    },
+    "306": {
+      "name": "Neris",
+      "role": "Rogue",
+      "immediate": "Gain 1 <villager>Villager</villager>.",
+      "reaction": "When you remove a <villager>Villager</villager> from the Village, you may exhaust this card to gain 2 additional <coin/> or to ignore the extra cost.",
+      "score": "1 VP per pair of <coin/> remaining."
+    },
+    "307": {
+      "name": "Bran",
+      "role": "Guardian",
+      "immediate": "Gain 1 <villager>Villager</villager>.",
+      "reaction": "When you must spend one or more <villager>Villagers</villager> to activate one of your cards, you may exhaust this card to reduce that number by 1.",
+      "score": "VP = number of <villager>Villagers</villager> available to you, minus 2."
+    },
+    "308": {
+      "name": "Lucan",
+      "role": "Paladin",
+      "immediate": "Gain 1 <villager>Villager</villager>.",
+      "reaction": "When you gain Magic, you may exhaust this card to gain 1 <force>Strength</force> (or vice versa).",
+      "score": "VP = level of your lower skill (Strength or Magic)."
+    },
+    "309": {
+      "name": "Isandre",
+      "role": "Cleric",
+      "immediate": "Gain 1 <villager>Villager</villager>.",
+      "reaction": "When you exhaust one of your cards, you may exhaust this card to ready it. You may immediately exhaust the card you just readied to trigger its effect again.",
+      "score": "2 VP per Companion."
+    },
+    "310": {
+      "name": "Seren",
+      "role": "Bard",
+      "immediate": "Gain 1 <villager>Villager</villager>.",
+      "reaction": "When you tell a story, you may exhaust this card to make the storytelling value of one of your Encounter cards equal to 3.",
+      "score": "1 VP per story told."
+    },
+    "311": {
+      "name": "Mira",
+      "role": "Scout",
+      "immediate": "Gain 1 <villager>Villager</villager>.",
+      "reaction": "When you go adventuring (before or after resolving an Encounter), you may exhaust this card to place 1 active <villager>Villager</villager> in the Village.",
+      "score": "1 VP per Encounter card with a different crest (told or untold)."
+    }
+  },
+  "encounter-card": {
+    "1": {
+      "name": "Valley",
+      "0": {
+        "requirement": "Have at least 1 <force>Strength</force>",
+        "reward": "Move your <adventurer>Adventurer</adventurer> up to 2 spaces"
+      },
+      "1": {
+        "requirement": "Spend 1 <villager>Villager</villager>",
+        "reward": "Gain 3 VP"
+      }
+    },
+    "2": {
+      "name": "Tiger",
+      "0": {
+        "requirement": "Spend 1 <villager>Villager</villager>"
+      }
+    },
+    "3": {
+      "name": "Rocky pass",
+      "0": {
+        "reward": "Gain 1 <force>Strength</force>"
+      }
+    },
+    "4": {
+      "name": "Sheep",
+      "0": {
+        "reward": "Take the Income token: 1 <coin/> now, then the same each Autumn"
+      }
+    },
+    "5": {
+      "name": "Mine",
+      "0": {
+        "requirement": "Spend 1 <villager>Villager</villager>",
+        "reward": "Take the Income token: 2 <coin/> now, then the same each Autumn"
+      }
+    },
+    "6": {
+      "name": "Pack of wolves",
+      "0": {
+        "requirement": "Have at least 2 <force>Strength</force>",
+        "reward": "Gain 3 VP"
+      }
+    },
+    "7": {
+      "name": "Marauders",
+      "0": {
+        "requirement": "Have a total of <force>Strength</force> and <magic>Magic</magic> of at least 2",
+        "reward": "Gain 4 <coin/>"
+      }
+    },
+    "8": {
+      "name": "Initiation",
+      "0": {
+        "requirement": "Spend 4 <coin/>",
+        "reward": "Gain 1 <force>Strength</force> and 1 <magic>Magic</magic>"
+      }
+    },
+    "9": {
+      "name": "Hermit",
+      "0": {
+        "requirement": "Have at least 2 <force>Strength</force>",
+        "reward": "Gain 1 <magic>Magic</magic>"
+      }
+    },
+    "10": {
+      "name": "Ambush",
+      "0": {
+        "requirement": "Have at least 1 <magic>Magic</magic>",
+        "reward": "Take the Income token: 1 <coin/> now, then the same each Autumn"
+      }
+    },
+    "11": {
+      "name": "Cursed skull",
+      "0": {
+        "requirement": "Have at least 2 <magic>Magic</magic>",
+        "reward": "Ready one of your cards"
+      }
+    },
+    "12": {
+      "name": "Circle of stones",
+      "0": {
+        "reward": "Gain 1 <magic>Magic</magic>"
+      }
+    },
+    "13": {
+      "name": "Camp",
+      "0": {
+        "requirement": "Have a total of <force>Strength</force> and <magic>Magic</magic> of at least 1",
+        "reward": "Gain 1 <villager>Villager</villager>"
+      }
+    },
+    "14": {
+      "name": "Inn",
+      "0": {
+        "requirement": "Spend 2 <coin/>",
+        "reward": "Gain 1 <villager>Villager</villager>"
+      }
+    },
+    "15": {
+      "name": "Bear",
+      "0": {
+        "requirement": "Have at least 1 <force>Strength</force>",
+        "reward": "Gain 2 VP"
+      },
+      "1": {
+        "requirement": "Have at least 1 <magic>Magic</magic>",
+        "reward": "Gain 2 VP"
+      }
+    },
+    "16": {
+      "name": "World-tree",
+      "0": {
+        "reward": "Take the Income token: 1 VP now, then the same each Autumn"
+      }
+    },
+    "17": {
+      "name": "Treasure",
+      "0": {
+        "requirement": "Have at least 3 <magic>Magic</magic>",
+        "reward": "Gain 3 <coin/>"
+      },
+      "1": {
+        "requirement": "Spend 1 <magic>Magic</magic>",
+        "reward": "Gain 4 <coin/>"
+      }
+    },
+    "18": {
+      "name": "Lone tower",
+      "0": {
+        "requirement": "Spend 1 <magic>Magic</magic>",
+        "reward": "Go adventuring again — move your <adventurer>Adventurer</adventurer> up to 3 spaces — and gain 3 VP"
+      }
+    },
+    "19": {
+      "name": "Witchcraft",
+      "0": {
+        "requirement": "Spend 4 <coin/>",
+        "reward": "Gain 2 <magic>Magic</magic>"
+      }
+    },
+    "20": {
+      "name": "Incantation",
+      "0": {
+        "requirement": "Spend 1 <villager>Villager</villager>",
+        "reward": "Gain 1 <magic>Magic</magic>"
+      }
+    },
+    "21": {
+      "name": "Unicorn",
+      "0": {
+        "requirement": "Have at least 3 <magic>Magic</magic>",
+        "reward": "Ready one of your cards, and take the Income token: 1 VP now, then the same each Autumn"
+      }
+    },
+    "22": {
+      "name": "Joust",
+      "0": {
+        "requirement": "Spend 1 <villager>Villager</villager>",
+        "reward": "Gain 3 VP"
+      },
+      "1": {
+        "requirement": "Have at least 4 <force>Strength</force>",
+        "reward": "Gain 4 VP"
+      }
+    },
+    "23": {
+      "name": "Diamond",
+      "0": {
+        "requirement": "Spend 1 <force>Strength</force>",
+        "reward": "Gain 5 <coin/>"
+      }
+    },
+    "24": {
+      "name": "Farm",
+      "0": {
+        "reward": "Gain 1 <villager>Villager</villager>"
+      }
+    },
+    "25": {
+      "name": "Demon",
+      "0": {
+        "requirement": "Have at least 3 <force>Strength</force>",
+        "reward": "Gain 3 VP"
+      },
+      "1": {
+        "requirement": "Have at least 3 <magic>Magic</magic>",
+        "reward": "Gain 3 VP"
+      }
+    },
+    "26": {
+      "name": "Legendary sword",
+      "0": {
+        "requirement": "Spend 1 <villager>Villager</villager>",
+        "reward": "Gain 3 VP"
+      }
+    },
+    "27": {
+      "name": "Coopery",
+      "0": {
+        "requirement": "Spend 4 <coin/>",
+        "reward": "Take the Income token: 2 VP now, then the same each Autumn"
+      }
+    },
+    "28": {
+      "name": "Training",
+      "0": {
+        "requirement": "Spend 4 <coin/>",
+        "reward": "Take the Income token: 1 <force>Strength</force> now, then the same each Autumn"
+      }
+    },
+    "29": {
+      "name": "Vagabond",
+      "0": {
+        "requirement": "Have a total of <force>Strength</force> and <magic>Magic</magic> of at least 4",
+        "reward": "Gain 1 <villager>Villager</villager>"
+      }
+    },
+    "30": {
+      "name": "Errant knight",
+      "0": {
+        "requirement": "Spend 2 <coin/>",
+        "reward": "Gain 1 <force>Strength</force> and 2 VP"
+      }
+    },
+    "31": {
+      "name": "Caravan",
+      "0": {
+        "requirement": "Spend 2 <villager>Villagers</villager>",
+        "reward": "Take the Income token: 4 <coin/> now, then the same each Autumn"
+      }
+    },
+    "32": {
+      "name": "Brigands",
+      "0": {
+        "requirement": "Have at least 3 <force>Strength</force>",
+        "reward": "Gain 4 <coin/> and 2 VP"
+      }
+    },
+    "33": {
+      "name": "Archery",
+      "0": {
+        "requirement": "Spend 3 <coin/>",
+        "reward": "Gain 1 <force>Strength</force> and 3 VP"
+      }
+    },
+    "34": {
+      "name": "Snowy pass",
+      "0": {
+        "requirement": "Have at least 5 <force>Strength</force>",
+        "reward": "Gain 5 <coin/> and 3 VP"
+      }
+    },
+    "35": {
+      "name": "Necromancer",
+      "0": {
+        "requirement": "Have a total of <force>Strength</force> and <magic>Magic</magic> of at least 8",
+        "reward": "Gain 9 VP"
+      }
+    },
+    "36": {
+      "name": "Gold mine",
+      "0": {
+        "requirement": "Spend 1 <villager>Villager</villager>",
+        "reward": "Gain 7 <coin/>"
+      }
+    },
+    "37": {
+      "name": "Dragon",
+      "0": {
+        "requirement": "Have at least 5 <force>Strength</force>",
+        "reward": "Gain 4 VP"
+      },
+      "1": {
+        "requirement": "Have at least 5 <magic>Magic</magic>",
+        "reward": "Gain 4 VP"
+      }
+    },
+    "38": {
+      "name": "Labyrinth",
+      "0": {
+        "requirement": "Spend 1 <villager>Villager</villager>",
+        "reward": "Gain 4 VP"
+      },
+      "1": {
+        "requirement": "Spend 1 <villager>Villager</villager>",
+        "reward": "Gain 4 VP"
+      }
+    },
+    "39": {
+      "name": "Relay",
+      "0": {
+        "requirement": "Spend 4 <coin/>",
+        "reward": "Go adventuring again — move your <adventurer>Adventurer</adventurer> up to 3 spaces — and gain 2 VP"
+      }
+    },
+    "40": {
+      "name": "Fairy ring",
+      "0": {
+        "requirement": "Spend 1 <villager>Villager</villager>",
+        "reward": "Gain 1 <magic>Magic</magic> and 3 VP"
+      }
+    },
+    "41": {
+      "name": "Holy chalice",
+      "0": {
+        "requirement": "Have at least 5 <magic>Magic</magic>",
+        "reward": "Ready one of your cards and gain 4 VP"
+      }
+    }
+  },
+  "event-tile": {
+    "1": {
+      "name": "Banquet",
+      "0": {
+        "reward": "Gain 3 <coin/>"
+      },
+      "1": {
+        "reward": "Ready one of your exhausted cards"
+      }
+    },
+    "2": {
+      "name": "Festival"
+    },
+    "3": {
+      "name": "Great fair",
+      "0": {
+        "requirement": "Spend 3 <coin/>",
+        "reward": "Gain 1 <force>Strength</force> and 1 <magic>Magic</magic>"
+      }
+    },
+    "4": {
+      "name": "Magic show",
+      "0": {
+        "requirement": "Spend 1 <magic>Magic</magic>",
+        "reward": "Move your <adventurer>Adventurer</adventurer> up to 5 spaces"
+      }
+    },
+    "5": {
+      "name": "Gathering",
+      "0": {
+        "requirement": "Spend 1 <force>Strength</force>",
+        "reward": "Gain 1 <villager>Villager</villager>"
+      },
+      "1": {
+        "requirement": "Spend 3 <coin/>",
+        "reward": "Gain 1 <villager>Villager</villager>"
+      }
+    },
+    "6": {
+      "name": "Tournament",
+      "0": {
+        "requirement": "Spend 1 <force>Strength</force>",
+        "reward": "Gain 6 <coin/>"
+      },
+      "1": {
+        "requirement": "Spend 1 <force>Strength</force>",
+        "reward": "Gain 4 VP"
+      }
+    }
+  },
+  "quest-tile": {
+    "1": {
+      "name": "Giant",
+      "requirement": "Have at least 4 <force>Strength</force>"
+    },
+    "2": {
+      "name": "Dragon",
+      "requirement": "Have a total of <force>Strength</force> and <magic>Magic</magic> of at least 6"
+    },
+    "3": {
+      "name": "Wraiths",
+      "requirement": "Have at least 4 <magic>Magic</magic>"
+    },
+    "4": {
+      "name": "Bards' Tournament",
+      "requirement": "Move 2 Encounter cards to the Told Stories area (regardless of their story value)"
+    },
+    "5": {
+      "name": "Donation",
+      "requirement": "Discard one of your Items"
+    },
+    "6": {
+      "name": "Undeads",
+      "requirement": "Spend 1 <force>Strength</force> and 1 <magic>Magic</magic>"
+    },
+    "7": {
+      "name": "Deadly trap",
+      "requirement": "Return one of your available <villager>Villagers</villager> to the supply"
+    },
+    "8": {
+      "name": "Ransom",
+      "requirement": "Spend 6 <coin/>"
+    },
+    "9": {
+      "name": "Wedding",
+      "requirement": "Spend 2 <villager>Villagers</villager>"
+    }
+  }
+}
