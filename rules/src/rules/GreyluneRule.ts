@@ -599,9 +599,17 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
     return playerSeason(this, player) === Season.Spring ? RuleId.Spring : RuleId.Summer
   }
 
-  /** The action is over: the memory it needed is dropped and the turn passes, or the year ends. */
+  /**
+   * The action is over: the memory it needed is dropped, and the player is left to end their turn
+   * (see {@link RuleId.EndTurn}).
+   */
   endOfTurn(): GreyluneMove[] {
     this.forgetAction()
+    return [this.startRule(RuleId.EndTurn)]
+  }
+
+  /** The turn passes to the next player who still has something to do, or the year ends. */
+  passTurn(): GreyluneMove[] {
     const next = this.nextActivePlayer()
     if (next !== undefined) return [this.startPlayerTurn(this.seasonRule(next), next)]
     return [this.startRule(isLastYear(this) ? RuleId.QuestsScoring : RuleId.Winter)]

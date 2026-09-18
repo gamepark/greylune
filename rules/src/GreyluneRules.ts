@@ -21,6 +21,7 @@ import { BonusTokenRule } from './rules/BonusTokenRule'
 import { ChooseOutcomeRule } from './rules/ChooseOutcomeRule'
 import { ChooseSkillRule } from './rules/ChooseSkillRule'
 import { DiscardItemRule } from './rules/DiscardItemRule'
+import { EndTurnRule } from './rules/EndTurnRule'
 import { EventRule } from './rules/EventRule'
 import { FinalScoringRule, scoreStillToCount } from './rules/FinalScoringRule'
 import { PlaceVillagerRule } from './rules/PlaceVillagerRule'
@@ -74,6 +75,7 @@ export class GreyluneRules
     [RuleId.BonusToken]: BonusTokenRule,
     [RuleId.Reaction]: ReactionRule,
     [RuleId.ResolveEffects]: ResolveEffectsRule,
+    [RuleId.EndTurn]: EndTurnRule,
     [RuleId.QuestsScoring]: FinalScoringRule,
     [RuleId.CompanionsScoring]: FinalScoringRule,
     [RuleId.ItemsScoring]: FinalScoringRule,

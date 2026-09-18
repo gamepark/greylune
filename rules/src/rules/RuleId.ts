@@ -156,6 +156,13 @@ export enum RuleId {
    */
   ResolveEffects,
 
+  /**
+   * Not a step of the rulebook either: the action is over and everything it paid has been handed
+   * over, and the player ends their turn themselves, so that the table stays theirs long enough to
+   * read what it did before the next player takes it over.
+   */
+  EndTurn,
+
   // ---------------------------------------------------------------------------- the end of the game
 
   /**

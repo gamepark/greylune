@@ -125,6 +125,10 @@
       "you": "Résolution de vos gains",
       "player": "Résolution des gains de {player}"
     },
+    "end-turn": {
+      "you": "<end>Terminer mon tour</end>",
+      "player": "{player} termine son tour"
+    },
     "skill": {
       "you": "Gagnez",
       "player": "{player} choisit Force ou Magie"

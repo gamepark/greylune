@@ -14,8 +14,8 @@ export type Simulation = { game: GreyluneGame; turnOver: boolean }
 /**
  * Plays a move on a copy of the game, with everything that follows from it, up to the next decision.
  *
- * It stops short of three moves, and plays none of them: the turn passing to somebody, the turn of the
- * year and the final count. Past those, the position no longer belongs to the action being weighed —
+ * It stops short of four moves, and plays none of them: the turn ending, the turn passing to somebody,
+ * the turn of the year and the final count. Past those, the position no longer belongs to the action being weighed —
  * and the count would add to the score track what the evaluation already reckons with on its own.
  * Winter above all: it deals the next year off the two decks, whose faces no player can read, and a bot
  * that played it out would be choosing on cards it is not allowed to see.
@@ -27,7 +27,7 @@ export const simulate = (game: GreyluneGame, move: GreyluneMove): Simulation => 
   let played = 0
   while (queue.length) {
     const current = queue.shift()!
-    if (isStartPlayerTurn(current) || isEndGame(current) || (isStartRule(current) && (current.id === RuleId.Winter || current.id === RuleId.QuestsScoring))) {
+    if (isStartPlayerTurn(current) || isEndGame(current) || (isStartRule(current) && (current.id === RuleId.EndTurn || current.id === RuleId.Winter || current.id === RuleId.QuestsScoring))) {
       return { game: next, turnOver: true }
     }
     if (++played > 2000) throw new Error('Infinite loop detected while simulating a move')

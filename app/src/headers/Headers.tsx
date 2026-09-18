@@ -5,6 +5,7 @@ import { Trans } from 'react-i18next'
 import { ActivateCardHeader } from './ActivateCardHeader'
 import { BonusTokenHeader } from './BonusTokenHeader'
 import { ChooseSkillHeader } from './ChooseSkillHeader'
+import { EndTurnHeader } from './EndTurnHeader'
 import { EventHeader } from './EventHeader'
 import { VillagerIcon } from '../components/Icons'
 import { ReactionHeader } from './ReactionHeader'
@@ -66,6 +67,7 @@ export const Headers: Record<RuleId, ComponentType> = {
   [RuleId.BonusToken]: BonusTokenHeader,
   [RuleId.Reaction]: ReactionHeader,
   [RuleId.ResolveEffects]: () => <HeaderText code="resolve-effects" />,
+  [RuleId.EndTurn]: EndTurnHeader,
 
   // ------------------------------------------------------------------ the final count
   [RuleId.QuestsScoring]: () => <Trans i18nKey="header.scoring.quests" />,

@@ -53,7 +53,7 @@ export enum CustomMoveType {
   SkipEncounter,
   ResolveQuest,
 
-  /** Closing what is open: a story, a reaction window, a journey with steps to spare. */
+  /** Closing what is open: a story, a reaction window, a journey with steps to spare, the turn. */
   Pass,
 
   /** Answering with a Companion or a Potion. Data: `{ card, option }`. */

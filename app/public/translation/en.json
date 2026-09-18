@@ -125,6 +125,10 @@
       "you": "Resolving your gains",
       "player": "Resolving {player}'s gains"
     },
+    "end-turn": {
+      "you": "<end>End my turn</end>",
+      "player": "{player} ends their turn"
+    },
     "skill": {
       "you": "Gain",
       "player": "{player} chooses Strength or Magic"
