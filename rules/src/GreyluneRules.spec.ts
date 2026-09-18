@@ -328,7 +328,7 @@ describe('The score track', () => {
     expect(held()[0].location.rotation).toBe(true)
   })
 
-  it('spends a Bonus token at 8 and another at 20, leaving the last one on the table', () => {
+  it('spends a Bonus token at 8 and another at 20, the last one going back to the box', () => {
     gain(8)
     expect(game.rule!.id).toBe(RuleId.BonusToken)
     spendBonus()
@@ -339,8 +339,11 @@ describe('The score track', () => {
     }
     gain(12)
     expect(game.rule!.id).toBe(RuleId.BonusToken)
+    // The Coin token went at 8, the Skill token goes now: the Villager token left over brings no Villager.
+    const reserve = count(MaterialType.Villager, LocationType.VillagerReserve, BLUE)
     spendBonus()
-    expect(count(MaterialType.BonusToken, LocationType.BonusTokens, BLUE)).toBe(1)
+    expect(count(MaterialType.BonusToken, LocationType.BonusTokens, BLUE)).toBe(0)
+    expect(count(MaterialType.Villager, LocationType.VillagerReserve, BLUE)).toBe(reserve)
     gain(10)
     expect(game.rule!.id).not.toBe(RuleId.BonusToken)
   })
@@ -350,7 +353,7 @@ describe('The score track', () => {
     spendBonus()
     expect(game.rule!.id).toBe(RuleId.BonusToken)
     spendBonus()
-    expect(count(MaterialType.BonusToken, LocationType.BonusTokens, BLUE)).toBe(1)
+    expect(count(MaterialType.BonusToken, LocationType.BonusTokens, BLUE)).toBe(0)
     expect(game.rule!.id).not.toBe(RuleId.BonusToken)
   })
 })
