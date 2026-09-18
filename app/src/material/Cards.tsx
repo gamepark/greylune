@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import { EncounterCardId } from '@gamepark/greylune/material/EncounterCard'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
@@ -19,7 +20,7 @@ import { reactionMoves } from '../reactions/ReactionActions'
 import { ReactionCardMenu } from '../reactions/UseReaction'
 import { straightenCardMove } from '../straighten/StraightenActions'
 import { StraightenCardButton } from '../straighten/StraightenCard'
-import { VillageCardMenu } from '../village/CardAction'
+import { CardAbilityMenu, cardAbilityMoves, VillageCardMenu } from '../village/CardAction'
 import { selectedVillager } from '../villagers/SelectVillager'
 import { isActivateCard, villagerActionData } from '../villagers/VillagerActions'
 import { EncounterCardHelp } from './help/EncounterCardHelp'
@@ -62,6 +63,9 @@ export class VillageCardDescription extends CardDescription<PlayerColor, Materia
    * While one of the player's Objects has to go, every one of them wears the offer to give it up
    * instead (see {@link DiscardItemButton}): nothing else is on offer in the meantime.
    *
+   * While a Villager is being spent on a Building offering more than one option, the card wears one
+   * button per option (see {@link CardAbilityMenu}).
+   *
    * While an effect straightens a card, every tilted card of the player's own, Object or Companion,
    * wears the offer to stand it back up (see {@link StraightenCardButton}), and nothing else either.
    */
@@ -87,6 +91,8 @@ export class VillageCardDescription extends CardDescription<PlayerColor, Materia
       return uses.length && item.id?.front !== undefined ? <ItemCardMenu front={item.id.front} moves={uses} count={count} players={players} /> : undefined
     }
     if (item.location.type !== LocationType.VillageGrid) return undefined
+    const abilities = cardAbilityMoves(context.rules as GreyluneRules, legalMoves, context.index)
+    if (abilities.length && item.id?.front !== undefined) return <CardAbilityMenu front={item.id.front} moves={abilities} />
     const villager = selectedVillager(context.rules)
     if (villager === undefined) return undefined
     const move = legalMoves.find(

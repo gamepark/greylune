@@ -232,13 +232,13 @@ export const villageCardData: Record<VillageCard, VillageCardData> = {
 
   [VillageCard.TravelersGuildII]: { cost: 0, abilities: [{ requirements: [spend(RequirementType.SpendCoins, 2)], gains: [travel(4)] }] },
   [VillageCard.ScoutsGuildII]: { cost: 0, seals: PLAYERS_MINUS_ONE, abilities: [{ requirements: [seal], gains: [travel(SEAL)] }] },
-  /** One skill, the other, or both — the rulebook reads "and/or". */
+  /** One skill, the other, or both — the rulebook reads "and/or" — and both are worth the 7 points of the two together. */
   [VillageCard.HallOfTheHeroes]: {
     cost: 0,
     abilities: [
       { requirements: [spend(RequirementType.SpendForce, 1)], gains: [vp(3)] },
       { requirements: [spend(RequirementType.SpendMagic, 1)], gains: [vp(4)] },
-      { requirements: [spend(RequirementType.SpendForce, 1), spend(RequirementType.SpendMagic, 1)], gains: [vp(3), vp(4)] }
+      { requirements: [spend(RequirementType.SpendForce, 1), spend(RequirementType.SpendMagic, 1)], gains: [vp(7)] }
     ]
   },
   [VillageCard.TownHall]: { cost: 0, seals: PLAYERS_MINUS_ONE, abilities: [{ requirements: [sealCoins], gains: [force(), magic()] }] },
