@@ -1,4 +1,5 @@
 import CompanionBadge from './icons/Companion.png'
+import FirstPlayerMoon from './icons/FirstPlayer.png'
 import GoldCoin from './icons/Gold.png'
 import IncomeHand from './icons/Income.png'
 import MagicGem from './icons/Magic.png'
@@ -63,10 +64,14 @@ const riderImages: Partial<Record<number, string>> = { 1: Rider1, 2: Rider2, 3: 
  * And the Encounters one: a Villager to pay, drawn the way the rider is — the figure dark on the
  * parchment with its 1 cut into it, so that the price is a single symbol. Cut out of the Tigre, which
  * prints nothing else.
+ *
+ * And the moon of the first player token, cut out of the banner alone: the whole token is a tall
+ * flag on its hill, and at the size of a badge only the moon on it would still be read.
  */
 export {
   CompanionBadge,
   DiscardedPotion,
+  FirstPlayerMoon,
   ForceGem,
   ForceGemDown,
   ForceGemUp,

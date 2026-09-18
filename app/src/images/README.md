@@ -66,7 +66,7 @@ le magenta sur l'anneau extérieur de 2 px, nouveau contre courant. Sur les 56 p
 | `tokens` | pièces, sceaux, jetons Revenu, jetons Bonus, jetons PV, jeton 1er joueur |
 | `pawns` | meeples et marqueurs, par couleur (`Blue`, `Orange`, `Red`, `Purple`) |
 | `seasons` | `Winter`, `Spring`, `Summer`, `Autumn` : bannières découpées dans `boards/SeasonBoard.png` |
-| `icons` | symboles isolés (`Gold`, `Magic(Up/Down)`, `Move`, `Move1-5`, `PotionDiscarded`, `Story`, `SpendVillager`, `Strength(Up/Down)`, `Tilt`, `VictoryPoint`, `Villager`) — **provisoires** |
+| `icons` | symboles isolés (`Gold`, `Magic(Up/Down)`, `Move`, `Move1-5`, `PotionDiscarded`, `Story`, `SpendVillager`, `Strength(Up/Down)`, `Tilt`, `VictoryPoint`, `Villager`, `FirstPlayer` — la lune du jeton 1er joueur, détourée seule sur un carré) — **provisoires** |
 
 Les `icons` sont la seule exception à la règle « une image = une pièce » : la Force, la Magie, les
 points de victoire et la route n'existent comme pièce nulle part, seulement comme symbole imprimé

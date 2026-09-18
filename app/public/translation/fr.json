@@ -157,6 +157,9 @@
     "skills": "Compétences",
     "total": "Total"
   },
+  "panel": {
+    "first-player": "Premier joueur"
+  },
   "help": {
     "period": "Période {period}",
     "cost": "Coût",

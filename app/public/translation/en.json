@@ -157,6 +157,9 @@
     "skills": "Skills",
     "total": "Total"
   },
+  "panel": {
+    "first-player": "First player"
+  },
   "help": {
     "period": "Period {period}",
     "cost": "Cost",

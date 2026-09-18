@@ -1,11 +1,16 @@
 import { css } from '@emotion/react'
 import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
-import { playerCoins, playerForce, playerMagic, playerVp } from '@gamepark/greylune/material/PlayerState'
+import { MaterialType } from '@gamepark/greylune/material/MaterialType'
+import { playerCoins, playerForce, playerMagic, playerSeason, playerVp } from '@gamepark/greylune/material/PlayerState'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
+import { RuleId } from '@gamepark/greylune/rules/RuleId'
+import { Season } from '@gamepark/greylune/Season'
 import { StyledPlayerPanel, usePlay, usePlayer, usePlayerId, useRules } from '@gamepark/react-game'
 import { Location, MaterialMoveBuilder } from '@gamepark/rules-api'
-import { ForceGem, GoldCoin, Laurel, MagicGem } from '../images/IconImages'
+import { useTranslation } from 'react-i18next'
+import { FirstPlayerMoon, ForceGem, GoldCoin, Laurel, MagicGem } from '../images/IconImages'
+import { seasonImages } from '../images/SeasonImages'
 import { playerPanelEms, playerPanelScale, playerPanelWidth } from '../locators/TableLayout'
 import { playerColors } from '../PlayerColors'
 
@@ -22,9 +27,15 @@ import { playerColors } from '../PlayerColors'
  * All of them are badged with the symbol the game prints them with rather than with a piece: gold is
  * a heap of 2 coins and no single one of them is the amount, and a marker at badge size reads as a
  * marker and not as what it counts. The coin, the laurel and the 2 gems are the same marks the cards
- * are read with.
+ * are read with. They run in the order the game spends them — gold, Force, Magic — and end on the score.
+ *
+ * Over the second badge, 2 marks say where the player stands in the year: the banner of the season
+ * their marker is in, and the moon of the first player token when they hold it — the moon alone, cut
+ * out of its banner. While the year turns, the banner is Winter for everybody: the markers have no
+ * space for it and stand on Spring all through it.
  */
 export const PlayerPanelContent = ({ location }: { location: Location<PlayerColor, LocationType> }) => {
+  const { t } = useTranslation()
   const rules = useRules<GreyluneRules>()!
   const player = usePlayer<PlayerColor>(location.player)
   const me = usePlayerId<PlayerColor>()
@@ -32,23 +43,85 @@ export const PlayerPanelContent = ({ location }: { location: Location<PlayerColo
   if (!player) return null
 
   const displayedPlayer = (rules.game.view as PlayerColor) ?? me ?? rules.players[0]
+  const season = rules.game.rule?.id === RuleId.Winter ? Season.Winter : playerSeason(rules, player.id)
+  const isFirstPlayer = rules.material(MaterialType.FirstPlayerToken).getItem()?.location.player === player.id
+  const read = () => play(MaterialMoveBuilder.changeView(player.id), { transient: true })
 
   return (
-    <StyledPlayerPanel
-      player={player}
-      activeRing
-      counters={[
-        { image: GoldCoin, value: playerCoins(rules, player.id) },
-        { image: Laurel, value: playerVp(rules, player.id) },
-        { image: ForceGem, value: playerForce(rules, player.id) },
-        { image: MagicGem, value: playerMagic(rules, player.id) }
-      ]}
-      countersPerLine={4}
-      onClick={() => play(MaterialMoveBuilder.changeView(player.id), { transient: true })}
-      css={[panelStyle, colouredPanel(playerColors[player.id]), selectablePanel, player.id === displayedPlayer && displayedPanel]}
-    />
+    <>
+      <StyledPlayerPanel
+        player={player}
+        activeRing
+        counters={[
+          { image: GoldCoin, value: playerCoins(rules, player.id) },
+          { image: ForceGem, value: playerForce(rules, player.id) },
+          { image: MagicGem, value: playerMagic(rules, player.id) },
+          { image: Laurel, value: playerVp(rules, player.id) }
+        ]}
+        countersPerLine={4}
+        onClick={read}
+        css={[panelStyle, colouredPanel(playerColors[player.id]), selectablePanel, player.id === displayedPlayer && displayedPanel]}
+      />
+      <div css={[panelStyle, marksBox]}>
+        <div css={marksStyle} onClick={read}>
+          <span title={t(`help.season-board.${Season[season].toLowerCase()}.name`)} css={markStyle}>
+            <img src={seasonImages[season]} alt="" />
+          </span>
+          {isFirstPlayer && (
+            <span title={t('panel.first-player')} css={markStyle}>
+              <img src={FirstPlayerMoon} alt="" />
+            </span>
+          )}
+        </div>
+      </div>
+    </>
   )
 }
+
+/**
+ * The marks are laid over the panel rather than in it — StyledPlayerPanel draws its own children — in a
+ * box of the panel's own size, which lets every click through but the marks' own. The location lays
+ * its children out in 3D, where 2 siblings on the same plane are hit in no reliable order whatever
+ * the order they are painted in: the box is lifted off the panel by a hair so that the marks, and
+ * their tooltips, are the ones the mouse finds.
+ *
+ * They are centred over the second of the 4 counters: the grid splits the 27 em inside the padding
+ * into 4 columns 0.4 em apart, so that column runs from 7.35 to 13.8 em, and the counters row, 2.5 em
+ * type in a padded badge, rises 4.3 em from the foot of the panel. The marks are as tall as those badges.
+ */
+const marksBox = css`
+  pointer-events: none;
+  transform: translateZ(0.01em);
+`
+
+const marksStyle = css`
+  position: absolute;
+  left: 10.575em;
+  bottom: 4.8em;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  gap: 0.4em;
+  pointer-events: auto;
+  cursor: pointer;
+`
+
+/**
+ * Set in the dark badge the counters are set in, so that neither is read against the player's colour.
+ * The badge carries the tooltip, not the image: the zoom of the table sets `pointer-events: none` on
+ * every image it holds, so an image is never hovered.
+ */
+const markStyle = css`
+  display: flex;
+  padding: 0.3em;
+  border-radius: 0.4em;
+  background-color: rgba(0, 0, 0, 0.7);
+
+  > img {
+    height: 3em;
+    width: auto;
+  }
+`
 
 /**
  * The 2 sizes StyledPlayerPanel would rather derive from one another: `font-size` scales the content —
