@@ -6,6 +6,7 @@ import { MAX_SKILL } from '../Constants'
 import { TriggerType } from '../material/Reaction'
 import { villageGaps } from '../material/Village'
 import { cardsAroundGap } from '../material/Village'
+import { CustomMoveType } from './CustomMoveType'
 import { GreyluneMove, GreyluneRule } from './GreyluneRule'
 import { RuleId } from './RuleId'
 
@@ -15,8 +16,8 @@ import { RuleId } from './RuleId'
  * It takes one gain at a time and either hands it over, or starts the rule that asks the player what
  * to do with it. Whatever it hands over ends by starting this rule again, so the next gain is counted
  * against the state this one leaves. A gain that can give nothing at all is dropped where it stands:
- * a skill whose track is full, a Villager with an empty reserve, a card to straighten with none
- * tilted, a Bonus token with none left.
+ * a Villager with an empty reserve, a card to straighten with none tilted, a Bonus token with none
+ * left. A skill whose track is full is not one of those: it is paid in victory points instead.
  *
  * When there is nothing left, the action is over and the turn passes.
  */
@@ -34,7 +35,8 @@ export class ResolveEffectsRule extends GreyluneRule {
       this.memorize(Memory.Gains, rest)
       const moves = this.startGain(gain)
       if (moves.length) return moves
-      gains = rest
+      // A gain that gave nothing may still have queued something in its stead: a track full at 5.
+      gains = this.gains
     }
     const journey = this.travelDone()
     return journey.length ? journey : this.endOfTurn()
@@ -66,7 +68,8 @@ export class ResolveEffectsRule extends GreyluneRule {
         return villagers.length ? [...villagers, this.startRule(RuleId.ResolveEffects)] : []
       }
       case GainType.Skill:
-        if (this.force >= MAX_SKILL && this.magic >= MAX_SKILL) return []
+        // Both tracks full: either choice would be paid in victory points, so there is nothing to ask.
+        if (this.force >= MAX_SKILL && this.magic >= MAX_SKILL) return [this.customMove(CustomMoveType.GainVp, this.amount(gain.count))]
         this.memorize(Memory.CurrentGain, gain)
         return [this.startRule(RuleId.ChooseSkill)]
       case GainType.Travel:

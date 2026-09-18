@@ -1,5 +1,4 @@
 import { CustomMove, isCustomMoveType } from '@gamepark/rules-api'
-import { MAX_SKILL } from '../Constants'
 import { coins, force, Gain, magic, tellStory, travel, vp } from '../material/Effect'
 import { CustomMoveType } from './CustomMoveType'
 import { GreyluneMove, GreyluneRule } from './GreyluneRule'
@@ -29,21 +28,12 @@ export const specialActions: Gain[][] = [[tellStory([coins(2)], [force()], [vp(2
  */
 export class SpecialActionRule extends GreyluneRule {
   /**
-   * Only what would actually hand something over. A track already at 5 takes nothing more, and a
-   * story needs a story to tell — both would spend the Villager of the year on nothing. The road is
-   * always offered: the Adventurer can always be walked, and staying put is a decision of its own.
+   * Only what would actually hand something over: a story needs a story to tell, or it would spend the
+   * Villager of the year on nothing. The road is always offered: the Adventurer can always be walked,
+   * and staying put is a decision of its own. So is the Magic, which a full track pays in victory points.
    */
   getPlayerMoves(): GreyluneMove[] {
-    return specialActions.flatMap((_, option) => (this.gives(option) ? [this.customMove(CustomMoveType.TakeSpecialAction, option)] : []))
-  }
-
-  private gives(option: SpecialAction): boolean {
-    switch (option) {
-      case SpecialAction.Magic:
-        return this.magic < MAX_SKILL
-      default:
-        return this.canReceive(specialActions[option])
-    }
+    return specialActions.flatMap((gains, option) => (this.canReceive(gains) ? [this.customMove(CustomMoveType.TakeSpecialAction, option)] : []))
   }
 
   onCustomMove(move: CustomMove): GreyluneMove[] {

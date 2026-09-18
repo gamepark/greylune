@@ -231,6 +231,51 @@ describe('The Village', () => {
   })
 })
 
+describe('A skill track at 5', () => {
+  const activateJadeStatue = () => {
+    emptyVillage()
+    placeCard(VillageCard.JadeStatue, 0, 0)
+    const mine = standVillager(BLUE, 0.5, 0)
+    setSeason(BLUE, Season.Summer)
+    startRule(RuleId.Summer)
+    playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === mine)
+  }
+
+  it('pays the Force it has no room for in victory points', () => {
+    emptyVillage()
+    placeCard(VillageCard.Smithy, 0, 0)
+    const mine = standVillager(BLUE, 0.5, 0)
+    setSkill(BLUE, 5, 0)
+    setSeason(BLUE, Season.Summer)
+    startRule(RuleId.Summer)
+    const score = playerVp(rules(), BLUE)
+    playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === mine)
+    expect(playerForce(rules(), BLUE)).toBe(5)
+    expect(playerVp(rules(), BLUE)).toBe(score + 1)
+  })
+
+  it('still offers the choice between Force and Magic, the full track as a victory point', () => {
+    setSkill(BLUE, 5, 2)
+    activateJadeStatue()
+    expect(game.rule!.id).toBe(RuleId.ChooseSkill)
+    const moves = rules().getLegalMoves(BLUE)
+    expect(moves).toHaveLength(2)
+    expect(moves.some(isMoveItemType(MaterialType.MagicMarker))).toBe(true)
+    const score = playerVp(rules(), BLUE)
+    playCustom(CustomMoveType.GainVp)
+    expect(playerVp(rules(), BLUE)).toBe(score + 1)
+    expect(playerMagic(rules(), BLUE)).toBe(2)
+  })
+
+  it('pays a victory point without asking when both tracks are full', () => {
+    setSkill(BLUE, 5, 5)
+    const score = playerVp(rules(), BLUE)
+    activateJadeStatue()
+    expect(game.rule!.id).not.toBe(RuleId.ChooseSkill)
+    expect(playerVp(rules(), BLUE)).toBe(score + 1)
+  })
+})
+
 describe('The score track', () => {
   const gain = (amount: number) => {
     startRule(RuleId.ResolveEffects)

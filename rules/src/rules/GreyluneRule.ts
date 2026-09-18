@@ -2,7 +2,7 @@ import { CustomMove, getEnumValues, isCustomMoveType, Location, Material, Materi
 import { BONUS_TOKEN_SCORES, MAX_SKILL, SCORE_TRACK_SIZE } from '../Constants'
 import { Memory } from '../Memory'
 import { PlayerColor } from '../PlayerColor'
-import { bonusToken, Count, Gain, GainType, gathered, placeVillager, Requirement, RequirementType, SEAL } from '../material/Effect'
+import { bonusToken, Count, Gain, GainType, gathered, placeVillager, Requirement, RequirementType, SEAL, vp } from '../material/Effect'
 import { EncounterCardId, encounterCardData } from '../material/EncounterCard'
 import { EventTile, eventTileData, isFestival } from '../material/EventTile'
 import { LocationType } from '../material/LocationType'
@@ -258,12 +258,27 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
   }
 
   /**
-   * A track stops at 5. Lucan turns one skill into the other, so the window opens on the way back to
-   * the queue, and only when the marker actually moved: a track already full gives nothing.
+   * A track stops at 5, and every point gained past it is 1 victory point instead: the personal board
+   * prints "…1" above the top of each track. That point jumps the queue, like the rest of the gain.
+   * Lucan turns one skill into the other, so the window opens on the way back to the queue, and only
+   * when the marker actually moved.
    */
   gainSkill(marker: SkillMarker, amount: number): GreyluneMove[] {
+    this.pushSkillOverflow(marker, amount)
     const moves = this.moveSkillMarker(marker, amount)
     return moves.length ? [...moves, ...this.skillGained(marker, amount)] : []
+  }
+
+  /** How much of a gain the track has no room for. */
+  skillOverflow(marker: SkillMarker, amount: number): number {
+    const level = this.material(marker).player(this.player).getItem()?.location.x ?? 0
+    return Math.max(0, level + amount - MAX_SKILL)
+  }
+
+  /** What the track has no room for is queued as victory points, to be handed over next. */
+  pushSkillOverflow(marker: SkillMarker, amount: number): void {
+    const overflow = this.skillOverflow(marker, amount)
+    if (overflow > 0) this.pushGains([vp(overflow)], true)
   }
 
   /** The marker moved along its track, up for a gain and down for a cost: the track runs from 0 to 5. */

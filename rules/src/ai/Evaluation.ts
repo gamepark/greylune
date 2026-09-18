@@ -431,10 +431,11 @@ export class Assessment {
     return value
   }
 
+  /** The levels climbed, and 1 victory point for each one the track has no room for. */
   private nextLevels(level: number, count: number): number {
     let value = 0
     for (let step = level; step < Math.min(MAX_SKILL, level + count); step++) value += LEVEL_VALUES[step]
-    return value * this.skillFactor
+    return value * this.skillFactor + Math.max(0, level + count - MAX_SKILL)
   }
 
   /** What a Companion's reaction is worth in a year, given what else the player owns. */
@@ -693,18 +694,19 @@ export class Assessment {
         model.vp += amount(gain.count)
         return 0
       case GainType.Force:
+        model.vp += Math.max(0, model.force + amount(gain.count) - MAX_SKILL)
         model.force = clampSkill(model.force + amount(gain.count))
         return 0
       case GainType.Magic:
+        model.vp += Math.max(0, model.magic + amount(gain.count) - MAX_SKILL)
         model.magic = clampSkill(model.magic + amount(gain.count))
         return 0
       case GainType.Skill: {
         const withForce = cloneModel(model)
-        withForce.force = clampSkill(model.force + amount(gain.count))
+        this.applyGain(withForce, { type: GainType.Force, count: gain.count }, options)
         const withMagic = cloneModel(model)
-        withMagic.magic = clampSkill(model.magic + amount(gain.count))
-        if (this.staticValue(withForce) >= this.staticValue(withMagic)) model.force = withForce.force
-        else model.magic = withMagic.magic
+        this.applyGain(withMagic, { type: GainType.Magic, count: gain.count }, options)
+        Object.assign(model, this.staticValue(withForce) >= this.staticValue(withMagic) ? withForce : withMagic)
         return 0
       }
       case GainType.Villager: {
@@ -1184,7 +1186,7 @@ export class Assessment {
     const options = [
       this.storyValue((specialActions[0][0] as Extract<Gain, { type: GainType.TellStory }>).rewards),
       this.travelValue(1),
-      this.model.magic < MAX_SKILL ? this.effectValue([], [magic()]) : undefined
+      this.effectValue([], [magic()])
     ].filter((value): value is number => value !== undefined)
     return options.length ? Math.max(...options) : undefined
   }

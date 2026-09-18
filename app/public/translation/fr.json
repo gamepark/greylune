@@ -19,6 +19,7 @@
     "end-story": "Terminer le récit",
     "gain-force": "Gagner {count} Force",
     "gain-magic": "Gagner {count} Magie",
+    "gain-vp": "Gagner {count} PV",
     "extra-coins": "Gagner {coins} <coin/> de plus",
     "no-surcharge": "Payer {coins} <coin/> de moins",
     "camp": "Aller au campement",
