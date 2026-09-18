@@ -6,8 +6,7 @@ import { encounterCardData } from '../material/EncounterCard'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { adventurerArea } from '../material/PlayerState'
-import { HeroicQuestArea, heroicQuestAreas, questRequirements, QuestTile } from '../material/QuestTile'
-import { TriggerType } from '../material/Reaction'
+import { HeroicQuestArea, heroicQuestAreas, questRequirements, QuestTile, questTriggers } from '../material/QuestTile'
 import { CustomMoveType } from './CustomMoveType'
 import { EncounterRule } from './EncounterRule'
 import { GreyluneMove } from './GreyluneRule'
@@ -77,7 +76,8 @@ export class ResolveEncounterRule extends EncounterRule {
 
   /**
    * A Quest is taken once by each player, and only by one who still has a marker to commit and can
-   * meet what it asks.
+   * meet what it asks — counting the Force Kael could still take off it, since he is offered before
+   * the Quest is paid for.
    */
   get canTakeQuest(): boolean {
     const space = this.questSpace
@@ -85,7 +85,7 @@ export class ResolveEncounterRule extends EncounterRule {
     if (space === undefined || tile === undefined) return false
     if (!this.material(MaterialType.QuestMarker).id(this.player).location(LocationType.QuestMarkerSpace).length) return false
     if (this.material(MaterialType.QuestMarker).id(this.player).location(LocationType.QuestRewardSpace).locationId(space).length) return false
-    return this.canPay(questRequirements[tile])
+    return this.canPay(questRequirements[tile], this.potentialReduction(questTriggers(tile)))
   }
 
   onCustomMove(move: CustomMove): GreyluneMove[] {
@@ -95,7 +95,7 @@ export class ResolveEncounterRule extends EncounterRule {
       return this.endOfAction()
     }
     if (isCustomMoveType(CustomMoveType.ResolveQuest)(move)) {
-      return this.openReactions([TriggerType.SpendForce], RuleId.ResolveQuest)
+      return this.openReactions(questTriggers(this.questTile!), RuleId.ResolveQuest)
     }
     if (isCustomMoveType(CustomMoveType.ChooseEncounter)(move)) return this.designate(move.data as number)
     return super.onCustomMove(move)

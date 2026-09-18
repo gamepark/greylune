@@ -4,6 +4,7 @@ import { RequirementType } from '../material/Effect'
 import { EncounterCardId, encounterCardData } from '../material/EncounterCard'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
+import { ReactionType } from '../material/Reaction'
 import { adventurerArea } from '../material/PlayerState'
 import { HeroicQuestArea, questRequirements, QuestTile } from '../material/QuestTile'
 import { GreyluneMove, GreyluneRule } from './GreyluneRule'
@@ -18,6 +19,10 @@ import { RuleId } from './RuleId'
  *
  * Two of the nine ask for something that cannot be paid without choosing: an Object to hand over,
  * and 2 Encounters told whatever they are worth. Those are settled here, before the turn moves on.
+ *
+ * The Undeads are offered to a player who could only pay their Force with Kael, so the window opened
+ * before this rule reads {@link outOfReach} and {@link helps} off it, as it does for a card being
+ * activated: while the Quest is out of reach it cannot be passed, and only Kael is offered in it.
  */
 export class ResolveQuestRule extends GreyluneRule {
   get space(): HeroicQuestArea {
@@ -26,6 +31,16 @@ export class ResolveQuestRule extends GreyluneRule {
 
   get tile(): QuestTile {
     return this.material(MaterialType.QuestTile).location(LocationType.QuestTileSpace).locationId(this.space).getItem()!.id as QuestTile
+  }
+
+  /** The Quest cannot be paid for yet: only an answer given before paying can bring it in reach. */
+  get outOfReach(): boolean {
+    return !this.canPay(questRequirements[this.tile])
+  }
+
+  helps(card: number, option: number): boolean {
+    if (this.reactionEffect(card, option).type !== ReactionType.ReduceForceCost) return false
+    return questRequirements[this.tile].some((requirement) => requirement.type === RequirementType.SpendForce && !this.canPay([requirement]))
   }
 
   onRuleStart(): GreyluneMove[] {

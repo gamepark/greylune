@@ -216,6 +216,45 @@ describe('Kael', () => {
       expect(playerVp(rules(), BLUE)).toBe(4)
     })
   })
+
+  describe('on a Heroic Quest', () => {
+    /** BLUE's Adventurer a step away from the Quest of the Hammer, which is the one named. */
+    const questAhead = (quest: QuestTile) => {
+      for (const item of items(MaterialType.QuestTile)) {
+        if (item.location.id === Area.Hammer) item.id = quest
+      }
+      items(MaterialType.Adventurer).find((item) => item.id === BLUE)!.location.id = Area.Bow
+      game.rule = { id: RuleId.Travel, player: BLUE }
+      game.memory[Memory.TravelDistance] = 1
+      play(travelTo(Area.Hammer))
+    }
+
+    const questMarker = () => items(MaterialType.QuestMarker).find((item) => item.id === BLUE && item.location.type === LocationType.QuestRewardSpace)
+
+    it('lets a player with no Force achieve the Undeads', () => {
+      const kael = give(VillageCard.Kael)
+      setSkill(BLUE, 0, 1)
+      questAhead(QuestTile.Undeads)
+      playCustom(CustomMoveType.ResolveQuest)
+      expect(game.rule!.id).toBe(RuleId.Reaction)
+      // Without him the Quest cannot be paid for: the window cannot be passed.
+      expect(rules().getLegalMoves(BLUE)).toHaveLength(1)
+      useReaction(kael)
+      expect(questMarker()?.location.id).toBe(Area.Hammer)
+      expect(playerForce(rules(), BLUE)).toBe(0)
+      expect(playerMagic(rules(), BLUE)).toBe(0)
+    })
+
+    it('is not offered on a Quest that asks for no Force', () => {
+      const kael = give(VillageCard.Kael)
+      setSkill(BLUE, 3, 0)
+      questAhead(QuestTile.Wedding)
+      playCustom(CustomMoveType.ResolveQuest)
+      expect(game.rule!.id).not.toBe(RuleId.Reaction)
+      expect(questMarker()?.location.id).toBe(Area.Hammer)
+      expect(items(MaterialType.VillageCard)[kael].location.rotation).toBeFalsy()
+    })
+  })
 })
 
 describe('Bran', () => {

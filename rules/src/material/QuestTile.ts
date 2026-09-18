@@ -1,5 +1,6 @@
 import { Area } from './Area'
 import { req, Requirement, RequirementType } from './Effect'
+import { TriggerType } from './Reaction'
 
 /** The 9 Heroic Quest tiles, named after the rulebook appendix (p.19): they carry no printed title. */
 export enum QuestTile {
@@ -52,3 +53,10 @@ export const questRequirements: Record<QuestTile, Requirement[]> = {
   [QuestTile.Ransom]: [req(RequirementType.SpendCoins, 6)],
   [QuestTile.Wedding]: [req(RequirementType.SpendVillagers, 2)]
 }
+
+/**
+ * What achieving a Quest can be answered with: Kael, on the only one that asks for Force to be spent.
+ * The Villagers of the Wedding are not Bran's to lower — he answers the player's own cards only.
+ */
+export const questTriggers = (tile: QuestTile): TriggerType[] =>
+  questRequirements[tile].some((requirement) => requirement.type === RequirementType.SpendForce) ? [TriggerType.SpendForce] : []
