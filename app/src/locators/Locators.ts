@@ -39,6 +39,7 @@ import {
   playerCoinsSpot,
   playerVpTokensSpot,
   questMarkerSpot,
+  questRewardFanStep,
   questRewardSpot,
   questTileSpots,
   scoreTrackSpot,
@@ -130,9 +131,13 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     getCoordinates: (location: Location) => questTileSpots[location.id as HeroicQuestArea]
   }),
 
-  /** The markers of the players who achieved a Quest: the first alone, the others sharing a shield. */
+  /** The markers of the players who achieved a Quest: the first alone, the others fanned out on a medal they share. */
   [LocationType.QuestRewardSpace]: new Locator({
-    getCoordinates: (location: Location) => stacked(questRewardSpot(location.id as HeroicQuestArea, location.x === 0), location.z)
+    getCoordinates: (location: Location) => {
+      const spot = questRewardSpot(location.id as HeroicQuestArea, location.x === 0)
+      const rank = location.z ?? 0
+      return { x: spot.x + questRewardFanStep.x * rank, y: spot.y + questRewardFanStep.y * rank, z: (spot.z ?? 0) + questRewardFanStep.z * rank }
+    }
   }),
 
   /**

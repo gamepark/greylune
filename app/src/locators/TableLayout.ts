@@ -269,14 +269,30 @@ export const questTileSpots: Record<HeroicQuestArea, Coordinates> = {
 }
 
 /**
- * The 2 shields drawn under each Quest tile: the left one for the player who achieved it first,
- * which pays more, the right one — marked with an infinity sign — for everybody after them.
+ * The 2 medals drawn on the board under each Quest space, below the plaque printing its 2 rewards: the
+ * left one for the player who achieved it first, which pays more, the right one for everybody after
+ * them. The plaque itself is left showing, so the points a marker stands for can still be read.
  */
-export const questRewardSpot = (area: HeroicQuestArea, first: boolean): Coordinates => ({
-  ...questTileSpots[area],
-  x: questTileSpots[area].x + (first ? -0.815 : 0.815) + markerDrop.quest.x,
-  y: questTileSpots[area].y + 2.47 + markerDrop.quest.y
-})
+const questRewardSpots: Record<HeroicQuestArea, XYCoordinates> = {
+  [Area.Hammer]: { x: 13.805, y: 18.65 },
+  [Area.Swords]: { x: 13.805, y: 10.42 },
+  [Area.Edge]: { x: 6.925, y: 7.59 }
+}
+
+/** From the left medal to the right one. */
+const questRewardSpotsGap = 1.77
+
+export const questRewardSpot = (area: HeroicQuestArea, first: boolean): Coordinates => {
+  const { x, y } = questRewardSpots[area]
+  return onMainBoard(x + (first ? 0 : questRewardSpotsGap) + markerDrop.quest.x, y + markerDrop.quest.y)
+}
+
+/**
+ * Everybody after the first shares the right medal. Piled up like the markers of the score track, only
+ * the one on top would show its colour: each is laid half a marker to the right of the one before it,
+ * so every player who achieved the Quest can be told apart.
+ */
+export const questRewardFanStep: Coordinates = { x: 0.5, y: 0, z: 0.1 }
 
 /**
  * Revealed Encounters lie in a row per Area, and the first card of each row is slotted into the
