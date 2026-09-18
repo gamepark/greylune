@@ -14,10 +14,13 @@ export abstract class SeasonRule extends GreyluneRule {
   /**
    * Taking part is one move and one decision at a time: the Villager walks onto the tile and stands
    * in the middle of it, and what the Event gives is chosen afterwards (see {@link EventRule}). The
-   * tile is only offered while it still has something left to give this player.
+   * tile is only offered while it still has something left to give this player — counting what the
+   * Companions answering its price could still take off it, since they are offered before the choice.
    */
   eventMoves(from: LocationType): GreyluneMove[] {
-    if (this.hasUsedEvent || !this.eventOptions.length) return []
+    const tile = this.eventTile
+    if (this.hasUsedEvent || tile === undefined) return []
+    if (!this.eventOptionsWith(this.potentialReduction(eventTriggers(tile))).length) return []
     return this.villagers.location(from).player(this.player).moveItems(this.eventSpace)
   }
 

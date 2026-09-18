@@ -5,6 +5,7 @@ import { GreyluneSetup } from './GreyluneSetup'
 import { Area } from './material/Area'
 import { force, magic, travel, vp } from './material/Effect'
 import { EncounterCard, EncounterCardId, getEncounterCardPeriod } from './material/EncounterCard'
+import { EventTile } from './material/EventTile'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { playerCoins, playerForce, playerMagic, playerVp } from './material/PlayerState'
@@ -175,6 +176,45 @@ describe('Kael', () => {
     expect(playerVp(rules(), BLUE)).toBe(3)
     expect(playerForce(rules(), BLUE)).toBe(0)
     expect(items(MaterialType.VillageCard)[building].location.type).toBe(LocationType.VillageGrid)
+  })
+
+  describe('on the Event of the year', () => {
+    /** The Tournament turned up as the Event, and BLUE about to take their Spring turn. */
+    const tournament = (strength: number) => {
+      for (const tile of items(MaterialType.EventTile)) tile.location.rotation = tile.id === EventTile.Tournament ? true : undefined
+      if (!items(MaterialType.EventTile).some((tile) => tile.id === EventTile.Tournament)) {
+        items(MaterialType.EventTile).push({ id: EventTile.Tournament, location: { type: LocationType.EventPile, rotation: true } })
+      }
+      setSkill(BLUE, strength, 0)
+      game.rule = { id: RuleId.Spring, player: BLUE }
+    }
+
+    const walkOntoEvent = () =>
+      play(rules().getLegalMoves(BLUE).find((move) => 'location' in move && move.location?.type === LocationType.EventSpace)!)
+
+    it('pays the whole Force of the Event when a player has some', () => {
+      const kael = give(VillageCard.Kael)
+      tournament(1)
+      walkOntoEvent()
+      expect(game.rule!.id).toBe(RuleId.Reaction)
+      useReaction(kael)
+      playCustom(CustomMoveType.TakeEventOption, (option: number) => option === 1)
+      expect(playerForce(rules(), BLUE)).toBe(1)
+      expect(playerVp(rules(), BLUE)).toBe(4)
+    })
+
+    it('lets a player with no Force take part in it', () => {
+      const kael = give(VillageCard.Kael)
+      tournament(0)
+      walkOntoEvent()
+      expect(game.rule!.id).toBe(RuleId.Reaction)
+      // Without him the Villager would have walked onto the tile for nothing: the window cannot be passed.
+      expect(rules().getLegalMoves(BLUE)).toHaveLength(1)
+      useReaction(kael)
+      playCustom(CustomMoveType.TakeEventOption, (option: number) => option === 1)
+      expect(playerForce(rules(), BLUE)).toBe(0)
+      expect(playerVp(rules(), BLUE)).toBe(4)
+    })
   })
 })
 

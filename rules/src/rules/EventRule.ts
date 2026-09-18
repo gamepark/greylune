@@ -1,7 +1,9 @@
 import { CustomMove, isCustomMoveType, isMoveItemType, ItemMove } from '@gamepark/rules-api'
+import { RequirementType } from '../material/Effect'
 import { eventTileData, isFestival } from '../material/EventTile'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
+import { ReactionType } from '../material/Reaction'
 import { CustomMoveType } from './CustomMoveType'
 import { GreyluneMaterial, GreyluneMove, GreyluneRule } from './GreyluneRule'
 
@@ -17,6 +19,10 @@ import { GreyluneMaterial, GreyluneMove, GreyluneRule } from './GreyluneRule'
  *
  * A tile that has only one option left settles it on its own, so a player is never shown a choice
  * they do not have.
+ *
+ * The tile is offered to a player who could only pay for it with Kael, so the window opened as the
+ * Villager walks on reads {@link outOfReach} and {@link helps} off this rule, as it does for a card
+ * being activated: while nothing here is affordable it cannot be passed, and only Kael is offered in it.
  */
 export class EventRule extends GreyluneRule {
   /** The Villager that has walked onto the tile and has taken nothing from it yet. */
@@ -39,6 +45,30 @@ export class EventRule extends GreyluneRule {
     if (tile === undefined || !this.newcomer.length) return []
     return this.eventOptions.map((option) =>
       isFestival(tile) ? this.newcomer.moveItem({ ...this.eventSpace, x: option }) : this.customMove(CustomMoveType.TakeEventOption, option)
+    )
+  }
+
+  /** Nothing on the tile can be paid for yet: only an answer given before choosing can bring it in reach. */
+  get outOfReach(): boolean {
+    return this.eventOptions.length === 0
+  }
+
+  helps(card: number, option: number): boolean {
+    const effect = this.reactionEffect(card, option)
+    switch (effect.type) {
+      case ReactionType.ReduceForceCost:
+        return this.blockedBy(RequirementType.SpendForce)
+      case ReactionType.ReduceVillagerCost:
+        return this.blockedBy(RequirementType.SpendVillagers)
+      default:
+        return false
+    }
+  }
+
+  /** An option the player cannot pay for, and that asks for exactly that. */
+  private blockedBy(type: RequirementType): boolean {
+    return eventTileData[this.eventTile!].abilities.some(
+      (ability) => !this.canPay(ability.requirements) && (ability.requirements ?? []).some((requirement) => requirement.type === type)
     )
   }
 

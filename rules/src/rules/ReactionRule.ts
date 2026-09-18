@@ -3,6 +3,7 @@ import { Memory } from '../Memory'
 import { TriggerType } from '../material/Reaction'
 import { ActivateCardRule } from './ActivateCardRule'
 import { CustomMoveType } from './CustomMoveType'
+import { EventRule } from './EventRule'
 import { GreyluneMove, GreyluneRule, ReactionChoice } from './GreyluneRule'
 import { RuleId } from './RuleId'
 import { TellStoryRule } from './TellStoryRule'
@@ -14,8 +15,9 @@ import { TellStoryRule } from './TellStoryRule'
  * the same journey — and it closes on its own the moment there is nothing, so nobody is ever asked
  * to pass on an empty hand.
  *
- * Two windows cannot be passed: the one opened on a card offered to a player who can only pay for it
- * with a Companion (see {@link ActivateCardRule}), and the one opened on a story that only Seren or a
+ * Three windows cannot be passed: the one opened on a card offered to a player who can only pay for it
+ * with a Companion (see {@link ActivateCardRule}), the one opened on an Event that only Kael can pay
+ * for (see {@link EventRule}), and the one opened on a story that only Seren or a
  * Charisma potion can make heard (see {@link TellStoryRule}). There, answering is the only way on,
  * and only the answers that bring the card or the story within reach are offered.
  */
@@ -39,9 +41,9 @@ export class ReactionRule extends GreyluneRule {
     return this.resumeRule === RuleId.ActivateCard ? new ActivateCardRule(this.game) : undefined
   }
 
-  /** The card being activated or the story about to be told, when nothing can go on without an answer. */
-  get blocked(): ActivateCardRule | TellStoryRule | undefined {
-    const next = this.resumeRule === RuleId.TellStory ? new TellStoryRule(this.game) : this.activation
+  /** The card being activated, the Event being joined or the story about to be told, when nothing can go on without an answer. */
+  get blocked(): ActivateCardRule | EventRule | TellStoryRule | undefined {
+    const next = this.resumeRule === RuleId.TellStory ? new TellStoryRule(this.game) : this.resumeRule === RuleId.Event ? new EventRule(this.game) : this.activation
     return next?.outOfReach ? next : undefined
   }
 

@@ -168,13 +168,21 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
    *
    * A Villager that has walked onto the tile but not yet chosen stands in the middle of it, on no
    * option at all, so it takes nothing away from anybody.
+   *
+   * Before the Villager walks onto the tile, the question is asked with what Kael could still take
+   * off the price (see `SeasonRule.eventMoves`): a player with no Force left may take part in a
+   * Tournament he pays for.
    */
   get eventOptions(): number[] {
+    return this.eventOptionsWith(this.costReduction)
+  }
+
+  eventOptionsWith(reduction: CostReduction): number[] {
     const tile = this.eventTile
     if (tile === undefined) return []
     const taken = this.villagers.location(LocationType.EventSpace).getItems().map((item) => item.location.x)
     return eventTileData[tile].abilities.flatMap((ability, option) =>
-      this.canPay(ability.requirements) && !(isFestival(tile) && taken.includes(option)) ? [option] : []
+      this.canPay(ability.requirements, reduction) && !(isFestival(tile) && taken.includes(option)) ? [option] : []
     )
   }
 
