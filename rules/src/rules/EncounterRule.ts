@@ -40,6 +40,11 @@ export abstract class EncounterRule extends GreyluneRule {
    * which of its two rewards it hands over, and the Vallée of a player standing on 1 Force is only
    * ever asked whether they also send a Villager. What is left to choose is what has to be paid for.
    *
+   * The same goes for a side a Potion makes free: once the Villager the Vallée asks for is waved
+   * away, both sides cost a player standing on 1 Force what one of them does, and taking one alone
+   * would again be taking less for the same price. A way is left out whenever another one takes more
+   * sides and asks nothing this one does not.
+   *
    * Two ways that ask for the same thing and pay the same thing are offered once — the Labyrinthe
    * prints the same half twice, and a player with a single Villager would otherwise be handed two
    * buttons saying exactly the same thing and asked to pick one.
@@ -53,11 +58,25 @@ export abstract class EncounterRule extends GreyluneRule {
     const outcomes = encounterCardData[front].outcomes
     const free = outcomes.map((_, outcome) => outcome).filter((outcome) => this.isFree(front, outcome))
     const subsets = (outcomes.length > 1 ? [[0], [1], [0, 1]] : [[0]]).filter((subset) => free.every((outcome) => subset.includes(outcome)))
-    const ways = subsets.flatMap((subset) =>
+    const ways: ResolveOutcomeData[] = subsets.flatMap((subset) =>
       this.ignoreVariants(front, subset).map((ignored) => (ignored.length ? { card, outcomes: subset, ignored } : { card, outcomes: subset }))
     )
     const offers = ways.map((way) => this.offerOf(front, way))
-    return ways.filter((_, index) => offers.indexOf(offers[index]) === index)
+    return ways
+      .filter((_, index) => offers.indexOf(offers[index]) === index)
+      .filter((way) => !ways.some((other) => this.takesMoreForNoMore(front, other, way)))
+  }
+
+  /** Whether `better` takes every side `way` takes and more, asking for nothing `way` does not. */
+  private takesMoreForNoMore(front: EncounterCard, better: ResolveOutcomeData, way: ResolveOutcomeData): boolean {
+    if (better.outcomes.length <= way.outcomes.length || !way.outcomes.every((outcome) => better.outcomes.includes(outcome))) return false
+    const asked = outcomeRequirements(front, way.outcomes, way.ignored).map((requirement) => JSON.stringify(requirement))
+    return outcomeRequirements(front, better.outcomes, better.ignored).every((requirement) => {
+      const index = asked.indexOf(JSON.stringify(requirement))
+      if (index < 0) return false
+      asked.splice(index, 1)
+      return true
+    })
   }
 
   /**
@@ -82,17 +101,26 @@ export abstract class EncounterRule extends GreyluneRule {
    * The lists of conditions the player may wave away for a subset of sides, and still pay the rest.
    * Without a Potion or Ariok there is exactly one: the empty list.
    *
-   * A favour is only ever offered where it is needed — every condition waved away has to be one the
-   * subset could not be paid for without. Waving away a condition the player meets anyway would spend
-   * the Potion on nothing.
+   * A favour is only ever offered where it is worth something. A price — coins, Villagers, Force or
+   * Magic to spend — always is: waving it away keeps what the player would have paid, whether they
+   * could pay it or not. A "have at least" is only worth waving away when the subset could not be
+   * paid for without it: waving away a condition the player meets anyway would spend the Potion on
+   * nothing.
+   *
+   * And once drunk, a favour is not kept for later — setting off again forgets it. So a list that
+   * leaves a price paid which one more waiver would have kept is not offered: it is the same sides,
+   * for more.
    */
   private ignoreVariants(front: EncounterCard, subset: number[]): Ignored[][] {
-    const all = subset.flatMap((outcome) =>
-      (encounterCardData[front].outcomes[outcome].requirements ?? []).map((_, requirement) => ({ outcome, requirement }))
-    )
-    return subsetsUpTo(all, this.ignores)
+    const printed = encounterCardData[front].outcomes
+    const all = subset.flatMap((outcome) => (printed[outcome].requirements ?? []).map((_, requirement) => ({ outcome, requirement })))
+    const isPrice = (entry: Ignored) => !isCheck(printed[entry.outcome].requirements![entry.requirement])
+    const variants = subsetsUpTo(all, this.ignores)
       .filter((ignored) => this.canPay(outcomeRequirements(front, subset, ignored)))
-      .filter((ignored) => ignored.every((entry) => !this.canPay(outcomeRequirements(front, subset, without(ignored, entry)))))
+      .filter((ignored) =>
+        ignored.every((entry) => isPrice(entry) || !this.canPay(outcomeRequirements(front, subset, without(ignored, entry))))
+      )
+    return variants.filter((ignored) => !variants.some((other) => other.length > ignored.length && ignored.every((entry) => other.includes(entry))))
   }
 
   /**

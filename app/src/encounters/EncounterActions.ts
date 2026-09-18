@@ -39,23 +39,13 @@ export const encounterMoves = (legalMoves: MaterialMove[], card: number): Custom
  * is part of every one of them (see `EncounterRule`), so what the buttons really ask is which prices
  * are paid: at most 2 of them, and never one that hands over less for the same price.
  *
- * A Potion that lets a condition be waived can still split a set of sides into several moves, and
- * which conditions the favour is spent on is not a choice a player would want to be asked — the rule
- * only ever offers to waive what the set cannot be paid for without, so the moves left differ in
- * nothing that matters and the cheapest waiver stands for its set.
+ * A Potion that lets a condition be waived is already spent in them: the rule only offers to waive a
+ * price the player would otherwise pay or a condition they could not meet, never leaves a price paid
+ * that the favour could have kept, and offers once the ways that cost and pay the same. So every move
+ * left says something the others do not, and each one is a button.
  */
-const outcomeMoves = (legalMoves: MaterialMove[], card: number): CustomMove[] => {
-  const bySides = new Map<string, CustomMove>()
-  for (const move of legalMoves) {
-    if (!isResolveOutcome(move) || resolveOutcomeData(move).card !== card) continue
-    const sides = resolveOutcomeData(move).outcomes.join()
-    const best = bySides.get(sides)
-    if (best === undefined || waived(move) < waived(best)) bySides.set(sides, move)
-  }
-  return [...bySides.values()].sort(bySidesRead)
-}
-
-const waived = (move: CustomMove): number => resolveOutcomeData(move).ignored?.length ?? 0
+const outcomeMoves = (legalMoves: MaterialMove[], card: number): CustomMove[] =>
+  legalMoves.filter((move): move is CustomMove => isResolveOutcome(move) && resolveOutcomeData(move).card === card).sort(bySidesRead)
 
 /** One side before the other, and both after either: the order the card reads in. */
 const bySidesRead = (a: CustomMove, b: CustomMove): number => {

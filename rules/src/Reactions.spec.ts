@@ -406,6 +406,38 @@ describe('The Potions', () => {
     expect(rules().material(MaterialType.VillageCard).location(LocationType.Items).player(BLUE).length).toBe(0)
   })
 
+  it('waves away a price the player could have paid, and keeps what it would have cost', () => {
+    const potion = give(VillageCard.InvisibilityPotion, LocationType.Items)
+    // Auberge: 1 Villager for 2 coins.
+    placeEncounter(EncounterCard.Inn, Area.Wand)
+    setCoins(BLUE, 2)
+    game.rule = { id: RuleId.Travel, player: BLUE }
+    game.memory[Memory.TravelDistance] = 1
+    play(travelTo(Area.Wand))
+    useReaction(potion)
+    playCustom(CustomMoveType.ChooseEncounter)
+    expect(playerCoins(rules(), BLUE)).toBe(2)
+    expect(rules().material(MaterialType.EncounterCard).location(LocationType.UntoldStories).player(BLUE).length).toBe(1)
+  })
+
+  it('makes both sides free, and the card is then taken whole without a question', () => {
+    const potion = give(VillageCard.InvisibilityPotion, LocationType.Items)
+    // Vallée: 2 spaces of road for 1 Force, 3 points for 1 Villager.
+    placeEncounter(EncounterCard.Valley, Area.Wand)
+    setSkill(BLUE, 1, 0)
+    const villagers = () => rules().material(MaterialType.Villager).location(LocationType.ActiveVillagers).player(BLUE).length
+    const before = villagers()
+    game.rule = { id: RuleId.Travel, player: BLUE }
+    game.memory[Memory.TravelDistance] = 1
+    play(travelTo(Area.Wand))
+    useReaction(potion)
+    playCustom(CustomMoveType.ChooseEncounter)
+    // The 1 Force meets the left side, the Potion waves away the Villager of the right one.
+    expect(villagers()).toBe(before)
+    expect(playerVp(rules(), BLUE)).toBe(3)
+    expect(game.rule!.id).toBe(RuleId.Travel)
+  })
+
   it('takes a condition off one Encounter and does not follow the road to the next', () => {
     const potion = give(VillageCard.InvisibilityPotion, LocationType.Items)
     // Vallée: 2 spaces of road for 1 Force, and the road leads to a Meute de loups asking 2 Force.
