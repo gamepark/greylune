@@ -582,7 +582,11 @@ describe('An Income token', () => {
   it('is handed over with the Encounter and paid again every Autumn', () => {
     // Moutons: nothing to satisfy, and a token worth 1 coin a year.
     const sheep = placeEncounter(EncounterCard.Sheep, Area.Bow)
-    const token = items(MaterialType.IncomeToken).push({ id: IncomeToken.Income7, location: { type: LocationType.CardIncome, parent: sheep } }) - 1
+    // Revealed in the first row, the card already carries its token: a second one would pay twice. And
+    // when no token was dealt at all, there is no list yet for `items` to hand back and push into.
+    const tokens = (game.items[MaterialType.IncomeToken] ??= [])
+    const onCard = tokens.findIndex((item) => item.location.type === LocationType.CardIncome && item.location.parent === sheep)
+    const token = onCard >= 0 ? onCard : tokens.push({ id: IncomeToken.Income7, location: { type: LocationType.CardIncome, parent: sheep } }) - 1
     items(MaterialType.Adventurer).find((item) => item.id === BLUE)!.location = { type: LocationType.Area, id: Area.Bow }
     startRule(RuleId.ResolveEncounter)
     const coins = playerCoins(rules(), BLUE)
