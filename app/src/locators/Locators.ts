@@ -18,7 +18,7 @@ import { playerPanelLocator } from './PlayerPanelLocator'
 import { VillageGapLocator } from './VillageGapLocator'
 import { VillageGridLocator } from './VillageGridLocator'
 import { VillagerReserveLocator } from './VillagerReserveLocator'
-import { getDisplayedPlayer, hideOtherPlayers } from './DisplayedPlayer'
+import { hideOtherPlayers, isOutOfSight } from './DisplayedPlayer'
 import {
   bonusTokensGap,
   bonusTokensSpot,
@@ -116,10 +116,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
   [LocationType.CardIncome]: new Locator({
     parentItemType: MaterialType.EncounterCard,
     positionOnParent: { x: 79, y: 88 },
-    hide: (item: MaterialItem, context: ItemContext) => {
-      const owner = context.rules.material(MaterialType.EncounterCard).getItem(item.location.parent!).location.player
-      return owner !== undefined && owner !== getDisplayedPlayer(context)
-    }
+    hide: (item: MaterialItem<PlayerColor, LocationType>, context: ItemContext<PlayerColor, MaterialType, LocationType>) => isOutOfSight(item.location, context)
   }),
 
   // ---------------------------------------------------------------- Events and Quests

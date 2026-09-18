@@ -2,7 +2,7 @@ import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { ItemContext, MaterialContext } from '@gamepark/react-game'
-import { MaterialItem } from '@gamepark/rules-api'
+import { Location, MaterialItem } from '@gamepark/rules-api'
 
 type Context = MaterialContext<PlayerColor, MaterialType, LocationType>
 
@@ -21,6 +21,37 @@ export const getDisplayedPlayer = (context: Context): PlayerColor | undefined =>
  */
 export const hideOtherPlayers = (item: MaterialItem<PlayerColor, LocationType>, context: ItemContext<PlayerColor, MaterialType, LocationType>): boolean =>
   item.location.player !== getDisplayedPlayer(context)
+
+/** The places a player's area is made of: all of them lie on the same spots, whoever they belong to. */
+const playerAreaLocations = new Set<LocationType>([
+  LocationType.PlayerBoard,
+  LocationType.Companions,
+  LocationType.Items,
+  LocationType.UntoldStories,
+  LocationType.ToldStories,
+  LocationType.ActiveVillagers,
+  LocationType.StrengthTrack,
+  LocationType.MagicTrack,
+  LocationType.QuestMarkerSpace,
+  LocationType.IncomeTokenSpace,
+  LocationType.SpecialAction,
+  LocationType.BonusTokens,
+  LocationType.PlayerCoins,
+  LocationType.PlayerVpTokens,
+  LocationType.FirstPlayerTokenSpace
+])
+
+/**
+ * Whether a place lies in the area of a player who is not read, so that nothing there is drawn. The
+ * Income token an Encounter carries goes out of sight with its card, when the card lies among the
+ * Stories of such a player.
+ */
+export const isOutOfSight = (location: Location<PlayerColor, LocationType>, context: Context): boolean => {
+  if (location.type === LocationType.CardIncome && location.parent !== undefined) {
+    return isOutOfSight(context.rules.material(MaterialType.EncounterCard).getItem(location.parent).location, context)
+  }
+  return playerAreaLocations.has(location.type) && location.player !== getDisplayedPlayer(context)
+}
 
 /** Which of the 4 seats a player sits in. Fixed for the whole game, so positions never move. */
 export const seatOf = (context: Context, player?: number): number => Math.max(0, context.rules.players.indexOf(player as PlayerColor))

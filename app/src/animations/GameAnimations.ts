@@ -2,13 +2,88 @@ import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { SCORE_TRACK_SIZE } from '@gamepark/greylune/Constants'
-import { ItemContext, MaterialGameAnimations } from '@gamepark/react-game'
-import { Coordinates, isCreateItem, isMoveItem, isMoveItemType, MaterialMove, MoveItem } from '@gamepark/rules-api'
+import { ItemContext, Locator, MaterialContext, MaterialGameAnimations } from '@gamepark/react-game'
+import { Coordinates, isCreateItem, isDeleteItem, isMoveItem, isMoveItemType, Location, MaterialItem, MaterialMove, MoveItem } from '@gamepark/rules-api'
 import { range } from 'es-toolkit'
+import { isOutOfSight, seatOf } from '../locators/DisplayedPlayer'
 import { spread } from '../locators/spread'
-import { scoreTrackSpot, storiesCeiling, storiesGap, storiesMaxGap, storiesPush, toldStoriesSpot, untoldStoriesSpot } from '../locators/TableLayout'
+import { playerPanelSpot, scoreTrackSpot, storiesCeiling, storiesGap, storiesMaxGap, storiesPush, toldStoriesSpot, untoldStoriesSpot } from '../locators/TableLayout'
 
 export const gameAnimations = new MaterialGameAnimations<PlayerColor, MaterialType, LocationType>()
+
+type GreyluneContext = MaterialContext<PlayerColor, MaterialType, LocationType>
+type GreyluneMove = MaterialMove<PlayerColor, MaterialType, LocationType>
+
+/** Where a piece lies before the move, or undefined when the move does not take one from anywhere. */
+const moveOrigin = (move: GreyluneMove, context: GreyluneContext): Location<PlayerColor, LocationType> | undefined =>
+  isMoveItem(move) || isDeleteItem(move) ? context.rules.material(move.itemType).getItem(move.itemIndex).location : undefined
+
+/** Where a piece lies after the move, or undefined when the move does not put one anywhere. */
+const moveDestination = (move: GreyluneMove): Location<PlayerColor, LocationType> | undefined =>
+  isMoveItem(move) ? move.location : isCreateItem(move) ? move.item.location : undefined
+
+/**
+ * Whatever happens inside the area of a player who is not read is not shown: the pieces there are not
+ * drawn, and a piece handled there would fly over the area of the player who is — on the spots its
+ * own lie on. A piece that only comes or goes from there (created, deleted, or moved from one of its
+ * places to another) is simply put where it ends.
+ *
+ * Declared before any other configuration: the first one a move matches is the one it is given.
+ */
+gameAnimations
+  .configure((move, context) => {
+    const origin = moveOrigin(move, context)
+    const destination = moveDestination(move)
+    if (!origin && !destination) return false
+    return (!origin || isOutOfSight(origin, context)) && (!destination || isOutOfSight(destination, context))
+  })
+  .skip()
+
+/** How small a card gets by the time it reaches the panel it goes behind. */
+const CARD_SHRINK = 0.3
+
+/** The pieces that shrink on their way behind a panel: the cards, and the tokens lying on one. */
+const shrinks = (context: ItemContext<PlayerColor, MaterialType, LocationType>): boolean => {
+  if (context.type === MaterialType.VillageCard || context.type === MaterialType.EncounterCard) return true
+  const location = context.rules.material(context.type).getItem(context.index).location
+  return location.type === LocationType.CardSeal || location.type === LocationType.CardIncome
+}
+
+/**
+ * The spot behind a player's panel, under it rather than over it. A card is shrunk on its way there,
+ * so it goes out of sight as something put away rather than as a card sliding under a sheet of paper.
+ *
+ * Only the position and the scale are given, whatever the piece: the frame before it (the piece where
+ * it starts) holds the same position first, so the browser tweens the two component by component.
+ */
+class BehindPanelLocator extends Locator<PlayerColor, MaterialType, LocationType> {
+  getCoordinates(location: Location<PlayerColor, LocationType>, context: GreyluneContext): Coordinates {
+    return { ...playerPanelSpot(seatOf(context, location.player), context.rules.players.length), z: 0 }
+  }
+
+  placeItem(item: MaterialItem<PlayerColor, LocationType>, context: ItemContext<PlayerColor, MaterialType, LocationType>): string[] {
+    const { x = 0, y = 0, z = 0 } = this.getItemCoordinates(item, context)
+    const transforms = [`translate3d(${x}em, ${y}em, ${z}em)`]
+    return shrinks(context) ? [...transforms, `scale(${CARD_SHRINK})`] : transforms
+  }
+}
+
+const behindPanelLocator = new BehindPanelLocator()
+
+/**
+ * A piece taken from the common part of the table — the Villager reserve included, which is drawn for
+ * every player — by a player who is not read. Its place in their area is not drawn, and the spot it
+ * would fly to is the one the same piece of the player who is read lies on: so it goes behind the
+ * panel of its new owner instead, and is gone there.
+ */
+gameAnimations
+  .configure((move, context) => {
+    if (!isMoveItem(move)) return false
+    return !isOutOfSight(moveOrigin(move, context)!, context) && isOutOfSight(move.location, context)
+  })
+  .trajectory((_context, move) => ({
+    waypoints: [{ at: 1, locator: behindPanelLocator, location: { player: (move as MoveItem<PlayerColor, MaterialType, LocationType>).location.player } }]
+  }))
 
 /**
  * The Villager stepping from the middle of the Festival onto the space it settles on.
