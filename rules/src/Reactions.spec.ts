@@ -8,6 +8,7 @@ import { EncounterCard, EncounterCardId, getEncounterCardPeriod } from './materi
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { playerCoins, playerForce, playerMagic, playerVp } from './material/PlayerState'
+import { QuestTile } from './material/QuestTile'
 import { TriggerType } from './material/Reaction'
 import { Seal } from './material/Tokens'
 import { getVillageCardPeriod, VillageCard, VillageCardId } from './material/VillageCard'
@@ -507,6 +508,23 @@ describe('The Potions', () => {
       .filter(isCustomMoveType(CustomMoveType.UseReaction))
       .some((move) => (move.data as { card: number }).card === potion)
     expect(offered).toBe(false)
+  })
+
+  it('lends what a Heroic Quest asks for, as it does for an Encounter', () => {
+    const potion = give(VillageCard.FlyingPotion, LocationType.Items)
+    for (const item of items(MaterialType.QuestTile)) {
+      if (item.location.id === Area.Hammer) item.id = QuestTile.Wraiths
+    }
+    setSkill(BLUE, 0, 3)
+    items(MaterialType.Adventurer).find((item) => item.id === BLUE)!.location.id = Area.Bow
+    game.rule = { id: RuleId.Travel, player: BLUE }
+    game.memory[Memory.TravelDistance] = 1
+    play(travelTo(Area.Hammer))
+    useReaction(potion)
+    playCustom(CustomMoveType.ResolveQuest)
+    const marker = items(MaterialType.QuestMarker).find((item) => item.id === BLUE && item.location.type === LocationType.QuestRewardSpace)
+    expect(marker?.location.id).toBe(Area.Hammer)
+    expect(playerMagic(rules(), BLUE)).toBe(3)
   })
 
   it('is the only card Selia keeps: an Object given up without the Potion symbol is gone', () => {
