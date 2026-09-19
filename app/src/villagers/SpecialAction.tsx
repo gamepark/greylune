@@ -18,12 +18,15 @@ import { VillagerMove } from './SpecialActionMoves'
  * is not asked here (see {@link SpecialActionOption}).
  */
 
-/** The offer to take the action, before anything is said about what for. */
+/**
+ * The offer to take the action, before anything is said about what for. Its label opens to the left,
+ * over the doorway: nobody stands there yet, and to the right lies the column of Objects.
+ */
 export const SpecialActionMenu = ({ moves }: { moves: VillagerMove[] }) => {
   const { t } = useTranslation()
   const selected = useSelectedVillager()
   return (
-    <GreyluneMenuButton {...specialActionBoardOffset} move={moveOfSelectedVillager(moves, selected)} label={t('action.special-action')} labelPosition="right">
+    <GreyluneMenuButton {...specialActionBoardOffset} move={moveOfSelectedVillager(moves, selected)} label={t('action.special-action')} labelPosition="left">
       <VillagerIcon />
     </GreyluneMenuButton>
   )

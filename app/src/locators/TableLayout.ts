@@ -561,21 +561,22 @@ export const sealButtonSpot = (position: number, middle: number): XYCoordinates 
  * neighbours and away from the Village, so the room a button has there is not the room it has in the
  * grid, and the two are free to move apart.
  *
- * As long as the column has room for them all, each card is whole and the buttons are stacked in its
- * middle. Once it tightens up, every card but the top one shows only its lower part, so the buttons go
- * side by side across the middle of that strip (see {@link itemsStep}).
+ * A button sits just above the line of effects printed at the foot of the card, which is the part of
+ * it that stays in sight however tight the column gets, and leaves that line readable. It stands over the effect it offers: in the middle of the line for an Object printing one,
+ * over the left or the right half for one printing 2 on either side of a slash. The buttons carry no
+ * label, the effect right under them saying what they give.
  *
- * `index` is the rank of the button among the `buttons` the card wears.
+ * `ability` is the option the button offers among the `abilities` the card prints. Figures read off
+ * the printed cards: the line of effects starts 0.84 of the way down, and runs between the red band
+ * and the bag in the corner, its 2 halves centred at 0.37 and 0.71 of the width, a single effect at 0.55.
  */
-export const itemActionSpot = (count: number, players: number, index = 0, buttons = 1): XYCoordinates => {
-  const stacked = (index - (buttons - 1) / 2) * itemButtonStep
-  const step = itemsStep(count, players)
-  if (step >= playerCardsGap) return { x: 0, y: stacked }
-  return { x: stacked, y: villageCardSize.height / 2 - step / 2 }
-}
+export const itemActionSpot = (ability = 0, abilities = 1): XYCoordinates => ({
+  x: villageCardSize.width * ((abilities > 1 ? (ability ? 0.71 : 0.37) : 0.55) - 0.5),
+  y: villageCardSize.height * (0.84 - 0.5) - menuButtonSize / 2
+})
 
-/** A little more than a button is wide, so that two of them stand clear of one another. */
-const itemButtonStep = 2.4
+/** How wide a button is (see `GreyluneMenuButton`). */
+const menuButtonSize = 2.2
 
 /**
  * The Seals already spent lie in the strip the bottom-left corner of the table leaves open, between
@@ -702,10 +703,6 @@ const playerColumnTop = (players: number, left: boolean): number => ((left ? pla
 export const playerColumnMaxGap = (players: number, left: boolean): Partial<XYCoordinates> => ({
   y: playerColumnTop(players, left) + villageCardSize.height / 2 - playerAreaSpot.y
 })
-
-/** The step from one Object to the next, which is also the strip each card but the top one shows. */
-export const itemsStep = (count: number, players: number): number =>
-  Math.min(playerCardsGap, Math.abs(playerColumnMaxGap(players, false).y!) / Math.max(1, count - 1))
 
 /** The one board something is slid under, hence the only one lifted off the table: see {@link boardLevel}. */
 export const playerBoardSpot: Coordinates = { ...playerAreaSpot, z: boardLevel }
