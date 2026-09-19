@@ -162,7 +162,8 @@
     "total": "Total"
   },
   "panel": {
-    "first-player": "Premier joueur"
+    "first-player": "Premier joueur",
+    "show-player": "Afficher {player}"
   },
   "help": {
     "period": "Période {period}",

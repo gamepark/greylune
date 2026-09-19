@@ -1,4 +1,6 @@
 import { css } from '@emotion/react'
+import { faEye } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
@@ -6,7 +8,7 @@ import { playerCoins, playerForce, playerMagic, playerSeason, playerVp } from '@
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { RuleId } from '@gamepark/greylune/rules/RuleId'
 import { Season } from '@gamepark/greylune/Season'
-import { StyledPlayerPanel, usePlay, usePlayer, usePlayerId, useRules } from '@gamepark/react-game'
+import { StyledPlayerPanel, usePlay, usePlayer, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { Location, MaterialMoveBuilder } from '@gamepark/rules-api'
 import { useTranslation } from 'react-i18next'
 import { FirstPlayerMoon, ForceGem, GoldCoin, Laurel, MagicGem } from '../images/IconImages'
@@ -33,18 +35,23 @@ import { playerColors } from '../PlayerColors'
  * their marker is in, and the moon of the first player token when they hold it — the moon alone, cut
  * out of its banner. While the year turns, the banner is Winter for everybody: the markers have no
  * space for it and stand on Spring all through it.
+ *
+ * A panel that is not the one read wears an eye on its inner edge, the one facing the area, so that it
+ * reads as something to click and not as a plate of numbers only.
  */
 export const PlayerPanelContent = ({ location }: { location: Location<PlayerColor, LocationType> }) => {
   const { t } = useTranslation()
   const rules = useRules<GreyluneRules>()!
   const player = usePlayer<PlayerColor>(location.player)
   const me = usePlayerId<PlayerColor>()
+  const name = usePlayerName(location.player)
   const play = usePlay()
   if (!player) return null
 
   const displayedPlayer = (rules.game.view as PlayerColor) ?? me ?? rules.players[0]
   const season = rules.game.rule?.id === RuleId.Winter ? Season.Winter : playerSeason(rules, player.id)
   const isFirstPlayer = rules.material(MaterialType.FirstPlayerToken).getItem()?.location.player === player.id
+  const bottomRow = rules.players.indexOf(player.id) < 2
   const read = () => play(MaterialMoveBuilder.changeView(player.id), { transient: true })
 
   return (
@@ -73,6 +80,11 @@ export const PlayerPanelContent = ({ location }: { location: Location<PlayerColo
             </span>
           )}
         </div>
+        {player.id !== displayedPlayer && (
+          <div css={eyeTab(bottomRow, playerColors[player.id])} onClick={read} title={t('panel.show-player', { player: name })}>
+            <FontAwesomeIcon icon={faEye} />
+          </div>
+        )}
       </div>
     </>
   )
@@ -104,6 +116,49 @@ const marksStyle = css`
   gap: 0.4em;
   pointer-events: auto;
   cursor: pointer;
+`
+
+/**
+ * The eye: a half disc growing out of the edge of the panel that faces the player area — over the 2
+ * panels at the foot of the area, under the 2 at its head — where the air between the panels and the
+ * board leaves it room. It has to read as the panel itself bulging out, not as a piece stuck to it, so
+ * nothing marks the joint:
+ * - it is the colour the panel's gradient has on that edge, lit on top, darkened at the foot;
+ * - it runs into the panel as deep as the panel's dark rim is wide and paints over it there, while its
+ *   own rim follows the curve only, so the panel's rim goes round the bulge without a break;
+ * - its shadow is clipped at the joint, where it would otherwise fall back on the panel.
+ */
+const panelRim = 0.15
+
+const eyeTab = (bottomRow: boolean, colour: string) => css`
+  position: absolute;
+  left: 50%;
+  ${bottomRow ? 'bottom' : 'top'}: calc(100% - ${panelRim}em);
+  transform: translateX(-50%);
+  width: 4.7em;
+  height: 2.35em;
+  border-radius: ${bottomRow ? '2.35em 2.35em 0 0' : '0 0 2.35em 2.35em'};
+  border: ${panelRim}em solid rgba(0, 0, 0, 0.55);
+  border-${bottomRow ? 'bottom' : 'top'}: none;
+  box-sizing: border-box;
+  background: linear-gradient(${bottomRow ? 'rgba(255, 255, 255, 0.35)' : 'rgba(0, 0, 0, 0.4)'}, ${bottomRow ? 'rgba(255, 255, 255, 0.35)' : 'rgba(0, 0, 0, 0.4)'}), ${colour};
+  box-shadow: 0 0 0.5em black;
+  clip-path: inset(${bottomRow ? '-1em -1em 0 -1em' : '0 -1em -1em -1em'});
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-${bottomRow ? 'top' : 'bottom'}: 0.3em;
+  pointer-events: auto;
+  cursor: pointer;
+
+  > svg {
+    font-size: 1.5em;
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  &:hover > svg {
+    color: black;
+  }
 `
 
 /**
