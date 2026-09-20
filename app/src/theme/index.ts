@@ -22,7 +22,7 @@ const buttonBase = css`
   color: ${colors.parchmentLight} !important;
   border: 0.12em solid ${colors.gold} !important;
   border-radius: 0.3em !important;
-  padding: 0.35em 0.9em !important;
+  padding: 0.35em 0.9em;
   font-family: ${fontDisplay};
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -112,7 +112,8 @@ const headerButtons = css`
   font-family: ${fontDisplay};
   font-weight: 600;
   letter-spacing: 0.02em;
-  padding: 0 0.5em !important;
+  /* See buttonBase: the countdown of a button that plays by itself needs that padding open. */
+  padding: 0 0.5em;
   cursor: pointer;
   box-shadow: none !important;
   outline: none !important;
