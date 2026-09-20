@@ -192,7 +192,7 @@ export const villagePairGap: Partial<XYCoordinates> = { x: 3 }
  * a little further, so a pile of four still reads as four and the bottom one keeps standing on its
  * space.
  */
-const markerStackStep: Coordinates = { x: -0.1, y: -0.1, z: 0.1 }
+const markerStackStep: Coordinates = { x: -0.3, y: -0.1, z: 0.1 }
 
 export const stacked = (spot: Coordinates, level = 0): Coordinates => ({
   x: spot.x + markerStackStep.x * level,
