@@ -142,6 +142,8 @@ en miroir sur les planches de punchboard.
   | `Move3`, `Move5` | `Item10.jpg` (Crin blanc) | idem |
   | `Move4` | `Building7.jpg` (Guilde des voyageurs II) | idem |
   | `Withdraw` | `boards/SeasonBoard.png` | le villageois retiré, sous sa flèche crochue (colonne de l'Été) |
+  | `NextSeason` | `boards/SeasonBoard.png` | la flèche imprimée entre deux cases de la piste des saisons |
+  | `Story1-3` | `cards/encounter/fr/Encounter5.jpg`, `Encounter3.jpg`, `Encounter2.jpg` | le livre de la valeur de récit, son chiffre imprimé dedans ; les 3 cartes le portent au même endroit (336-439 × 53-184) |
   | `SpendVillager` | `cards/encounter/fr/Encounter2.jpg` (Tigre) | le villageois à payer, son 1 découpé dedans ; le 1 creusé est laissé opaque (seul le fond relié au bord est retiré) |
   | `seasons/Winter` | `boards/SeasonBoard.png` | le flocon de la colonne de l'Hiver, alpha progressif sur la saturation |
 - `pawns/*` : rendus vectoriels extraits de `MEEPLES GREYLUNE.ai` (fiche de fabrication).

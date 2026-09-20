@@ -7,6 +7,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { gameAnimations } from './animations/GameAnimations'
 import { App } from './App'
+import { GreyluneHistory } from './history/GreyluneHistory'
 import { Locators } from './locators/Locators'
 import { Material, MaterialI18n } from './material/Material'
 import { GreyluneScoring } from './scoring/GreyluneScoring'
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')!).render(
       theme={theme}
       ai={GreyluneAI}
       scoring={new GreyluneScoring()}
+      logs={new GreyluneHistory()}
     >
       <App />
     </GameProvider>

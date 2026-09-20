@@ -12,10 +12,14 @@ import Rider2 from './icons/Move2.png'
 import Rider3 from './icons/Move3.png'
 import Rider4 from './icons/Move4.png'
 import Rider5 from './icons/Move5.png'
+import SeasonArrow from './icons/NextSeason.png'
 import DiscardedPotion from './icons/PotionDiscarded.png'
 import SpecialActionHouse from './icons/SpecialAction.png'
 import PaidVillager from './icons/SpendVillager.png'
 import StoryBook from './icons/Story.png'
+import StoryBook1 from './icons/Story1.png'
+import StoryBook2 from './icons/Story2.png'
+import StoryBook3 from './icons/Story3.png'
 import ForceGem from './icons/Strength.png'
 import ForceGemDown from './icons/StrengthDown.png'
 import ForceGemUp from './icons/StrengthUp.png'
@@ -31,6 +35,14 @@ import WithdrawnVillager from './icons/Withdraw.png'
  * a number nobody knows yet — both fall back on the bare rider.
  */
 const riderImages: Partial<Record<number, string>> = { 1: Rider1, 2: Rider2, 3: Rider3, 4: Rider4, 5: Rider5 }
+
+/**
+ * The book each Encounter card prints its story value in, one drawing per value. A story is worth 1,
+ * 2 or 3 and nothing else is ever told (see `TellStoryRule`), so the figure is part of the drawing
+ * the way the distance is part of the rider — and a value named in a sentence is the very mark that
+ * is printed in the corner of the card it is read off.
+ */
+const storyValueImages: Partial<Record<number, string>> = { 1: StoryBook1, 2: StoryBook2, 3: StoryBook3 }
 
 /**
  * The symbols the game means, drawn on their own.
@@ -65,6 +77,10 @@ const riderImages: Partial<Record<number, string>> = { 1: Rider1, 2: Rider2, 3: 
  * parchment with its 1 cut into it, so that the price is a single symbol. Cut out of the Tigre, which
  * prints nothing else.
  *
+ * And one more off the Season board: the arrow it prints between 2 season circles, which is where a
+ * marker goes next. The button that walks it there is laid on that very arrow (see
+ * `ChangeSeasonMenu`), so what the button carries had better be the arrow itself.
+ *
  * And the moon of the first player token, cut out of the banner alone: the whole token is a tall
  * flag on its hill, and at the size of a badge only the moon on it would still be read.
  */
@@ -85,8 +101,10 @@ export {
   PaidVillager,
   Rider,
   riderImages,
+  SeasonArrow,
   SpecialActionHouse,
   StoryBook,
+  storyValueImages,
   TiltArrow,
   VillagerFigure,
   WithdrawnVillager

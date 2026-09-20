@@ -21,8 +21,10 @@ import {
   PaidVillager,
   Rider,
   riderImages,
+  SeasonArrow,
   SpecialActionHouse,
   StoryBook,
+  storyValueImages,
   TiltArrow,
   VillagerFigure,
   WithdrawnVillager
@@ -97,6 +99,16 @@ export const MagicDownIcon = (props: IconProps) => <Icon src={MagicGemDown} {...
 
 /** A story to be told: the book the personal board prints, ticked, for the Tavern it opens. */
 export const StoryIcon = (props: IconProps) => <Icon src={StoryBook} {...props} />
+
+/**
+ * What a story is worth, as the Encounter cards print it: the book with the figure drawn in it (see
+ * {@link storyValueImages}). Like the rider and its distance, it is one symbol rather than a number
+ * beside a mark — so a sentence naming a value writes nothing in front of it.
+ */
+export const StoryValueIcon = ({ value, ...props }: { value: number } & IconProps) => {
+  const src = storyValueImages[value]
+  return src === undefined ? null : <Icon src={src} {...props} />
+}
 
 /**
  * The road, as the box draws it: the rider with the distance cut into it. There is one drawing per
@@ -177,6 +189,13 @@ export const IncomeIcon = (props: IconProps) => <Icon src={IncomeHand} {...props
 export const SpecialActionIcon = (props: IconProps) => <Icon src={SpecialActionHouse} {...props} />
 
 export const SeasonIcon = ({ season, ...props }: { season: Season } & IconProps) => <Icon src={seasonImages[season]} {...props} />
+
+/**
+ * The arrow the Season board prints between 2 of its circles, which is the one thing on it that means
+ * "on to the next one". It is cut out of the board itself, because the button that walks a marker
+ * along is laid on that very arrow (see `ChangeSeasonMenu`).
+ */
+export const NextSeasonIcon = (props: IconProps) => <Icon src={SeasonArrow} {...props} />
 
 /** A Villager taken back out of the Village, as the Summer column of the Season board prints it: the mark of the camp. */
 export const WithdrawIcon = (props: IconProps) => <Icon src={WithdrawnVillager} {...props} />

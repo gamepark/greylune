@@ -482,28 +482,48 @@ const onSeasonBoard = (x: number, y: number): Coordinates => ({
   z: onBoard
 })
 
-const onSeasonSpace = (x: number, y: number): Coordinates => onSeasonBoard(x + markerDrop.season.x, y + markerDrop.season.y)
+const onSeasonSpace = ({ x, y }: XYCoordinates): Coordinates => onSeasonBoard(x + markerDrop.season.x, y + markerDrop.season.y)
 
 /**
  * Winter has no space of its own: it is the year's upkeep, resolved with the marker still on Spring.
  * The 3 circles are the same size but not quite in line: the one of Summer is printed a little lower
  * than its neighbours, so it gets its own height rather than the height of the row.
  */
+const seasonCircles: Record<Season, XYCoordinates> = {
+  [Season.Winter]: { x: 13.26, y: 9.16 },
+  [Season.Spring]: { x: 13.26, y: 9.16 },
+  [Season.Summer]: { x: 17.67, y: 9.38 },
+  [Season.Autumn]: { x: 22.1, y: 9.16 }
+}
+
 export const seasonSpots: Record<Season, Coordinates> = {
-  [Season.Winter]: onSeasonSpace(13.26, 9.16),
-  [Season.Spring]: onSeasonSpace(13.26, 9.16),
-  [Season.Summer]: onSeasonSpace(17.67, 9.38),
-  [Season.Autumn]: onSeasonSpace(22.1, 9.16)
+  [Season.Winter]: onSeasonSpace(seasonCircles[Season.Winter]),
+  [Season.Spring]: onSeasonSpace(seasonCircles[Season.Spring]),
+  [Season.Summer]: onSeasonSpace(seasonCircles[Season.Summer]),
+  [Season.Autumn]: onSeasonSpace(seasonCircles[Season.Autumn])
 }
 
 /**
- * The button that walks a marker on to the next season, measured from the marker itself: right under
- * the pawn's foot, and under the track rather than along it — the spaces on either side are where
- * the markers of the other players stand (see `ChangeSeasonMenu`). The circles are printed all but
- * on the bottom edge of the board, so it hangs a little below the parchment, over the open table:
- * still the width of a Villager clear of the bottom of the table itself.
+ * The 2 arrows the board prints between the circles, each pointing at the season it leads to. They
+ * are painted rather than laid out, and neither sits quite halfway between the circles it joins, so
+ * each is measured on its own.
  */
-export const changeSeasonButtonSpot: XYCoordinates = { x: 2, y: 2 }
+const seasonArrows: Record<Season.Summer | Season.Autumn, XYCoordinates> = {
+  [Season.Summer]: { x: 15.22, y: 9.44 },
+  [Season.Autumn]: { x: 20.28, y: 9.43 }
+}
+
+/**
+ * The button that walks a marker on to the next season, measured from the marker it hangs on: it is
+ * laid on the very arrow the board prints towards that season (see `ChangeSeasonMenu`), so it is
+ * that arrow less the circle the marker is standing on — Spring for the one leading to Summer,
+ * Summer for the one leading to Autumn.
+ */
+export const changeSeasonButtonSpot = (season: Season.Summer | Season.Autumn): XYCoordinates => {
+  const arrow = seasonArrows[season]
+  const circle = seasonCircles[season === Season.Summer ? Season.Spring : Season.Summer]
+  return { x: arrow.x - circle.x - markerDrop.season.x, y: arrow.y - circle.y - markerDrop.season.y }
+}
 
 /** The tents to the left of the Season board, where spent Villagers rest until Autumn. */
 const campOnBoard: XYCoordinates = { x: 5.15, y: 6.05 }

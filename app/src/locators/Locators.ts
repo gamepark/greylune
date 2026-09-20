@@ -109,13 +109,14 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
   [LocationType.EncounterRow]: new EncounterRowLocator(),
 
   /**
-   * The Income token an Encounter carries, laid over the reward half of its scroll, flush with the right
-   * edge of the card. It goes out of sight with its card, when the card lies among the Stories of a
-   * player who is not read.
+   * The Income token an Encounter carries, laid on the picture just above the reward half of its scroll,
+   * flush with the right edge of the card: on the scroll itself it would hide what the card pays besides
+   * the token — the Licorne's Villager among them. It goes out of sight with its card, when the card lies
+   * among the Stories of a player who is not read.
    */
   [LocationType.CardIncome]: new Locator({
     parentItemType: MaterialType.EncounterCard,
-    positionOnParent: { x: 79, y: 88 },
+    positionOnParent: { x: 79, y: 69 },
     hide: (item: MaterialItem<PlayerColor, LocationType>, context: ItemContext<PlayerColor, MaterialType, LocationType>) => isOutOfSight(item.location, context)
   }),
 

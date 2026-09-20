@@ -1,4 +1,15 @@
-import { FailuresDialog, FullscreenDialog, LoadingScreen, MaterialGameSounds, MaterialHeader, MaterialImageLoader, Menu, useGame } from '@gamepark/react-game'
+import { css } from '@emotion/react'
+import {
+  FailuresDialog,
+  FullscreenDialog,
+  LiveLogContainer,
+  LoadingScreen,
+  MaterialGameSounds,
+  MaterialHeader,
+  MaterialImageLoader,
+  Menu,
+  useGame
+} from '@gamepark/react-game'
 import { MaterialGame } from '@gamepark/rules-api'
 import { useEffect, useState } from 'react'
 import { GameDisplay } from './GameDisplay'
@@ -22,6 +33,19 @@ export function App() {
       <Menu />
       <FailuresDialog />
       <FullscreenDialog />
+      {!loading && <LiveLogContainer css={liveLogCss} />}
     </>
   )
 }
+
+/**
+ * The last entries of the journal, shown on the table as they are played: top left, right under the
+ * header. It never takes a click, so the Village cards it may cover stay within reach.
+ */
+const liveLogCss = css`
+  position: absolute;
+  top: 3em;
+  left: 1em;
+  width: 30em;
+  pointer-events: none;
+`

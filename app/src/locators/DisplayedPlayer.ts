@@ -53,5 +53,16 @@ export const isOutOfSight = (location: Location<PlayerColor, LocationType>, cont
   return playerAreaLocations.has(location.type) && location.player !== getDisplayedPlayer(context)
 }
 
+/**
+ * Whose area a place belongs to: the player it names, or — for the Income token an Encounter carries —
+ * the player whose Stories the card lies among.
+ */
+export const areaOwner = (location: Location<PlayerColor, LocationType>, context: Context): PlayerColor | undefined => {
+  if (location.type === LocationType.CardIncome && location.parent !== undefined) {
+    return areaOwner(context.rules.material(MaterialType.EncounterCard).getItem(location.parent).location, context)
+  }
+  return location.player
+}
+
 /** Which of the 4 seats a player sits in. Fixed for the whole game, so positions never move. */
 export const seatOf = (context: Context, player?: number): number => Math.max(0, context.rules.players.indexOf(player as PlayerColor))
