@@ -122,8 +122,14 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
 
   // ---------------------------------------------------------------- Events and Quests
 
-  /** The tile of the year is the one on top of the pile, face up; the years to come show their back. */
-  [LocationType.EventPile]: new DeckLocator({ coordinates: eventSpot }),
+  /**
+   * The tile of the year is the one on top of the pile, face up; the years to come show their back.
+   *
+   * It is read up close like a Village card, and for the same reason: it is printed with what it
+   * asks and what it pays, in a size the table cannot spare. Only the tile of the year grows — the
+   * ones under it are hidden, so the framework leaves a face-down item where it lies.
+   */
+  [LocationType.EventPile]: new DeckLocator({ coordinates: eventSpot, getHoverTransform: cardHoverTransform }),
 
   [LocationType.QuestTileSpace]: new Locator({
     getCoordinates: (location: Location) => questTileSpots[location.id as HeroicQuestArea]
