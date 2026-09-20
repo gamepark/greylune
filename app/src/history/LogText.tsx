@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { ReactElement } from 'react'
 import { Trans } from 'react-i18next'
-import { CoinIcon, EventIcon, ForceIcon, MagicIcon, QuestIcon, SpecialActionIcon, StoryIcon, VillagerIcon, VpIcon, WithdrawIcon } from '../components/Icons'
+import { CoinIcon, EventIcon, ForceIcon, MagicIcon, QuestIcon, StoryIcon, VillagerIcon, VpIcon, WithdrawIcon } from '../components/Icons'
 import { logIconCss } from './logCss'
 
 /**
