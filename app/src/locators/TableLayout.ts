@@ -595,6 +595,26 @@ export const itemActionSpot = (ability = 0, abilities = 1): XYCoordinates => ({
   y: villageCardSize.height * (0.84 - 0.5) - menuButtonSize / 2
 })
 
+/**
+ * Where the buttons a card of the player's own wears while it may answer sit on it (see
+ * `ReactionCardMenu`): the same button in the same place as an Object's own (see {@link itemActionSpot}).
+ * Answering is the same kind of decision as using — the card goes down on its side, or is emptied —
+ * and both cards lie in a column beside the player's board, read at the foot, so both wear their
+ * offer over the line of effects printed there, carrying no label.
+ *
+ * The line starts further right than an Object's: a reaction prints what sets it off in a banner on
+ * the left of the line, and the banner is not what the button offers.
+ *
+ * `option` is the one the button offers among the `options` the card prints. Figures read off the
+ * printed cards: the line starts 0.84 of the way down, like an Object's, and runs between that banner
+ * and the badge in the corner, a single effect centred at 0.63 of the width, the 2 halves Neris prints
+ * on either side of a slash at 0.53 and 0.77.
+ */
+export const reactionActionSpot = (option = 0, options = 1): XYCoordinates => ({
+  x: villageCardSize.width * ((options > 1 ? (option ? 0.77 : 0.53) : 0.63) - 0.5),
+  y: villageCardSize.height * (0.84 - 0.5) - menuButtonSize / 2
+})
+
 /** How wide a button is (see `GreyluneMenuButton`). */
 const menuButtonSize = 2.2
 
