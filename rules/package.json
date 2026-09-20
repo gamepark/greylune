@@ -1,6 +1,6 @@
 {
   "name": "@gamepark/greylune",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The rules of Greylune adapted for Game Park",
   "sideEffects": false,
   "type": "module",
