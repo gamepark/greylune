@@ -1,4 +1,4 @@
-import { TriggerType } from './Reaction'
+import type { TriggerType } from './Reaction'
 import type { IncomeToken } from './Tokens'
 
 /**

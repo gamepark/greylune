@@ -1,5 +1,5 @@
-import { coins, Effect, force, magic, req, Requirement, RequirementType, straighten, travel, villager, vp } from './Effect'
-import { TriggerType } from './Reaction'
+import { coins, Effect, force, magic, req, RequirementType, straighten, travel, villager, vp } from './Effect'
+import { paymentTriggers, TriggerType } from './Reaction'
 
 /** The 6 Event tiles, named after the rulebook appendix (p.14): the tiles carry no printed title. */
 export enum EventTile {
@@ -25,14 +25,6 @@ export type EventTileData = { abilities: Effect[] }
 /** Only the Festival makes its spaces exclusive: everywhere else, several players may do the same. */
 export const isFestival = (tile: EventTile): boolean => tile === EventTile.Festival
 
-/** What a price a player is about to pay can be answered with, kind by kind. */
-const priceTriggers: Partial<Record<RequirementType, TriggerType>> = {
-  [RequirementType.SpendForce]: TriggerType.SpendForce,
-  [RequirementType.SpendVillagers]: TriggerType.SpendVillagers,
-  [RequirementType.Seal]: TriggerType.ActivateSeal,
-  [RequirementType.SealCoins]: TriggerType.ActivateSeal
-}
-
 /**
  * What answering the Event of the year can be about, read off the tile rather than named beside it:
  * whatever any of its options asks to be paid, since which one is taken is only settled once the
@@ -46,14 +38,8 @@ const priceTriggers: Partial<Record<RequirementType, TriggerType>> = {
  * the Village, and this one is being put down.
  */
 export const eventTriggers = (tile: EventTile): TriggerType[] => [
-  ...new Set(eventTileData[tile].abilities.flatMap((ability) => triggersOf(ability.requirements)))
+  ...new Set(eventTileData[tile].abilities.flatMap((ability) => paymentTriggers(ability.requirements)))
 ]
-
-const triggersOf = (requirements: Requirement[] = []): TriggerType[] =>
-  requirements.flatMap((requirement) => {
-    const trigger = priceTriggers[requirement.type]
-    return trigger === undefined ? [] : [trigger]
-  })
 
 export const eventTileData: Record<EventTile, EventTileData> = {
   /** 3 coins, or a card straightened. */

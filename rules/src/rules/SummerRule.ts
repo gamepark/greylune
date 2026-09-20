@@ -5,7 +5,7 @@ import { coins, Requirement, RequirementType, usesSeal } from '../material/Effec
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { playerCompanions, villagersInVillage } from '../material/PlayerState'
-import { ReactionType, TriggerType } from '../material/Reaction'
+import { paymentTriggers, ReactionType, TriggerType } from '../material/Reaction'
 import { Seal } from '../material/Tokens'
 import { cardsAroundGap, gapOf, Slot, villagersAroundSlot } from '../material/Village'
 import { activationTriggers, getVillageCardType, VillageCardId, VillageCardType, villageCardData } from '../material/VillageCard'
@@ -186,9 +186,16 @@ export class SummerRule extends SeasonRule {
     return this.openReactions(new ActivateCardRule(this.game).triggers, RuleId.ActivateCard)
   }
 
+  /**
+   * The option is already named here, so the window is opened on what that very option asks to be
+   * paid and on nothing else: Bran answers the Villagers the Object spends, and Kael is not called
+   * to an Object that spends no Force. What the tilt itself may be answered with comes later, in the
+   * window `UseItemRule` opens once the card is down.
+   */
   private startUseItem(data: { card: number; ability: number }): GreyluneMove[] {
     this.memorize(Memory.ActivatedCard, data.card)
     this.memorize(Memory.Ability, data.ability)
-    return this.openReactions([TriggerType.SpendVillagers, TriggerType.SpendForce], RuleId.UseItem)
+    const ability = villageCardData[this.playerCard(data.card)].abilities![data.ability]
+    return this.openReactions(paymentTriggers(ability.requirements), RuleId.UseItem)
   }
 }

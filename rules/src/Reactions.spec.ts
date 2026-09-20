@@ -178,6 +178,17 @@ describe('Kael', () => {
     expect(items(MaterialType.VillageCard)[building].location.type).toBe(LocationType.VillageGrid)
   })
 
+  it('is not offered on an Object that spends no Force', () => {
+    const kael = give(VillageCard.Kael)
+    // Chantelame: 1 Force or 1 Magic for a tilt, and nothing paid but the tilt itself.
+    const bladechant = give(VillageCard.Bladechant, LocationType.Items)
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+    game.rule = { id: RuleId.Summer, player: BLUE }
+    playCustom(CustomMoveType.UseItem, (data: { card: number; ability: number }) => data.card === bladechant && data.ability === 0)
+    expect(game.rule!.id).not.toBe(RuleId.Reaction)
+    expect(items(MaterialType.VillageCard)[kael].location.rotation).toBeFalsy()
+  })
+
   describe('on the Event of the year', () => {
     /** The Tournament turned up as the Event, and BLUE about to take their Spring turn. */
     const tournament = (strength: number) => {

@@ -1,4 +1,4 @@
-import { Requirement } from './Effect'
+import { Requirement, RequirementType } from './Effect'
 
 /**
  * The moments a Companion or a Potion may step into an action already under way.
@@ -44,6 +44,28 @@ export enum TriggerType {
   /** One of the player's own cards has just been tilted: Isandre. */
   TiltCard
 }
+
+/** What a price a player is about to pay can be answered with, kind by kind. */
+const priceTriggers: Partial<Record<RequirementType, TriggerType>> = {
+  [RequirementType.SpendForce]: TriggerType.SpendForce,
+  [RequirementType.SpendVillagers]: TriggerType.SpendVillagers,
+  [RequirementType.Seal]: TriggerType.ActivateSeal,
+  [RequirementType.SealCoins]: TriggerType.ActivateSeal
+}
+
+/**
+ * What answering a price can be about, read off what it asks to be paid rather than named beside it:
+ * a window is only ever opened on what is actually being spent, so Kael is not offered on an action
+ * that costs no Force, nor Bran on one that costs no Villager.
+ */
+export const paymentTriggers = (requirements: Requirement[] = []): TriggerType[] => [
+  ...new Set(
+    requirements.flatMap((requirement) => {
+      const trigger = priceTriggers[requirement.type]
+      return trigger === undefined ? [] : [trigger]
+    })
+  )
+]
 
 export enum ReactionType {
   /** Elwen: the Adventurer goes that many spaces further. */
