@@ -1,14 +1,14 @@
 import { CustomMove, isCustomMoveType } from '@gamepark/rules-api'
 import { Memory } from '../Memory'
 import { Area } from '../material/Area'
-import { coins, Gain, vp } from '../material/Effect'
-import { encounterCardData } from '../material/EncounterCard'
+import { coins, Gain, RequirementType, vp } from '../material/Effect'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { adventurerArea } from '../material/PlayerState'
 import { HeroicQuestArea, heroicQuestAreas, questRequirements, QuestTile, questTriggers } from '../material/QuestTile'
+import { TriggerType } from '../material/Reaction'
 import { CustomMoveType } from './CustomMoveType'
-import { EncounterRule } from './EncounterRule'
+import { EncounterRule, outcomeRequirements } from './EncounterRule'
 import { GreyluneMove } from './GreyluneRule'
 import { RuleId } from './RuleId'
 
@@ -47,9 +47,10 @@ export class ResolveEncounterRule extends EncounterRule {
    * stopped somewhere that owes them something, and they take it.
    */
   getPlayerMoves(): GreyluneMove[] {
+    const reduction = this.potentialReduction([TriggerType.SpendForce])
     const moves: GreyluneMove[] = this.row
       .getIndexes()
-      .filter((card) => this.encounterMoves(card).length > 0)
+      .filter((card) => this.encounterMoves(card, reduction).length > 0)
       .map((card) => this.customMove(CustomMoveType.ChooseEncounter, card))
     if (this.spaceGain) moves.push(this.customMove(CustomMoveType.SkipEncounter))
     if (this.canTakeQuest) moves.push(this.customMove(CustomMoveType.ResolveQuest))
@@ -102,19 +103,18 @@ export class ResolveEncounterRule extends EncounterRule {
   }
 
   /**
-   * The card is named, and the sides it is paid for are chosen next — unless there is nothing left to
-   * choose *and* nothing left to miss.
+   * The card is named, and the sides it is paid for are chosen next (see {@link ChooseOutcomeRule}).
    *
-   * A single way that takes every side of the card is everything the card has to give, and asks
-   * nothing: every one-sided Encounter is resolved on the spot, and so are the Ours, the Démon and
-   * the Dragon of a player who meets both of their conditions. A single way that leaves a side behind
-   * is still a button, and it is worth the click it costs — it is where the player reads that they
-   * only satisfy half of the card and are only paid half of it.
+   * The Diamant is the one Encounter that spends Force, and Kael answers Force about to be spent: he
+   * is offered as the card is named, before anything is paid — which is also what lets a player with
+   * no Force left take it at all (see {@link ChooseOutcomeRule.outOfReach}).
    */
   private designate(card: number): GreyluneMove[] {
-    const ways = this.encounterMoves(card)
-    if (ways.length === 1 && ways[0].outcomes.length === encounterCardData[this.front(card)].outcomes.length) return this.resolve(ways[0])
     this.memorize(Memory.ResolvedEncounter, card)
-    return [this.startRule(RuleId.ChooseOutcome)]
+    const front = this.front(card)
+    const spendsForce = this.encounterMoves(card, this.potentialReduction([TriggerType.SpendForce])).some((way) =>
+      outcomeRequirements(front, way.outcomes, way.ignored).some((requirement) => requirement.type === RequirementType.SpendForce)
+    )
+    return spendsForce ? this.openReactions([TriggerType.SpendForce], RuleId.ChooseOutcome) : [this.startRule(RuleId.ChooseOutcome)]
   }
 }

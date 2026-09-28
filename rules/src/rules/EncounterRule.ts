@@ -4,7 +4,7 @@ import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { Memory } from '../Memory'
 import { incomeTokenGains } from '../material/Tokens'
-import { GreyluneMaterial, GreyluneMove, GreyluneRule } from './GreyluneRule'
+import { CostReduction, GreyluneMaterial, GreyluneMove, GreyluneRule } from './GreyluneRule'
 import { RuleId } from './RuleId'
 
 /** Which requirement of which side of the card, when a Potion lets one of them be waved away. */
@@ -52,14 +52,17 @@ export abstract class EncounterRule extends GreyluneRule {
    * A way waving nothing away carries no `ignored` at all, rather than an `ignored` worth nothing: a
    * move travels as JSON, which drops a key set to `undefined`, and what comes back would then no
    * longer be equal to the move this list holds — the move the player just chose would be refused.
+   *
+   * `reduction` is what the Force to spend is reckoned against: what Kael has already taken off it,
+   * or — before the card is named — what he still could.
    */
-  protected encounterMoves(card: number): ResolveOutcomeData[] {
+  protected encounterMoves(card: number, reduction: CostReduction = this.costReduction): ResolveOutcomeData[] {
     const front = this.front(card)
     const outcomes = encounterCardData[front].outcomes
     const free = outcomes.map((_, outcome) => outcome).filter((outcome) => this.isFree(front, outcome))
     const subsets = (outcomes.length > 1 ? [[0], [1], [0, 1]] : [[0]]).filter((subset) => free.every((outcome) => subset.includes(outcome)))
     const ways: ResolveOutcomeData[] = subsets.flatMap((subset) =>
-      this.ignoreVariants(front, subset).map((ignored) => (ignored.length ? { card, outcomes: subset, ignored } : { card, outcomes: subset }))
+      this.ignoreVariants(front, subset, reduction).map((ignored) => (ignored.length ? { card, outcomes: subset, ignored } : { card, outcomes: subset }))
     )
     const offers = ways.map((way) => this.offerOf(front, way))
     return ways
@@ -111,14 +114,14 @@ export abstract class EncounterRule extends GreyluneRule {
    * leaves a price paid which one more waiver would have kept is not offered: it is the same sides,
    * for more.
    */
-  private ignoreVariants(front: EncounterCard, subset: number[]): Ignored[][] {
+  private ignoreVariants(front: EncounterCard, subset: number[], reduction: CostReduction): Ignored[][] {
     const printed = encounterCardData[front].outcomes
     const all = subset.flatMap((outcome) => (printed[outcome].requirements ?? []).map((_, requirement) => ({ outcome, requirement })))
     const isPrice = (entry: Ignored) => !isCheck(printed[entry.outcome].requirements![entry.requirement])
     const variants = subsetsUpTo(all, this.ignores)
-      .filter((ignored) => this.canPay(outcomeRequirements(front, subset, ignored)))
+      .filter((ignored) => this.canPay(outcomeRequirements(front, subset, ignored), reduction))
       .filter((ignored) =>
-        ignored.every((entry) => isPrice(entry) || !this.canPay(outcomeRequirements(front, subset, without(ignored, entry))))
+        ignored.every((entry) => isPrice(entry) || !this.canPay(outcomeRequirements(front, subset, without(ignored, entry)), reduction))
       )
     return variants.filter((ignored) => !variants.some((other) => other.length > ignored.length && ignored.every((entry) => other.includes(entry))))
   }

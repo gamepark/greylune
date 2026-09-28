@@ -228,6 +228,45 @@ describe('Kael', () => {
     })
   })
 
+  describe('on the Diamant', () => {
+    /** BLUE's Adventurer a step away from the Hammer, where the Diamant lies alone: 5 coins for 1 Force. */
+    const diamondAhead = (strength: number) => {
+      const diamond = placeEncounter(EncounterCard.Diamond, Area.Hammer)
+      setSkill(BLUE, strength, 0)
+      items(MaterialType.Adventurer).find((item) => item.id === BLUE)!.location.id = Area.Bow
+      game.rule = { id: RuleId.Travel, player: BLUE }
+      game.memory[Memory.TravelDistance] = 1
+      play(travelTo(Area.Hammer))
+      return diamond
+    }
+
+    it('lets a player with no Force take it', () => {
+      const kael = give(VillageCard.Kael)
+      const diamond = diamondAhead(0)
+      const coins = playerCoins(rules(), BLUE)
+      playCustom(CustomMoveType.ChooseEncounter, (card: number) => card === diamond)
+      expect(game.rule!.id).toBe(RuleId.Reaction)
+      // Without him the Diamant cannot be paid for: the window cannot be passed.
+      expect(rules().getLegalMoves(BLUE)).toHaveLength(1)
+      useReaction(kael)
+      expect(playerForce(rules(), BLUE)).toBe(0)
+      expect(playerCoins(rules(), BLUE)).toBe(coins + 5)
+      expect(items(MaterialType.EncounterCard)[diamond].location.type).toBe(LocationType.UntoldStories)
+    })
+
+    it('is offered to a player who could pay the Force, and may be passed', () => {
+      const kael = give(VillageCard.Kael)
+      const diamond = diamondAhead(1)
+      playCustom(CustomMoveType.ChooseEncounter, (card: number) => card === diamond)
+      expect(game.rule!.id).toBe(RuleId.Reaction)
+      expect(reactionsOffered()).toEqual([{ card: kael, option: 0 }])
+      playCustom(CustomMoveType.Pass)
+      expect(playerForce(rules(), BLUE)).toBe(0)
+      expect(items(MaterialType.VillageCard)[kael].location.rotation).toBeFalsy()
+      expect(items(MaterialType.EncounterCard)[diamond].location.type).toBe(LocationType.UntoldStories)
+    })
+  })
+
   describe('on a Heroic Quest', () => {
     /** BLUE's Adventurer a step away from the Quest of the Hammer, which is the one named. */
     const questAhead = (quest: QuestTile) => {
