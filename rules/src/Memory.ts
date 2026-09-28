@@ -48,6 +48,11 @@ export enum Memory {
   StoryTold,
   /** Set by Seren or a Charisma potion: the next Encounter told counts as a 3. */
   StoryBoost,
+  /**
+   * The story has been ended on the tier its Tavern pays off a Seal, and that Seal is now being taken
+   * off the Tavern (see `TellStoryRule`).
+   */
+  StoryOver,
 
   /**
    * What a Potion lends for the length of one adventure: skill levels that count towards the

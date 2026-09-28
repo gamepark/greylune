@@ -1,13 +1,16 @@
-import { CustomMove, isCustomMoveType, ItemMove } from '@gamepark/rules-api'
+import { CustomMove, isCustomMoveType, isMoveItemType, ItemMove } from '@gamepark/rules-api'
 import { MAX_STORY_VALUE } from '../Constants'
 import { Memory } from '../Memory'
-import { Gain } from '../material/Effect'
+import { Gain, readsSeal } from '../material/Effect'
 import { EncounterCardId, encounterCardData } from '../material/EncounterCard'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { ReactionType } from '../material/Reaction'
+import { ReactionType, TriggerType } from '../material/Reaction'
+import { Seal } from '../material/Tokens'
+import { ChooseAbilityData } from './ActivateCardRule'
 import { CustomMoveType } from './CustomMoveType'
 import { GreyluneMove, GreyluneRule } from './GreyluneRule'
+import { RuleId } from './RuleId'
 
 /**
  * A Tavern is open, or the special action of the personal board has been taken (rulebook p.12).
@@ -16,6 +19,11 @@ import { GreyluneMove, GreyluneRule } from './GreyluneRule'
  * the first bonus for a story worth 1, the first two for 2, all of them for 3. A story is never
  * worth more than 3, which is why a card worth nothing cannot be told at all, unless Seren or a
  * Charisma potion makes it a 3.
+ *
+ * The Lion d'or and the Loup gris pay one of their tiers with what a Seal is worth. That Seal is no
+ * price for opening them: it is only picked, and discarded, once the story has ended on that tier or
+ * past it. A Tavern with no Seal left still hears stories, and that tier then pays nothing for it.
+ * Selia answers the Seal as she does on any other card, once it has left the Tavern.
  */
 export class TellStoryRule extends GreyluneRule {
   get rewards(): Gain[][] {
@@ -37,6 +45,25 @@ export class TellStoryRule extends GreyluneRule {
 
   get boosts(): number {
     return this.remind<number>(Memory.StoryBoost) ?? 0
+  }
+
+  /** The tier paid with what the Seal is worth, or -1: the special action and most Taverns have none. */
+  get sealTier(): number {
+    return this.rewards.findIndex((tier) => tier.some(readsSeal))
+  }
+
+  /** The Seals still lying on the Tavern being listened to. */
+  get seals() {
+    return this.material(MaterialType.Seal).location(LocationType.CardSeal).parent(this.remind<number>(Memory.ActivatedCard))
+  }
+
+  get over(): boolean {
+    return !!this.remind<boolean>(Memory.StoryOver)
+  }
+
+  /** The Seal has left the Tavern: all that is left is to name its value, if Selia is there for it. */
+  get sealSpent(): boolean {
+    return this.remind<number>(Memory.SealValue) !== undefined
   }
 
   get untold() {
@@ -81,6 +108,8 @@ export class TellStoryRule extends GreyluneRule {
    * would spend the Villager on nothing.
    */
   getPlayerMoves(): GreyluneMove[] {
+    if (this.sealSpent) return this.costReduction.freeSealValue ? this.sealValueMoves() : []
+    if (this.over) return this.seals.moveItems({ type: LocationType.SealDiscard })
     const moves: GreyluneMove[] = this.tellable.moveItems({ type: LocationType.ToldStories, player: this.player })
     if (this.told.length) moves.push(this.customMove(CustomMoveType.Pass))
     return moves
@@ -99,8 +128,26 @@ export class TellStoryRule extends GreyluneRule {
     return this.reactionEffect(card, option).type === ReactionType.StoryValue3
   }
 
-  /** A card told for nothing is told as a 3: that is what the boost was spent on. */
+  /** Back from Selia's window: the story is paid, unless she was tilted and a value is to be named. */
+  onRuleStart(): GreyluneMove[] {
+    if (this.sealSpent && !this.costReduction.freeSealValue) return this.pay()
+    return []
+  }
+
+  /** Selia has been tilted: any value can be named, the Seal costing nothing here. */
+  private sealValueMoves(): GreyluneMove[] {
+    return [Seal.One, Seal.Two, Seal.Three].map((value) => this.customMove(CustomMoveType.ChooseAbility, { value }))
+  }
+
+  /**
+   * A card told for nothing is told as a 3: that is what the boost was spent on. A Seal taken off the
+   * Tavern is spent at its printed value, and Selia may be tilted to name another.
+   */
   afterItemMove(move: ItemMove<number, MaterialType, LocationType>): GreyluneMove[] {
+    if (isMoveItemType(MaterialType.Seal)(move) && move.location.type === LocationType.SealDiscard) {
+      this.memorize(Memory.SealValue, this.material(MaterialType.Seal).getItem<Seal>(move.itemIndex).id)
+      return this.openReactions([TriggerType.ActivateSeal], RuleId.TellStory)
+    }
     if (move.itemType !== MaterialType.EncounterCard || !('itemIndex' in move)) return []
     const added = this.addedValue(move.itemIndex)
     if (added > this.storyValue(move.itemIndex)) this.memorize(Memory.StoryBoost, this.boosts - 1)
@@ -108,9 +155,26 @@ export class TellStoryRule extends GreyluneRule {
     return []
   }
 
+  /**
+   * Ending the story. When it reaches the tier paid off a Seal and the Tavern still has one, that Seal
+   * is picked first — for the player when all of those left are worth the same.
+   */
   onCustomMove(move: CustomMove): GreyluneMove[] {
+    if (isCustomMoveType(CustomMoveType.ChooseAbility)(move)) {
+      this.memorize(Memory.SealValue, (move.data as ChooseAbilityData).value)
+      return this.pay()
+    }
     if (!isCustomMoveType(CustomMoveType.Pass)(move)) return super.onCustomMove(move)
-    this.pushGains(this.rewards.slice(0, this.value).flat(), true)
+    if (this.sealTier < 0 || this.value <= this.sealTier || !this.seals.length) return this.pay()
+    this.memorize(Memory.StoryOver, true)
+    const values = new Set(this.seals.getItems().map((item) => item.id))
+    return values.size === 1 ? [this.seals.limit(1).moveItem({ type: LocationType.SealDiscard })] : []
+  }
+
+  /** The tiers reached are paid. Without a Seal spent, the one paid off a Seal gives nothing for it. */
+  private pay(): GreyluneMove[] {
+    const gains = this.rewards.slice(0, this.value).flat()
+    this.pushGains(this.sealSpent ? gains : gains.filter((gain) => !readsSeal(gain)), true)
     return this.endOfAction()
   }
 }

@@ -97,8 +97,12 @@ export class GreyluneHistory implements LogDescription<GreyluneMove, PlayerColor
       return this.entry(IncomeTokenLog, move.location.player, 1)
     }
 
-    // A Seal spent on a card being activated; the Seals of a year put away go in one move, and say nothing.
-    if (isMoveItemType(MaterialType.Seal)(move) && move.location.type === LocationType.SealDiscard && ruleId === RuleId.ActivateCard) {
+    // A Seal spent on a card being activated, or at the end of a story; the Seals of a year put away go in one move, and say nothing.
+    if (
+      isMoveItemType(MaterialType.Seal)(move) &&
+      move.location.type === LocationType.SealDiscard &&
+      (ruleId === RuleId.ActivateCard || ruleId === RuleId.TellStory)
+    ) {
       return this.entry(SealLog, player, 1)
     }
 

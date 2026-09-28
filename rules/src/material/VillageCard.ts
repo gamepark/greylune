@@ -219,11 +219,15 @@ export const villageCardData: Record<VillageCard, VillageCardData> = {
   [VillageCard.ScoutsGuildI]: { cost: 0, seals: PLAYERS_MINUS_ONE, abilities: [{ requirements: [seal], gains: [travel(SEAL)] }] },
   /** A Tavern. */
   [VillageCard.RivenOak]: { cost: 0, abilities: [{ gains: [tellStory([vp(2)], [force()], [villager()])] }] },
-  /** A Tavern whose last tier pays what its Seal is worth. */
+  /**
+   * A Tavern whose last tier pays what its Seal is worth. The Seal is no price to open it: it is taken
+   * only by a story that reaches that tier, and a Tavern left without one still hears stories, the
+   * tier merely paying nothing for it (see `TellStoryRule`).
+   */
   [VillageCard.GoldenLion]: {
     cost: 0,
     seals: PLAYERS_MINUS_ONE,
-    abilities: [{ requirements: [seal], gains: [tellStory([coins(4)], [vp(1)], [coins(SEAL)])] }]
+    abilities: [{ gains: [tellStory([coins(4)], [vp(1)], [coins(SEAL)])] }]
   },
   [VillageCard.MagicalSchool]: { cost: 0, seals: PLAYERS_MINUS_ONE, abilities: [{ requirements: [sealCoins], gains: [magic()] }] },
   [VillageCard.Smithy]: { cost: 0, abilities: [{ gains: [force()] }] },
@@ -242,11 +246,11 @@ export const villageCardData: Record<VillageCard, VillageCardData> = {
     ]
   },
   [VillageCard.TownHall]: { cost: 0, seals: PLAYERS_MINUS_ONE, abilities: [{ requirements: [sealCoins], gains: [force(), magic()] }] },
-  /** A Tavern. */
+  /** A Tavern whose second tier pays what its Seal is worth, taken the same way as the Golden Lion's. */
   [VillageCard.SilverWolf]: {
     cost: 0,
     seals: PLAYERS_MINUS_ONE,
-    abilities: [{ requirements: [seal], gains: [tellStory([coins(4)], [vp(SEAL)], [straighten])] }]
+    abilities: [{ gains: [tellStory([coins(4)], [vp(SEAL)], [straighten])] }]
   },
   /** A Tavern. */
   [VillageCard.JollyBoar]: { cost: 0, abilities: [{ gains: [tellStory([vp(3)], [coins(2)], [skill()])] }] },

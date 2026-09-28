@@ -456,7 +456,7 @@
     },
     "104": {
       "name": "Le lion d'or",
-      "ability": "Défaussez un jeton <seal/> et racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 4 <coin/> + 1 PV + autant de <coin/> que la valeur du jeton."
+      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 4 <coin/> + 1 PV + défaussez un jeton <seal/> et gagnez autant de <coin/> que sa valeur."
     },
     "105": {
       "name": "École de magie",
@@ -484,7 +484,7 @@
     },
     "111": {
       "name": "Le loup gris",
-      "ability": "Défaussez un jeton <seal/> et racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 4 <coin/> + autant de PV que la valeur du jeton + redressez une de vos cartes."
+      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 4 <coin/> + défaussez un jeton <seal/> et gagnez autant de PV que sa valeur + redressez une de vos cartes."
     },
     "112": {
       "name": "Le sanglier rieur",

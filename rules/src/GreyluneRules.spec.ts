@@ -10,7 +10,7 @@ import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { playerCoins, playerForce, playerMagic, playerVp } from './material/PlayerState'
 import { QuestTile } from './material/QuestTile'
-import { IncomeToken } from './material/Tokens'
+import { IncomeToken, Seal } from './material/Tokens'
 import { getVillageCardPeriod, PLAYERS_MINUS_ONE, VillageCard, VillageCardId, villageCardData } from './material/VillageCard'
 import { getVillagerPlayer, Villager } from './material/Villager'
 import { getVpToken, VpTokenValue } from './material/VpToken'
@@ -463,6 +463,73 @@ describe('A Tavern', () => {
     expect(offered()).toBe(false)
     untold(EncounterCard.Ambush)
     expect(offered()).toBe(true)
+  })
+
+  describe('that pays a tier off a Seal', () => {
+    let tavern: number
+
+    /** Lays a Seal of that value on the Tavern, and returns its index. */
+    const sealOn = (value: Seal): number => {
+      const seal = items(MaterialType.Seal).findIndex((item) => item.location.type === LocationType.SealStack && item.id === value)
+      items(MaterialType.Seal)[seal].location = { type: LocationType.CardSeal, parent: tavern }
+      return seal
+    }
+
+    /** The Lion d'or pays 4 coins, then 1 point, then as many coins as its Seal is worth. */
+    const openTavern = () => {
+      const mine = standVillager(BLUE, 0.5, 0)
+      setSeason(BLUE, Season.Summer)
+      startRule(RuleId.Summer)
+      playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === mine)
+      expect(game.rule!.id).toBe(RuleId.TellStory)
+    }
+
+    const sealsLeft = () => rules().material(MaterialType.Seal).location(LocationType.CardSeal).parent(tavern).length
+
+    beforeEach(() => {
+      emptyVillage()
+      tavern = placeCard(VillageCard.GoldenLion, 0, 0)
+    })
+
+    it('keeps its Seal when the story stops short of that tier', () => {
+      sealOn(Seal.Three)
+      untold(EncounterCard.Hermit)
+      openTavern()
+      const coins = playerCoins(rules(), BLUE)
+      play(rules().getLegalMoves(BLUE)[0])
+      playCustom(CustomMoveType.Pass)
+      expect(playerCoins(rules(), BLUE)).toBe(coins + 4)
+      expect(playerVp(rules(), BLUE)).toBe(1)
+      expect(sealsLeft()).toBe(1)
+    })
+
+    it('has the Seal picked once the story reaches that tier, and pays what it is worth', () => {
+      sealOn(Seal.One)
+      const three = sealOn(Seal.Three)
+      untold(EncounterCard.Tiger)
+      openTavern()
+      const coins = playerCoins(rules(), BLUE)
+      play(rules().getLegalMoves(BLUE)[0])
+      playCustom(CustomMoveType.Pass)
+      const picks = rules().getLegalMoves(BLUE)
+      expect(picks.every(isMoveItemType(MaterialType.Seal))).toBe(true)
+      expect(picks).toHaveLength(2)
+      play(picks.find((move) => isMoveItemType(MaterialType.Seal)(move) && move.itemIndex === three)!)
+      expect(playerCoins(rules(), BLUE)).toBe(coins + 4 + 3)
+      expect(playerVp(rules(), BLUE)).toBe(1)
+      expect(items(MaterialType.Seal)[three].location.type).toBe(LocationType.SealDiscard)
+      expect(sealsLeft()).toBe(1)
+    })
+
+    it('still hears stories with no Seal left, and pays nothing for that tier', () => {
+      untold(EncounterCard.Tiger)
+      openTavern()
+      const coins = playerCoins(rules(), BLUE)
+      play(rules().getLegalMoves(BLUE)[0])
+      playCustom(CustomMoveType.Pass)
+      expect(playerCoins(rules(), BLUE)).toBe(coins + 4)
+      expect(playerVp(rules(), BLUE)).toBe(1)
+    })
   })
 })
 

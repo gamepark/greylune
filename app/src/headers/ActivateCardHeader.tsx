@@ -27,7 +27,8 @@ export const ActivateCardHeader = () => {
   return <HeaderText code={rule.sealAbility >= 0 ? 'activate-seal' : 'activate-card'} />
 }
 
-const SealValueHeader = () => {
+/** Also the last step of a story told in a Tavern that pays off a Seal (see `TellStoryHeader`). */
+export const SealValueHeader = () => {
   const one = useLegalMove(names(Seal.One))
   const two = useLegalMove(names(Seal.Two))
   const three = useLegalMove(names(Seal.Three))

@@ -727,7 +727,7 @@ export class Assessment {
       case GainType.PlaceVillager:
         return this.active > 0 && this.season !== Season.Autumn ? 1 : 0
       case GainType.TellStory:
-        return options.nested ? 2 : (this.storyValue(gain.rewards) ?? 0)
+        return options.nested ? 2 : (this.storyValue(gain.rewards, options.seal) ?? 0)
       case GainType.Score:
         model.vp += modelScoreValue(model, gain.score)
         return 0
@@ -839,8 +839,8 @@ export class Assessment {
   // ------------------------------------------------------------------ the stories
 
   /** The best story the player could tell for these rewards, or undefined when they have none to tell. */
-  storyValue(rewards: Gain[][]): number | undefined {
-    const key = JSON.stringify(rewards)
+  storyValue(rewards: Gain[][], seal?: number): number | undefined {
+    const key = JSON.stringify([rewards, seal])
     if (this.storyCache.has(key)) return this.storyCache.get(key)
     const cards = this.model.untold.filter((card) => encounterCardData[card].story > 0)
     const seen = new Set<string>()
@@ -858,7 +858,7 @@ export class Assessment {
         model.told.push(card)
       }
       let extra = 0
-      for (const gain of rewards.slice(0, Math.min(MAX_STORY_VALUE, sum)).flat()) extra += this.applyGain(model, gain, { nested: true })
+      for (const gain of rewards.slice(0, Math.min(MAX_STORY_VALUE, sum)).flat()) extra += this.applyGain(model, gain, { nested: true, seal })
       const value = this.staticValue(model) - this.base + extra
       if (best === undefined || value > best) best = value
     }
@@ -938,7 +938,8 @@ export class Assessment {
       let best: { value: number; coins: number } | undefined
       for (const ability of data.abilities ?? []) {
         if (ability.gains?.some((gain) => gain.type === GainType.TellStory) && !this.model.untold.some((c) => encounterCardData[c].story > 0)) continue
-        const seals = usesSeal(ability.requirements) ? [...new Set(this.seals(card))] : [undefined]
+        // A Tavern takes its Seal only for a story that reaches the tier it pays: the best one is counted.
+        const seals = usesSeal(ability.requirements) ? [...new Set(this.seals(card))] : [this.seals(card).length ? Math.max(...this.seals(card)) : undefined]
         for (const seal of seals) {
           const value = this.effectValue(ability.requirements, ability.gains, { price: surcharge, seal })
           if (value === undefined) continue

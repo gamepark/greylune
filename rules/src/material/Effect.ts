@@ -86,7 +86,8 @@ export type Score = { vp: number; per?: Countable; divide?: number; minus?: numb
 /**
  * How much a gain is worth. A number, unless it is read off the Seal token the activation spends:
  * the Scouts guilds travel as far as their Seal is worth, and the Taverns that carry one
- * pay as many coins or points as its value.
+ * pay as many coins or points as its value — on the one tier that reads it, the Seal being taken
+ * only if the story reaches that tier (see `TellStoryRule`).
  */
 export const SEAL = 'seal'
 export type Count = number | typeof SEAL
@@ -110,6 +111,9 @@ export const straighten: Gain = { type: GainType.Straighten }
 export const placeVillager: Gain = { type: GainType.PlaceVillager }
 export const bonusToken: Gain = { type: GainType.BonusToken }
 export const tellStory = (...rewards: Gain[][]): Gain => ({ type: GainType.TellStory, rewards })
+
+/** Whether a gain is worth what the Seal of the activation is worth. */
+export const readsSeal = (gain: Gain): boolean => 'count' in gain && gain.count === SEAL
 export const score = (vp: number, per?: Countable, extra: { divide?: number; minus?: number } = {}): Gain => ({
   type: GainType.Score,
   score: { vp, per, ...extra }
