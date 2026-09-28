@@ -67,10 +67,10 @@
       "player": "{player} part à l'aventure"
     },
     "encounter": {
-      "you-none": "Résolvez une rencontre",
+      "you-none": "Résolvez une rencontre ou <pass>passez</pass>",
       "you-coin": "Résolvez une rencontre ou <take>prenez 1 <coin/></take>",
       "you-vp": "Résolvez une rencontre ou <take>prenez 1 <vp/></take>",
-      "you-quest": "Résolvez une rencontre ou <quest>accomplissez une quête <crown/></quest>",
+      "you-quest": "Résolvez une rencontre, <quest>accomplissez une quête <crown/></quest> ou <pass>passez</pass>",
       "player": "{player} résout une rencontre",
       "nothing": "Vous ne pouvez résoudre ni rencontre ni quête ici."
     },

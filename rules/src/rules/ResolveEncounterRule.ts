@@ -16,10 +16,9 @@ import { RuleId } from './RuleId'
  * The Adventurer has stopped in one of the areas out of Greylune (rulebook p.11).
  *
  * The player resolves one Encounter of the row they stand in, satisfying either of its two sides or
- * both, and slides it over their board as a story not told yet. They may also refuse it — for the
- * coin the Wand area pays, the point the Bow one pays, or the Heroic Quest lying in the three
- * farthest ones — but refusing is only ever taking what the space offers instead, never doing
- * nothing: the Adventurer "résout une Rencontre sur sa case d'arrivée, si possible" (p.11).
+ * both, and slides it over their board as a story not told yet. They may also refuse it: for the
+ * coin the Wand area pays or the point the Bow one pays, and in the three farthest ones for their
+ * Heroic Quest, or for nothing at all.
  *
  * What is chosen here is the card alone. Which of its two sides is paid for is a decision of its
  * own, taken on the card once it has been named (see {@link ChooseOutcomeRule}): a two-sided card
@@ -41,10 +40,10 @@ export class ResolveEncounterRule extends EncounterRule {
   }
 
   /**
-   * Passing is not one of the alternatives, it is what is left to a player who has none: a space
-   * whose Encounters they cannot pay for, which offers neither the coin nor the point, and whose
-   * Heroic Quest — if it carries one — is not theirs to take. Anywhere else the Adventurer has
-   * stopped somewhere that owes them something, and they take it.
+   * Passing is offered wherever the space pays nothing for refusing its Encounters: the three
+   * farthest ones, whose Heroic Quest may be out of reach or not wanted, and whose Encounters the
+   * player is never forced to resolve. Where the space pays a coin or a point, taking it is the way
+   * to refuse, and turning that down too would only be taking less.
    */
   getPlayerMoves(): GreyluneMove[] {
     const reduction = this.potentialReduction([TriggerType.SpendForce])
@@ -54,7 +53,7 @@ export class ResolveEncounterRule extends EncounterRule {
       .map((card) => this.customMove(CustomMoveType.ChooseEncounter, card))
     if (this.spaceGain) moves.push(this.customMove(CustomMoveType.SkipEncounter))
     if (this.canTakeQuest) moves.push(this.customMove(CustomMoveType.ResolveQuest))
-    if (!moves.length) moves.push(this.customMove(CustomMoveType.Pass))
+    if (!this.spaceGain) moves.push(this.customMove(CustomMoveType.Pass))
     return moves
   }
 

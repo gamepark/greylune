@@ -68,10 +68,14 @@ export const SkipEncounterLog = ({ context }: MaterialLogProps<CustomMove>) => {
   return <LogText code="log.skip-encounter" values={{ player }} />
 }
 
-/** A space with nothing the player can pay for, nor anything to pay them instead. */
+/**
+ * A space left without resolving anything: either it had nothing the player could pay for, nor
+ * anything to pay them instead, or they turned down what it had.
+ */
 export const NoEncounterLog = ({ context }: MaterialLogProps<CustomMove>) => {
   const player = usePlayerName(context.game.rule?.player)
-  return <LogText code="log.no-encounter" values={{ player }} />
+  const refused = new ResolveEncounterRule(context.game).getPlayerMoves().length > 1
+  return <LogText code={refused ? 'log.skip-encounter' : 'log.no-encounter'} values={{ player }} />
 }
 
 /**

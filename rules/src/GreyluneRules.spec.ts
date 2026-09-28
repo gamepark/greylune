@@ -626,11 +626,23 @@ describe('The areas', () => {
     expect(inCamp(BLUE)).toBe(2)
   })
 
-  it('never lets a player walk away from an Encounter they can resolve', () => {
+  it('lets a player walk away from an Encounter they can resolve on a Quest space', () => {
     // Moutons: nothing to satisfy, so the row of the purple space is never out of reach.
     placeEncounter(EncounterCard.Sheep, Area.Hammer)
     items(MaterialType.Adventurer).find((item) => item.id === BLUE)!.location = { type: LocationType.Area, id: Area.Hammer }
-    expect(rules().getLegalMoves(BLUE).some(isCustomMoveType(CustomMoveType.Pass))).toBe(false)
+    const moves = rules().getLegalMoves(BLUE)
+    expect(moves.some(isCustomMoveType(CustomMoveType.ChooseEncounter))).toBe(true)
+    expect(moves.some(isCustomMoveType(CustomMoveType.Pass))).toBe(true)
+    playCustom(CustomMoveType.Pass)
+    expect(game.rule!.id).not.toBe(RuleId.ResolveEncounter)
+  })
+
+  it('is refused for the coin or the point where the space pays one, never for nothing', () => {
+    placeEncounter(EncounterCard.Sheep, Area.Wand)
+    items(MaterialType.Adventurer).find((item) => item.id === BLUE)!.location = { type: LocationType.Area, id: Area.Wand }
+    const moves = rules().getLegalMoves(BLUE)
+    expect(moves.some(isCustomMoveType(CustomMoveType.SkipEncounter))).toBe(true)
+    expect(moves.some(isCustomMoveType(CustomMoveType.Pass))).toBe(false)
   })
 
   it('is passed only where the space owes nothing: no Encounter to pay for, and a Quest out of reach', () => {

@@ -19,7 +19,8 @@ import { CoinIcon, QuestIcon, VpIcon } from '../components/Icons'
  * a player who resolves nothing, and only the three farthest ones carry a Heroic Quest — never both,
  * since no space is at once one of the two nearest and one of the three farthest. So there is one
  * sentence per offer rather than a stem with clauses hung off it: a sentence a translator can read
- * whole is a sentence they can put in the order their language wants.
+ * whole is a sentence they can put in the order their language wants. The three farthest ones pay
+ * nothing for refusing, so their sentences offer to pass instead.
  *
  * The moves are the reader's own, so an opponent and a spectator get the one sentence that says what
  * is being waited for, and no buttons at all.
@@ -33,6 +34,7 @@ export const ResolveEncounterHeader = () => {
   const skip = useLegalMove(isCustomMoveType(CustomMoveType.SkipEncounter))
   const quest = useLegalMove(isCustomMoveType(CustomMoveType.ResolveQuest))
   const pass = useLegalMove(isCustomMoveType(CustomMoveType.Pass))
+  const encounter = useLegalMove(isCustomMoveType(CustomMoveType.ChooseEncounter))
   const [undo, canUndo] = useUndo()
   if (me === undefined || me !== activePlayer) return <>{t('header.encounter.player', { player })}</>
   const gain = new ResolveEncounterRule(rules.game).spaceGain
@@ -44,19 +46,19 @@ export const ResolveEncounterHeader = () => {
         components={{
           take: <PlayMoveButton move={skip} />,
           quest: <PlayMoveButton move={quest} />,
+          pass: <PlayMoveButton move={pass} />,
           coin: <CoinIcon />,
           vp: <VpIcon />,
           crown: <QuestIcon />
         }}
       />
       {/*
-       * Passing is legal only where nothing else is (see {@link ResolveEncounterRule.getPlayerMoves}),
-       * so its being offered at all is the news: the player has walked into a space that owes them
-       * nothing. A sentence in the bar would leave them looking for the move it talks about, so it is
-       * said here, over the table, where the only two ways out of it are the two buttons — take the
-       * journey back, or take note and end the action.
+       * When passing is all there is, that is the news: the player has walked into a space that owes
+       * them nothing. A sentence in the bar would leave them looking for the move it talks about, so
+       * it is said here, over the table, where the only two ways out of it are the two buttons — take
+       * the journey back, or take note and end the action.
        */}
-      <Dialog open={!!pass}>
+      <Dialog open={!!pass && !encounter && !quest}>
         <div css={dialogCss}>
           <p>{t('header.encounter.nothing')}</p>
           <div css={buttonsCss}>
