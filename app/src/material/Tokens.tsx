@@ -103,12 +103,12 @@ export class BonusTokenDescription extends TokenDescription<PlayerColor, Materia
 
   /** The offer to spend it, while the score has just crossed 8 or 20 (see {@link ChooseBonusButton}). */
   getItemMenu(
-    item: MaterialItem<PlayerColor, LocationType, BonusToken>,
+    _item: MaterialItem<PlayerColor, LocationType, BonusToken>,
     context: ItemContext<PlayerColor, MaterialType, LocationType>,
     legalMoves: MaterialMove<PlayerColor, MaterialType, LocationType>[]
   ) {
     const move = chooseBonusMove(legalMoves, context.index)
-    return move && <ChooseBonusButton token={item.id} move={move} />
+    return move && <ChooseBonusButton move={move} />
   }
 }
 

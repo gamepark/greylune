@@ -131,7 +131,7 @@
       "player": "{player} choisit Force ou Magie"
     },
     "bonus": {
-      "you": "Choisissez un jeton Bonus",
+      "you": "Bonus : gagnez",
       "player": "{player} choisit un jeton Bonus"
     },
     "reaction": {
