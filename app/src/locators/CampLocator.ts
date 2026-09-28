@@ -2,9 +2,9 @@ import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { DropAreaDescription, ItemContext, PileLocator } from '@gamepark/react-game'
-import { Location, MaterialMove } from '@gamepark/rules-api'
+import { CustomMove, Location, MaterialMove } from '@gamepark/rules-api'
 import { CampArea } from '../villagers/CampAction'
-import { isGainCoinsAround, villagerActionData } from '../villagers/VillagerActions'
+import { bestCoinsMove, isGainCoinsAround, villagerActionData } from '../villagers/VillagerActions'
 import { campAreaSize, campRadius, campSpot } from './TableLayout'
 
 /**
@@ -24,6 +24,15 @@ class CampAreaDescription extends DropAreaDescription<PlayerColor, MaterialType,
     context: ItemContext<PlayerColor, MaterialType, LocationType>
   ): boolean {
     return isGainCoinsAround(move) && context.type === MaterialType.Villager && villagerActionData(move).villager === context.index
+  }
+
+  /** A Villager between 2 cards is dropped for the fuller purse, the one the area offers. */
+  getBestDropMove(
+    moves: MaterialMove<PlayerColor, MaterialType, LocationType>[],
+    _location: Location<PlayerColor, LocationType>,
+    context: ItemContext<PlayerColor, MaterialType, LocationType>
+  ): MaterialMove<PlayerColor, MaterialType, LocationType> {
+    return bestCoinsMove(moves as CustomMove[], context.rules) ?? moves[0]
   }
 }
 
