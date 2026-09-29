@@ -169,13 +169,14 @@ export class SummerRule extends SeasonRule {
 
   /**
    * The Villager leaves the Village for the camp and the card it designates pays a coin for every
-   * other Villager still standing around it. Neris may make that two more.
+   * other Villager still standing around it. Neris may make that two more, but only when there is a
+   * card to take coins from: a Villager with no neighbour left is taken back for nothing.
    */
   private gainCoinsAround(data: VillagerActionData): GreyluneMove[] {
     if (data.card !== undefined) this.pushGains([coins(this.surcharge(data.card))])
     return [
       this.villagers.index(data.villager).moveItem({ type: LocationType.Camp }),
-      ...this.openReactions([TriggerType.GainCoinsAround], RuleId.ResolveEffects)
+      ...this.openReactions(data.card === undefined ? [] : [TriggerType.GainCoinsAround], RuleId.ResolveEffects)
     ]
   }
 

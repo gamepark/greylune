@@ -419,6 +419,17 @@ describe('Neris', () => {
     useReaction(neris, 0)
     expect(playerCoins(rules(), BLUE)).toBe(3)
   })
+
+  it('has no coins to add to a Villager taken back with no card left beside it', () => {
+    give(VillageCard.Neris)
+    const villager = standVillager(BLUE, 0.5, 1)
+    setCoins(BLUE, 0)
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+    game.rule = { id: RuleId.Summer, player: BLUE }
+    playCustom(CustomMoveType.GainCoinsAround, (data: { villager: number; card?: number }) => data.villager === villager)
+    expect(game.rule!.id).not.toBe(RuleId.Reaction)
+    expect(playerCoins(rules(), BLUE)).toBe(0)
+  })
 })
 
 describe('Dorian', () => {
