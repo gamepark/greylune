@@ -1,5 +1,5 @@
 import { Memory } from '../Memory'
-import { Gain, GainType } from '../material/Effect'
+import { Count, Gain, GainType } from '../material/Effect'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { MAX_SKILL } from '../Constants'
@@ -7,8 +7,12 @@ import { TriggerType } from '../material/Reaction'
 import { villageGaps } from '../material/Village'
 import { cardsAroundGap } from '../material/Village'
 import { CustomMoveType } from './CustomMoveType'
-import { GreyluneMove, GreyluneRule } from './GreyluneRule'
+import { GreyluneMove, GreyluneRule, SkillMarker } from './GreyluneRule'
 import { RuleId } from './RuleId'
+
+type CountedGain = Extract<Gain, { count: Count }>
+
+const skillMarker = (type: GainType): SkillMarker => (type === GainType.Force ? MaterialType.StrengthMarker : MaterialType.MagicMarker)
 
 /**
  * The queue of everything the action still owes the player.
@@ -60,9 +64,8 @@ export class ResolveEffectsRule extends GreyluneRule {
     if (move) return [move]
     switch (gain.type) {
       case GainType.Force:
-        return this.gainSkill(MaterialType.StrengthMarker, this.amount(gain.count))
       case GainType.Magic:
-        return this.gainSkill(MaterialType.MagicMarker, this.amount(gain.count))
+        return this.gainSkills(this.withOtherSkill(gain).map(({ type, count }) => [skillMarker(type), this.amount(count)]))
       case GainType.Villager: {
         const villagers = this.gainVillagers(this.amount(gain.count))
         return villagers.length ? [...villagers, this.startRule(RuleId.ResolveEffects)] : []
@@ -98,6 +101,18 @@ export class ResolveEffectsRule extends GreyluneRule {
         // away, queueing what it pays in its stead (see `ResolveEncounterRule`).
         return []
     }
+  }
+
+  /**
+   * Force and Magic next to each other in the queue go up together: an effect printing both gems
+   * raises both at once, and Lucan is then offered once, for whichever of the two the player answers.
+   */
+  private withOtherSkill(gain: CountedGain): CountedGain[] {
+    const [next, ...rest] = this.gains
+    const other = gain.type === GainType.Force ? GainType.Magic : GainType.Force
+    if (next?.type !== other || !('count' in next)) return [gain]
+    this.memorize(Memory.Gains, rest)
+    return [gain, next]
   }
 
   get tiltedCards() {

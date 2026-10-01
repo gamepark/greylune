@@ -3,6 +3,7 @@ import {
   Countable,
   Effect,
   force,
+  GainType,
   magic,
   req,
   Requirement,
@@ -453,7 +454,12 @@ export const villageCardData: Record<VillageCard, VillageCardData> = {
   }),
   /** The paladin. */
   [VillageCard.Lucan]: companion({
-    reaction: reaction([TriggerType.GainSkill], [tilt], { type: ReactionType.OtherSkill }),
+    reaction: reaction(
+      [TriggerType.GainSkill],
+      [tilt],
+      { type: ReactionType.OtherSkill, skill: GainType.Force },
+      { type: ReactionType.OtherSkill, skill: GainType.Magic }
+    ),
     score: { vp: 1, per: Countable.LowestSkill }
   }),
   /** The cleric. */

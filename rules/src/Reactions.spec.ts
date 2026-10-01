@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { GreyluneRules } from './GreyluneRules'
 import { GreyluneSetup } from './GreyluneSetup'
 import { Area } from './material/Area'
-import { force, magic, travel, vp } from './material/Effect'
+import { force, GainType, magic, travel, vp } from './material/Effect'
 import { EncounterCard, EncounterCardId, getEncounterCardPeriod } from './material/EncounterCard'
 import { EventTile } from './material/EventTile'
 import { LocationType } from './material/LocationType'
@@ -154,6 +154,36 @@ describe('Lucan', () => {
     expect(game.rule!.id).toBe(RuleId.Reaction)
     useReaction(lucan)
     expect(playerForce(rules(), BLUE)).toBe(1)
+  })
+
+  it('is offered once for Force and Magic gained together, the player picking which to answer', () => {
+    const lucan = give(VillageCard.Lucan)
+    owe(force(1), magic(1))
+    expect(playerForce(rules(), BLUE)).toBe(1)
+    expect(playerMagic(rules(), BLUE)).toBe(1)
+    expect(reactionsOffered()).toEqual([
+      { card: lucan, option: 0 },
+      { card: lucan, option: 1 }
+    ])
+    useReaction(lucan, 1)
+    expect(playerForce(rules(), BLUE)).toBe(1)
+    expect(playerMagic(rules(), BLUE)).toBe(2)
+    expect(game.rule!.id).not.toBe(RuleId.Reaction)
+  })
+
+  it('stood back up by Isandre, may answer either skill of a double gain again', () => {
+    const lucan = give(VillageCard.Lucan)
+    const isandre = give(VillageCard.Isandre)
+    owe(force(1), magic(1))
+    useReaction(lucan, 0)
+    useReaction(isandre)
+    expect(reactionsOffered()).toEqual([
+      { card: lucan, option: 0 },
+      { card: lucan, option: 1 }
+    ])
+    useReaction(lucan, 1)
+    expect(playerForce(rules(), BLUE)).toBe(2)
+    expect(playerMagic(rules(), BLUE)).toBe(2)
   })
 })
 
@@ -691,6 +721,8 @@ describe('Isandre', () => {
     useReaction(isandre)
     expect(items(MaterialType.VillageCard)[horn].location.rotation).toBe(false)
     expect(items(MaterialType.VillageCard)[isandre].location.rotation).toBe(true)
+    // An Object stood back up is ready for another action, not used twice in this one.
+    expect(game.rule!.id).not.toBe(RuleId.Reaction)
     expect(playerVp(rules(), BLUE)).toBe(3)
   })
 
@@ -725,6 +757,294 @@ describe('Isandre', () => {
     useReaction(isandre)
     expect(items(MaterialType.VillageCard)[dorian].location.rotation).toBe(false)
     expect(items(MaterialType.VillageCard)[isandre].location.rotation).toBe(true)
+  })
+})
+
+/**
+ * What a card stood back up by Isandre gives when it answers the same moment again, case by case as
+ * the authors settled it: twice what it gives, or nothing worth putting it down for.
+ */
+describe('A reaction answered twice through Isandre', () => {
+  /** A window opened on these moments, as the rule that opens it would leave it. */
+  const openWindow = (...triggers: TriggerType[]) => {
+    game.rule = { id: RuleId.Reaction, player: BLUE }
+    game.memory[Memory.Trigger] = triggers
+    game.memory[Memory.Resume] = RuleId.ResolveEffects
+  }
+
+  /** BLUE's Adventurer arriving in the Wand area, where this Encounter lies alone. */
+  const arriveAt = (front: EncounterCard) => {
+    placeEncounter(front, Area.Wand)
+    game.rule = { id: RuleId.Travel, player: BLUE }
+    game.memory[Memory.TravelDistance] = 1
+    play(travelTo(Area.Wand))
+  }
+
+  const isTilted = (card: number) => items(MaterialType.VillageCard)[card].location.rotation === true
+
+  it('Elwen: 4 more spaces of road', () => {
+    const elwen = give(VillageCard.Elwen)
+    const isandre = give(VillageCard.Isandre)
+    openWindow(TriggerType.Travel)
+    game.memory[Memory.Resume] = RuleId.Travel
+    game.memory[Memory.TravelDistance] = 1
+    useReaction(elwen)
+    useReaction(isandre)
+    useReaction(elwen)
+    expect(game.rule!.id).toBe(RuleId.Travel)
+    expect(rules().remind(Memory.TravelDistance)).toBe(5)
+  })
+
+  it('Dorian: the Object 2 coins cheaper, and 2 victory points', () => {
+    const dorian = give(VillageCard.Dorian)
+    const isandre = give(VillageCard.Isandre)
+    // Magic ring, 7 coins.
+    const item = placeCard(VillageCard.MagicRing, 0, 0)
+    const villager = standVillager(BLUE, 0.5, 0)
+    setCoins(BLUE, 7)
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+    game.rule = { id: RuleId.Summer, player: BLUE }
+    playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === villager)
+    useReaction(dorian)
+    useReaction(isandre)
+    useReaction(dorian)
+    expect(items(MaterialType.VillageCard)[item].location.type).toBe(LocationType.Items)
+    expect(playerCoins(rules(), BLUE)).toBe(2)
+    expect(playerVp(rules(), BLUE)).toBe(2)
+  })
+
+  it('Kael: not offered again once the Force asked is paid for', () => {
+    const kael = give(VillageCard.Kael)
+    const isandre = give(VillageCard.Isandre)
+    // Hall of the heroes: 1 Force for 3 victory points, or 1 Force and 1 Magic for 7.
+    placeCard(VillageCard.HallOfTheHeroes, 0, 0)
+    const villager = standVillager(BLUE, 0.5, 0)
+    setSkill(BLUE, 1, 0)
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+    game.rule = { id: RuleId.Summer, player: BLUE }
+    playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === villager)
+    useReaction(kael)
+    useReaction(isandre)
+    expect(game.rule!.id).not.toBe(RuleId.Reaction)
+    expect(isTilted(kael)).toBe(false)
+  })
+
+  /** BLUE using the Horn: 3 victory points for a tilt and a Villager, or 5 for a tilt and 2 Villagers. */
+  const blowHorn = (ability: number) => {
+    const horn = give(VillageCard.Horn, LocationType.Items)
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+    game.rule = { id: RuleId.Summer, player: BLUE }
+    playCustom(CustomMoveType.UseItem, (data: { card: number; ability: number }) => data.card === horn && data.ability === ability)
+  }
+
+  const activeVillagers = () => rules().material(MaterialType.Villager).location(LocationType.ActiveVillagers).player(BLUE).length
+
+  it('Bran: spares both Villagers the Horn asks for', () => {
+    const bran = give(VillageCard.Bran)
+    const isandre = give(VillageCard.Isandre)
+    const before = activeVillagers()
+    blowHorn(1)
+    useReaction(bran)
+    useReaction(isandre)
+    expect(reactionsOffered()).toEqual([{ card: bran, option: 0 }])
+    useReaction(bran)
+    expect(activeVillagers()).toBe(before)
+    expect(playerVp(rules(), BLUE)).toBe(5)
+  })
+
+  it('Bran: not offered again on a price of a single Villager', () => {
+    const bran = give(VillageCard.Bran)
+    const isandre = give(VillageCard.Isandre)
+    blowHorn(0)
+    useReaction(bran)
+    useReaction(isandre)
+    expect(game.rule!.id).not.toBe(RuleId.Reaction)
+    expect(isTilted(bran)).toBe(false)
+    expect(playerVp(rules(), BLUE)).toBe(3)
+  })
+
+  it('Neris: 4 more coins out of the Villager taken back for the coins around a card', () => {
+    const neris = give(VillageCard.Neris)
+    const isandre = give(VillageCard.Isandre)
+    placeCard(VillageCard.MagicRing, 1, 1)
+    const villager = standVillager(BLUE, 0.5, 1)
+    standVillager(ORANGE, 1.5, 1)
+    setCoins(BLUE, 0)
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+    game.rule = { id: RuleId.Summer, player: BLUE }
+    playCustom(CustomMoveType.GainCoinsAround, (data: { villager: number; card?: number }) => data.villager === villager && data.card !== undefined)
+    useReaction(neris, 0)
+    useReaction(isandre)
+    useReaction(neris, 0)
+    expect(playerCoins(rules(), BLUE)).toBe(5)
+  })
+
+  describe('Lucan', () => {
+    it('answers the skill first gained a second time', () => {
+      const lucan = give(VillageCard.Lucan)
+      const isandre = give(VillageCard.Isandre)
+      owe(force(1))
+      useReaction(lucan, 1)
+      useReaction(isandre)
+      expect(reactionsOffered()).toEqual([{ card: lucan, option: 1 }])
+      useReaction(lucan, 1)
+      expect(playerForce(rules(), BLUE)).toBe(1)
+      expect(playerMagic(rules(), BLUE)).toBe(2)
+    })
+
+    it('or answers the skill he has just given', () => {
+      const lucan = give(VillageCard.Lucan)
+      const isandre = give(VillageCard.Isandre)
+      owe(force(1))
+      useReaction(lucan, 1)
+      useReaction(isandre)
+      playCustom(CustomMoveType.Pass)
+      // The Magic Lucan gave is a gain of its own, which he may answer.
+      expect(game.rule!.id).toBe(RuleId.Reaction)
+      expect(reactionsOffered()).toEqual([{ card: lucan, option: 0 }])
+      useReaction(lucan, 0)
+      expect(playerForce(rules(), BLUE)).toBe(2)
+      expect(playerMagic(rules(), BLUE)).toBe(1)
+    })
+  })
+
+  it('Mira: a second active Villager placed in the Village', () => {
+    const mira = give(VillageCard.Mira)
+    const isandre = give(VillageCard.Isandre)
+    placeCard(VillageCard.Smithy, 0, 0)
+    openWindow(TriggerType.TravelDone)
+    useReaction(mira)
+    useReaction(isandre)
+    useReaction(mira)
+    expect(game.rule!.id).toBe(RuleId.PlaceVillager)
+    expect(rules().remind(Memory.Gains)).toEqual([{ type: GainType.PlaceVillager }])
+  })
+
+  describe('Ariok', () => {
+    it('waves away both conditions of an Encounter that prints two, for 2 Magic', () => {
+      const ariok = give(VillageCard.Ariok)
+      const isandre = give(VillageCard.Isandre)
+      setSkill(BLUE, 0, 2)
+      // Vallée: 1 Force on one side, 1 Villager on the other.
+      arriveAt(EncounterCard.Valley)
+      useReaction(ariok)
+      useReaction(isandre)
+      expect(reactionsOffered()).toEqual([{ card: ariok, option: 0 }])
+      useReaction(ariok)
+      expect(rules().remind(Memory.IgnoredConditions)).toBe(2)
+      expect(playerMagic(rules(), BLUE)).toBe(0)
+    })
+
+    it('is not offered again on an Encounter that prints a single condition', () => {
+      const ariok = give(VillageCard.Ariok)
+      const isandre = give(VillageCard.Isandre)
+      setSkill(BLUE, 0, 2)
+      // Meute de loups: 2 Force, and nothing else.
+      arriveAt(EncounterCard.PackOfWolves)
+      useReaction(ariok)
+      useReaction(isandre)
+      expect(game.rule!.id).toBe(RuleId.ResolveEncounter)
+      expect(isTilted(ariok)).toBe(false)
+      expect(playerMagic(rules(), BLUE)).toBe(1)
+    })
+  })
+
+  it('Selia: not offered again, a Seal is only named once', () => {
+    const selia = give(VillageCard.Selia)
+    const isandre = give(VillageCard.Isandre)
+    activateMagicalSchool(5, Seal.Three)
+    useReaction(selia)
+    useReaction(isandre)
+    expect(game.rule!.id).toBe(RuleId.ActivateCard)
+    expect(isTilted(selia)).toBe(false)
+  })
+
+  /** Le Grand Arbre, worth nothing, waiting to be told by a player with Seren or a Charisma potion. */
+  const storyToTell = () => {
+    const tree = encounter(EncounterCard.WorldTree)
+    items(MaterialType.EncounterCard)[tree].location = { type: LocationType.UntoldStories, player: BLUE }
+    game.rule = { id: RuleId.ResolveEffects, player: BLUE }
+    game.memory[Memory.Gains] = [{ type: GainType.TellStory, rewards: [[vp(2)], [force()], [vp(5)]] }]
+    play(rules().startRule(RuleId.ResolveEffects) as MaterialMove)
+  }
+
+  it('Seren: not offered again, a story is worth 3 at most', () => {
+    const seren = give(VillageCard.Seren)
+    const isandre = give(VillageCard.Isandre)
+    storyToTell()
+    useReaction(seren)
+    useReaction(isandre)
+    expect(game.rule!.id).toBe(RuleId.TellStory)
+    expect(isTilted(seren)).toBe(false)
+  })
+
+  describe('a Potion', () => {
+    it('emptied, is gone: Isandre has nothing to stand back up', () => {
+      const potion = give(VillageCard.StrengthPotion, LocationType.Items)
+      const isandre = give(VillageCard.Isandre)
+      arriveAt(EncounterCard.PackOfWolves)
+      useReaction(potion)
+      expect(game.rule!.id).toBe(RuleId.ResolveEncounter)
+      expect(isTilted(isandre)).toBe(false)
+    })
+
+    it('kept by Selia: a Potion of strength lends 4 Force', () => {
+      give(VillageCard.Selia)
+      const potion = give(VillageCard.StrengthPotion, LocationType.Items)
+      const isandre = give(VillageCard.Isandre)
+      arriveAt(EncounterCard.PackOfWolves)
+      useReaction(potion)
+      useReaction(isandre)
+      useReaction(potion)
+      expect(rules().remind(Memory.TemporaryForce)).toBe(4)
+    })
+
+    it('kept by Selia: a Flying potion lends 2 Force and 2 Magic', () => {
+      give(VillageCard.Selia)
+      const potion = give(VillageCard.FlyingPotion, LocationType.Items)
+      const isandre = give(VillageCard.Isandre)
+      arriveAt(EncounterCard.PackOfWolves)
+      useReaction(potion)
+      useReaction(isandre)
+      useReaction(potion)
+      expect(rules().remind(Memory.TemporaryForce)).toBe(2)
+      expect(rules().remind(Memory.TemporaryMagic)).toBe(2)
+    })
+
+    it('kept by Selia: a Potion of invisibility waves away both conditions of the Encounter', () => {
+      give(VillageCard.Selia)
+      const potion = give(VillageCard.InvisibilityPotion, LocationType.Items)
+      const isandre = give(VillageCard.Isandre)
+      arriveAt(EncounterCard.Valley)
+      useReaction(potion)
+      useReaction(isandre)
+      useReaction(potion)
+      expect(rules().remind(Memory.IgnoredConditions)).toBe(2)
+    })
+
+    it('kept by Selia: a Potion of endurance places a second Villager', () => {
+      give(VillageCard.Selia)
+      const potion = give(VillageCard.EndurancePotion, LocationType.Items)
+      const isandre = give(VillageCard.Isandre)
+      placeCard(VillageCard.Smithy, 0, 0)
+      openWindow(TriggerType.TravelDone)
+      useReaction(potion)
+      useReaction(isandre)
+      useReaction(potion)
+      expect(game.rule!.id).toBe(RuleId.PlaceVillager)
+      expect(rules().remind(Memory.Gains)).toEqual([{ type: GainType.PlaceVillager }])
+    })
+
+    it('kept by Selia: a Charisma potion is not drunk again, as Seren is not tilted again', () => {
+      give(VillageCard.Selia)
+      const potion = give(VillageCard.CharismaPotion, LocationType.Items)
+      const isandre = give(VillageCard.Isandre)
+      storyToTell()
+      useReaction(potion)
+      useReaction(isandre)
+      expect(game.rule!.id).toBe(RuleId.TellStory)
+      expect(isTilted(potion)).toBe(false)
+    })
   })
 })
 
@@ -802,6 +1122,10 @@ describe('Every Companion', () => {
       // Opened on every trigger at once: what matters is that the card knows how to answer.
       game.memory[Memory.Trigger] = getEnumValues(TriggerType)
       game.memory[Memory.LastTilted] = give(VillageCard.Horn, LocationType.Items)
+      game.memory[Memory.SkillsGained] = [GainType.Force, GainType.Magic]
+      // An Encounter printing a condition where the Adventurer stands, for Ariok to wave away.
+      placeEncounter(EncounterCard.PackOfWolves, Area.Wand)
+      items(MaterialType.Adventurer).find((item) => item.id === BLUE)!.location.id = Area.Wand
       const choices = rules()
         .getLegalMoves(BLUE)
         .filter((move) => isCustomMoveType(CustomMoveType.UseReaction)(move))

@@ -1,6 +1,11 @@
 import { CustomMove, isCustomMoveType } from '@gamepark/rules-api'
 import { Memory } from '../Memory'
-import { TriggerType } from '../material/Reaction'
+import { Requirement, RequirementType } from '../material/Effect'
+import { EncounterCardId, encounterCardData } from '../material/EncounterCard'
+import { eventTileData } from '../material/EventTile'
+import { questRequirements } from '../material/QuestTile'
+import { ReactionType, TriggerType } from '../material/Reaction'
+import { villageCardData } from '../material/VillageCard'
 import { ActivateCardRule } from './ActivateCardRule'
 import { ChooseOutcomeRule } from './ChooseOutcomeRule'
 import { CustomMoveType } from './CustomMoveType'
@@ -66,7 +71,58 @@ export class ReactionRule extends GreyluneRule {
 
   get choices(): ReactionChoice[] {
     const blocked = this.blocked
-    return this.reactionChoices(this.triggers).filter((choice) => !blocked || blocked.helps(choice.card, choice.option))
+    return this.reactionChoices(this.triggers).filter(
+      (choice) => this.lowersPrice(choice) && (!blocked || blocked.helps(choice.card, choice.option))
+    )
+  }
+
+  /**
+   * Kael and Bran are only offered while the price still asks for more than they have already taken
+   * off it. Stood back up by Isandre, they may take off a second Force or a second Villager, which is
+   * only ever worth it on a price of 2: Snowmane and the Horn, for Bran.
+   */
+  private lowersPrice({ card, option }: ReactionChoice): boolean {
+    switch (this.reactionEffect(card, option).type) {
+      case ReactionType.ReduceForceCost:
+        return (this.costReduction.force ?? 0) < this.mostAsked(RequirementType.SpendForce)
+      case ReactionType.ReduceVillagerCost:
+        return (this.costReduction.villagers ?? 0) < this.mostAsked(RequirementType.SpendVillagers)
+      default:
+        return true
+    }
+  }
+
+  /** The most of a kind any of the prices the window was opened on asks for, or no limit when it was opened on none. */
+  private mostAsked(type: RequirementType): number {
+    const prices = this.prices
+    if (!prices) return Infinity
+    return Math.max(0, ...prices.map((price) => price.filter((requirement) => requirement.type === type).reduce((total, requirement) => total + (requirement.count ?? 1), 0)))
+  }
+
+  /**
+   * What the action waiting on the window may be paid with, one entry per option still open: every
+   * option of a Building or of the Event, since none is chosen yet, the option of the Object already
+   * named, the Quest, and both sides of the Encounter together, which is the most it can ask.
+   */
+  private get prices(): Requirement[][] | undefined {
+    switch (this.resumeRule) {
+      case RuleId.ActivateCard:
+        return (this.activation!.data.abilities ?? []).map((ability) => ability.requirements ?? [])
+      case RuleId.UseItem: {
+        const card = this.remind<number>(Memory.ActivatedCard)
+        return [villageCardData[this.playerCard(card)].abilities![this.remind<number>(Memory.Ability)].requirements ?? []]
+      }
+      case RuleId.Event:
+        return this.eventTile === undefined ? [] : eventTileData[this.eventTile].abilities.map((ability) => ability.requirements ?? [])
+      case RuleId.ResolveQuest:
+        return [questRequirements[new ResolveQuestRule(this.game).tile]]
+      case RuleId.ChooseOutcome: {
+        const card = this.encounterCards.getItem<EncounterCardId>(new ChooseOutcomeRule(this.game).card)
+        return [encounterCardData[card.id.front!].outcomes.flatMap((outcome) => outcome.requirements ?? [])]
+      }
+      default:
+        return undefined
+    }
   }
 
   getPlayerMoves(): GreyluneMove[] {
@@ -76,14 +132,20 @@ export class ReactionRule extends GreyluneRule {
     ]
   }
 
+  /**
+   * What is left to answer with is read once the answer has been played out, and not before: the
+   * card just spent only goes down with the moves it returns, and the card Isandre stands back up
+   * only comes back with them — it may then answer the same moment again.
+   */
+  onRuleStart(): GreyluneMove[] {
+    return this.choices.length ? [] : this.close()
+  }
+
   onCustomMove(move: CustomMove): GreyluneMove[] {
     if (isCustomMoveType(CustomMoveType.Pass)(move)) return this.close()
     if (!isCustomMoveType(CustomMoveType.UseReaction)(move)) return super.onCustomMove(move)
     const { card, option } = move.data as { card: number; option: number }
-    const moves = this.useReaction(card, option)
-    // The card just spent is gone from the window, though the move that puts it down is not played yet.
-    const left = this.choices.filter((choice) => choice.card !== card)
-    return left.length ? moves : [...moves, ...this.close()]
+    return [...this.useReaction(card, option), this.startRule(RuleId.Reaction)]
   }
 
   private close(): GreyluneMove[] {

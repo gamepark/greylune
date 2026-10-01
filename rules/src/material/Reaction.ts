@@ -1,4 +1,4 @@
-import { Requirement, RequirementType } from './Effect'
+import { GainType, Requirement, RequirementType } from './Effect'
 
 /**
  * The moments a Companion or a Potion may step into an action already under way.
@@ -88,7 +88,7 @@ export enum ReactionType {
   ExtraCoins,
   /** Neris: the Villagers standing around the card being activated are not paid for. */
   NoSurcharge,
-  /** Lucan: gaining one skill gains the other. */
+  /** Lucan: gaining one skill gains 1 of the other. */
   OtherSkill,
   /** Selia: the Seal is spent at whichever value the player names. */
   ChooseSealValue,
@@ -104,6 +104,7 @@ export enum ReactionType {
 export type ReactionEffect = { trigger?: TriggerType } & (
   | { type: ReactionType.ExtraTravel | ReactionType.ExtraCoins; count: number }
   | { type: ReactionType.TemporarySkills; force?: number; magic?: number }
+  | { type: ReactionType.OtherSkill; skill: SkillGain }
   | {
       type:
         | ReactionType.PlaceVillager
@@ -113,15 +114,19 @@ export type ReactionEffect = { trigger?: TriggerType } & (
         | ReactionType.ReduceVillagerCost
         | ReactionType.CheaperItem
         | ReactionType.NoSurcharge
-        | ReactionType.OtherSkill
         | ReactionType.ChooseSealValue
         | ReactionType.StraightenTilted
     }
 )
 
+/** The two skills a gain can raise, named as the gain that raises them. */
+export type SkillGain = GainType.Force | GainType.Magic
+
 /**
  * A reaction printed at the bottom of a Companion, or the one thing a Potion is drunk for. `options`
- * holds more than one entry only on Neris, and each of hers answers a different moment.
+ * holds more than one entry only on Neris, each of hers answering a different moment, and on Lucan,
+ * who gives Force for the Magic gained and Magic for the Force: when both go up at once, the player
+ * picks which of the two they answer.
  */
 export type Reaction = { triggers: TriggerType[]; requirements: Requirement[]; options: ReactionEffect[] }
 

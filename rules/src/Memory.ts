@@ -15,6 +15,12 @@ export enum Memory {
   /** The gain being resolved, when the rule that resolves it needs to read it back. */
   CurrentGain,
 
+  /**
+   * The skills that have just gone up, which Lucan may answer: both of them when an effect raises Force
+   * and Magic together, so that a single window lets the player pick which one to answer.
+   */
+  SkillsGained,
+
   /** The Village card a Villager has just designated, while its price is settled and it resolves. */
   ActivatedCard,
 

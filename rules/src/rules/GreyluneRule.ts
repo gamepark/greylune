@@ -8,8 +8,8 @@ import { EventTile, eventTileData, isFestival } from '../material/EventTile'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { MaterialSource } from '../material/MaterialSource'
-import { activeVillagers, keepsPotions, playerCoins, playerForce, playerMagic, playerSeason, playerVp, scoreValue, vpTokenTotal } from '../material/PlayerState'
-import { Reaction, ReactionEffect, ReactionType, TriggerType } from '../material/Reaction'
+import { activeVillagers, adventurerArea, keepsPotions, playerCoins, playerForce, playerMagic, playerSeason, playerVp, scoreValue, vpTokenTotal } from '../material/PlayerState'
+import { Reaction, ReactionEffect, ReactionType, SkillGain, TriggerType } from '../material/Reaction'
 import { Coin, coinUnits } from '../material/Tokens'
 import { getVillagerPlayer, Villager } from '../material/Villager'
 import { isPotion, VillageCard, VillageCardId, villageCardData } from '../material/VillageCard'
@@ -37,6 +37,9 @@ export type CostReduction = {
   /** Selia: the Seal is spent at whichever value the player names. */
   freeSealValue?: boolean
 }
+
+const skillGain = (marker: SkillMarker): SkillGain => (marker === MaterialType.StrengthMarker ? GainType.Force : GainType.Magic)
+const otherSkill = (skill: SkillGain): SkillGain => (skill === GainType.Force ? GainType.Magic : GainType.Force)
 
 /** One of the answers a player may give to what is happening. */
 export type ReactionChoice = { card: number; option: number }
@@ -269,12 +272,23 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
    * A track stops at 5, and every point gained past it is 1 victory point instead: the personal board
    * prints "…1" above the top of each track. That point jumps the queue, like the rest of the gain.
    * Lucan turns one skill into the other, so the window opens on the way back to the queue, and only
-   * when the marker actually moved.
+   * when a marker actually moved. Force and Magic gained together open a single window, in which
+   * Lucan answers whichever of the two the player picks.
    */
   gainSkill(marker: SkillMarker, amount: number): GreyluneMove[] {
-    this.pushSkillOverflow(marker, amount)
-    const moves = this.moveSkillMarker(marker, amount)
-    return moves.length ? [...moves, ...this.skillGained(marker, amount)] : []
+    return this.gainSkills([[marker, amount]])
+  }
+
+  gainSkills(gains: [SkillMarker, number][]): GreyluneMove[] {
+    const moves: GreyluneMove[] = []
+    const gained: SkillMarker[] = []
+    for (const [marker, amount] of gains) {
+      this.pushSkillOverflow(marker, amount)
+      const moved = this.moveSkillMarker(marker, amount)
+      if (moved.length) gained.push(marker)
+      moves.push(...moved)
+    }
+    return moves.length ? [...moves, ...this.afterSkillsGained(gained)] : []
   }
 
   /** How much of a gain the track has no room for. */
@@ -297,9 +311,9 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
     return x === location.x ? [] : [markers.moveItem({ ...location, x })]
   }
 
-  /** What follows a marker that moved up: the gain is remembered for Lucan, who may answer it. */
-  skillGained(marker: SkillMarker, amount: number): GreyluneMove[] {
-    this.memorize(Memory.CurrentGain, { type: marker === MaterialType.StrengthMarker ? GainType.Force : GainType.Magic, count: amount })
+  /** What follows markers that moved up: the gains are remembered for Lucan, who may answer them. */
+  afterSkillsGained(markers: SkillMarker[]): GreyluneMove[] {
+    this.memorize<SkillGain[]>(Memory.SkillsGained, markers.map(skillGain))
     return this.resume([TriggerType.GainSkill])
   }
 
@@ -417,10 +431,59 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
       if (!reaction || !reaction.triggers.some((trigger) => triggers.includes(trigger))) continue
       if (!this.canReact(card, reaction)) continue
       reaction.options.forEach((effect, option) => {
-        if (effect.trigger === undefined || triggers.includes(effect.trigger)) choices.push({ card, option })
+        if ((effect.trigger === undefined || triggers.includes(effect.trigger)) && this.canApply(effect)) choices.push({ card, option })
       })
     }
     return choices
+  }
+
+  /**
+   * Whether an answer still changes anything. Lucan only gives Force for Magic gained, and Magic for
+   * Force.
+   *
+   * The rest only matters once Isandre has stood a card back up, so that it may answer the same moment
+   * a second time (see {@link ReactionType.StraightenTilted}): most cards then give twice what they
+   * give, but a few have nothing left to give. A Seal whose value is already named for free, a story
+   * already holding its 3 — a story is worth 3 at most — and a condition waved away on every
+   * Encounter that only prints one: the authors call those second answers useless, and a card is not
+   * put down for nothing. Neris has nothing left to wave away once the crowd is free either, and Kael and
+   * Bran nothing left to take off a price they have already brought down to nothing: the window
+   * itself sees to those, since it alone knows the price (see `ReactionRule`).
+   */
+  private canApply(effect: ReactionEffect): boolean {
+    switch (effect.type) {
+      case ReactionType.OtherSkill:
+        return this.skillsGained.includes(otherSkill(effect.skill))
+      case ReactionType.ChooseSealValue:
+        return !this.costReduction.freeSealValue
+      case ReactionType.StoryValue3:
+        return !this.remind<number>(Memory.StoryBoost)
+      case ReactionType.IgnoreCondition:
+        return (this.remind<number>(Memory.IgnoredConditions) ?? 0) < this.mostConditionsHere
+      default:
+        return true
+    }
+  }
+
+  get skillsGained(): SkillGain[] {
+    return this.remind<SkillGain[]>(Memory.SkillsGained) ?? []
+  }
+
+  /**
+   * The most conditions an Encounter of the row the Adventurer stands in prints, both sides together:
+   * how many of them Ariok or a Potion d'invisibilité may still wave away. The favour is spent on the
+   * Encounter about to be resolved, and on no other.
+   */
+  private get mostConditionsHere(): number {
+    const area = adventurerArea(this, this.player)
+    return Math.max(
+      0,
+      ...this.encounterCards
+        .location(LocationType.EncounterRow)
+        .locationId(area)
+        .getItems<EncounterCardId>()
+        .map((item) => encounterCardData[item.id.front!].outcomes.reduce((total, outcome) => total + (outcome.requirements?.length ?? 0), 0))
+    )
   }
 
   private canReact(card: number, reaction: Reaction): boolean {
@@ -566,14 +629,17 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
       case ReactionType.ChooseSealValue:
         this.reduceCost({ freeSealValue: true })
         return []
-      case ReactionType.OtherSkill: {
-        // Lucan: whichever of the two has just been gained, the player gains 1 of the other.
-        const gain = this.remind<Gain>(Memory.CurrentGain)
-        this.pushGains([{ type: gain?.type === GainType.Force ? GainType.Magic : GainType.Force, count: 1 }], true)
+      case ReactionType.OtherSkill:
+        // Lucan: the player gains 1 of the other skill. The gain he answered stays answerable: stood back
+        // up by Isandre, he may answer it again, or wait for the skill he has just given.
+        this.pushGains([{ type: effect.skill, count: 1 }], true)
         return []
-      }
       case ReactionType.StraightenTilted:
         // Isandre: the card that had just gone down stands up again — never the one she went down for.
+        // A Companion or a Potion kept by Selia stands up in the window it answered, which is still
+        // open on the same moment, so it may at once answer it again. An Object stands up once its
+        // effect has been queued, so it is ready for another action and not used twice in this one:
+        // the authors rule that the second sentence of her card is about reactions only.
         return tiltedBefore === undefined ? [] : [this.villageCards.index(tiltedBefore).rotateItem(false)]
     }
   }

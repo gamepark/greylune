@@ -14,6 +14,14 @@ Source : `kDrive/Licences/Sorry We Are French/GREYLUNE`.
 
 ### Recette de l'ombre portée
 
+**Référence actuelle** : le script `shadow.py` du skill `game-park` (template), calibré sur les ombres
+validées d'ici. L'ombre dépend de l'épaisseur de la pièce, pas de sa taille : `--kind cardboard` reproduit
+`boards/PlayerBoard.png` et les jetons, `--kind wood` reproduit les `pawns`. `boards/SeasonBoard.png` a
+été refait ainsi (`--replace --keep-canvas --defringe`) : son ancienne ombre s'étendait sur ~170 px, et
+le trait de découpe magenta est retiré. La toile garde sa taille, donc `seasonBoardSize` reste valable.
+
+Historique de la recette d'origine :
+
 Le découpage est dilaté de **22 px**, flouté au gaussien **σ = 24 px**, teinté `#190F05`, et la pièce
 est composée par-dessus. Seule l'opacité varie :
 

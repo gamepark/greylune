@@ -35,6 +35,6 @@ export class ChooseSkillRule extends GreyluneRule {
 
   afterItemMove(move: ItemMove<number, MaterialType, LocationType>): GreyluneMove[] {
     const marker = skillMarkers.find((marker) => isMoveItemType(marker)(move))
-    return marker ? this.skillGained(marker, this.count) : []
+    return marker ? this.afterSkillsGained([marker]) : []
   }
 }
