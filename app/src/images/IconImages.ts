@@ -64,25 +64,24 @@ const storyValueImages: Partial<Record<number, string>> = { 1: StoryBook1, 2: St
  *
  * The last 4 are marks rather than symbols: the badge that stands for a Companion and the one that
  * stands for an Object, the open hand holding a coin that says income, and the doorway a Villager
- * stands in for the special action. The box draws no small picture of any of those, so each is cut
- * out of the personal board, which is the one place all 4 are printed — and cut out of the artwork
- * itself rather than redrawn, so a mark in a sentence is the very mark on the board (see
- * `PlayerBoardHelp`).
+ * stands in for the special action. All 4 are the marks the personal board prints, so a mark in a
+ * sentence is the very mark on the board (see `PlayerBoardHelp`); the hand is still cut out of the
+ * board itself, the publisher having exported no file of its own for it.
  *
  * The Season board adds one more, for the same reason: the Villager under a hooked arrow that its
  * Summer column prints for a Villager taken back out of the Village. It is what the camp is for, and
  * the camp itself is a painted scene with no mark of its own (see `SeasonBoardHelp`).
  *
  * And the Encounters one: a Villager to pay, drawn the way the rider is — the figure dark on the
- * parchment with its 1 cut into it, so that the price is a single symbol. Cut out of the Tigre, which
+ * parchment with its 1 cut into it, so that the price is a single symbol. It is the Tigre's, which
  * prints nothing else.
  *
  * And one more off the Season board: the arrow it prints between 2 season circles, which is where a
  * marker goes next. The button that walks it there is laid on that very arrow (see
  * `ChangeSeasonMenu`), so what the button carries had better be the arrow itself.
  *
- * And the moon of the first player token, cut out of the banner alone: the whole token is a tall
- * flag on its hill, and at the size of a badge only the moon on it would still be read.
+ * And the moon of the first player token on its own: the whole token is a tall flag on its hill,
+ * and at the size of a badge only the moon on it would still be read.
  */
 export {
   CompanionBadge,
