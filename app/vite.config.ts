@@ -60,6 +60,11 @@ export default defineConfig(({ mode }) => {
       'process.env.PUSHER_KEY': JSON.stringify(env.VITE_PUSHER_KEY),
       'process.env.VERSION': JSON.stringify(version)
     },
+    // The rules-api build imports its own directories, which Node refuses: the specs that play the rules
+    // (the tutorial's) have it bundled instead, as the rules package does.
+    test: {
+      server: { deps: { inline: [/@gamepark/, 'es-toolkit'] } }
+    },
     plugins: [react({ jsxImportSource: '@emotion/react' }), imagetools({ defaultDirectives: () => new URLSearchParams({ format: 'webp' }) }), translationHmrPlugin(), localeUrlPlugin()]
   }
 })

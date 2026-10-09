@@ -8,6 +8,7 @@ import { BoardDescription, ItemContext, MaterialContext } from '@gamepark/react-
 import { CustomMove, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { MainBoard, PlayerBoard, SeasonBoard } from '../images/BoardImages'
 import { mainBoardSize, playerBoardShadow, playerBoardSize, seasonBoardSize, specialActionStoryOffset } from '../locators/TableLayout'
+import { getDisplayedPlayer } from '../locators/DisplayedPlayer'
 import { TravelMenu } from '../travel/TravelMenu'
 import { isTravelMove } from '../travel/TravelMoves'
 import { CampMenu } from '../villagers/CampAction'
@@ -94,9 +95,15 @@ export class PlayerBoardDescription extends BoardDescription<PlayerColor, Materi
   transparency = true
   help = PlayerBoardHelp
 
-  /** One board per player, in seat order. At 2 or 3 players the remaining seats stay empty. */
-  getStaticItems({ rules }: MaterialContext<PlayerColor, MaterialType, LocationType>): MaterialItem<PlayerColor, LocationType>[] {
-    return rules.players.map((player) => ({ location: { type: LocationType.PlayerBoard, player } }))
+  /**
+   * The board of the player being read, alone. Every board lies on the same spot, and a static item is
+   * drawn whatever its locator's `hide` says: with all of them listed, the last seat's board covered the
+   * others with the very same picture, and whatever was drawn on a board underneath — the mask of a
+   * tutorial focus, for one — was out of sight.
+   */
+  getStaticItems(context: MaterialContext<PlayerColor, MaterialType, LocationType>): MaterialItem<PlayerColor, LocationType>[] {
+    const player = getDisplayedPlayer(context)
+    return player === undefined ? [] : [{ location: { type: LocationType.PlayerBoard, player } }]
   }
 
   /** Like the map and the Season board: what the board offers is there to be read, not to be uncovered. */

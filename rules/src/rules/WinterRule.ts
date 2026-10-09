@@ -29,26 +29,42 @@ import { RuleId } from './RuleId'
  */
 export class WinterRule extends MaterialRulesPart<PlayerColor, MaterialType, LocationType, RuleId> {
   onRuleStart(): GreyluneMove[] {
-    return [...this.putAway(), ...this.newEvent(), ...this.revealVillage(), ...this.revealEncounters(), ...this.newRound()]
+    return [
+      ...this.putAwayVillage(),
+      ...this.revealVillage(),
+      ...this.newEvent(),
+      ...this.putAwayEncounters(),
+      ...this.revealEncounters(),
+      ...this.newRound()
+    ]
   }
 
   // ------------------------------------------------------------------ what the past year leaves
 
   /**
-   * Everything the past year leaves goes away one pile at a time: the Seals of the cards nobody took
-   * first, so the Village grid is bare when it goes, then the Income tokens of the Encounters nobody
-   * took, then the Encounters themselves. Each pile is one move — a table cleared in one gesture per
-   * pile rather than one per token — and an empty pile is no move at all, which is what the first
-   * year finds.
+   * The year is turned over in the order the rulebook reveals it (p.6) — the Village, the Event, then
+   * the Encounters — and each piece of the past year is put away right before its replacement is laid
+   * out, so that each piece comes as one block: the tutorial explains them one at a time.
+   *
+   * What the past year leaves goes away one pile at a time: the Seals of the cards nobody took first,
+   * so the Village grid is bare when it goes, and the Income tokens of the Encounters nobody took
+   * before the Encounters themselves. Each pile is one move — a table cleared in one gesture per pile
+   * rather than one per token — and an empty pile is no move at all, which is what the first year
+   * finds.
    */
-  private putAway(): GreyluneMove[] {
+  private putAwayVillage(): GreyluneMove[] {
     return [
       ...atOnce(this.material(MaterialType.Seal).location(LocationType.CardSeal), (seals) => seals.moveItemsAtOnce({ type: LocationType.SealDiscard })),
       // Both decks are the calendar of the game and are never shuffled back — they hold exactly the
       // 5 years and nothing more. So a card nobody took is out of the game for good and goes back in
       // the box, rather than onto a discard nobody would ever draw from. Same for the Event of the
       // year: the pile only holds the years to come.
-      ...atOnce(this.grid, (grid) => grid.deleteItemsAtOnce()),
+      ...atOnce(this.grid, (grid) => grid.deleteItemsAtOnce())
+    ]
+  }
+
+  private putAwayEncounters(): GreyluneMove[] {
+    return [
       ...atOnce(this.material(MaterialType.IncomeToken).location(LocationType.CardIncome), (tokens) => tokens.deleteItemsAtOnce()),
       ...atOnce(this.material(MaterialType.EncounterCard).location(LocationType.EncounterRow), (row) => row.deleteItemsAtOnce())
     ]

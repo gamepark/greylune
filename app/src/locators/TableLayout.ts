@@ -43,7 +43,7 @@ export const questTileSize = { width: 3.75, height: 4.13 }
 export const sealSize = { width: 2.12, height: 2.23 }
 /** A Villager figure, its baked-in shadow included, as `VillagerDescription` draws it. */
 const villagerWidth = 1.87
-const villagerHeight = 3.04
+export const villagerHeight = 3.04
 
 /** Anything laid on a board has to clear its thickness, or it disappears inside it. */
 const onBoard = 0.6
@@ -273,14 +273,14 @@ export const questTileSpots: Record<HeroicQuestArea, Coordinates> = {
  * left one for the player who achieved it first, which pays more, the right one for everybody after
  * them. The plaque itself is left showing, so the points a marker stands for can still be read.
  */
-const questRewardSpots: Record<HeroicQuestArea, XYCoordinates> = {
+export const questRewardSpots: Record<HeroicQuestArea, XYCoordinates> = {
   [Area.Hammer]: { x: 13.805, y: 18.65 },
   [Area.Swords]: { x: 13.805, y: 10.42 },
   [Area.Edge]: { x: 6.925, y: 7.59 }
 }
 
 /** From the left medal to the right one. */
-const questRewardSpotsGap = 1.77
+export const questRewardSpotsGap = 1.77
 
 export const questRewardSpot = (area: HeroicQuestArea, first: boolean): Coordinates => {
   const { x, y } = questRewardSpots[area]

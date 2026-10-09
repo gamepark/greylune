@@ -18,6 +18,7 @@ import { playerPanelLocator } from './PlayerPanelLocator'
 import { VillageGapLocator } from './VillageGapLocator'
 import { VillageGridLocator } from './VillageGridLocator'
 import { VillagerReserveLocator } from './VillagerReserveLocator'
+import { BoardZoneLocator, CardZoneLocator, MainBoardZoneLocator } from './ZoneLocators'
 import { hideOtherPlayers, isOutOfSight } from './DisplayedPlayer'
 import {
   bonusTokensGap,
@@ -295,5 +296,13 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
   }),
 
   /** A player holds one point token at a time: the 25 is handed back when the 75 is taken. */
-  [LocationType.PlayerVpTokens]: new Locator({ coordinates: playerVpTokensSpot, hide: hideOtherPlayers })
+  [LocationType.PlayerVpTokens]: new Locator({ coordinates: playerVpTokensSpot, hide: hideOtherPlayers }),
+
+  // ---------------------------------------------------------------- what the tutorial points at
+
+  [LocationType.CardZone]: new CardZoneLocator(),
+
+  [LocationType.BoardZone]: new BoardZoneLocator(),
+
+  [LocationType.MainBoardZone]: new MainBoardZoneLocator()
 }

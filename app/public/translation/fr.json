@@ -6,11 +6,11 @@
   "gains": "<gain1/> et <gain2/>",
   "action": {
     "exploit": "Exploiter",
-    "exploit-price": "Exploiter ({price} <coin/>)",
+    "exploit-price": "Exploiter ({price} <coin/>)",
     "buy": "Acheter",
-    "buy-price": "Acheter ({price} <coin/>)",
+    "buy-price": "Acheter ({price} <coin/>)",
     "recruit": "Recruter",
-    "recruit-price": "Recruter ({price} <coin/>)",
+    "recruit-price": "Recruter ({price} <coin/>)",
     "activate": "Activer",
     "resolve": "Résoudre",
     "achieve": "Accomplir",
@@ -20,7 +20,7 @@
     "gain-magic": "Gagner {count} Magie",
     "gain-vp": "Gagner {count} PV",
     "camp": "Aller au campement",
-    "camp-coins": "Gagner {coins} <coin/>",
+    "camp-coins": "Gagner {coins} <coin/>",
     "travel": "Voyager",
     "stay": "Rester sur place",
     "summer": "Passer à l'été",
@@ -68,8 +68,8 @@
     },
     "encounter": {
       "you-none": "Résolvez une rencontre ou <pass>passez</pass>",
-      "you-coin": "Résolvez une rencontre ou <take>prenez 1 <coin/></take>",
-      "you-vp": "Résolvez une rencontre ou <take>prenez 1 <vp/></take>",
+      "you-coin": "Résolvez une rencontre ou <take>prenez 1 <coin/></take>",
+      "you-vp": "Résolvez une rencontre ou <take>prenez 1 <vp/></take>",
       "you-quest": "Résolvez une rencontre, <quest>accomplissez une quête <crown/></quest> ou <pass>passez</pass>",
       "player": "{player} résout une rencontre",
       "nothing": "Vous ne pouvez résoudre ni rencontre ni quête ici."
@@ -131,7 +131,7 @@
       "player": "{player} choisit Force ou Magie"
     },
     "bonus": {
-      "you": "Bonus : gagnez",
+      "you": "Bonus : gagnez",
       "player": "{player} choisit un jeton Bonus"
     },
     "reaction": {
@@ -143,10 +143,10 @@
       "player": "{player} peut réagir"
     },
     "scoring": {
-      "quests": "Fin de partie : PV des Quêtes",
-      "companions": "Fin de partie : PV des Compagnons",
-      "items": "Fin de partie : PV des Objets",
-      "skills": "Fin de partie : PV des compétences"
+      "quests": "Fin de partie : PV des Quêtes",
+      "companions": "Fin de partie : PV des Compagnons",
+      "items": "Fin de partie : PV des Objets",
+      "skills": "Fin de partie : PV des compétences"
     },
     "or": "ou"
   },
@@ -164,7 +164,7 @@
   },
   "log": {
     "new-year": "Année {year}",
-    "event-reveal": "Événement de l'année : <tile/>",
+    "event-reveal": "Événement de l'année : <tile/>",
     "first-player": "{player} reçoit le jeton Premier joueur <token/>",
     "summer": "{player} passe en Été <season/>",
     "autumn": "{player} passe en Automne <season/>",
@@ -196,26 +196,26 @@
     "income-token": "{player} prend le jeton Revenu <token/>",
     "tell-story": "{player} raconte l'histoire <card/> <value/>",
     "quest-story": "{player} déplace <card/> vers les histoires racontées",
-    "gain-coins": "{player} gagne {count} <coin/>",
-    "pay-coins": "{player} dépense {count} <coin/>",
-    "gain-vp": "{player} gagne {count} <vp/>",
-    "gain-force": "{player} gagne {count} <force/>",
-    "spend-force": "{player} dépense {count} <force/>",
-    "gain-magic": "{player} gagne {count} <magic/>",
-    "spend-magic": "{player} dépense {count} <magic/>",
-    "gain-villagers": "{player} gagne {count} <villager/>",
-    "spend-villagers": "{player} dépense {count} <villager/>",
-    "return-villagers": "{player} remet {count} <villager/> dans la réserve",
+    "gain-coins": "{player} gagne {count} <coin/>",
+    "pay-coins": "{player} dépense {count} <coin/>",
+    "gain-vp": "{player} gagne {count} <vp/>",
+    "gain-force": "{player} gagne {count} <force/>",
+    "spend-force": "{player} dépense {count} <force/>",
+    "gain-magic": "{player} gagne {count} <magic/>",
+    "spend-magic": "{player} dépense {count} <magic/>",
+    "gain-villagers": "{player} gagne {count} <villager/>",
+    "spend-villagers": "{player} dépense {count} <villager/>",
+    "return-villagers": "{player} remet {count} <villager/> dans la réserve",
     "straighten": "{player} redresse <card/>",
     "discard-item": "{player} défausse <card/>",
     "bonus-token": "{player} résout le jeton Bonus <token/>",
     "scoring": {
-      "quests": "Fin de partie : PV des Quêtes",
-      "companions": "Fin de partie : PV des Compagnons",
-      "items": "Fin de partie : PV des Objets",
-      "skills": "Fin de partie : PV des compétences"
+      "quests": "Fin de partie : PV des Quêtes",
+      "companions": "Fin de partie : PV des Compagnons",
+      "items": "Fin de partie : PV des Objets",
+      "skills": "Fin de partie : PV des compétences"
     },
-    "score": "{player} marque {count} <vp/>"
+    "score": "{player} marque {count} <vp/>"
   },
   "help": {
     "period": "Période {period}",
@@ -237,7 +237,7 @@
       },
       "3": {
         "name": "Compagnon",
-        "note": "Un Compagnon coûte 7 <coin/> à recruter et se place à gauche de votre plateau personnel. Il vous fait gagner 1 <villager>Villageois</villager>, directement disponible, mais réduit d'une pièce votre revenu en Automne. Vous ne pouvez jamais recruter plus de 3 Compagnons au cours de la partie."
+        "note": "Un Compagnon coûte 7 <coin/> à recruter et se place à gauche de votre plateau personnel. Il vous fait gagner 1 <villager>Villageois</villager>, directement disponible, mais réduit d'une pièce votre revenu en Automne. Vous ne pouvez jamais recruter plus de 3 Compagnons au cours de la partie."
       }
     },
     "tavern": {
@@ -318,7 +318,7 @@
       },
       "income": {
         "name": "Revenu",
-        "text": "À l'Automne, gagnez votre revenu : 3 <coin/>, moins 1 <coin/> par Compagnon, ainsi que les gains éventuels des jetons Revenu placés sur votre plateau personnel."
+        "text": "À l'Automne, gagnez votre revenu : 3 <coin/>, moins 1 <coin/> par Compagnon, ainsi que les gains éventuels des jetons Revenu placés sur votre plateau personnel."
       },
       "skills": {
         "name": "Force et Magie",
@@ -328,7 +328,7 @@
       "special-action": {
         "name": "Action spéciale",
         "text": "Cette case spéciale, utilisable seulement en Été, vous permet de placer 1 de vos <villager>Villageois</villager> actifs pour l'une de ces options, au choix. Il y reste jusqu'à l'Automne.",
-        "0": "Raconter une histoire : 2 <coin/> + 1 <force>Force</force> + 2 <vp/>",
+        "0": "Raconter une histoire : 2 <coin/> + 1 <force>Force</force> + 2 <vp/>",
         "1": "Déplacer votre <adventurer>Aventurier</adventurer> d'une case",
         "2": "Gagner 1 <magic>Magie</magic>"
       },
@@ -338,7 +338,7 @@
       },
       "villagers": {
         "name": "Villageois actifs",
-        "text": "Les Villageois que vous contrôlez au début de chaque année sont dits « actifs » et se trouvent dans cette zone de votre plateau personnel, tout comme ceux que vous gagnez en cours d'année. À l'Automne, remettez-y vos Villageois du campement, de l'Événement et de la case spéciale."
+        "text": "Les Villageois que vous contrôlez au début de chaque année sont dits « actifs » et se trouvent dans cette zone de votre plateau personnel, tout comme ceux que vous gagnez en cours d'année. À l'Automne, remettez-y vos Villageois du campement, de l'Événement et de la case spéciale."
       }
     },
     "main-board": {
@@ -362,11 +362,11 @@
       },
       "stops": {
         "name": "Pièce et PV",
-        "text": "Une fois votre <adventurer>Aventurier</adventurer> arrêté sur la case marquée d'une <coin/>, vous pouvez décider de ne pas résoudre de Rencontre pour gagner 1 <coin/>. Sur la case marquée d'un <vp/>, vous pouvez faire de même pour gagner 1 <vp/>."
+        "text": "Une fois votre <adventurer>Aventurier</adventurer> arrêté sur la case marquée d'une <coin/>, vous pouvez décider de ne pas résoudre de Rencontre pour gagner 1 <coin/>. Sur la case marquée d'un <vp/>, vous pouvez faire de même pour gagner 1 <vp/>."
       },
       "quests": {
         "name": "Quêtes Héroïques",
-        "text": "Les 3 tuiles Quête Héroïque de la partie sont placées face visible sur les 3 emplacements du plateau, près des cases les plus éloignées du Village. Les PV qu'elles rapportent en fin de partie sont imprimés sous chaque emplacement : 7 et 5, 8 et 6, puis 9 et 7 <vp/>, de la case la plus proche à la plus éloignée."
+        "text": "Les 3 tuiles Quête Héroïque de la partie sont placées face visible sur les 3 emplacements du plateau, près des cases les plus éloignées du Village. Les PV qu'elles rapportent en fin de partie sont imprimés sous chaque emplacement : 7 et 5, 8 et 6, puis 9 et 7 <vp/>, de la case la plus proche à la plus éloignée."
       },
       "event": {
         "name": "Événement",
@@ -399,8 +399,8 @@
       },
       "summer": {
         "name": "Été",
-        "0": "Gagner des pièces : choisissez l'un de vos <villager>Villageois</villager> au Village et une carte adjacente à celui-ci, et gagnez 1 <coin/> pour chaque autre Villageois adjacent à cette carte, quel qu'en soit le propriétaire",
-        "1": "Activer une carte : choisissez l'un de vos <villager>Villageois</villager> au Village et une carte voisine de celui-ci, et payez son prix plus 1 <coin/> pour chaque autre Villageois voisin de cette carte, quel qu'en soit le propriétaire",
+        "0": "Gagner des pièces : choisissez l'un de vos <villager>Villageois</villager> au Village et une carte adjacente à celui-ci, et gagnez 1 <coin/> pour chaque autre Villageois adjacent à cette carte, quel qu'en soit le propriétaire",
+        "1": "Activer une carte : choisissez l'un de vos <villager>Villageois</villager> au Village et une carte voisine de celui-ci, et payez son prix plus 1 <coin/> pour chaque autre Villageois voisin de cette carte, quel qu'en soit le propriétaire",
         "2": "Participer à l'Événement, une fois par année, avec l'un de vos <villager>Villageois</villager> actifs ou l'un de ceux qui se trouvent au Village",
         "3": "Utiliser l'un de vos Objets redressés, en l'inclinant",
         "4": "Utiliser l'action spéciale de votre plateau personnel",
@@ -412,7 +412,7 @@
         "0": "Renvoyez votre <adventurer>Aventurier</adventurer> au Village",
         "1": "Remettez vos <villager>Villageois</villager> du campement, de l'Événement et de l'action spéciale dans la zone des Villageois actifs de votre plateau personnel",
         "2": "Redressez toutes vos cartes",
-        "3": "Gagnez votre revenu : 3 <coin/>, moins 1 <coin/> par Compagnon, ainsi que les gains éventuels de vos jetons Revenu"
+        "3": "Gagnez votre revenu : 3 <coin/>, moins 1 <coin/> par Compagnon, ainsi que les gains éventuels de vos jetons Revenu"
       },
       "camp": {
         "name": "Campement",
@@ -430,7 +430,7 @@
     },
     "villager": {
       "name": "Villageois",
-      "active": "Les Villageois que vous contrôlez au début de chaque année sont dits « actifs » et se trouvent toujours dans la zone « Villageois actifs » de votre plateau personnel, tout comme ceux que vous gagnez en cours d'année."
+      "active": "Les Villageois que vous contrôlez au début de chaque année sont dits « actifs » et se trouvent toujours dans la zone « Villageois actifs » de votre plateau personnel, tout comme ceux que vous gagnez en cours d'année."
     },
     "bonus-token": {
       "name": "Jeton Bonus"
@@ -456,7 +456,7 @@
     },
     "104": {
       "name": "Le lion d'or",
-      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 4 <coin/> + 1 PV + défaussez un jeton <seal/> et gagnez autant de <coin/> que sa valeur."
+      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 4 <coin/> + 1 PV + défaussez un jeton <seal/> et gagnez autant de <coin/> que sa valeur."
     },
     "105": {
       "name": "École de magie",
@@ -468,7 +468,7 @@
     },
     "107": {
       "name": "Guilde des voyageurs",
-      "ability": "Dépensez 2 <coin/> et déplacez votre <adventurer>Aventurier</adventurer> jusqu'à 4 cases."
+      "ability": "Dépensez 2 <coin/> et déplacez votre <adventurer>Aventurier</adventurer> jusqu'à 4 cases."
     },
     "108": {
       "name": "Guilde des éclaireurs",
@@ -484,11 +484,11 @@
     },
     "111": {
       "name": "Le loup gris",
-      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 4 <coin/> + défaussez un jeton <seal/> et gagnez autant de PV que sa valeur + redressez une de vos cartes."
+      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 4 <coin/> + défaussez un jeton <seal/> et gagnez autant de PV que sa valeur + redressez une de vos cartes."
     },
     "112": {
       "name": "Le sanglier rieur",
-      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 3 PV + 2 <coin/> + 1 <force>Force</force> ou 1 <magic>Magie</magic>."
+      "ability": "Racontez une ou plusieurs histoires dont la valeur totale de récit est de 3 maximum : 3 PV + 2 <coin/> + 1 <force>Force</force> ou 1 <magic>Magie</magic>."
     },
     "113": {
       "name": "Forteresse",
@@ -496,7 +496,7 @@
     },
     "114": {
       "name": "Guilde des voyageurs",
-      "ability": "Dépensez 2 <coin/> et déplacez votre <adventurer>Aventurier</adventurer> jusqu'à 5 cases."
+      "ability": "Dépensez 2 <coin/> et déplacez votre <adventurer>Aventurier</adventurer> jusqu'à 5 cases."
     },
     "115": {
       "name": "Bibliothèque",
@@ -637,7 +637,7 @@
       "name": "Dorian",
       "role": "Marchand",
       "immediate": "Gagnez 1 <villager>Villageois</villager>.",
-      "reaction": "Quand vous achetez un Objet, vous pouvez incliner cette carte pour réduire son coût de 1 <coin/> et gagner 1 PV.",
+      "reaction": "Quand vous achetez un Objet, vous pouvez incliner cette carte pour réduire son coût de 1 <coin/> et gagner 1 PV.",
       "permanent": "Votre limite d'Objets est augmentée de 2.",
       "score": "1 PV par Objet que vous possédez."
     },
@@ -660,8 +660,8 @@
       "name": "Neris",
       "role": "Roublarde",
       "immediate": "Gagnez 1 <villager>Villageois</villager>.",
-      "reaction": "Quand vous retirez un <villager>Villageois</villager> du Village, vous pouvez incliner cette carte pour gagner 2 <coin/> supplémentaires, ou pour ne pas payer le surcoût.",
-      "score": "1 PV par 2 <coin/> restantes."
+      "reaction": "Quand vous retirez un <villager>Villageois</villager> du Village, vous pouvez incliner cette carte pour gagner 2 <coin/> supplémentaires, ou pour ne pas payer le surcoût.",
+      "score": "1 PV par 2 <coin/> restantes."
     },
     "307": {
       "name": "Bran",
@@ -726,14 +726,14 @@
     "4": {
       "name": "Moutons",
       "0": {
-        "reward": "Prenez le jeton Revenu : 1 <coin/> tout de suite, puis autant à chaque Automne"
+        "reward": "Prenez le jeton Revenu : 1 <coin/> tout de suite, puis autant à chaque Automne"
       }
     },
     "5": {
       "name": "Mine",
       "0": {
         "requirement": "Dépensez 1 <villager>Villageois</villager>",
-        "reward": "Prenez le jeton Revenu : 2 <coin/> tout de suite, puis autant à chaque Automne"
+        "reward": "Prenez le jeton Revenu : 2 <coin/> tout de suite, puis autant à chaque Automne"
       }
     },
     "6": {
@@ -747,13 +747,13 @@
       "name": "Maraudeurs",
       "0": {
         "requirement": "Avoir un total de <force>Force</force> et de <magic>Magie</magic> d'au moins 2",
-        "reward": "Gagnez 4 <coin/>"
+        "reward": "Gagnez 4 <coin/>"
       }
     },
     "8": {
       "name": "Initiation",
       "0": {
-        "requirement": "Dépensez 4 <coin/>",
+        "requirement": "Dépensez 4 <coin/>",
         "reward": "Gagnez 1 <force>Force</force> et 1 <magic>Magie</magic>"
       }
     },
@@ -768,7 +768,7 @@
       "name": "Embuscade",
       "0": {
         "requirement": "Avoir au moins 1 <magic>Magie</magic>",
-        "reward": "Prenez le jeton Revenu : 1 <coin/> tout de suite, puis autant à chaque Automne"
+        "reward": "Prenez le jeton Revenu : 1 <coin/> tout de suite, puis autant à chaque Automne"
       }
     },
     "11": {
@@ -794,7 +794,7 @@
     "14": {
       "name": "Auberge",
       "0": {
-        "requirement": "Dépensez 2 <coin/>",
+        "requirement": "Dépensez 2 <coin/>",
         "reward": "Gagnez 1 <villager>Villageois</villager>"
       }
     },
@@ -819,11 +819,11 @@
       "name": "Trésor",
       "0": {
         "requirement": "Avoir au moins 3 <magic>Magie</magic>",
-        "reward": "Gagnez 3 <coin/>"
+        "reward": "Gagnez 3 <coin/>"
       },
       "1": {
         "requirement": "Dépensez 1 <magic>Magie</magic>",
-        "reward": "Gagnez 4 <coin/>"
+        "reward": "Gagnez 4 <coin/>"
       }
     },
     "18": {
@@ -836,7 +836,7 @@
     "19": {
       "name": "Sorcellerie",
       "0": {
-        "requirement": "Dépensez 4 <coin/>",
+        "requirement": "Dépensez 4 <coin/>",
         "reward": "Gagnez 2 <magic>Magie</magic>"
       }
     },
@@ -869,7 +869,7 @@
       "name": "Diamant",
       "0": {
         "requirement": "Dépensez 1 <force>Force</force>",
-        "reward": "Gagnez 5 <coin/>"
+        "reward": "Gagnez 5 <coin/>"
       }
     },
     "24": {
@@ -899,14 +899,14 @@
     "27": {
       "name": "Tonnellerie",
       "0": {
-        "requirement": "Dépensez 4 <coin/>",
+        "requirement": "Dépensez 4 <coin/>",
         "reward": "Prenez le jeton Revenu : 2 PV tout de suite, puis autant à chaque Automne"
       }
     },
     "28": {
       "name": "Entrainement",
       "0": {
-        "requirement": "Dépensez 4 <coin/>",
+        "requirement": "Dépensez 4 <coin/>",
         "reward": "Prenez le jeton Revenu : 1 <force>Force</force> tout de suite, puis autant à chaque Automne"
       }
     },
@@ -920,7 +920,7 @@
     "30": {
       "name": "Chevalier errant",
       "0": {
-        "requirement": "Dépensez 2 <coin/>",
+        "requirement": "Dépensez 2 <coin/>",
         "reward": "Gagnez 1 <force>Force</force> et 2 PV"
       }
     },
@@ -928,20 +928,20 @@
       "name": "Caravane",
       "0": {
         "requirement": "Dépensez 2 <villager>Villageois</villager>",
-        "reward": "Prenez le jeton Revenu : 4 <coin/> tout de suite, puis autant à chaque Automne"
+        "reward": "Prenez le jeton Revenu : 4 <coin/> tout de suite, puis autant à chaque Automne"
       }
     },
     "32": {
       "name": "Bandits",
       "0": {
         "requirement": "Avoir au moins 3 <force>Force</force>",
-        "reward": "Gagnez 4 <coin/> et 2 PV"
+        "reward": "Gagnez 4 <coin/> et 2 PV"
       }
     },
     "33": {
       "name": "Archerie",
       "0": {
-        "requirement": "Dépensez 3 <coin/>",
+        "requirement": "Dépensez 3 <coin/>",
         "reward": "Gagnez 1 <force>Force</force> et 3 PV"
       }
     },
@@ -949,7 +949,7 @@
       "name": "Passe enneigée",
       "0": {
         "requirement": "Avoir au moins 5 <force>Force</force>",
-        "reward": "Gagnez 5 <coin/> et 3 PV"
+        "reward": "Gagnez 5 <coin/> et 3 PV"
       }
     },
     "35": {
@@ -963,7 +963,7 @@
       "name": "Mine d'or",
       "0": {
         "requirement": "Dépensez 1 <villager>Villageois</villager>",
-        "reward": "Gagnez 7 <coin/>"
+        "reward": "Gagnez 7 <coin/>"
       }
     },
     "37": {
@@ -991,7 +991,7 @@
     "39": {
       "name": "Relais",
       "0": {
-        "requirement": "Dépensez 4 <coin/>",
+        "requirement": "Dépensez 4 <coin/>",
         "reward": "Repartez à l'aventure — déplacez votre <adventurer>Aventurier</adventurer> jusqu'à 3 cases — et gagnez 2 PV"
       }
     },
@@ -1014,7 +1014,7 @@
     "1": {
       "name": "Banquet",
       "0": {
-        "reward": "Gagnez 3 <coin/>"
+        "reward": "Gagnez 3 <coin/>"
       },
       "1": {
         "reward": "Redressez une de vos cartes inclinées"
@@ -1026,7 +1026,7 @@
     "3": {
       "name": "Grande foire",
       "0": {
-        "requirement": "Dépensez 3 <coin/>",
+        "requirement": "Dépensez 3 <coin/>",
         "reward": "Gagnez 1 <force>Force</force> et 1 <magic>Magie</magic>"
       }
     },
@@ -1044,7 +1044,7 @@
         "reward": "Gagnez 1 <villager>Villageois</villager>"
       },
       "1": {
-        "requirement": "Dépensez 3 <coin/>",
+        "requirement": "Dépensez 3 <coin/>",
         "reward": "Gagnez 1 <villager>Villageois</villager>"
       }
     },
@@ -1052,7 +1052,7 @@
       "name": "Tournoi",
       "0": {
         "requirement": "Dépensez 1 <force>Force</force>",
-        "reward": "Gagnez 6 <coin/>"
+        "reward": "Gagnez 6 <coin/>"
       },
       "1": {
         "requirement": "Dépensez 1 <force>Force</force>",
@@ -1091,11 +1091,67 @@
     },
     "8": {
       "name": "Rançon",
-      "requirement": "Dépensez 6 <coin/>"
+      "requirement": "Dépensez 6 <coin/>"
     },
     "9": {
       "name": "Mariage",
       "requirement": "Dépensez 2 <villager>Villageois</villager>"
     }
+  },
+  "tuto": {
+    "welcome": "Bienvenue dans le tutoriel de <bold>Greylune</bold> !",
+    "goal": "Dans ce jeu, vous incarnez un <bold>Aventurier</bold>.\nVotre objectif est de devenir la figure la plus prestigieuse de Greylune en accumulant le maximum de points de victoire <vp/> au terme des <bold>cinq années</bold> de jeu.",
+    "seasons": "Chaque année est divisée en <bold>4 saisons</bold>. L'Hiver <winter/> est la mise en place, automatique.",
+    "spring": "Vous et votre adversaire êtes au <bold>Printemps</bold> <spring/>.",
+    "villagers": "Au Printemps, vous placez vos <bold>Villageois</bold>. Vous commencez avec 3 Villageois, et pouvez en recruter jusqu'à 4 supplémentaires.",
+    "village": "Les Villageois peuvent être placés au <bold>Village</bold>, entre 2 cartes. En Été, cela vous permettra de bénéficier de l'une des 2 cartes adjacentes.\n<italic>Il y a de nombreuses cartes, toutes uniques, dans le jeu. Sur Game Park, cliquez sur un élément pour ouvrir l'aide de jeu !</italic>",
+    "place-first": "Placez votre premier Villageois ici, à côté de <bold>Dorian</bold>.",
+    "opponent-turn": "C'est au tour de votre adversaire, William.",
+    "place-second": "Placez votre second Villageois ici, entre <bold>Tommy</bold> et <bold>Le chêne fendu</bold>.",
+    "go-summer": "Il vous reste un troisième Villageois, mais rien ne vous oblige à le placer. Choisissez de <bold>passer en Été</bold> <summer/>.",
+    "summer": "Votre <bold>marqueur Saison</bold> est déplacé en Été. À cette saison, vous ne pouvez plus placer de Villageois au Village.\n<italic>Votre adversaire reste au Printemps.</italic>",
+    "recruit": "En Été, vous pouvez utiliser un Villageois placé au Village pour <bold>activer</bold> l'une des 2 cartes adjacentes.\nPar exemple, ce Villageois peut recruter ce Compagnon, <bold>Dorian</bold>, pour <bold>7 <coin/></bold>. Faites-le.",
+    "starting-coins": "Vous commencez la partie avec <bold>8 <coin/></bold>.\n<italic>Les pièces servent à recruter des Compagnons, acheter des Objets, et activer certains Bâtiments, Événements ou Rencontres.</italic>",
+    "companions": "Vos <bold>Compagnons</bold> vont ici. Vous pouvez en avoir 3 au maximum.",
+    "new-villager": "De plus, lorsque vous recrutez un Compagnon, vous gagnez immédiatement un nouveau <bold>Villageois</bold> <villager/>.",
+    "opponent-guild": "C'est à votre adversaire de jouer. Il passe en Été, et utilise ce Villageois pour exploiter la <bold>Guilde des éclaireurs</bold>.",
+    "seal": "Ce Bâtiment porte un <bold>Sceau</bold> <seal/> : son effet dépend de la valeur de ce Sceau (entre 1 et 3). Ici, William peut partir à l'aventure jusqu'à une distance de 1.\n<italic>À 3 ou 4 joueurs, il y aurait 2 ou 3 Sceaux.</italic>",
+    "camp": "Une fois utilisé, le Villageois va ici, au <bold>campement</bold>. Il sera de nouveau disponible l'année prochaine.",
+    "opponent-travel": "William <bold>part à l'aventure</bold> : il déplace son <bold>Aventurier</bold> <adventurer/>, ici d'une case au maximum.",
+    "opponent-encounter": "À cet endroit, William peut gagner 1 <coin/> ou résoudre une carte <bold>Rencontre</bold>. Il choisit de résoudre le <bold>Tigre</bold>.",
+    "untold-stories": "Il envoie un Villageois actif au campement, et le Tigre va dans ses <bold>histoires non racontées</bold> !",
+    "banquet": "À vous de jouer. Chaque année, un <bold>Événement</bold> a lieu à Greylune. Cette année, c'est le <bold>Banquet</bold>.\nCliquez dessus pour connaître son effet, puis envoyez-y un Villageois actif pour gagner 3 <coin/>.",
+    "opponent-tavern": "William souhaite maintenant exploiter <bold>Le chêne fendu</bold> pour raconter sa rencontre avec le Tigre !\nCependant, pour activer une carte du Village, il faut payer <bold>1 <coin/> pour chaque autre Villageois</bold> adjacent à cette carte… William paie donc 1 <coin/>.",
+    "tell-story": "Pour <bold>raconter une histoire</bold>, William doit choisir une ou plusieurs histoires non racontées et les déplacer vers ses histoires racontées.",
+    "tavern-rewards": "William a raconté une histoire de valeur 3 : il gagne donc les 3 bonus de la <bold>Taverne</bold> : 2 <vp/> + 1 <force/> + 1 <villager/>.",
+    "force": "William va gagner 1 <bold>Force</bold> <force/> : son marqueur Force va donc monter. La Force et la <bold>Magie</bold> <magic/> sont souvent des prérequis pour résoudre des Rencontres et des Quêtes !",
+    "skills-score": "À la fin de la partie, vous gagnez <bold>2 <vp/></bold> si vous avez au moins 3 <force/> et 3 <magic/>, et <bold>5 <vp/></bold> si vous avez 5 <force/> et 5 <magic/>.\n<italic>De plus, chaque <force/> ou <magic/> gagnée au-delà de 5 rapporte 1 <vp/> immédiatement.</italic>",
+    "villager-actions": "À vous de jouer. En Été, un Villageois au Village peut faire 3 choses :\n• <bold>activer</bold> une carte adjacente (recruter le Compagnon, acheter l'Objet ou exploiter le Bâtiment) ;\n• <bold>gagner des pièces</bold> : autant de <coin/> qu'il y a d'<bold>autres Villageois</bold> autour de l'une des 2 cartes adjacentes (ici, ce serait 0 <coin/>…) ;\n• <bold>participer à l'Événement</bold>, une seule fois par année (vous ne pouvez donc pas le faire ici).",
+    "buy-tommy": "Utilisez ce Villageois pour <bold>acheter Tommy</bold>.",
+    "reaction": "Certains Compagnons et certains Objets peuvent être activés <bold>en réaction</bold>. Par exemple, lorsque vous achetez un Objet, vous pouvez incliner <bold>Dorian</bold> pour réduire son coût de 1 <coin/>, et gagner 1 <vp/>. Faites-le.",
+    "score-track": "Lorsque vous gagnez des points de victoire, votre marqueur avance sur la <bold>piste de score</bold>. Lorsque vous atteignez 8 puis 20 <vp/>, vous gagnez immédiatement un bonus !",
+    "bonus-tokens": "Vos 3 <bold>jetons Bonus</bold> sont ici. À 8 <vp/>, vous en choisissez un, gagnez ce qu'il offre, et le défaussez.\nÀ 20 <vp/>, vous en choisissez un second, et défaussez le dernier.",
+    "items": "Vos <bold>Objets</bold> vont ici. Vous pouvez en avoir 3 au maximum, mais Dorian vous permet d'en avoir 2 supplémentaires !\nDorian vous fera également gagner en fin de partie 1 <vp/> par Objet en votre possession.",
+    "tommy-score": "<bold>Tommy</bold> vous fera également gagner 1 <vp/> en fin de partie.",
+    "opponent-banquet": "William a utilisé son dernier Villageois actif pour participer à l'Événement, et gagner 3 <coin/>.",
+    "special-action": "En Été, une fois par année, vous pouvez utiliser un Villageois pour effectuer votre <bold>action spéciale</bold> <special/> : raconter une histoire pour gagner 2 <coin/> + 1 <force/> + 2 <vp/>, partir à l'aventure d'une case <travel1/>, ou gagner 1 <magic/>.",
+    "use-tommy": "En Été, vous pouvez également utiliser vos Objets : <bold>Tommy</bold>, par exemple, vous permet de partir à l'aventure !\nInclinez-le en dépensant un Villageois actif pour pouvoir déplacer votre Aventurier jusqu'à 2 cases <travel2/>.",
+    "travel": "Déplacez votre <bold>Aventurier</bold> ici.",
+    "sheep": "Vous avez le choix ici entre gagner 1 <vp/> ou résoudre une Rencontre. Choisissez de résoudre la Rencontre <bold>Moutons</bold>.",
+    "income-token": "Vous avez gagné ce <bold>jeton Revenu</bold> : 1 <coin/> immédiatement, puis 1 <coin/> chaque année.",
+    "opponent-autumn": "William n'a plus de Villageois : il passe en <bold>Automne</bold> <autumn/>. Son Aventurier rentre à Greylune, il récupère ses Villageois et gagne 3 <coin/>.",
+    "autumn": "À vous de jouer : vous n'avez plus d'action possible, passez en <bold>Automne</bold> <autumn/>.",
+    "come-home": "Votre Aventurier rentre à Greylune, vous récupérez vos <bold>Villageois</bold>, et vous redressez vos cartes Compagnon et Objet.",
+    "income": "Vous gagnez également votre <bold>revenu</bold> <income/> : 3 <coin/>, moins 1 <coin/> par Compagnon (Dorian vous coûte 1 <coin/>), plus vos jetons Revenu (1 <coin/> pour les Moutons).",
+    "end-of-year": "Une fois en Automne, les joueurs ne peuvent plus agir, et doivent attendre que les autres joueurs finissent leur année.\nUne fois que tout le monde est en Automne, une <bold>nouvelle année</bold> commence !",
+    "new-village": "En <bold>Hiver</bold> <winter/>, les cartes <bold>Village</bold> restantes sont remplacées par 9 nouvelles cartes Village.",
+    "new-event": "Un nouvel <bold>Événement</bold> est révélé.",
+    "new-encounters": "5 nouvelles <bold>Rencontres</bold> remplacent les précédentes (nombre de joueurs + 3).",
+    "new-year": "Enfin, les joueurs passent tous au <bold>Printemps</bold> <spring/>, et le jeton 1er joueur passe au joueur suivant : une nouvelle année peut commencer !",
+    "periods": "Les années 3 et 4, les cartes Village et Rencontre seront de la <bold>période II</bold> (plus puissantes, mais avec plus de prérequis), et l'année 5, de la <bold>période III</bold>, pour marquer un maximum de <vp/> avant la fin de la partie !",
+    "quests": "Pour gagner beaucoup de <vp/>, vous pouvez également accomplir les <bold>Quêtes Héroïques</bold> <quest/>.\nPour cela, partez à l'aventure, et une fois sur la case d'une Quête, choisissez de la résoudre plutôt qu'une Rencontre.\n<italic>Les <vp/> des Quêtes sont marqués à la fin de la partie.</italic>",
+    "first-quest": "Le <bold>premier joueur</bold> à résoudre une Quête gagne 2 <vp/> supplémentaires !\n<italic>Vous ne pouvez résoudre chaque Quête qu'une seule fois pendant la partie.</italic>",
+    "final-score": "À la fin de la partie, ajoutez aux <vp/> déjà accumulés :\n• les <vp/> des Quêtes ;\n• les <vp/> des Compagnons ;\n• les <vp/> des Objets ;\n• 2 <vp/> si vous avez au moins 3 <force/> et 3 <magic/>, ou 5 <vp/> si vous avez 5 <force/> et 5 <magic/>.",
+    "good-luck": "Le joueur le plus prestigieux à la fin de la 5e année l'emportera !\nÀ vous de forger votre destinée à présent, noble aventurier !"
   }
 }

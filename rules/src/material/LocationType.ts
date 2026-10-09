@@ -119,5 +119,14 @@ export enum LocationType {
   FirstPlayerTokenSpace,
 
   /** Not material: where the display puts a player's panel, over their own area. */
-  PlayerPanel
+  PlayerPanel,
+  /**
+   * Not material: a part of a Village card the tutorial points at — the corner a bonus is printed in,
+   * the points it scores — `parent` being the card and `id` which part.
+   */
+  CardZone,
+  /** Not material: a part of the personal board of `player` the tutorial points at, `id` naming which. */
+  BoardZone,
+  /** Not material: a part of the main board the tutorial points at, `id` naming which. */
+  MainBoardZone
 }

@@ -12,6 +12,7 @@ import { Locators } from './locators/Locators'
 import { Material, MaterialI18n } from './material/Material'
 import { GreyluneScoring } from './scoring/GreyluneScoring'
 import { theme } from './theme'
+import { Tutorial } from './tutorial/Tutorial'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -28,6 +29,7 @@ createRoot(document.getElementById('root')!).render(
       ai={GreyluneAI}
       scoring={new GreyluneScoring()}
       logs={new GreyluneHistory()}
+      tutorial={new Tutorial()}
     >
       <App />
     </GameProvider>

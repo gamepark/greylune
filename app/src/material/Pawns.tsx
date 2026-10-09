@@ -182,8 +182,8 @@ export class SeasonMarkerDescription extends TokenDescription<PlayerColor, Mater
 
   /**
    * The marker of the reader, while they are the one being waited for in Spring or in Summer, wears
-   * the offer to move on (see {@link ChangeSeasonMenu}). Nobody else's marker carries anything: the
-   * moves are the reader's own, and a season is left by the player who is in it.
+   * the offer to move on (see {@link ChangeSeasonMenu}), as long as the move is legal. Nobody else's
+   * marker carries anything: the moves are the reader's own, and a season is left by the player who is in it.
    */
   getItemMenu(
     item: MaterialItem<PlayerColor, LocationType, PlayerColor>,
@@ -195,7 +195,7 @@ export class SeasonMarkerDescription extends TokenDescription<PlayerColor, Mater
     if (rule.id !== RuleId.Spring && rule.id !== RuleId.Summer) return undefined
     const season = rule.id === RuleId.Spring ? Season.Summer : Season.Autumn
     const move = legalMoves.find((move) => isMoveItemType(MaterialType.SeasonMarker)(move) && move.itemIndex === context.index)
-    return <ChangeSeasonMenu season={season} move={move} />
+    return move && <ChangeSeasonMenu season={season} move={move} />
   }
 }
 

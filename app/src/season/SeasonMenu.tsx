@@ -12,8 +12,8 @@ import { GreyluneMenuButton } from '../theme/GreyluneMenuButton'
 
 type Props = {
   season: Season.Summer | Season.Autumn
-  /** Nothing at all when the season cannot be left yet: the button is then drawn and comes up disabled. */
-  move?: MaterialMove<PlayerColor, MaterialType, LocationType>
+  /** The button is only drawn when the season can be left: it never comes up disabled. */
+  move: MaterialMove<PlayerColor, MaterialType, LocationType>
 }
 
 /**
@@ -29,8 +29,7 @@ type Props = {
  * Which is why the label only comes up under the cursor: the marker wears its offer at all times
  * (see `SeasonMarkerDescription`), and a sentence stood permanently on the track would cover the
  * circles on either side, which is where the other players' markers are. The arrow says it, and the
- * words are there for whoever asks. A disabled button never gets asked — no pointer events reach it
- * — but Spring and Summer both spell the same offer out in the header bar, so nothing is lost.
+ * words are there for whoever asks.
  */
 export const ChangeSeasonMenu = ({ season, move }: Props) => {
   const { t } = useTranslation()
