@@ -12,8 +12,9 @@ import { VillageCard } from '../material/VillageCard'
 import { PlayerColor } from '../PlayerColor'
 import { CustomMoveType } from '../rules/CustomMoveType'
 import { RuleId } from '../rules/RuleId'
+import { SummerRule, VillagerActionData } from '../rules/SummerRule'
 import { Assessment } from './Evaluation'
-import { chooseMove } from './GreyluneAI'
+import { chooseMove, rankMoves } from './GreyluneAI'
 import { cloneModel, PlayerModel } from './Model'
 import { GreyluneGame } from './Simulation'
 
@@ -107,6 +108,35 @@ describe('The automatic player', () => {
     const move = chooseMove(game, player)!
     expect(isCustomMoveType(CustomMoveType.TakeEventOption)(move)).toBe(true)
     expect(move.data).toBe(0)
+  })
+
+  it('takes a Villager back for the card that pays the most coins', { timeout: 300_000 }, () => {
+    const game = newGame(3)
+    let random = 11
+    let checked = 0
+    for (let moves = 0; game.rule && moves < 3000 && checked < 10; moves++) {
+      const rules = new GreyluneRules(game)
+      const player = rules.getActivePlayer()!
+      const legal = rules.getLegalMoves(player)
+      if (game.rule.id === RuleId.Summer) {
+        const summer = new SummerRule(game)
+        const coins = (data: VillagerActionData) => (data.card === undefined ? 0 : summer.surcharge(data.card))
+        const coinMoves = legal.filter(isCustomMoveType(CustomMoveType.GainCoinsAround)).map((move) => move.data as VillagerActionData)
+        const choices = new Set(coinMoves.map((data) => `${data.villager}:${coins(data)}`))
+        if (choices.size > new Set(coinMoves.map((data) => data.villager)).size) {
+          checked++
+          for (const { move } of rankMoves(game, player)) {
+            if (!isCustomMoveType(CustomMoveType.GainCoinsAround)(move)) continue
+            const data = move.data as VillagerActionData
+            const most = Math.max(...coinMoves.filter((other) => other.villager === data.villager).map(coins))
+            expect(coins(data)).toBe(most)
+          }
+        }
+      }
+      random = (random * 1103515245 + 12345) % 2147483648
+      playAction(rules, legal[random % legal.length], player)
+    }
+    expect(checked).toBeGreaterThan(0)
   })
 
   it('values a Potion more once it has Selia, and Selia more once it has Potions', () => {

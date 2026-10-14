@@ -6,6 +6,7 @@ import { CustomMoveType } from '../rules/CustomMoveType'
 import { GreyluneMove } from '../rules/GreyluneRule'
 import { LocationType } from '../material/LocationType'
 import { RuleId } from '../rules/RuleId'
+import { SummerRule, VillagerActionData } from '../rules/SummerRule'
 import { Assessment, evaluate } from './Evaluation'
 import { GreyluneGame, simulate } from './Simulation'
 
@@ -46,7 +47,7 @@ export const chooseMove = (game: GreyluneGame, player: PlayerColor): GreyluneMov
  */
 export const rankMoves = (game: GreyluneGame, player: PlayerColor): RankedMove[] => {
   const rules = new GreyluneRules(game)
-  const moves = keepVillagersForSpring(game, player, distinctMoves(rules, rules.getLegalMoves(player)))
+  const moves = keepVillagersForSpring(game, player, candidateMoves(rules, rules.getLegalMoves(player)))
   if (moves.length <= 1) return moves.map((move) => ({ move, value: 0, line: [move] }))
   const search = new TurnSearch(player)
   const nodes = search.children(game, moves)
@@ -93,7 +94,7 @@ class TurnSearch {
     const game = node.game!
     if (game.rule?.player !== this.player) return 0
     const rules = new GreyluneRules(game)
-    const moves = distinctMoves(rules, rules.getLegalMoves(this.player))
+    const moves = candidateMoves(rules, rules.getLegalMoves(this.player))
     if (!moves.length || moves.length > budget) return 0
     const children = this.children(game, moves)
     this.deepen(children, budget - moves.length)
@@ -130,6 +131,36 @@ const bestOf = (nodes: SearchNode[]): SearchNode | undefined => {
   let best: SearchNode | undefined
   for (const node of nodes) if (!best || node.value > best.value) best = node
   return best
+}
+
+/** The legal moves worth playing out: neither twice the same, nor one that another beats in every respect. */
+const candidateMoves = (rules: GreyluneRules, moves: GreyluneMove[]): GreyluneMove[] => richestCoinsAround(rules, distinctMoves(rules, moves))
+
+/**
+ * A Villager taken back for the coins around one card or around the other leaves the same Village
+ * behind, and Neris adds her 2 coins whichever card it is: only the coins differ, so only the card
+ * paying the most is weighed. Left to the evaluation, the coins of the action and the coins the rest
+ * of the year promises are counted on the same purse, whose every coin is worth less than the one
+ * before: the extra coins can come out exactly even, and the bot then took the first card offered.
+ */
+const richestCoinsAround = (rules: GreyluneRules, moves: GreyluneMove[]): GreyluneMove[] => {
+  if (rules.game.rule?.id !== RuleId.Summer) return moves
+  const summer = new SummerRule(rules.game)
+  const coins = (data: VillagerActionData) => (data.card === undefined ? 0 : summer.surcharge(data.card))
+  const best = new Map<number, number>()
+  for (const move of moves) {
+    if (!isCustomMoveType(CustomMoveType.GainCoinsAround)(move)) continue
+    const data = move.data as VillagerActionData
+    best.set(data.villager, Math.max(best.get(data.villager) ?? 0, coins(data)))
+  }
+  const kept = new Set<number>()
+  return moves.filter((move) => {
+    if (!isCustomMoveType(CustomMoveType.GainCoinsAround)(move)) return true
+    const data = move.data as VillagerActionData
+    if (kept.has(data.villager) || coins(data) < best.get(data.villager)!) return false
+    kept.add(data.villager)
+    return true
+  })
 }
 
 /**
