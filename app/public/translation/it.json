@@ -1,1 +1,1157 @@
-{}
+{
+  "Place": "Piazzare",
+  "Participate": "Partecipare",
+  "cancel": "Annulla",
+  "ok": "Ok",
+  "gains": "<gain1/> e <gain2/>",
+  "action": {
+    "exploit": "Sfruttare",
+    "exploit-price": "Sfruttare ({price} <coin/>)",
+    "buy": "Acquistare",
+    "buy-price": "Acquistare ({price} <coin/>)",
+    "recruit": "Reclutare",
+    "recruit-price": "Reclutare ({price} <coin/>)",
+    "activate": "Attivare",
+    "resolve": "Risolvere",
+    "achieve": "Completare",
+    "tell": "Raccontare",
+    "end-story": "Terminare il racconto",
+    "gain-force": "Ottenere {count} Forza",
+    "gain-magic": "Ottenere {count} Magia",
+    "gain-vp": "Ottenere {count} PV",
+    "camp": "Andare all'accampamento",
+    "camp-coins": "Ottenere {coins} <coin/>",
+    "travel": "Viaggiare",
+    "stay": "Restare sul posto",
+    "summer": "Passare all'estate",
+    "autumn": "Passare all'autunno",
+    "special-action": "Azione speciale",
+    "straighten": "Ripristinare una carta"
+  },
+  "header": {
+    "winter": "Nuovo anno",
+    "spring": {
+      "you": "Piazzate un <villager/> o <summer>passate all'estate <sun/></summer>",
+      "player": "{player} piazza un paesano"
+    },
+    "summer": {
+      "you": "Attivate un <villager/>, un oggetto, o <autumn>passate all'autunno <leaf/></autumn>",
+      "player": "{player} svolge la sua azione estiva"
+    },
+    "activate-card": {
+      "you": "Scegliete un'opzione della carta",
+      "player": "{player} attiva una carta"
+    },
+    "must-react-card": {
+      "you": "Dovete attivare {card}",
+      "player": "{player} attiva una carta"
+    },
+    "must-react": {
+      "you": "Dovete attivare un compagno",
+      "player": "{player} attiva una carta"
+    },
+    "activate-seal": {
+      "you": "Attivate un segnalino Sigillo",
+      "player": "{player} attiva un segnalino Sigillo"
+    },
+    "seal-value": {
+      "you": "Scegliete il valore del segnalino Sigillo",
+      "player": "{player} sceglie il valore del segnalino Sigillo"
+    },
+    "discard-item": {
+      "you": "Scartate un oggetto",
+      "player": "{player} scarta un oggetto"
+    },
+    "travel": {
+      "you": "Muovete il vostro <adventurer/> fino a {count, plural, one {# casella} other {# caselle}}",
+      "player": "{player} parte all'avventura"
+    },
+    "encounter": {
+      "you-none": "Risolvete un incontro o <pass>passate</pass>",
+      "you-coin": "Risolvete un incontro o <take>prendete 1 <coin/></take>",
+      "you-vp": "Risolvete un incontro o <take>prendete 1 <vp/></take>",
+      "you-quest": "Risolvete un incontro, <quest>completate una missione <crown/></quest> o <pass>passate</pass>",
+      "player": "{player} risolve un incontro",
+      "nothing": "Qui non potete risolvere né un incontro né una missione."
+    },
+    "outcome": {
+      "you": "Scegliete cosa pagate e cosa ottenete",
+      "player": "{player} sceglie cosa pagare e cosa ottenere"
+    },
+    "quest": {
+      "you": "Raccontate {count, plural, one {# storia} other {# storie}}",
+      "player": "{player} racconta {count, plural, one {# storia} other {# storie}}"
+    },
+    "start-story": {
+      "you": "Raccontate una storia",
+      "player": "{player} racconta una storia"
+    },
+    "tell-story": {
+      "you": "Raccontate una storia ({value}/{max}) o <end>terminate il vostro racconto</end>",
+      "player": "{player} racconta una storia"
+    },
+    "straighten": {
+      "you": "Ripristinate una carta",
+      "player": "{player} ripristina una carta"
+    },
+    "place-villager": {
+      "you": "Piazzate un <villager/>",
+      "player": "{player} piazza un paesano"
+    },
+    "event": {
+      "you": "Scegliete cosa vi fa ottenere l'evento",
+      "player": "{player} partecipa all'evento"
+    },
+    "special-action": {
+      "you": "Scegliete cosa vi fa ottenere l'azione speciale",
+      "player": "{player} usa la sua azione speciale"
+    },
+    "resolve-event": {
+      "you": "Risoluzione dell'evento",
+      "player": "{player} partecipa all'evento"
+    },
+    "autumn": {
+      "you": "Passate all'autunno",
+      "player": "{player} passa all'autunno"
+    },
+    "use-item": {
+      "you": "Usate un oggetto",
+      "player": "{player} usa un oggetto"
+    },
+    "resolve-effects": {
+      "you": "Risoluzione dei vostri guadagni",
+      "player": "Risoluzione dei guadagni di {player}"
+    },
+    "end-turn": {
+      "you": "<end>Termina il mio turno</end>",
+      "player": "{player} termina il suo turno"
+    },
+    "skill": {
+      "you": "Ottenete",
+      "player": "{player} sceglie Forza o Magia"
+    },
+    "bonus": {
+      "you": "Bonus: ottenete",
+      "player": "{player} sceglie un segnalino Bonus"
+    },
+    "reaction": {
+      "you": "Usate un compagno, una pozione, o <pass>passate</pass>",
+      "player": "{player} può reagire"
+    },
+    "reaction-card": {
+      "you": "Attivate {card} o <pass>passate</pass>",
+      "player": "{player} può reagire"
+    },
+    "scoring": {
+      "quests": "Fine partita: PV delle Missioni",
+      "companions": "Fine partita: PV dei Compagni",
+      "items": "Fine partita: PV degli Oggetti",
+      "skills": "Fine partita: PV delle abilità"
+    },
+    "or": "o"
+  },
+  "scoring": {
+    "game": "PV accumulati durante la partita",
+    "quests": "Missioni",
+    "companions": "Compagni",
+    "items": "Oggetti",
+    "skills": "Abilità",
+    "total": "Totale"
+  },
+  "panel": {
+    "first-player": "Primo giocatore",
+    "show-player": "Mostra {player}"
+  },
+  "log": {
+    "new-year": "Anno {year}",
+    "event-reveal": "Evento dell'anno: <tile/>",
+    "first-player": "{player} riceve il segnalino Primo giocatore <token/>",
+    "summer": "{player} passa all'Estate <season/>",
+    "autumn": "{player} passa all'Autunno <season/>",
+    "place-villager": {
+      "between": "{player} piazza <villager/> tra <card1/> e <card2/>",
+      "beside": "{player} piazza <villager/> accanto a <card/>"
+    },
+    "event": "{player} piazza <villager/> sull'Evento <tile/>",
+    "special-action": "{player} piazza <villager/> sulla sua azione speciale",
+    "coins-around": "{player} ottiene monete attorno a <card/>",
+    "withdraw": "{player} manda un <villager/> all'accampamento <camp/>",
+    "activate": {
+      "1": "{player} sfrutta <card/>",
+      "2": "{player} acquista <card/>",
+      "3": "{player} recluta <card/>"
+    },
+    "use-item": "{player} usa <card/>",
+    "reaction": "{player} reagisce con <card/>",
+    "seal": "{player} scarta il segnalino Sigillo <seal/>",
+    "seal-value": "{player} fissa il valore del segnalino Sigillo a <seal/>",
+    "travel": "{player} muove il suo <adventurer/> verso <area/>",
+    "travel-home": "{player} riporta il suo <adventurer/> al Villaggio",
+    "stay": "{player} resta sul posto con il suo <adventurer/>",
+    "encounter": "{player} risolve l'Incontro <card/>",
+    "skip-encounter": "{player} non risolve alcun Incontro",
+    "no-encounter": "{player} non può risolvere alcun Incontro",
+    "quest": "{player} completa la Missione Eroica <quest/>",
+    "quest-first": "{player} completa per primo la Missione Eroica <quest/>",
+    "income-token": "{player} prende il segnalino Rendita <token/>",
+    "tell-story": "{player} racconta la storia <card/> <value/>",
+    "quest-story": "{player} sposta <card/> tra le storie raccontate",
+    "gain-coins": "{player} ottiene {count} <coin/>",
+    "pay-coins": "{player} spende {count} <coin/>",
+    "gain-vp": "{player} ottiene {count} <vp/>",
+    "gain-force": "{player} ottiene {count} <force/>",
+    "spend-force": "{player} spende {count} <force/>",
+    "gain-magic": "{player} ottiene {count} <magic/>",
+    "spend-magic": "{player} spende {count} <magic/>",
+    "gain-villagers": "{player} ottiene {count} <villager/>",
+    "spend-villagers": "{player} spende {count} <villager/>",
+    "return-villagers": "{player} rimette {count} <villager/> nella riserva",
+    "straighten": "{player} ripristina <card/>",
+    "discard-item": "{player} scarta <card/>",
+    "bonus-token": "{player} risolve il segnalino Bonus <token/>",
+    "scoring": {
+      "quests": "Fine partita: PV delle Missioni",
+      "companions": "Fine partita: PV dei Compagni",
+      "items": "Fine partita: PV degli Oggetti",
+      "skills": "Fine partita: PV delle abilità"
+    },
+    "score": "{player} segna {count} <vp/>"
+  },
+  "help": {
+    "period": "Periodo {period}",
+    "cost": "Costo",
+    "surcharge": "Sovrapprezzo",
+    "immediate": "Effetto immediato",
+    "ability": "Capacità",
+    "reaction": "Reazione",
+    "permanent": "Effetto permanente",
+    "score": "PV di fine partita",
+    "type": {
+      "1": {
+        "name": "Edificio",
+        "note": "Un Edificio non può essere né acquistato né reclutato: resta al Villaggio dopo essere stato attivato e potrà essere sfruttato da altri Paesani vicini, anche da un giocatore che lo ha già attivato. Può essere attivato più volte nel corso dello stesso anno."
+      },
+      "2": {
+        "name": "Oggetto",
+        "note": "Un Oggetto si acquista e si colloca a destra della vostra plancia personale. Salvo eccezioni, siete limitati a 3 Oggetti: se superate questo limite acquistando un Oggetto, scartate un Oggetto a vostra scelta, esaurito o no (compreso quello appena acquisito, dopo aver segnato gli eventuali PV immediati)."
+      },
+      "3": {
+        "name": "Compagno",
+        "note": "Un Compagno costa 7 <coin/> da reclutare e si colloca a sinistra della vostra plancia personale. Vi fa ottenere 1 <villager>Paesano</villager>, subito disponibile, ma riduce di una moneta la vostra rendita in Autunno. Non potete mai reclutare più di 3 Compagni nel corso della partita."
+      }
+    },
+    "tavern": {
+      "name": "Taverna"
+    },
+    "tell-story": {
+      "name": "Raccontare una storia",
+      "note": "Raccontate una storia usando una o più carte Incontro risolte in precedenza, senza superare un valore narrativo massimo di 3 — eccezione: 2 storie di valore 2 ciascuna contano solo come una storia di valore 3. I guadagni sono cumulativi: per un valore narrativo totale di 1, ottenete solo il primo bonus; per 2, i primi due; per 3, tutti i bonus."
+    },
+    "potion": {
+      "name": "Pozione",
+      "note": "Pozione: deve essere scartata dopo l'uso e rimessa nella scatola — a meno che Selia non vi permetta di esaurirla invece di scartarla."
+    },
+    "seals": {
+      "label": "Sigilli",
+      "none": "nessuno",
+      "spent": "Su questa carta non resta alcun segnalino <seal/>: non può più essere attivata quest'anno.",
+      "note-players": "Quando viene rivelata, questa carta riceve un numero di segnalini <seal/> pari al numero di giocatori meno 1. Ogni attivazione ne usa uno, che viene poi scartato.",
+      "note-one": "Quando viene rivelata, questa carta riceve un solo segnalino <seal/>, indipendentemente dal numero di giocatori."
+    },
+    "village-deck": {
+      "name": "Mazzo Villaggio",
+      "left": "Carte rimanenti",
+      "note": "Ogni Inverno, le prime 9 carte del mazzo Villaggio vengono rivelate e disposte in una griglia 3x3. Il dorso indica il periodo: I per i primi 2 anni, II per i 2 successivi, III per l'ultimo."
+    },
+    "distance": "Distanza",
+    "story": "Valore narrativo",
+    "income": "Rendita",
+    "requirement": "Requisito",
+    "reward": "Ricompensa",
+    "encounter": {
+      "name": "Incontro",
+      "note": "Una carta Incontro si risolve dalla casella in cui il vostro <adventurer>Avventuriero</adventurer> si è fermato, soddisfacendone il requisito per ottenerne la ricompensa. Dopo averla risolta, fatela scorrere nella colonna delle storie non raccontate della vostra plancia personale.",
+      "both": "Questo Incontro ha 2 requisiti e 2 ricompense: dovete soddisfarne almeno uno per risolverlo. Se soddisfate solo il requisito di sinistra, ottenete solo la ricompensa di sinistra; potete anche soddisfare entrambi i requisiti per ottenere entrambe le ricompense.",
+      "story-only": "Questo Incontro non ha ricompensa: frutta solo quando lo raccontate.",
+      "untellable": "Valore narrativo 0: non potete raccontare questo Incontro, a meno che non riusciate ad aumentarne il valore (Charisma potion, Seren) o per completare la Missione Torneo dei Bardi."
+    },
+    "income-token": {
+      "note": "Segnalino Rendita: dopo aver risolto un Incontro che porta un segnalino Rendita, collocatelo sulla vostra plancia personale e risolvetene subito l'effetto. Lo risolverete di nuovo durante la fase di Rendita, in Autunno. Il numero di segnalini Rendita non è limitato."
+    },
+    "encounter-deck": {
+      "name": "Mazzo Incontri",
+      "left": "Carte rimanenti",
+      "note": "Ogni Inverno, le prime 5/6/7 carte Incontro (con 2/3/4 giocatori) vengono rivelate e disposte a destra del tabellone principale in base alla loro Distanza. Il dorso indica il periodo: I per i primi 2 anni, II per i 2 successivi, III per l'ultimo."
+    },
+    "options": "Opzioni",
+    "vp": "{count} PV",
+    "event": {
+      "name": "Evento",
+      "note": "Una volta all'anno, in Primavera o in Estate, potete partecipare all'Evento come azione: piazzate uno dei vostri <villager>Paesani</villager> attivi — o, in Estate, uno di quelli che si trovano al Villaggio — sulla tessera Evento, a condizione di poterlo attivare (pagando l'eventuale costo) per ottenerne i benefici.",
+      "festival": "Festival: scegliete una casella libera della tessera e ottenete i 2 bonus adiacenti. Il vostro <villager>Paesano</villager> vi resta fino all'Autunno."
+    },
+    "event-pile": {
+      "name": "Pila degli Eventi",
+      "left": "Tessere in arrivo",
+      "note": "Durante la preparazione, una tessera Evento viene rimossa a caso e le altre 5 vengono mescolate segretamente per formare la pila. Ogni Inverno, la prima tessera della pila viene rivelata: è l'Evento attivo per l'anno in corso."
+    },
+    "quest": {
+      "name": "Missione Eroica",
+      "first": "Al primo",
+      "others": "Ai successivi",
+      "note": "Una volta che il vostro <adventurer>Avventuriero</adventurer> si è fermato sulla casella di una Missione Eroica, potete decidere di non risolvere un Incontro per risolvere invece la Missione, se non l'avete ancora fatta e ne soddisfate le condizioni. Se siete il primo giocatore a farlo, piazzate uno dei vostri segnalini Missione sullo spazio che frutta più PV a fine partita; altrimenti, piazzatelo sullo spazio accanto: su questo spazio possono trovarsi più segnalini (di giocatori diversi).",
+      "score": "Potete risolvere ogni Missione una sola volta. I suoi PV vengono aggiunti solo a fine partita, dopo il quinto anno."
+    },
+    "player-board": {
+      "name": "Plancia personale",
+      "companions": {
+        "name": "Compagni",
+        "text": "I vostri Compagni si collocano a sinistra della vostra plancia personale. La loro capacità di reazione, in fondo alla carta, richiede di esaurirli; la loro capacità permanente, invece, è attiva che il Compagno sia esaurito o no."
+      },
+      "items": {
+        "name": "Oggetti",
+        "text": "I vostri Oggetti si collocano a destra della vostra plancia personale. La maggior parte possiede una capacità che richiede di spendere un'azione in Estate per essere usata, esaurendo la carta; le Pozioni devono essere scartate dopo l'uso. In Autunno, ripristinate tutte le vostre carte."
+      },
+      "stories": {
+        "name": "Storie",
+        "text": "Dopo averla risolta, fate scorrere ogni carta Incontro nella colonna delle storie non raccontate della vostra plancia personale. Una volta raccontata una storia, spostate la carta o le carte verso destra, nella zona delle storie raccontate: non potrete più raccontarle per il resto della partita."
+      },
+      "income": {
+        "name": "Rendita",
+        "text": "In Autunno, ottenete la vostra rendita: 3 <coin/>, meno 1 <coin/> per Compagno, più gli eventuali guadagni dei segnalini Rendita piazzati sulla vostra plancia personale."
+      },
+      "skills": {
+        "name": "Forza e Magia",
+        "text": "Il tracciato rosso è quello della vostra Forza, quello blu della vostra Magia: entrambi i segnalini iniziano la partita sullo spazio più basso. Carte e Missioni richiedono a volte di avere almeno un certo livello di Forza o di Magia, a volte di spenderne.",
+        "score": "A fine partita, segnate 2 PV se avete almeno 3 Forza e 3 Magia, o 5 PV se avete 5 Forza e 5 Magia."
+      },
+      "special-action": {
+        "name": "Azione speciale",
+        "text": "Questa casella speciale, utilizzabile solo in Estate, vi permette di piazzare 1 dei vostri <villager>Paesani</villager> attivi per una di queste opzioni, a scelta. Vi resta fino all'Autunno.",
+        "0": "Raccontare una storia: 2 <coin/> + 1 <force>Forza</force> + 2 <vp/>",
+        "1": "Muovere il vostro <adventurer>Avventuriero</adventurer> di una casella",
+        "2": "Ottenere 1 <magic>Magia</magic>"
+      },
+      "quests": {
+        "name": "Segnalini Missione",
+        "text": "Durante la preparazione, i vostri 3 segnalini Missione Eroica vengono piazzati su questi spazi. Ogni volta che risolvete una Missione Eroica, ne piazzate uno su uno degli spazi sotto la sua tessera, sul tabellone principale: non potete quindi risolverne più di 3."
+      },
+      "villagers": {
+        "name": "Paesani attivi",
+        "text": "I Paesani che controllate all'inizio di ogni anno sono detti «attivi» e si trovano in questa zona della vostra plancia personale, così come quelli che ottenete durante l'anno. In Autunno, rimetteteci i Paesani dell'accampamento, dell'Evento e della casella speciale."
+      }
+    },
+    "main-board": {
+      "name": "Tabellone principale",
+      "score": {
+        "name": "Tracciato del punteggio",
+        "text": "I <vp/> segnati durante la partita fanno avanzare il vostro segnalino sul tracciato del punteggio, che riparte da 0 dopo 24. Quando raggiungete 25, 50, 75 e poi 100 PV, prendete o girate i vostri segnalini 25/50 e 75/100 PV.",
+        "note": "Alla fine del quinto anno, aggiungete ai PV accumulati durante la partita i PV delle Missioni, dei Compagni e degli Oggetti, e quelli delle vostre abilità: 2 PV se avete almeno 3 Forza e 3 Magia, 5 PV se avete 5 Forza e 5 Magia."
+      },
+      "bonus": {
+        "name": "Segnalini Bonus",
+        "text": "Quando raggiungete 8 PV, scegliete uno dei vostri 3 segnalini Bonus, risolvetene l'effetto e scartatelo. Quando raggiungete 20 PV, fate lo stesso con uno dei 2 segnalini rimasti."
+      },
+      "village": {
+        "name": "Villaggio",
+        "text": "Durante la preparazione, ogni giocatore piazza il suo <adventurer>Avventuriero</adventurer> al Villaggio. Quando partite all'avventura, il vostro Avventuriero si muove prima dal Villaggio; nel corso dello stesso anno, si muove poi dalla casella in cui si è fermato. In Autunno, torna al Villaggio."
+      },
+      "road": {
+        "name": "Partire all'avventura",
+        "text": "Quando viaggiate, potete muovere il vostro <adventurer>Avventuriero</adventurer> fino al numero di caselle indicato, nella direzione che preferite, o restare sul posto. Più Avventurieri possono trovarsi sulla stessa casella. Lo stemma in alto a sinistra di ogni carta Incontro indica dove collocarla: a destra del tabellone, accanto alla casella che porta lo stesso stemma."
+      },
+      "stops": {
+        "name": "Moneta e PV",
+        "text": "Una volta che il vostro <adventurer>Avventuriero</adventurer> si è fermato sulla casella contrassegnata da una <coin/>, potete decidere di non risolvere un Incontro per ottenere 1 <coin/>. Sulla casella contrassegnata da un <vp/>, potete fare lo stesso per ottenere 1 <vp/>."
+      },
+      "quests": {
+        "name": "Missioni Eroiche",
+        "text": "Le 3 tessere Missione Eroica della partita vengono piazzate a faccia in su sui 3 spazi del tabellone, vicino alle caselle più lontane dal Villaggio. I PV che fruttano a fine partita sono stampati sotto ogni spazio: 7 e 5, 8 e 6, poi 9 e 7 <vp/>, dalla casella più vicina alla più lontana."
+      },
+      "event": {
+        "name": "Evento",
+        "text": "La pila degli Eventi viene piazzata a faccia in giù su questo spazio. Ogni Inverno, la tessera Evento dell'anno precedente viene scartata e la prima tessera della pila viene rivelata: è l'Evento attivo per l'anno in corso."
+      }
+    },
+    "season-board": {
+      "name": "Plancia Stagioni",
+      "year": "Anno",
+      "period": "Periodo",
+      "markers": {
+        "name": "Segnalini Stagione",
+        "text": "Al vostro turno, dovete scegliere una delle azioni consentite dalla stagione in cui vi trovate: è ciò che indica il vostro segnalino Stagione. Alcuni giocatori possono trovarsi in Estate o in Autunno mentre altri sono ancora in Primavera. Un giocatore in Estate non può mai tornare in Primavera nel corso dello stesso anno, e un anno termina solo quando tutti i giocatori hanno raggiunto l'Autunno."
+      },
+      "winter": {
+        "name": "Inverno",
+        "text": "L'Inverno è la fase di preparazione dell'anno. Ignoratela per il primo anno: è già stata effettuata durante la preparazione.",
+        "0": "Piazzate il segnalino Stagione di ogni giocatore sulla casella Primavera",
+        "1": "Il 1° giocatore passa il segnalino 1° giocatore al vicino di sinistra",
+        "2": "Scartate le carte Villaggio, le carte Incontro e la tessera Evento dell'anno precedente, così come i segnalini Sigillo o Rendita che vi si trovavano",
+        "3": "Rivelate le prime 9 carte del mazzo Villaggio in una griglia 3x3, e piazzatevi i segnalini <seal/> che richiedono",
+        "4": "Rivelate la prima tessera della pila degli Eventi: è l'Evento attivo per l'anno in corso",
+        "5": "Rivelate le prime 5/6/7 carte Incontro (con 2/3/4 giocatori) e disponetele a destra del tabellone principale in base alla loro Distanza"
+      },
+      "spring": {
+        "name": "Primavera",
+        "0": "Piazzare un Paesano: prendete uno dei vostri <villager>Paesani</villager> attivi e piazzatelo al Villaggio, tra due carte vicine o tra una carta e uno spazio carta vuoto",
+        "1": "Partecipare all'Evento, una volta all'anno, con uno dei vostri <villager>Paesani</villager> attivi",
+        "2": "Passare all'Estate ed effettuare subito un'azione estiva"
+      },
+      "summer": {
+        "name": "Estate",
+        "0": "Ottenere monete: scegliete uno dei vostri <villager>Paesani</villager> al Villaggio e una carta adiacente a esso, e ottenete 1 <coin/> per ogni altro Paesano adiacente a quella carta, a prescindere dal proprietario",
+        "1": "Attivare una carta: scegliete uno dei vostri <villager>Paesani</villager> al Villaggio e una carta vicina a esso, e pagatene il prezzo più 1 <coin/> per ogni altro Paesano vicino a quella carta, a prescindere dal proprietario",
+        "2": "Partecipare all'Evento, una volta all'anno, con uno dei vostri <villager>Paesani</villager> attivi o uno di quelli che si trovano al Villaggio",
+        "3": "Usare uno dei vostri Oggetti pronti, esaurendolo",
+        "4": "Usare l'azione speciale della vostra plancia personale",
+        "5": "Passare all'Autunno ed effettuare subito un'azione autunnale, solo se non avete più <villager>Paesani</villager> al Villaggio"
+      },
+      "autumn": {
+        "name": "Autunno",
+        "text": "Una volta in Autunno, non potete più effettuare azioni nel corso di quell'anno, e risolvete subito questi passaggi, in quest'ordine.",
+        "0": "Riportate il vostro <adventurer>Avventuriero</adventurer> al Villaggio",
+        "1": "Rimettete i vostri <villager>Paesani</villager> dell'accampamento, dell'Evento e dell'azione speciale nella zona dei Paesani attivi della vostra plancia personale",
+        "2": "Ripristinate tutte le vostre carte",
+        "3": "Ottenete la vostra rendita: 3 <coin/>, meno 1 <coin/> per Compagno, più gli eventuali guadagni dei vostri segnalini Rendita"
+      },
+      "camp": {
+        "name": "Accampamento",
+        "text": "Quando uno dei vostri <villager>Paesani</villager> viene usato e diventa inattivo, piazzatelo nell'accampamento per indicare che non potete più usarlo quest'anno. È lì che vanno anche i Paesani che spendete, presi dalla vostra zona dei Paesani attivi. In Autunno, tornano in quella zona."
+      }
+    },
+    "villager-reserve": {
+      "name": "Riserva di Paesani",
+      "owned": "A vostra disposizione",
+      "text": "Durante la preparazione, 4 dei vostri 7 <villager>Paesani</villager> vengono messi da parte e non sono per ora disponibili: iniziate la partita con 3 Paesani attivi. Ogni volta che ottenete un <villager>Paesano</villager>, arriva da qui e raggiunge la zona dei Paesani attivi della vostra plancia personale. La Missione Trappola mortale vi fa rimettere in questa riserva uno dei vostri Paesani disponibili."
+    },
+    "adventurer": {
+      "name": "Avventuriero",
+      "travel": "Quando viaggiate, potete muovere il vostro Avventuriero fino al numero di caselle indicato, nella direzione che preferite (potete anche scegliere di restare sul posto), e risolvere un Incontro sulla casella di arrivo, se possibile. Più Avventurieri possono trovarsi sulla stessa casella."
+    },
+    "villager": {
+      "name": "Paesano",
+      "active": "I Paesani che controllate all'inizio di ogni anno sono detti «attivi» e si trovano sempre nella zona «Paesani attivi» della vostra plancia personale, così come quelli che ottenete durante l'anno."
+    },
+    "bonus-token": {
+      "name": "Segnalino Bonus"
+    },
+    "skill": {
+      "force": "Forza",
+      "magic": "Magia",
+      "level": "Livello"
+    }
+  },
+  "village-card": {
+    "101": {
+      "name": "Travelers' guild",
+      "ability": "Muovete il vostro <adventurer>Avventuriero</adventurer> fino a 2 caselle."
+    },
+    "102": {
+      "name": "Scouts' guild",
+      "ability": "Scartate un segnalino <seal/> e muovete il vostro <adventurer>Avventuriero</adventurer> fino a un numero di caselle pari al valore del segnalino."
+    },
+    "103": {
+      "name": "The Riven Oak",
+      "ability": "Raccontate una o più storie il cui valore narrativo totale è al massimo 3: 2 PV + 1 <force>Forza</force> + 1 <villager>Paesano</villager>."
+    },
+    "104": {
+      "name": "The Golden Lion",
+      "ability": "Raccontate una o più storie il cui valore narrativo totale è al massimo 3: 4 <coin/> + 1 PV + scartate un segnalino <seal/> e ottenete tante <coin/> quanto il suo valore."
+    },
+    "105": {
+      "name": "Magical school",
+      "ability": "Scartate un segnalino <seal/>, spendete tante <coin/> quanto il suo valore e ottenete 1 <magic>Magia</magic>."
+    },
+    "106": {
+      "name": "Smithy",
+      "ability": "Ottenete 1 <force>Forza</force>."
+    },
+    "107": {
+      "name": "Travelers' guild",
+      "ability": "Spendete 2 <coin/> e muovete il vostro <adventurer>Avventuriero</adventurer> fino a 4 caselle."
+    },
+    "108": {
+      "name": "Scouts' guild",
+      "ability": "Scartate un segnalino <seal/> e muovete il vostro <adventurer>Avventuriero</adventurer> fino a un numero di caselle pari al valore del segnalino."
+    },
+    "109": {
+      "name": "Hall of the heroes",
+      "ability": "Spendete 1 <force>Forza</force> per ottenere 3 PV, e/o spendete 1 <magic>Magia</magic> per ottenere 4 PV."
+    },
+    "110": {
+      "name": "Town hall",
+      "ability": "Scartate un segnalino <seal/>, spendete tante <coin/> quanto il suo valore e ottenete 1 <force>Forza</force> e 1 <magic>Magia</magic>."
+    },
+    "111": {
+      "name": "The Silver Wolf",
+      "ability": "Raccontate una o più storie il cui valore narrativo totale è al massimo 3: 4 <coin/> + scartate un segnalino <seal/> e ottenete tanti PV quanto il suo valore + ripristinate una delle vostre carte."
+    },
+    "112": {
+      "name": "The Jolly Boar",
+      "ability": "Raccontate una o più storie il cui valore narrativo totale è al massimo 3: 3 PV + 2 <coin/> + 1 <force>Forza</force> o 1 <magic>Magia</magic>."
+    },
+    "113": {
+      "name": "Fortress",
+      "ability": "Scartate un segnalino <seal/>, spendete tante <coin/> quanto il suo valore e ottenete 2 PV per ogni Compagno che possedete."
+    },
+    "114": {
+      "name": "Travelers' guild",
+      "ability": "Spendete 2 <coin/> e muovete il vostro <adventurer>Avventuriero</adventurer> fino a 5 caselle."
+    },
+    "115": {
+      "name": "Library",
+      "ability": "Scartate un segnalino <seal/>, spendete tante <coin/> quanto il suo valore e ottenete 1 PV per ogni storia raccontata."
+    },
+    "116": {
+      "name": "The Scarlet Dragon",
+      "ability": "Raccontate una o più storie il cui valore narrativo totale è al massimo 3: 3 PV + 2 PV + 1 PV."
+    },
+    "201": {
+      "name": "Jade statue",
+      "immediate": "Ottenete 1 <force>Forza</force> o 1 <magic>Magia</magic>.",
+      "score": "5 PV."
+    },
+    "202": {
+      "name": "Tommy",
+      "ability": "Esaurite questa carta per muovere il vostro <adventurer>Avventuriero</adventurer> fino a 1 casella, oppure esauritela e spendete 1 <villager>Paesano</villager> per muoverlo fino a 2 caselle.",
+      "score": "1 PV."
+    },
+    "203": {
+      "name": "Hundred-league boots",
+      "immediate": "Scartate il segnalino <seal/> e ottenete tanti PV quanto il suo valore.",
+      "ability": "Esaurite questa carta e scartatela per muovere il vostro <adventurer>Avventuriero</adventurer> fino a 5 caselle."
+    },
+    "204": {
+      "name": "Wizard's staff",
+      "immediate": "Ottenete 1 <magic>Magia</magic>.",
+      "ability": "Esaurite questa carta e spendete 1 <villager>Paesano</villager> per ottenere 1 <magic>Magia</magic>.",
+      "score": "1 PV."
+    },
+    "205": {
+      "name": "Mysterious map",
+      "ability": "Esaurite questa carta per muovere il vostro <adventurer>Avventuriero</adventurer> fino a 1 casella, oppure esauritela, spendete 1 <villager>Paesano</villager> e scartatela per muoverlo fino a 3 caselle.",
+      "score": "1 PV."
+    },
+    "206": {
+      "name": "Mana potion",
+      "immediate": "Scartate il segnalino <seal/> e ottenete tanti PV quanto il suo valore.",
+      "reaction": "Quando partite all'avventura, potete scartare questa carta per aumentare la vostra Magia di 2. Questo aumento è temporaneo e non muovete il vostro segnalino Magia: non potete quindi spendere questi punti."
+    },
+    "207": {
+      "name": "Strength potion",
+      "immediate": "Scartate il segnalino <seal/> e ottenete tanti PV quanto il suo valore.",
+      "reaction": "Quando partite all'avventura, potete scartare questa carta per aumentare la vostra Forza di 2. Questo aumento è temporaneo e non muovete il vostro segnalino Forza: non potete quindi spendere questi punti."
+    },
+    "208": {
+      "name": "Short sword",
+      "immediate": "Ottenete 1 <force>Forza</force>.",
+      "ability": "Esaurite questa carta e spendete 1 <villager>Paesano</villager> per ottenere 1 <force>Forza</force>.",
+      "score": "1 PV."
+    },
+    "209": {
+      "name": "Gold statue",
+      "immediate": "Ottenete 1 <force>Forza</force> o 1 <magic>Magia</magic>.",
+      "score": "5 PV."
+    },
+    "210": {
+      "name": "Snowmane",
+      "ability": "Esaurite questa carta e spendete 1 o 2 <villager>Paesani</villager> per muovere il vostro <adventurer>Avventuriero</adventurer> fino a 3 o 5 caselle.",
+      "score": "2 PV."
+    },
+    "211": {
+      "name": "Horn",
+      "ability": "Esaurite questa carta e spendete 1 o 2 <villager>Paesani</villager> per ottenere 3 o 5 PV.",
+      "score": "1 PV."
+    },
+    "212": {
+      "name": "Treasure map",
+      "ability": "Esaurite questa carta per muovere il vostro <adventurer>Avventuriero</adventurer> fino a 2 caselle, oppure esauritela, spendete 1 <villager>Paesano</villager> e scartatela per muoverlo fino a 4 caselle.",
+      "score": "1 PV."
+    },
+    "213": {
+      "name": "Charisma potion",
+      "immediate": "Scartate il segnalino <seal/> e ottenete tanti PV quanto il suo valore.",
+      "reaction": "Quando raccontate una storia, potete scartare questa carta perché il valore narrativo di una delle vostre carte Incontro sia 3."
+    },
+    "214": {
+      "name": "Endurance potion",
+      "immediate": "Scartate il segnalino <seal/> e ottenete tanti PV quanto il suo valore.",
+      "reaction": "Quando partite all'avventura, potete scartare questa carta per piazzare un <villager>Paesano</villager> attivo al Villaggio."
+    },
+    "215": {
+      "name": "Flying potion",
+      "immediate": "Scartate il segnalino <seal/> e ottenete tanti PV quanto il suo valore.",
+      "reaction": "Quando partite all'avventura, potete scartare questa carta per aumentare la vostra Forza e la vostra Magia di 1. Questo aumento è temporaneo e non muovete i vostri segnalini Forza e Magia: non potete quindi spendere questi punti."
+    },
+    "216": {
+      "name": "Bladechant",
+      "ability": "Esaurite questa carta per ottenere 1 <force>Forza</force> o 1 <magic>Magia</magic>, oppure esauritela e spendete 1 <villager>Paesano</villager> per ottenere 1 <force>Forza</force> e 1 <magic>Magia</magic>.",
+      "score": "1 PV."
+    },
+    "217": {
+      "name": "Invisibility potion",
+      "immediate": "Scartate il segnalino <seal/> e ottenete tanti PV quanto il suo valore.",
+      "reaction": "Quando partite all'avventura, potete scartare questa carta per ignorare un requisito di una carta Incontro."
+    },
+    "218": {
+      "name": "Ruby statue",
+      "immediate": "Ottenete 1 <force>Forza</force> o 1 <magic>Magia</magic>.",
+      "score": "6 PV."
+    },
+    "219": {
+      "name": "Mandolin",
+      "ability": "Esaurite questa carta e spendete 1 <villager>Paesano</villager> per segnare 1 PV per ogni storia non raccontata.",
+      "score": "5 PV."
+    },
+    "220": {
+      "name": "Bag of holding",
+      "ability": "Esaurite questa carta e spendete 1 <villager>Paesano</villager> per ottenere 1 PV per ogni Oggetto che possedete.",
+      "permanent": "Il vostro limite di Oggetti aumenta di 1. Questo effetto funziona anche se questa carta è esaurita e se avevate raggiunto il vostro limite di Oggetti prima di acquisirla.",
+      "score": "4 PV."
+    },
+    "221": {
+      "name": "Philosopher stone",
+      "immediate": "Scartate il segnalino <seal/> e ottenete tanti PV quanto il suo valore.",
+      "ability": "Esaurite questa carta e spendete 1 <villager>Paesano</villager> per ottenere 5 PV."
+    },
+    "222": {
+      "name": "Magic ring",
+      "score": "9 PV."
+    },
+    "301": {
+      "name": "Kael",
+      "role": "Guerriero",
+      "immediate": "Ottenete 1 <villager>Paesano</villager>.",
+      "reaction": "Quando dovete spendere Forza, potete esaurire questa carta per spenderne 1 in meno.",
+      "permanent": "Il vostro limite di Oggetti aumenta di 1.",
+      "score": "1 PV per livello di <force>Forza</force>."
+    },
+    "302": {
+      "name": "Elwen",
+      "role": "Arciere",
+      "immediate": "Ottenete 1 <villager>Paesano</villager>.",
+      "reaction": "Quando partite all'avventura, potete esaurire questa carta per muovere il vostro <adventurer>Avventuriero</adventurer> fino a 2 caselle aggiuntive.",
+      "score": "1 PV per ogni carta Incontro che si trova a una distanza di 3 o più dal Villaggio (raccontata o no)."
+    },
+    "303": {
+      "name": "Dorian",
+      "role": "Mercante",
+      "immediate": "Ottenete 1 <villager>Paesano</villager>.",
+      "reaction": "Quando acquistate un Oggetto, potete esaurire questa carta per ridurne il costo di 1 <coin/> e ottenere 1 PV.",
+      "permanent": "Il vostro limite di Oggetti aumenta di 2.",
+      "score": "1 PV per ogni Oggetto che possedete."
+    },
+    "304": {
+      "name": "Ariok",
+      "role": "Mago",
+      "immediate": "Ottenete 1 <villager>Paesano</villager> e 1 <magic>Magia</magic>.",
+      "reaction": "Quando partite all'avventura, potete esaurire questa carta e spendere 1 <magic>Magia</magic> per ignorare un requisito di una carta Incontro.",
+      "score": "1 PV per livello di <magic>Magia</magic>."
+    },
+    "305": {
+      "name": "Selia",
+      "role": "Alchimista",
+      "immediate": "Ottenete 1 <villager>Paesano</villager>.",
+      "reaction": "Quando attivate un segnalino <seal/>, potete esaurire questa carta per sceglierne il valore (tra 1 e 3).",
+      "permanent": "Quando usate una Pozione, esauritela invece di scartarla. Promemoria: potete usare più Pozioni nello stesso turno.",
+      "score": "2 PV per ogni Pozione che possedete."
+    },
+    "306": {
+      "name": "Neris",
+      "role": "Ladra",
+      "immediate": "Ottenete 1 <villager>Paesano</villager>.",
+      "reaction": "Quando ritirate un <villager>Paesano</villager> dal Villaggio, potete esaurire questa carta per ottenere 2 <coin/> aggiuntive, o per non pagare il sovrapprezzo.",
+      "score": "1 PV ogni 2 <coin/> rimaste."
+    },
+    "307": {
+      "name": "Bran",
+      "role": "Guardiano",
+      "immediate": "Ottenete 1 <villager>Paesano</villager>.",
+      "reaction": "Quando dovete spendere 1 o più <villager>Paesani</villager> attivando una delle vostre carte, potete esaurire questa carta per ridurre quel numero di 1.",
+      "score": "PV = numero di <villager>Paesani</villager> a vostra disposizione meno 2."
+    },
+    "308": {
+      "name": "Lucan",
+      "role": "Paladino",
+      "immediate": "Ottenete 1 <villager>Paesano</villager>.",
+      "reaction": "Quando ottenete Magia, potete esaurire questa carta per ottenere 1 <force>Forza</force> (o viceversa).",
+      "score": "PV = il livello più basso tra la vostra Forza e la vostra Magia."
+    },
+    "309": {
+      "name": "Isandre",
+      "role": "Chierica",
+      "immediate": "Ottenete 1 <villager>Paesano</villager>.",
+      "reaction": "Quando esaurite una delle vostre carte, potete esaurire questa carta per ripristinarla. Potete esaurire subito la carta appena ripristinata per attivarne di nuovo l'effetto.",
+      "score": "2 PV per Compagno."
+    },
+    "310": {
+      "name": "Seren",
+      "role": "Bardo",
+      "immediate": "Ottenete 1 <villager>Paesano</villager>.",
+      "reaction": "Quando raccontate una storia, potete esaurire questa carta perché il valore narrativo di una delle vostre carte Incontro sia 3.",
+      "score": "1 PV per ogni storia raccontata."
+    },
+    "311": {
+      "name": "Mira",
+      "role": "Esploratrice",
+      "immediate": "Ottenete 1 <villager>Paesano</villager>.",
+      "reaction": "Quando partite all'avventura (prima o dopo aver risolto un Incontro), potete esaurire questa carta per piazzare 1 <villager>Paesano</villager> attivo al Villaggio.",
+      "score": "1 PV per ogni carta Incontro con uno stemma diverso (raccontata o no)."
+    }
+  },
+  "encounter-card": {
+    "1": {
+      "name": "Valley",
+      "0": {
+        "requirement": "Avere almeno 1 <force>Forza</force>",
+        "reward": "Muovete il vostro <adventurer>Avventuriero</adventurer> fino a 2 caselle"
+      },
+      "1": {
+        "requirement": "Spendete 1 <villager>Paesano</villager>",
+        "reward": "Ottenete 3 PV"
+      }
+    },
+    "2": {
+      "name": "Tiger",
+      "0": {
+        "requirement": "Spendete 1 <villager>Paesano</villager>"
+      }
+    },
+    "3": {
+      "name": "Rocky pass",
+      "0": {
+        "reward": "Ottenete 1 <force>Forza</force>"
+      }
+    },
+    "4": {
+      "name": "Sheep",
+      "0": {
+        "reward": "Prendete il segnalino Rendita: 1 <coin/> subito, poi altrettanto a ogni Autunno"
+      }
+    },
+    "5": {
+      "name": "Mine",
+      "0": {
+        "requirement": "Spendete 1 <villager>Paesano</villager>",
+        "reward": "Prendete il segnalino Rendita: 2 <coin/> subito, poi altrettanto a ogni Autunno"
+      }
+    },
+    "6": {
+      "name": "Pack of wolves",
+      "0": {
+        "requirement": "Avere almeno 2 <force>Forza</force>",
+        "reward": "Ottenete 3 PV"
+      }
+    },
+    "7": {
+      "name": "Marauders",
+      "0": {
+        "requirement": "Avere un totale di <force>Forza</force> e <magic>Magia</magic> di almeno 2",
+        "reward": "Ottenete 4 <coin/>"
+      }
+    },
+    "8": {
+      "name": "Initiation",
+      "0": {
+        "requirement": "Spendete 4 <coin/>",
+        "reward": "Ottenete 1 <force>Forza</force> e 1 <magic>Magia</magic>"
+      }
+    },
+    "9": {
+      "name": "Hermit",
+      "0": {
+        "requirement": "Avere almeno 2 <force>Forza</force>",
+        "reward": "Ottenete 1 <magic>Magia</magic>"
+      }
+    },
+    "10": {
+      "name": "Ambush",
+      "0": {
+        "requirement": "Avere almeno 1 <magic>Magia</magic>",
+        "reward": "Prendete il segnalino Rendita: 1 <coin/> subito, poi altrettanto a ogni Autunno"
+      }
+    },
+    "11": {
+      "name": "Cursed skull",
+      "0": {
+        "requirement": "Avere almeno 2 <magic>Magia</magic>",
+        "reward": "Ripristinate una delle vostre carte"
+      }
+    },
+    "12": {
+      "name": "Circle of stones",
+      "0": {
+        "reward": "Ottenete 1 <magic>Magia</magic>"
+      }
+    },
+    "13": {
+      "name": "Camp",
+      "0": {
+        "requirement": "Avere un totale di <force>Forza</force> e <magic>Magia</magic> di almeno 1",
+        "reward": "Ottenete 1 <villager>Paesano</villager>"
+      }
+    },
+    "14": {
+      "name": "Inn",
+      "0": {
+        "requirement": "Spendete 2 <coin/>",
+        "reward": "Ottenete 1 <villager>Paesano</villager>"
+      }
+    },
+    "15": {
+      "name": "Bear",
+      "0": {
+        "requirement": "Avere almeno 1 <force>Forza</force>",
+        "reward": "Ottenete 2 PV"
+      },
+      "1": {
+        "requirement": "Avere almeno 1 <magic>Magia</magic>",
+        "reward": "Ottenete 2 PV"
+      }
+    },
+    "16": {
+      "name": "World-tree",
+      "0": {
+        "reward": "Prendete il segnalino Rendita: 1 PV subito, poi altrettanto a ogni Autunno"
+      }
+    },
+    "17": {
+      "name": "Treasure",
+      "0": {
+        "requirement": "Avere almeno 3 <magic>Magia</magic>",
+        "reward": "Ottenete 3 <coin/>"
+      },
+      "1": {
+        "requirement": "Spendete 1 <magic>Magia</magic>",
+        "reward": "Ottenete 4 <coin/>"
+      }
+    },
+    "18": {
+      "name": "Lone tower",
+      "0": {
+        "requirement": "Spendete 1 <magic>Magia</magic>",
+        "reward": "Ripartite all'avventura — muovete il vostro <adventurer>Avventuriero</adventurer> fino a 3 caselle — e ottenete 3 PV"
+      }
+    },
+    "19": {
+      "name": "Witchcraft",
+      "0": {
+        "requirement": "Spendete 4 <coin/>",
+        "reward": "Ottenete 2 <magic>Magia</magic>"
+      }
+    },
+    "20": {
+      "name": "Incantation",
+      "0": {
+        "requirement": "Spendete 1 <villager>Paesano</villager>",
+        "reward": "Ottenete 1 <magic>Magia</magic>"
+      }
+    },
+    "21": {
+      "name": "Unicorn",
+      "0": {
+        "requirement": "Avere almeno 3 <magic>Magia</magic>",
+        "reward": "Ripristinate una delle vostre carte, e prendete il segnalino Rendita: 1 PV subito, poi altrettanto a ogni Autunno"
+      }
+    },
+    "22": {
+      "name": "Joust",
+      "0": {
+        "requirement": "Spendete 1 <villager>Paesano</villager>",
+        "reward": "Ottenete 3 PV"
+      },
+      "1": {
+        "requirement": "Avere almeno 4 <force>Forza</force>",
+        "reward": "Ottenete 4 PV"
+      }
+    },
+    "23": {
+      "name": "Diamond",
+      "0": {
+        "requirement": "Spendete 1 <force>Forza</force>",
+        "reward": "Ottenete 5 <coin/>"
+      }
+    },
+    "24": {
+      "name": "Farm",
+      "0": {
+        "reward": "Ottenete 1 <villager>Paesano</villager>"
+      }
+    },
+    "25": {
+      "name": "Demon",
+      "0": {
+        "requirement": "Avere almeno 3 <force>Forza</force>",
+        "reward": "Ottenete 3 PV"
+      },
+      "1": {
+        "requirement": "Avere almeno 3 <magic>Magia</magic>",
+        "reward": "Ottenete 3 PV"
+      }
+    },
+    "26": {
+      "name": "Legendary sword",
+      "0": {
+        "requirement": "Spendete 1 <villager>Paesano</villager>",
+        "reward": "Ottenete 3 PV"
+      }
+    },
+    "27": {
+      "name": "Coopery",
+      "0": {
+        "requirement": "Spendete 4 <coin/>",
+        "reward": "Prendete il segnalino Rendita: 2 PV subito, poi altrettanto a ogni Autunno"
+      }
+    },
+    "28": {
+      "name": "Training",
+      "0": {
+        "requirement": "Spendete 4 <coin/>",
+        "reward": "Prendete il segnalino Rendita: 1 <force>Forza</force> subito, poi altrettanto a ogni Autunno"
+      }
+    },
+    "29": {
+      "name": "Vagabond",
+      "0": {
+        "requirement": "Avere un totale di <force>Forza</force> e <magic>Magia</magic> di almeno 4",
+        "reward": "Ottenete 1 <villager>Paesano</villager>"
+      }
+    },
+    "30": {
+      "name": "Errant knight",
+      "0": {
+        "requirement": "Spendete 2 <coin/>",
+        "reward": "Ottenete 1 <force>Forza</force> e 2 PV"
+      }
+    },
+    "31": {
+      "name": "Caravan",
+      "0": {
+        "requirement": "Spendete 2 <villager>Paesani</villager>",
+        "reward": "Prendete il segnalino Rendita: 4 <coin/> subito, poi altrettanto a ogni Autunno"
+      }
+    },
+    "32": {
+      "name": "Brigands",
+      "0": {
+        "requirement": "Avere almeno 3 <force>Forza</force>",
+        "reward": "Ottenete 4 <coin/> e 2 PV"
+      }
+    },
+    "33": {
+      "name": "Archery",
+      "0": {
+        "requirement": "Spendete 3 <coin/>",
+        "reward": "Ottenete 1 <force>Forza</force> e 3 PV"
+      }
+    },
+    "34": {
+      "name": "Snowy pass",
+      "0": {
+        "requirement": "Avere almeno 5 <force>Forza</force>",
+        "reward": "Ottenete 5 <coin/> e 3 PV"
+      }
+    },
+    "35": {
+      "name": "Necromancer",
+      "0": {
+        "requirement": "Avere un totale di <force>Forza</force> e <magic>Magia</magic> di almeno 8",
+        "reward": "Ottenete 9 PV"
+      }
+    },
+    "36": {
+      "name": "Gold mine",
+      "0": {
+        "requirement": "Spendete 1 <villager>Paesano</villager>",
+        "reward": "Ottenete 7 <coin/>"
+      }
+    },
+    "37": {
+      "name": "Dragon",
+      "0": {
+        "requirement": "Avere almeno 5 <force>Forza</force>",
+        "reward": "Ottenete 4 PV"
+      },
+      "1": {
+        "requirement": "Avere almeno 5 <magic>Magia</magic>",
+        "reward": "Ottenete 4 PV"
+      }
+    },
+    "38": {
+      "name": "Labyrinth",
+      "0": {
+        "requirement": "Spendete 1 <villager>Paesano</villager>",
+        "reward": "Ottenete 4 PV"
+      },
+      "1": {
+        "requirement": "Spendete 1 <villager>Paesano</villager>",
+        "reward": "Ottenete 4 PV"
+      }
+    },
+    "39": {
+      "name": "Relay",
+      "0": {
+        "requirement": "Spendete 4 <coin/>",
+        "reward": "Ripartite all'avventura — muovete il vostro <adventurer>Avventuriero</adventurer> fino a 3 caselle — e ottenete 2 PV"
+      }
+    },
+    "40": {
+      "name": "Fairy ring",
+      "0": {
+        "requirement": "Spendete 1 <villager>Paesano</villager>",
+        "reward": "Ottenete 1 <magic>Magia</magic> e 3 PV"
+      }
+    },
+    "41": {
+      "name": "Holy chalice",
+      "0": {
+        "requirement": "Avere almeno 5 <magic>Magia</magic>",
+        "reward": "Ripristinate una delle vostre carte e ottenete 4 PV"
+      }
+    }
+  },
+  "event-tile": {
+    "1": {
+      "name": "Banchetto",
+      "0": {
+        "reward": "Ottenete 3 <coin/>"
+      },
+      "1": {
+        "reward": "Ripristinate una delle vostre carte esaurite"
+      }
+    },
+    "2": {
+      "name": "Festival"
+    },
+    "3": {
+      "name": "Grande fiera",
+      "0": {
+        "requirement": "Spendete 3 <coin/>",
+        "reward": "Ottenete 1 <force>Forza</force> e 1 <magic>Magia</magic>"
+      }
+    },
+    "4": {
+      "name": "Spettacolo di magia",
+      "0": {
+        "requirement": "Spendete 1 <magic>Magia</magic>",
+        "reward": "Muovete il vostro <adventurer>Avventuriero</adventurer> fino a 5 caselle"
+      }
+    },
+    "5": {
+      "name": "Raduno",
+      "0": {
+        "requirement": "Spendete 1 <force>Forza</force>",
+        "reward": "Ottenete 1 <villager>Paesano</villager>"
+      },
+      "1": {
+        "requirement": "Spendete 3 <coin/>",
+        "reward": "Ottenete 1 <villager>Paesano</villager>"
+      }
+    },
+    "6": {
+      "name": "Torneo",
+      "0": {
+        "requirement": "Spendete 1 <force>Forza</force>",
+        "reward": "Ottenete 6 <coin/>"
+      },
+      "1": {
+        "requirement": "Spendete 1 <force>Forza</force>",
+        "reward": "Ottenete 4 PV"
+      }
+    }
+  },
+  "quest-tile": {
+    "1": {
+      "name": "Gigante",
+      "requirement": "Avere almeno 4 <force>Forza</force>"
+    },
+    "2": {
+      "name": "Drago",
+      "requirement": "Avere un totale di <force>Forza</force> e <magic>Magia</magic> di almeno 6"
+    },
+    "3": {
+      "name": "Spettri",
+      "requirement": "Avere almeno 4 <magic>Magia</magic>"
+    },
+    "4": {
+      "name": "Torneo dei Bardi",
+      "requirement": "Spostate 2 carte Incontro nella zona delle storie raccontate (qualunque sia il loro valore narrativo)"
+    },
+    "5": {
+      "name": "Donazione",
+      "requirement": "Scartate uno dei vostri Oggetti"
+    },
+    "6": {
+      "name": "Non morti",
+      "requirement": "Spendete 1 <force>Forza</force> e 1 <magic>Magia</magic>"
+    },
+    "7": {
+      "name": "Trappola mortale",
+      "requirement": "Rimettete nella riserva uno dei vostri <villager>Paesani</villager> disponibili"
+    },
+    "8": {
+      "name": "Riscatto",
+      "requirement": "Spendete 6 <coin/>"
+    },
+    "9": {
+      "name": "Matrimonio",
+      "requirement": "Spendete 2 <villager>Paesani</villager>"
+    }
+  },
+  "tuto": {
+    "welcome": "Benvenuti nel tutorial di <bold>Greylune</bold>!",
+    "goal": "In questo gioco, interpretate un <bold>Avventuriero</bold>.\nIl vostro obiettivo è diventare la figura più prestigiosa di Greylune accumulando il maggior numero di punti vittoria <vp/> al termine dei <bold>cinque anni</bold> di gioco.",
+    "seasons": "Ogni anno è diviso in <bold>4 stagioni</bold>. L'Inverno <winter/> è la preparazione, automatica.",
+    "spring": "Voi e il vostro avversario siete in <bold>Primavera</bold> <spring/>.",
+    "villagers": "In Primavera, piazzate i vostri <bold>Paesani</bold>. Iniziate con 3 Paesani, e potete reclutarne fino a 4 in più.",
+    "village": "I Paesani possono essere piazzati al <bold>Villaggio</bold>, tra 2 carte. In Estate, questo vi permetterà di beneficiare di una delle 2 carte adiacenti.\n<italic>Nel gioco ci sono numerose carte, tutte uniche. Su Game Park, cliccate su un elemento per aprire l'aiuto di gioco!</italic>",
+    "place-first": "Piazzate il vostro primo Paesano qui, accanto a <bold>Dorian</bold>.",
+    "opponent-turn": "È il turno del vostro avversario, William.",
+    "place-second": "Piazzate il vostro secondo Paesano qui, tra <bold>Tommy</bold> e <bold>The Riven Oak</bold>.",
+    "go-summer": "Vi resta un terzo Paesano, ma nulla vi obbliga a piazzarlo. Scegliete di <bold>passare all'Estate</bold> <summer/>.",
+    "summer": "Il vostro <bold>segnalino Stagione</bold> viene spostato in Estate. In questa stagione, non potete più piazzare Paesani al Villaggio.\n<italic>Il vostro avversario resta in Primavera.</italic>",
+    "recruit": "In Estate, potete usare un Paesano piazzato al Villaggio per <bold>attivare</bold> una delle 2 carte adiacenti.\nPer esempio, questo Paesano può reclutare questo Compagno, <bold>Dorian</bold>, per <bold>7 <coin/></bold>. Fatelo.",
+    "starting-coins": "Iniziate la partita con <bold>8 <coin/></bold>.\n<italic>Le monete servono a reclutare Compagni, acquistare Oggetti e attivare alcuni Edifici, Eventi o Incontri.</italic>",
+    "companions": "I vostri <bold>Compagni</bold> vanno qui. Potete averne al massimo 3.",
+    "new-villager": "Inoltre, quando reclutate un Compagno, ottenete subito un nuovo <bold>Paesano</bold> <villager/>.",
+    "opponent-guild": "Tocca al vostro avversario. Passa all'Estate, e usa questo Paesano per sfruttare <bold>Scouts' guild</bold>.",
+    "seal": "Questo Edificio porta un <bold>Sigillo</bold> <seal/>: il suo effetto dipende dal valore di questo Sigillo (tra 1 e 3). Qui, William può partire all'avventura fino a una distanza di 1.\n<italic>Con 3 o 4 giocatori, ci sarebbero 2 o 3 Sigilli.</italic>",
+    "camp": "Una volta usato, il Paesano va qui, all'<bold>accampamento</bold>. Sarà di nuovo disponibile l'anno prossimo.",
+    "opponent-travel": "William <bold>parte all'avventura</bold>: muove il suo <bold>Avventuriero</bold> <adventurer/>, qui di una casella al massimo.",
+    "opponent-encounter": "In questo punto, William può ottenere 1 <coin/> o risolvere una carta <bold>Incontro</bold>. Sceglie di risolvere l'Incontro <bold>Tiger</bold>.",
+    "untold-stories": "Manda un Paesano attivo all'accampamento, e Tiger va tra le sue <bold>storie non raccontate</bold>!",
+    "banquet": "Tocca a voi. Ogni anno, a Greylune si svolge un <bold>Evento</bold>. Quest'anno, è il <bold>Banchetto</bold>.\nCliccateci sopra per conoscerne l'effetto, poi mandateci un Paesano attivo per ottenere 3 <coin/>.",
+    "opponent-tavern": "William vuole ora sfruttare <bold>The Riven Oak</bold> per raccontare il suo incontro con Tiger!\nTuttavia, per attivare una carta del Villaggio, bisogna pagare <bold>1 <coin/> per ogni altro Paesano</bold> adiacente a quella carta… William paga quindi 1 <coin/>.",
+    "tell-story": "Per <bold>raccontare una storia</bold>, William deve scegliere una o più storie non raccontate e spostarle tra le sue storie raccontate.",
+    "tavern-rewards": "William ha raccontato una storia di valore 3: ottiene quindi i 3 bonus della <bold>Taverna</bold>: 2 <vp/> + 1 <force/> + 1 <villager/>.",
+    "force": "William otterrà 1 <bold>Forza</bold> <force/>: il suo segnalino Forza salirà quindi. La Forza e la <bold>Magia</bold> <magic/> sono spesso requisiti per risolvere Incontri e Missioni!",
+    "skills-score": "A fine partita, ottenete <bold>2 <vp/></bold> se avete almeno 3 <force/> e 3 <magic/>, e <bold>5 <vp/></bold> se avete 5 <force/> e 5 <magic/>.\n<italic>Inoltre, ogni <force/> o <magic/> ottenuta oltre il 5 frutta subito 1 <vp/>.</italic>",
+    "villager-actions": "Tocca a voi. In Estate, un Paesano al Villaggio può fare 3 cose:\n• <bold>attivare</bold> una carta adiacente (reclutare il Compagno, acquistare l'Oggetto o sfruttare l'Edificio);\n• <bold>ottenere monete</bold>: tante <coin/> quanti sono gli <bold>altri Paesani</bold> attorno a una delle 2 carte adiacenti (qui, sarebbero 0 <coin/>…);\n• <bold>partecipare all'Evento</bold>, una sola volta all'anno (quindi qui non potete farlo).",
+    "buy-tommy": "Usate questo Paesano per <bold>acquistare Tommy</bold>.",
+    "reaction": "Alcuni Compagni e alcuni Oggetti possono essere attivati <bold>in reazione</bold>. Per esempio, quando acquistate un Oggetto, potete esaurire <bold>Dorian</bold> per ridurne il costo di 1 <coin/>, e ottenere 1 <vp/>. Fatelo.",
+    "score-track": "Quando ottenete punti vittoria, il vostro segnalino avanza sul <bold>tracciato del punteggio</bold>. Quando raggiungete 8 e poi 20 <vp/>, ottenete subito un bonus!",
+    "bonus-tokens": "I vostri 3 <bold>segnalini Bonus</bold> sono qui. A 8 <vp/>, ne scegliete uno, ottenete ciò che offre, e lo scartate.\nA 20 <vp/>, ne scegliete un secondo, e scartate l'ultimo.",
+    "items": "I vostri <bold>Oggetti</bold> vanno qui. Potete averne al massimo 3, ma Dorian vi permette di averne 2 in più!\nDorian vi farà anche ottenere a fine partita 1 <vp/> per ogni Oggetto in vostro possesso.",
+    "tommy-score": "Anche <bold>Tommy</bold> vi farà ottenere 1 <vp/> a fine partita.",
+    "opponent-banquet": "William ha usato il suo ultimo Paesano attivo per partecipare all'Evento, e ottenere 3 <coin/>.",
+    "special-action": "In Estate, una volta all'anno, potete usare un Paesano per effettuare la vostra <bold>azione speciale</bold> <special/>: raccontare una storia per ottenere 2 <coin/> + 1 <force/> + 2 <vp/>, partire all'avventura di una casella <travel1/>, o ottenere 1 <magic/>.",
+    "use-tommy": "In Estate, potete anche usare i vostri Oggetti: <bold>Tommy</bold>, per esempio, vi permette di partire all'avventura!\nEsauritelo spendendo un Paesano attivo per poter muovere il vostro Avventuriero fino a 2 caselle <travel2/>.",
+    "travel": "Muovete il vostro <bold>Avventuriero</bold> qui.",
+    "sheep": "Qui potete scegliere tra ottenere 1 <vp/> o risolvere un Incontro. Scegliete di risolvere l'Incontro <bold>Sheep</bold>.",
+    "income-token": "Avete ottenuto questo <bold>segnalino Rendita</bold>: 1 <coin/> subito, poi 1 <coin/> ogni anno.",
+    "opponent-autumn": "William non ha più Paesani: passa all'<bold>Autunno</bold> <autumn/>. Il suo Avventuriero rientra a Greylune, recupera i suoi Paesani e ottiene 3 <coin/>.",
+    "autumn": "Tocca a voi: non avete più azioni possibili, passate all'<bold>Autunno</bold> <autumn/>.",
+    "come-home": "Il vostro Avventuriero rientra a Greylune, recuperate i vostri <bold>Paesani</bold>, e ripristinate le vostre carte Compagno e Oggetto.",
+    "income": "Ottenete anche la vostra <bold>rendita</bold> <income/>: 3 <coin/>, meno 1 <coin/> per Compagno (Dorian vi costa 1 <coin/>), più i vostri segnalini Rendita (1 <coin/> per Sheep).",
+    "end-of-year": "Una volta in Autunno, i giocatori non possono più agire, e devono aspettare che gli altri giocatori finiscano il loro anno.\nUna volta che tutti sono in Autunno, inizia un <bold>nuovo anno</bold>!",
+    "new-village": "In <bold>Inverno</bold> <winter/>, le carte <bold>Villaggio</bold> rimaste vengono sostituite da 9 nuove carte Villaggio.",
+    "new-event": "Viene rivelato un nuovo <bold>Evento</bold>.",
+    "new-encounters": "5 nuovi <bold>Incontri</bold> sostituiscono i precedenti (numero di giocatori + 3).",
+    "new-year": "Infine, tutti i giocatori passano alla <bold>Primavera</bold> <spring/>, e il segnalino 1° giocatore passa al giocatore successivo: un nuovo anno può iniziare!",
+    "periods": "Negli anni 3 e 4, le carte Villaggio e Incontro saranno del <bold>periodo II</bold> (più potenti, ma con più requisiti), e nell'anno 5, del <bold>periodo III</bold>, per segnare il massimo di <vp/> prima della fine della partita!",
+    "quests": "Per ottenere molti <vp/>, potete anche completare le <bold>Missioni Eroiche</bold> <quest/>.\nPer farlo, partite all'avventura, e una volta sulla casella di una Missione, scegliete di risolverla invece di un Incontro.\n<italic>I <vp/> delle Missioni vengono segnati a fine partita.</italic>",
+    "first-quest": "Il <bold>primo giocatore</bold> a risolvere una Missione ottiene 2 <vp/> in più!\n<italic>Potete risolvere ogni Missione una sola volta durante la partita.</italic>",
+    "final-score": "A fine partita, aggiungete ai <vp/> già accumulati:\n• i <vp/> delle Missioni;\n• i <vp/> dei Compagni;\n• i <vp/> degli Oggetti;\n• 2 <vp/> se avete almeno 3 <force/> e 3 <magic/>, o 5 <vp/> se avete 5 <force/> e 5 <magic/>.",
+    "good-luck": "Vincerà il giocatore più prestigioso alla fine del 5° anno!\nOra tocca a voi forgiare il vostro destino, nobile avventuriero!"
+  }
+}

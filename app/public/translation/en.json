@@ -67,10 +67,10 @@
       "player": "{player} goes on an adventure"
     },
     "encounter": {
-      "you-none": "Resolve an Encounter",
+      "you-none": "Resolve an Encounter or <pass>pass</pass>",
       "you-coin": "Resolve an Encounter or <take>take 1 <coin/></take>",
       "you-vp": "Resolve an Encounter or <take>take 1 <vp/></take>",
-      "you-quest": "Resolve an Encounter or <quest>complete a Quest <crown/></quest>",
+      "you-quest": "Resolve an Encounter, <quest>complete a Quest <crown/></quest> or <pass>pass</pass>",
       "player": "{player} resolves an Encounter",
       "nothing": "You can resolve neither an Encounter nor a Quest here."
     },
@@ -131,7 +131,7 @@
       "player": "{player} chooses Strength or Magic"
     },
     "bonus": {
-      "you": "Choose a Bonus token",
+      "you": "Bonus: gain",
       "player": "{player} chooses a Bonus token"
     },
     "reaction": {
@@ -159,7 +159,63 @@
     "total": "Total"
   },
   "panel": {
-    "first-player": "First player"
+    "first-player": "First player",
+    "show-player": "Show {player}"
+  },
+  "log": {
+    "new-year": "Year {year}",
+    "event-reveal": "Event of the year: <tile/>",
+    "first-player": "{player} receives the 1st Player token <token/>",
+    "summer": "{player} moves to Summer <season/>",
+    "autumn": "{player} moves to Autumn <season/>",
+    "place-villager": {
+      "between": "{player} places <villager/> between <card1/> and <card2/>",
+      "beside": "{player} places <villager/> next to <card/>"
+    },
+    "event": "{player} places <villager/> on the Event <tile/>",
+    "special-action": "{player} places <villager/> on their special action",
+    "coins-around": "{player} gains coins around <card/>",
+    "withdraw": "{player} sends a <villager/> to the Campsite <camp/>",
+    "activate": {
+      "1": "{player} uses <card/>",
+      "2": "{player} buys <card/>",
+      "3": "{player} recruits <card/>"
+    },
+    "use-item": "{player} uses <card/>",
+    "reaction": "{player} reacts with <card/>",
+    "seal": "{player} discards the Seal token <seal/>",
+    "seal-value": "{player} sets the Seal token's value to <seal/>",
+    "travel": "{player} moves their <adventurer/> to <area/>",
+    "travel-home": "{player} brings their <adventurer/> back to the Village",
+    "stay": "{player} stays where they are with their <adventurer/>",
+    "encounter": "{player} resolves the Encounter <card/>",
+    "skip-encounter": "{player} does not resolve an Encounter",
+    "no-encounter": "{player} cannot resolve any Encounter",
+    "quest": "{player} completes the Heroic Quest <quest/>",
+    "quest-first": "{player} is the first to complete the Heroic Quest <quest/>",
+    "income-token": "{player} takes the Income token <token/>",
+    "tell-story": "{player} tells the story <card/> <value/>",
+    "quest-story": "{player} moves <card/> to their told stories",
+    "gain-coins": "{player} gains {count} <coin/>",
+    "pay-coins": "{player} spends {count} <coin/>",
+    "gain-vp": "{player} gains {count} <vp/>",
+    "gain-force": "{player} gains {count} <force/>",
+    "spend-force": "{player} spends {count} <force/>",
+    "gain-magic": "{player} gains {count} <magic/>",
+    "spend-magic": "{player} spends {count} <magic/>",
+    "gain-villagers": "{player} gains {count} <villager/>",
+    "spend-villagers": "{player} spends {count} <villager/>",
+    "return-villagers": "{player} returns {count} <villager/> to the supply",
+    "straighten": "{player} readies <card/>",
+    "discard-item": "{player} discards <card/>",
+    "bonus-token": "{player} resolves the Bonus token <token/>",
+    "scoring": {
+      "quests": "End of the game: VP from Quests",
+      "companions": "End of the game: VP from Companions",
+      "items": "End of the game: VP from Items",
+      "skills": "End of the game: VP from skills"
+    },
+    "score": "{player} scores {count} <vp/>"
   },
   "help": {
     "period": "Period {period}",
@@ -400,7 +456,7 @@
     },
     "104": {
       "name": "The Golden Lion",
-      "ability": "Discard a <seal/> token and tell one or more stories with a total storytelling value of up to 3: 4 <coin/> + 1 VP + as many <coin/> as the token's value."
+      "ability": "Tell one or more stories with a total storytelling value of up to 3: 4 <coin/> + 1 VP + discard a <seal/> token and gain as many <coin/> as its value."
     },
     "105": {
       "name": "Magical school",
@@ -428,7 +484,7 @@
     },
     "111": {
       "name": "The Silver Wolf",
-      "ability": "Discard a <seal/> token and tell one or more stories with a total storytelling value of up to 3: 4 <coin/> + as many VP as the token's value + ready one of your cards."
+      "ability": "Tell one or more stories with a total storytelling value of up to 3: 4 <coin/> + discard a <seal/> token and gain as many VP as its value + ready one of your cards."
     },
     "112": {
       "name": "The Jolly Boar",
@@ -586,7 +642,7 @@
       "score": "1 VP per Item you have."
     },
     "304": {
-      "name": "Arick",
+      "name": "Ariok",
       "role": "Wizard",
       "immediate": "Gain 1 <villager>Villager</villager> and 1 <magic>Magic</magic>.",
       "reaction": "When you go adventuring, you may exhaust this card and spend 1 <magic>Magic</magic> to ignore one requirement on an Encounter card.",
@@ -1041,5 +1097,61 @@
       "name": "Wedding",
       "requirement": "Spend 2 <villager>Villagers</villager>"
     }
+  },
+  "tuto": {
+    "welcome": "Welcome to the <bold>Greylune</bold> tutorial!",
+    "goal": "In this game, you play as an <bold>Adventurer</bold>.\nYour goal is to become the most prestigious figure in Greylune by earning the most Victory Points <vp/> at the end of <bold>five years</bold> of play.",
+    "seasons": "Each year is divided into <bold>4 seasons</bold>. Winter <winter/> is the setup, which is automatic.",
+    "spring": "You and your opponent are in <bold>Spring</bold> <spring/>.",
+    "villagers": "In Spring, you place your <bold>Villagers</bold>. You start with 3 Villagers, and can recruit up to 4 more.",
+    "village": "Villagers can be placed in the <bold>Village</bold>, between 2 cards. In Summer, this will let you benefit from one of the 2 adjacent cards.\n<italic>There are many cards in the game, all unique. On Game Park, click on any element to open the player aid!</italic>",
+    "place-first": "Place your first Villager here, next to <bold>Dorian</bold>.",
+    "opponent-turn": "It is your opponent's turn, William.",
+    "place-second": "Place your second Villager here, between <bold>Tommy</bold> and <bold>The Riven Oak</bold>.",
+    "go-summer": "You still have a third Villager, but nothing forces you to place it. Choose to <bold>move to Summer</bold> <summer/>.",
+    "summer": "Your <bold>Season marker</bold> is moved to Summer. In this season, you can no longer place Villagers in the Village.\n<italic>Your opponent stays in Spring.</italic>",
+    "recruit": "In Summer, you can use a Villager placed in the Village to <bold>activate</bold> one of the 2 adjacent cards.\nFor example, this Villager can recruit this Companion, <bold>Dorian</bold>, for <bold>7 <coin/></bold>. Do it.",
+    "starting-coins": "You start the game with <bold>8 <coin/></bold>.\n<italic>Coins are used to recruit Companions, buy Items, and activate some Buildings, Events or Encounters.</italic>",
+    "companions": "Your <bold>Companions</bold> go here. You can have at most 3 of them.",
+    "new-villager": "Moreover, when you recruit a Companion, you immediately gain a new <bold>Villager</bold> <villager/>.",
+    "opponent-guild": "It is your opponent's turn. He moves to Summer, and uses this Villager to use the <bold>Scouts' guild</bold>.",
+    "seal": "This Building bears a <bold>Seal</bold> <seal/>: its effect depends on the value of this Seal (between 1 and 3). Here, William can go on an adventure up to a distance of 1.\n<italic>With 3 or 4 players, there would be 2 or 3 Seals.</italic>",
+    "camp": "Once used, the Villager goes here, to the <bold>Campsite</bold>. It will be available again next year.",
+    "opponent-travel": "William <bold>goes on an adventure</bold>: he moves his <bold>Adventurer</bold> <adventurer/>, here up to 1 space.",
+    "opponent-encounter": "On this space, William can gain 1 <coin/> or resolve an <bold>Encounter</bold> card. He chooses to resolve the <bold>Tiger</bold>.",
+    "untold-stories": "He sends an active Villager to the Campsite, and the Tiger goes to his <bold>untold stories</bold>!",
+    "banquet": "Your turn. Each year, an <bold>Event</bold> takes place in Greylune. This year, it is the <bold>Banquet</bold>.\nClick on it to see its effect, then send an active Villager there to gain 3 <coin/>.",
+    "opponent-tavern": "William now wants to use <bold>The Riven Oak</bold> to tell the story of his encounter with the Tiger!\nHowever, to activate a Village card, you must pay <bold>1 <coin/> for each other Villager</bold> adjacent to that card… So William pays 1 <coin/>.",
+    "tell-story": "To <bold>tell a story</bold>, William must choose one or more untold stories and move them to his told stories.",
+    "tavern-rewards": "William told a story with a storytelling value of 3: he therefore gains all 3 bonuses of the <bold>Tavern</bold>: 2 <vp/> + 1 <force/> + 1 <villager/>.",
+    "force": "William will gain 1 <bold>Strength</bold> <force/>: his Strength marker therefore moves up. Strength and <bold>Magic</bold> <magic/> are often requirements to resolve Encounters and Quests!",
+    "skills-score": "At the end of the game, you gain <bold>2 <vp/></bold> if you have at least 3 <force/> and 3 <magic/>, and <bold>5 <vp/></bold> if you have 5 <force/> and 5 <magic/>.\n<italic>Moreover, each <force/> or <magic/> gained beyond 5 immediately gives 1 <vp/>.</italic>",
+    "villager-actions": "Your turn. In Summer, a Villager in the Village can do 3 things:\n• <bold>activate</bold> an adjacent card (recruit the Companion, buy the Item or use the Building);\n• <bold>gain coins</bold>: as many <coin/> as there are <bold>other Villagers</bold> around one of the 2 adjacent cards (here, it would be 0 <coin/>…);\n• <bold>participate in the Event</bold>, only once per year (so you cannot do it here).",
+    "buy-tommy": "Use this Villager to <bold>buy Tommy</bold>.",
+    "reaction": "Some Companions and some Items can be activated <bold>as a reaction</bold>. For example, when you buy an Item, you may exhaust <bold>Dorian</bold> to reduce its cost by 1 <coin/>, and gain 1 <vp/>. Do it.",
+    "score-track": "When you gain Victory Points, your marker advances on the <bold>score track</bold>. When you reach 8 and then 20 <vp/>, you immediately gain a bonus!",
+    "bonus-tokens": "Your 3 <bold>Bonus tokens</bold> are here. At 8 <vp/>, you choose one, gain what it offers, and discard it.\nAt 20 <vp/>, you choose a second one, and discard the last one.",
+    "items": "Your <bold>Items</bold> go here. You can have at most 3 of them, but Dorian lets you have 2 more!\nDorian will also give you 1 <vp/> per Item you have at the end of the game.",
+    "tommy-score": "<bold>Tommy</bold> will also give you 1 <vp/> at the end of the game.",
+    "opponent-banquet": "William used his last active Villager to participate in the Event, and gain 3 <coin/>.",
+    "special-action": "In Summer, once per year, you can use a Villager to take your <bold>special action</bold> <special/>: tell a story to gain 2 <coin/> + 1 <force/> + 2 <vp/>, go on an adventure up to 1 space <travel1/>, or gain 1 <magic/>.",
+    "use-tommy": "In Summer, you can also use your Items: <bold>Tommy</bold>, for example, lets you go on an adventure!\nExhaust it by spending an active Villager to move your Adventurer up to 2 spaces <travel2/>.",
+    "travel": "Move your <bold>Adventurer</bold> here.",
+    "sheep": "Here, you can choose between gaining 1 <vp/> or resolving an Encounter. Choose to resolve the <bold>Sheep</bold> Encounter.",
+    "income-token": "You gained this <bold>Income token</bold>: 1 <coin/> immediately, then 1 <coin/> each year.",
+    "opponent-autumn": "William has no Villagers left: he moves to <bold>Autumn</bold> <autumn/>. His Adventurer returns to Greylune, he retrieves his Villagers and gains 3 <coin/>.",
+    "autumn": "Your turn: you have no possible action left, move to <bold>Autumn</bold> <autumn/>.",
+    "come-home": "Your Adventurer returns to Greylune, you retrieve your <bold>Villagers</bold>, and you ready your Companion and Item cards.",
+    "income": "You also gain your <bold>income</bold> <income/>: 3 <coin/>, minus 1 <coin/> per Companion (Dorian costs you 1 <coin/>), plus your Income tokens (1 <coin/> for the Sheep).",
+    "end-of-year": "Once in Autumn, players can no longer take actions, and must wait for the other players to finish their year.\nOnce everyone is in Autumn, a <bold>new year</bold> begins!",
+    "new-village": "In <bold>Winter</bold> <winter/>, the remaining <bold>Village</bold> cards are replaced by 9 new Village cards.",
+    "new-event": "A new <bold>Event</bold> is revealed.",
+    "new-encounters": "5 new <bold>Encounters</bold> replace the previous ones (number of players + 3).",
+    "new-year": "Finally, all players move to <bold>Spring</bold> <spring/>, and the 1st Player token passes to the next player: a new year can begin!",
+    "periods": "In years 3 and 4, the Village and Encounter cards will be from <bold>period II</bold> (more powerful, but with more requirements), and in year 5, from <bold>period III</bold>, to score as many <vp/> as possible before the end of the game!",
+    "quests": "To gain a lot of <vp/>, you can also complete the <bold>Heroic Quests</bold> <quest/>.\nTo do so, go on an adventure, and once on a Quest space, choose to resolve it instead of an Encounter.\n<italic>The <vp/> from Quests are scored at the end of the game.</italic>",
+    "first-quest": "The <bold>first player</bold> to resolve a Quest gains 2 more <vp/>!\n<italic>You can resolve each Quest only once during the game.</italic>",
+    "final-score": "At the end of the game, add to the <vp/> already gained:\n• the <vp/> from Quests;\n• the <vp/> from Companions;\n• the <vp/> from Items;\n• 2 <vp/> if you have at least 3 <force/> and 3 <magic/>, or 5 <vp/> if you have 5 <force/> and 5 <magic/>.",
+    "good-luck": "The most prestigious player at the end of the 5th year wins!\nNow it is up to you to forge your destiny, noble adventurer!"
   }
 }

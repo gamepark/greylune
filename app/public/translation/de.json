@@ -1,1 +1,1157 @@
-{}
+{
+  "Place": "Platzieren",
+  "Participate": "Teilnehmen",
+  "cancel": "Abbrechen",
+  "ok": "Ok",
+  "gains": "<gain1/> und <gain2/>",
+  "action": {
+    "exploit": "Nutzen",
+    "exploit-price": "Nutzen ({price} <coin/>)",
+    "buy": "Kaufen",
+    "buy-price": "Kaufen ({price} <coin/>)",
+    "recruit": "Anwerben",
+    "recruit-price": "Anwerben ({price} <coin/>)",
+    "activate": "Aktivieren",
+    "resolve": "Abhandeln",
+    "achieve": "Erfüllen",
+    "tell": "Erzählen",
+    "end-story": "Erzählung beenden",
+    "gain-force": "{count} Stärke erhalten",
+    "gain-magic": "{count} Magie erhalten",
+    "gain-vp": "{count} SP erhalten",
+    "camp": "Ins Lager gehen",
+    "camp-coins": "{coins} <coin/> erhalten",
+    "travel": "Reisen",
+    "stay": "Stehen bleiben",
+    "summer": "In den Sommer wechseln",
+    "autumn": "In den Herbst wechseln",
+    "special-action": "Sonderaktion",
+    "straighten": "Eine Karte bereit machen"
+  },
+  "header": {
+    "winter": "Neues Jahr",
+    "spring": {
+      "you": "Platziere einen <villager/> oder <summer>wechsle in den Sommer <sun/></summer>",
+      "player": "{player} platziert einen Dorfbewohner"
+    },
+    "summer": {
+      "you": "Aktiviere einen <villager/>, einen Gegenstand oder <autumn>wechsle in den Herbst <leaf/></autumn>",
+      "player": "{player} führt eine Sommeraktion aus"
+    },
+    "activate-card": {
+      "you": "Wähle eine Option der Karte",
+      "player": "{player} aktiviert eine Karte"
+    },
+    "must-react-card": {
+      "you": "Du musst {card} aktivieren",
+      "player": "{player} aktiviert eine Karte"
+    },
+    "must-react": {
+      "you": "Du musst einen Gefährten aktivieren",
+      "player": "{player} aktiviert eine Karte"
+    },
+    "activate-seal": {
+      "you": "Aktiviere ein Siegelplättchen",
+      "player": "{player} aktiviert ein Siegelplättchen"
+    },
+    "seal-value": {
+      "you": "Wähle den Wert des Siegelplättchens",
+      "player": "{player} wählt den Wert des Siegelplättchens"
+    },
+    "discard-item": {
+      "you": "Wirf einen Gegenstand ab",
+      "player": "{player} wirft einen Gegenstand ab"
+    },
+    "travel": {
+      "you": "Bewege deinen <adventurer/> bis zu {count, plural, one {# Feld} other {# Felder}}",
+      "player": "{player} geht auf Abenteuer"
+    },
+    "encounter": {
+      "you-none": "Handle eine Begegnung ab oder <pass>passe</pass>",
+      "you-coin": "Handle eine Begegnung ab oder <take>nimm 1 <coin/></take>",
+      "you-vp": "Handle eine Begegnung ab oder <take>nimm 1 <vp/></take>",
+      "you-quest": "Handle eine Begegnung ab, <quest>erfülle eine Quest <crown/></quest> oder <pass>passe</pass>",
+      "player": "{player} handelt eine Begegnung ab",
+      "nothing": "Du kannst hier weder eine Begegnung noch eine Quest abhandeln."
+    },
+    "outcome": {
+      "you": "Wähle, was du bezahlst und was du erhältst",
+      "player": "{player} wählt, was bezahlt und was erhalten wird"
+    },
+    "quest": {
+      "you": "Erzähle {count, plural, one {# Geschichte} other {# Geschichten}}",
+      "player": "{player} erzählt {count, plural, one {# Geschichte} other {# Geschichten}}"
+    },
+    "start-story": {
+      "you": "Erzähle eine Geschichte",
+      "player": "{player} erzählt eine Geschichte"
+    },
+    "tell-story": {
+      "you": "Erzähle eine Geschichte ({value}/{max}) oder <end>beende deine Erzählung</end>",
+      "player": "{player} erzählt eine Geschichte"
+    },
+    "straighten": {
+      "you": "Mache eine Karte bereit",
+      "player": "{player} macht eine Karte bereit"
+    },
+    "place-villager": {
+      "you": "Platziere einen <villager/>",
+      "player": "{player} platziert einen Dorfbewohner"
+    },
+    "event": {
+      "you": "Wähle, was dir das Ereignis bringt",
+      "player": "{player} nimmt am Ereignis teil"
+    },
+    "special-action": {
+      "you": "Wähle, was dir die Sonderaktion bringt",
+      "player": "{player} nutzt die Sonderaktion"
+    },
+    "resolve-event": {
+      "you": "Das Ereignis wird abgehandelt",
+      "player": "{player} nimmt am Ereignis teil"
+    },
+    "autumn": {
+      "you": "Du wechselst in den Herbst",
+      "player": "{player} wechselt in den Herbst"
+    },
+    "use-item": {
+      "you": "Du nutzt einen Gegenstand",
+      "player": "{player} nutzt einen Gegenstand"
+    },
+    "resolve-effects": {
+      "you": "Deine Erträge werden abgehandelt",
+      "player": "Die Erträge von {player} werden abgehandelt"
+    },
+    "end-turn": {
+      "you": "<end>Meinen Zug beenden</end>",
+      "player": "{player} beendet den Zug"
+    },
+    "skill": {
+      "you": "Erhalte",
+      "player": "{player} wählt Stärke oder Magie"
+    },
+    "bonus": {
+      "you": "Bonus: erhalte",
+      "player": "{player} wählt ein Bonusplättchen"
+    },
+    "reaction": {
+      "you": "Nutze einen Gefährten, einen Trank oder <pass>passe</pass>",
+      "player": "{player} kann reagieren"
+    },
+    "reaction-card": {
+      "you": "Aktiviere {card} oder <pass>passe</pass>",
+      "player": "{player} kann reagieren"
+    },
+    "scoring": {
+      "quests": "Spielende: SP der Quests",
+      "companions": "Spielende: SP der Gefährten",
+      "items": "Spielende: SP der Gegenstände",
+      "skills": "Spielende: SP der Fertigkeiten"
+    },
+    "or": "oder"
+  },
+  "scoring": {
+    "game": "Während der Partie gesammelte SP",
+    "quests": "Quests",
+    "companions": "Gefährten",
+    "items": "Gegenstände",
+    "skills": "Fertigkeiten",
+    "total": "Gesamt"
+  },
+  "panel": {
+    "first-player": "Startspieler",
+    "show-player": "{player} anzeigen"
+  },
+  "log": {
+    "new-year": "Jahr {year}",
+    "event-reveal": "Ereignis des Jahres: <tile/>",
+    "first-player": "{player} erhält das Startspielerplättchen <token/>",
+    "summer": "{player} wechselt in den Sommer <season/>",
+    "autumn": "{player} wechselt in den Herbst <season/>",
+    "place-villager": {
+      "between": "{player} platziert <villager/> zwischen <card1/> und <card2/>",
+      "beside": "{player} platziert <villager/> neben <card/>"
+    },
+    "event": "{player} platziert <villager/> auf dem Ereignis <tile/>",
+    "special-action": "{player} platziert <villager/> auf der Sonderaktion",
+    "coins-around": "{player} erhält Münzen rund um <card/>",
+    "withdraw": "{player} schickt einen <villager/> ins Lager <camp/>",
+    "activate": {
+      "1": "{player} nutzt <card/>",
+      "2": "{player} kauft <card/>",
+      "3": "{player} wirbt <card/> an"
+    },
+    "use-item": "{player} nutzt <card/>",
+    "reaction": "{player} reagiert mit <card/>",
+    "seal": "{player} wirft das Siegelplättchen <seal/> ab",
+    "seal-value": "{player} legt den Wert des Siegelplättchens auf <seal/> fest",
+    "travel": "{player} bewegt den <adventurer/> nach <area/>",
+    "travel-home": "{player} bringt den <adventurer/> ins Dorf zurück",
+    "stay": "{player} bleibt mit dem <adventurer/> stehen",
+    "encounter": "{player} handelt die Begegnung <card/> ab",
+    "skip-encounter": "{player} handelt keine Begegnung ab",
+    "no-encounter": "{player} kann keine Begegnung abhandeln",
+    "quest": "{player} erfüllt die Heldenquest <quest/>",
+    "quest-first": "{player} erfüllt als Erste/r die Heldenquest <quest/>",
+    "income-token": "{player} nimmt das Einkommensplättchen <token/>",
+    "tell-story": "{player} erzählt die Geschichte <card/> <value/>",
+    "quest-story": "{player} verschiebt <card/> zu den erzählten Geschichten",
+    "gain-coins": "{player} erhält {count} <coin/>",
+    "pay-coins": "{player} gibt {count} <coin/> aus",
+    "gain-vp": "{player} erhält {count} <vp/>",
+    "gain-force": "{player} erhält {count} <force/>",
+    "spend-force": "{player} gibt {count} <force/> aus",
+    "gain-magic": "{player} erhält {count} <magic/>",
+    "spend-magic": "{player} gibt {count} <magic/> aus",
+    "gain-villagers": "{player} erhält {count} <villager/>",
+    "spend-villagers": "{player} gibt {count} <villager/> aus",
+    "return-villagers": "{player} legt {count} <villager/> in den Vorrat zurück",
+    "straighten": "{player} macht <card/> bereit",
+    "discard-item": "{player} wirft <card/> ab",
+    "bonus-token": "{player} handelt das Bonusplättchen <token/> ab",
+    "scoring": {
+      "quests": "Spielende: SP der Quests",
+      "companions": "Spielende: SP der Gefährten",
+      "items": "Spielende: SP der Gegenstände",
+      "skills": "Spielende: SP der Fertigkeiten"
+    },
+    "score": "{player} erzielt {count} <vp/>"
+  },
+  "help": {
+    "period": "Periode {period}",
+    "cost": "Kosten",
+    "surcharge": "Zusatzkosten",
+    "immediate": "Sofortiger Effekt",
+    "ability": "Fähigkeit",
+    "reaction": "Reaktion",
+    "permanent": "Dauerhafter Effekt",
+    "score": "SP bei Spielende",
+    "type": {
+      "1": {
+        "name": "Gebäude",
+        "note": "Ein Gebäude kann weder gekauft noch angeworben werden: Es bleibt nach seiner Aktivierung im Dorf und kann von anderen benachbarten Dorfbewohnern genutzt werden, auch von einem Spieler, der es bereits aktiviert hat. Es kann im Laufe eines Jahres mehrmals aktiviert werden."
+      },
+      "2": {
+        "name": "Gegenstand",
+        "note": "Ein Gegenstand wird gekauft und rechts neben dein Spielertableau gelegt. Von Ausnahmen abgesehen bist du auf 3 Gegenstände beschränkt: Überschreitest du diese Grenze durch einen Kauf, wirf einen Gegenstand deiner Wahl ab, erschöpft oder nicht (auch den gerade erworbenen, nachdem du seine eventuellen sofortigen SP erhalten hast)."
+      },
+      "3": {
+        "name": "Gefährte",
+        "note": "Einen Gefährten anzuwerben kostet 7 <coin/>; er wird links neben dein Spielertableau gelegt. Er bringt dir 1 <villager>Dorfbewohner</villager>, der sofort verfügbar ist, verringert aber dein Einkommen im Herbst um eine Münze. Du kannst im Laufe der Partie nie mehr als 3 Gefährten anwerben."
+      }
+    },
+    "tavern": {
+      "name": "Taverne"
+    },
+    "tell-story": {
+      "name": "Eine Geschichte erzählen",
+      "note": "Erzähle eine Geschichte mithilfe einer oder mehrerer zuvor abgehandelter Begegnungskarten, ohne einen Erzählwert von höchstens 3 zu überschreiten — Ausnahme: 2 Geschichten mit einem Erzählwert von je 2 zählen nur als eine Geschichte mit Wert 3. Die Belohnungen sind kumulativ: Bei einem gesamten Erzählwert von 1 erhältst du nur den ersten Bonus, bei 2 die ersten beiden, bei 3 alle Boni."
+    },
+    "potion": {
+      "name": "Trank",
+      "note": "Trank: Er muss nach Gebrauch abgeworfen und in die Schachtel zurückgelegt werden — es sei denn, Selia erlaubt dir, ihn zu erschöpfen, statt ihn abzuwerfen."
+    },
+    "seals": {
+      "label": "Siegel",
+      "none": "keine",
+      "spent": "Auf dieser Karte liegt kein <seal/>-Plättchen mehr: Sie kann in diesem Jahr nicht mehr aktiviert werden.",
+      "note-players": "Beim Aufdecken erhält diese Karte so viele <seal/>-Plättchen, wie Spieler teilnehmen, minus 1. Jede Aktivierung verbraucht eines davon, das danach abgeworfen wird.",
+      "note-one": "Beim Aufdecken erhält diese Karte unabhängig von der Spielerzahl nur ein <seal/>-Plättchen."
+    },
+    "village-deck": {
+      "name": "Dorfstapel",
+      "left": "Verbleibende Karten",
+      "note": "In jedem Winter werden die obersten 9 Karten des Dorfstapels aufgedeckt und in einem 3x3-Raster ausgelegt. Die Rückseite zeigt die Periode: I für die ersten 2 Jahre, II für die nächsten 2, III für das letzte."
+    },
+    "distance": "Entfernung",
+    "story": "Erzählwert",
+    "income": "Einkommen",
+    "requirement": "Voraussetzung",
+    "reward": "Belohnung",
+    "encounter": {
+      "name": "Begegnung",
+      "note": "Eine Begegnungskarte wird auf dem Feld abgehandelt, auf dem dein <adventurer>Abenteurer</adventurer> stehen geblieben ist, indem du ihre Voraussetzung erfüllst, um ihre Belohnung zu erhalten. Schiebe sie danach in die Spalte der unerzählten Geschichten deines Spielertableaus.",
+      "both": "Diese Begegnung hat 2 Voraussetzungen und 2 Belohnungen: Du musst mindestens eine der beiden erfüllen, um sie abzuhandeln. Erfüllst du nur die linke Voraussetzung, erhältst du nur die linke Belohnung; du kannst auch beide Voraussetzungen erfüllen, um beide Belohnungen zu erhalten.",
+      "story-only": "Diese Begegnung hat keine Belohnung: Sie bringt nur etwas, wenn du sie erzählst.",
+      "untellable": "Erzählwert 0: Du kannst diese Begegnung nicht erzählen, es sei denn, du erhöhst ihren Wert (Charisma potion, Seren) oder um die Quest Bardenturnier zu erfüllen."
+    },
+    "income-token": {
+      "note": "Einkommensplättchen: Nachdem du eine Begegnung mit einem Einkommensplättchen abgehandelt hast, lege es auf dein Spielertableau und handle seinen Effekt sofort ab. Du handelst ihn zudem in der Einkommensphase im Herbst erneut ab. Die Anzahl der Einkommensplättchen ist nicht begrenzt."
+    },
+    "encounter-deck": {
+      "name": "Begegnungsstapel",
+      "left": "Verbleibende Karten",
+      "note": "In jedem Winter werden die obersten 5/6/7 Begegnungskarten (bei 2/3/4 Spielern) aufgedeckt und entsprechend ihrer Entfernung rechts neben den Spielplan gelegt. Die Rückseite zeigt die Periode: I für die ersten 2 Jahre, II für die nächsten 2, III für das letzte."
+    },
+    "options": "Optionen",
+    "vp": "{count} SP",
+    "event": {
+      "name": "Ereignis",
+      "note": "Einmal pro Jahr, im Frühling oder im Sommer, kannst du als Aktion am Ereignis teilnehmen: Platziere einen deiner aktiven <villager>Dorfbewohner</villager> — oder im Sommer einen von denen, die sich im Dorf befinden — auf das Ereignisplättchen; du musst es aktivieren können (ggf. die Kosten bezahlen), um seine Vorteile zu erhalten.",
+      "festival": "Fest: Wähle ein freies Feld des Plättchens und erhalte die 2 angrenzenden Boni. Dein <villager>Dorfbewohner</villager> bleibt dort bis zum Herbst."
+    },
+    "event-pile": {
+      "name": "Ereignisstapel",
+      "left": "Kommende Plättchen",
+      "note": "Beim Spielaufbau wird ein Ereignisplättchen zufällig entfernt und die 5 übrigen werden verdeckt gemischt, um den Stapel zu bilden. In jedem Winter wird das oberste Plättchen des Stapels aufgedeckt: Es ist das aktive Ereignis des laufenden Jahres."
+    },
+    "quest": {
+      "name": "Heldenquest",
+      "first": "Für den Ersten",
+      "others": "Für die Folgenden",
+      "note": "Ist dein <adventurer>Abenteurer</adventurer> auf dem Feld einer Heldenquest stehen geblieben, kannst du beschließen, keine Begegnung abzuhandeln, um stattdessen die Quest zu erfüllen, sofern du sie noch nicht erfüllt hast und ihre Bedingungen erfüllst. Bist du der erste Spieler, der dies tut, lege einen deiner Questmarker auf den Platz, der bei Spielende die meisten SP bringt; andernfalls lege ihn auf den Platz daneben: Auf diesem Platz können mehrere Marker (verschiedener Spieler) liegen.",
+      "score": "Du kannst jede Quest nur einmal erfüllen. Ihre SP werden erst bei Spielende, nach dem fünften Jahr, hinzugezählt."
+    },
+    "player-board": {
+      "name": "Spielertableau",
+      "companions": {
+        "name": "Gefährten",
+        "text": "Deine Gefährten werden links neben dein Spielertableau gelegt. Ihre Reaktionsfähigkeit unten auf der Karte erfordert, sie zu erschöpfen; ihre dauerhafte Fähigkeit ist dagegen aktiv, ob der Gefährte erschöpft ist oder nicht."
+      },
+      "items": {
+        "name": "Gegenstände",
+        "text": "Deine Gegenstände werden rechts neben dein Spielertableau gelegt. Die meisten haben eine Fähigkeit, deren Nutzung eine Sommeraktion erfordert und bei der die Karte erschöpft wird; Tränke müssen nach Gebrauch abgeworfen werden. Mache im Herbst alle deine Karten wieder bereit."
+      },
+      "stories": {
+        "name": "Geschichten",
+        "text": "Schiebe jede Begegnungskarte nach dem Abhandeln in die Spalte der unerzählten Geschichten deines Spielertableaus. Sobald eine Geschichte erzählt ist, verschiebe die Karte(n) nach rechts in den Bereich der erzählten Geschichten: Du kannst sie für den Rest der Partie nicht noch einmal erzählen."
+      },
+      "income": {
+        "name": "Einkommen",
+        "text": "Erhalte im Herbst dein Einkommen: 3 <coin/>, minus 1 <coin/> pro Gefährte, sowie die eventuellen Erträge der Einkommensplättchen auf deinem Spielertableau."
+      },
+      "skills": {
+        "name": "Stärke und Magie",
+        "text": "Die rote Leiste zeigt deine Stärke, die blaue deine Magie: Beide Marker beginnen die Partie auf ihrem untersten Feld. Karten und Quests verlangen mal, mindestens eine bestimmte Stufe an Stärke oder Magie zu haben, mal, sie auszugeben.",
+        "score": "Bei Spielende erhältst du 2 SP, wenn du mindestens 3 Stärke und 3 Magie hast, oder 5 SP, wenn du 5 Stärke und 5 Magie hast."
+      },
+      "special-action": {
+        "name": "Sonderaktion",
+        "text": "Auf diesem Sonderfeld, das nur im Sommer nutzbar ist, kannst du 1 deiner aktiven <villager>Dorfbewohner</villager> für eine dieser Optionen nach Wahl platzieren. Er bleibt dort bis zum Herbst.",
+        "0": "Eine Geschichte erzählen: 2 <coin/> + 1 <force>Stärke</force> + 2 <vp/>",
+        "1": "Deinen <adventurer>Abenteurer</adventurer> um ein Feld bewegen",
+        "2": "1 <magic>Magie</magic> erhalten"
+      },
+      "quests": {
+        "name": "Questmarker",
+        "text": "Beim Spielaufbau werden deine 3 Heldenquest-Marker auf diese Plätze gelegt. Jedes Mal, wenn du eine Heldenquest erfüllst, legst du einen davon auf einen der Plätze unter ihrem Plättchen auf dem Spielplan: Du kannst also nicht mehr als 3 erfüllen."
+      },
+      "villagers": {
+        "name": "Aktive Dorfbewohner",
+        "text": "Die Dorfbewohner, die du zu Beginn jedes Jahres kontrollierst, gelten als „aktiv“ und befinden sich in diesem Bereich deines Spielertableaus, ebenso wie die, die du im Laufe des Jahres erhältst. Lege im Herbst deine Dorfbewohner aus dem Lager, vom Ereignis und vom Sonderfeld hierher zurück."
+      }
+    },
+    "main-board": {
+      "name": "Spielplan",
+      "score": {
+        "name": "Siegpunktleiste",
+        "text": "Die während der Partie erzielten <vp/> bewegen deinen Marker auf der Siegpunktleiste vorwärts, die nach 24 wieder bei 0 beginnt. Erreichst du 25, 50, 75 und dann 100 SP, nimm deine 25/50- und 75/100-SP-Plättchen bzw. drehe sie um.",
+        "note": "Zähle am Ende des fünften Jahres zu den während der Partie gesammelten SP die SP der Quests, Gefährten und Gegenstände hinzu, sowie die deiner Fertigkeiten: 2 SP, wenn du mindestens 3 Stärke und 3 Magie hast, 5 SP, wenn du 5 Stärke und 5 Magie hast."
+      },
+      "bonus": {
+        "name": "Bonusplättchen",
+        "text": "Erreichst du 8 SP, wähle eines deiner 3 Bonusplättchen, handle seinen Effekt ab und wirf es ab. Erreichst du 20 SP, tue dasselbe mit einem deiner 2 verbleibenden Plättchen."
+      },
+      "village": {
+        "name": "Dorf",
+        "text": "Beim Spielaufbau stellt jeder Spieler seinen <adventurer>Abenteurer</adventurer> ins Dorf. Wenn du auf Abenteuer gehst, bewegt sich dein Abenteurer zuerst vom Dorf aus; im selben Jahr bewegt er sich danach von dem Feld aus, auf dem er stehen geblieben ist. Im Herbst kehrt er ins Dorf zurück."
+      },
+      "road": {
+        "name": "Auf Abenteuer gehen",
+        "text": "Wenn du reist, kannst du deinen <adventurer>Abenteurer</adventurer> bis zur angegebenen Anzahl an Feldern in eine Richtung deiner Wahl bewegen oder stehen bleiben. Mehrere Abenteurer können auf demselben Feld stehen. Das Wappen oben links auf jeder Begegnungskarte zeigt an, wo sie hingelegt wird: rechts neben den Spielplan, neben das Feld mit demselben Wappen."
+      },
+      "stops": {
+        "name": "Münze und SP",
+        "text": "Ist dein <adventurer>Abenteurer</adventurer> auf dem mit einer <coin/> markierten Feld stehen geblieben, kannst du beschließen, keine Begegnung abzuhandeln, um 1 <coin/> zu erhalten. Auf dem mit einem <vp/> markierten Feld kannst du dasselbe tun, um 1 <vp/> zu erhalten."
+      },
+      "quests": {
+        "name": "Heldenquests",
+        "text": "Die 3 Heldenquest-Plättchen der Partie liegen offen auf den 3 Plätzen des Spielplans, nahe den vom Dorf am weitesten entfernten Feldern. Die SP, die sie bei Spielende bringen, sind unter jedem Platz aufgedruckt: 7 und 5, 8 und 6, dann 9 und 7 <vp/>, vom nächstgelegenen zum entferntesten Feld."
+      },
+      "event": {
+        "name": "Ereignis",
+        "text": "Der Ereignisstapel liegt verdeckt auf diesem Platz. In jedem Winter wird das Ereignisplättchen des Vorjahres abgeworfen und das oberste Plättchen des Stapels aufgedeckt: Es ist das aktive Ereignis des laufenden Jahres."
+      }
+    },
+    "season-board": {
+      "name": "Jahreszeitentableau",
+      "year": "Jahr",
+      "period": "Periode",
+      "markers": {
+        "name": "Jahreszeitenmarker",
+        "text": "In deinem Zug musst du eine der Aktionen wählen, die die Jahreszeit erlaubt, in der du dich befindest: Das zeigt dein Jahreszeitenmarker an. Manche Spieler können im Sommer oder Herbst sein, während andere noch im Frühling sind. Ein Spieler im Sommer kann im selben Jahr nie in den Frühling zurückkehren, und ein Jahr endet erst, wenn alle Spieler den Herbst erreicht haben."
+      },
+      "winter": {
+        "name": "Winter",
+        "text": "Der Winter ist die Aufbauphase des Jahres. Überspringe ihn im ersten Jahr: Er wurde bereits beim Spielaufbau durchgeführt.",
+        "0": "Stellt den Jahreszeitenmarker jedes Spielers auf das Frühlingsfeld",
+        "1": "Der Startspieler gibt das Startspielerplättchen an seinen linken Nachbarn weiter",
+        "2": "Werft die Dorfkarten, die Begegnungskarten und das Ereignisplättchen des Vorjahres ab, ebenso die Siegel- oder Einkommensplättchen darauf",
+        "3": "Deckt die obersten 9 Karten des Dorfstapels in einem 3x3-Raster auf und legt die <seal/>-Plättchen darauf, die sie verlangen",
+        "4": "Deckt das oberste Plättchen des Ereignisstapels auf: Es ist das aktive Ereignis des laufenden Jahres",
+        "5": "Deckt die obersten 5/6/7 Begegnungskarten (bei 2/3/4 Spielern) auf und legt sie entsprechend ihrer Entfernung rechts neben den Spielplan"
+      },
+      "spring": {
+        "name": "Frühling",
+        "0": "Einen Dorfbewohner platzieren: Nimm einen deiner aktiven <villager>Dorfbewohner</villager> und platziere ihn im Dorf, zwischen zwei benachbarte Karten oder zwischen eine Karte und einen leeren Kartenplatz",
+        "1": "Einmal pro Jahr mit einem deiner aktiven <villager>Dorfbewohner</villager> am Ereignis teilnehmen",
+        "2": "In den Sommer wechseln und sofort eine Sommeraktion ausführen"
+      },
+      "summer": {
+        "name": "Sommer",
+        "0": "Münzen erhalten: Wähle einen deiner <villager>Dorfbewohner</villager> im Dorf und eine an ihn angrenzende Karte und erhalte 1 <coin/> für jeden anderen an diese Karte angrenzenden Dorfbewohner, egal wem er gehört",
+        "1": "Eine Karte aktivieren: Wähle einen deiner <villager>Dorfbewohner</villager> im Dorf und eine benachbarte Karte und bezahle ihren Preis plus 1 <coin/> für jeden anderen Dorfbewohner neben dieser Karte, egal wem er gehört",
+        "2": "Einmal pro Jahr mit einem deiner aktiven <villager>Dorfbewohner</villager> oder einem von denen im Dorf am Ereignis teilnehmen",
+        "3": "Einen deiner bereiten Gegenstände nutzen, indem du ihn erschöpfst",
+        "4": "Die Sonderaktion deines Spielertableaus nutzen",
+        "5": "In den Herbst wechseln und sofort eine Herbstaktion ausführen, nur wenn du keine <villager>Dorfbewohner</villager> mehr im Dorf hast"
+      },
+      "autumn": {
+        "name": "Herbst",
+        "text": "Bist du im Herbst, kannst du in diesem Jahr keine Aktionen mehr ausführen und handelst sofort diese Schritte in dieser Reihenfolge ab.",
+        "0": "Schicke deinen <adventurer>Abenteurer</adventurer> ins Dorf zurück",
+        "1": "Lege deine <villager>Dorfbewohner</villager> aus dem Lager, vom Ereignis und von der Sonderaktion in den Bereich der aktiven Dorfbewohner deines Spielertableaus zurück",
+        "2": "Mache alle deine Karten wieder bereit",
+        "3": "Erhalte dein Einkommen: 3 <coin/>, minus 1 <coin/> pro Gefährte, sowie die eventuellen Erträge deiner Einkommensplättchen"
+      },
+      "camp": {
+        "name": "Lager",
+        "text": "Wird einer deiner <villager>Dorfbewohner</villager> genutzt und dadurch inaktiv, stelle ihn ins Lager, um anzuzeigen, dass du ihn in diesem Jahr nicht mehr nutzen kannst. Dorthin kommen auch die Dorfbewohner, die du aus deinem Bereich der aktiven Dorfbewohner ausgibst. Im Herbst kehren sie in diesen Bereich zurück."
+      }
+    },
+    "villager-reserve": {
+      "name": "Dorfbewohner-Vorrat",
+      "owned": "Dir zur Verfügung",
+      "text": "Beim Spielaufbau werden 4 deiner 7 <villager>Dorfbewohner</villager> beiseitegelegt und sind vorerst nicht verfügbar: Du beginnst die Partie mit 3 aktiven Dorfbewohnern. Jedes Mal, wenn du einen <villager>Dorfbewohner</villager> erhältst, kommt er von hier und gesellt sich zum Bereich der aktiven Dorfbewohner deines Spielertableaus. Die Quest Tödliche Falle lässt dich einen deiner verfügbaren Dorfbewohner in diesen Vorrat zurücklegen."
+    },
+    "adventurer": {
+      "name": "Abenteurer",
+      "travel": "Wenn du reist, kannst du deinen Abenteurer bis zur angegebenen Anzahl an Feldern in eine Richtung deiner Wahl bewegen (du kannst auch stehen bleiben) und, wenn möglich, eine Begegnung auf deinem Zielfeld abhandeln. Mehrere Abenteurer können auf demselben Feld stehen."
+    },
+    "villager": {
+      "name": "Dorfbewohner",
+      "active": "Die Dorfbewohner, die du zu Beginn jedes Jahres kontrollierst, gelten als „aktiv“ und befinden sich immer im Bereich „Aktive Dorfbewohner“ deines Spielertableaus, ebenso wie die, die du im Laufe des Jahres erhältst."
+    },
+    "bonus-token": {
+      "name": "Bonusplättchen"
+    },
+    "skill": {
+      "force": "Stärke",
+      "magic": "Magie",
+      "level": "Stufe"
+    }
+  },
+  "village-card": {
+    "101": {
+      "name": "Travelers' guild",
+      "ability": "Bewege deinen <adventurer>Abenteurer</adventurer> bis zu 2 Felder."
+    },
+    "102": {
+      "name": "Scouts' guild",
+      "ability": "Wirf ein <seal/>-Plättchen ab und bewege deinen <adventurer>Abenteurer</adventurer> bis zu so viele Felder, wie das Plättchen wert ist."
+    },
+    "103": {
+      "name": "The Riven Oak",
+      "ability": "Erzähle eine oder mehrere Geschichten mit einem gesamten Erzählwert von höchstens 3: 2 SP + 1 <force>Stärke</force> + 1 <villager>Dorfbewohner</villager>."
+    },
+    "104": {
+      "name": "The Golden Lion",
+      "ability": "Erzähle eine oder mehrere Geschichten mit einem gesamten Erzählwert von höchstens 3: 4 <coin/> + 1 SP + wirf ein <seal/>-Plättchen ab und erhalte so viele <coin/>, wie es wert ist."
+    },
+    "105": {
+      "name": "Magical school",
+      "ability": "Wirf ein <seal/>-Plättchen ab, gib so viele <coin/> aus, wie es wert ist, und erhalte 1 <magic>Magie</magic>."
+    },
+    "106": {
+      "name": "Smithy",
+      "ability": "Erhalte 1 <force>Stärke</force>."
+    },
+    "107": {
+      "name": "Travelers' guild",
+      "ability": "Gib 2 <coin/> aus und bewege deinen <adventurer>Abenteurer</adventurer> bis zu 4 Felder."
+    },
+    "108": {
+      "name": "Scouts' guild",
+      "ability": "Wirf ein <seal/>-Plättchen ab und bewege deinen <adventurer>Abenteurer</adventurer> bis zu so viele Felder, wie das Plättchen wert ist."
+    },
+    "109": {
+      "name": "Hall of the heroes",
+      "ability": "Gib 1 <force>Stärke</force> aus, um 3 SP zu erhalten, und/oder gib 1 <magic>Magie</magic> aus, um 4 SP zu erhalten."
+    },
+    "110": {
+      "name": "Town hall",
+      "ability": "Wirf ein <seal/>-Plättchen ab, gib so viele <coin/> aus, wie es wert ist, und erhalte 1 <force>Stärke</force> und 1 <magic>Magie</magic>."
+    },
+    "111": {
+      "name": "The Silver Wolf",
+      "ability": "Erzähle eine oder mehrere Geschichten mit einem gesamten Erzählwert von höchstens 3: 4 <coin/> + wirf ein <seal/>-Plättchen ab und erhalte so viele SP, wie es wert ist + mache eine deiner Karten bereit."
+    },
+    "112": {
+      "name": "The Jolly Boar",
+      "ability": "Erzähle eine oder mehrere Geschichten mit einem gesamten Erzählwert von höchstens 3: 3 SP + 2 <coin/> + 1 <force>Stärke</force> oder 1 <magic>Magie</magic>."
+    },
+    "113": {
+      "name": "Fortress",
+      "ability": "Wirf ein <seal/>-Plättchen ab, gib so viele <coin/> aus, wie es wert ist, und erhalte 2 SP pro Gefährte, den du besitzt."
+    },
+    "114": {
+      "name": "Travelers' guild",
+      "ability": "Gib 2 <coin/> aus und bewege deinen <adventurer>Abenteurer</adventurer> bis zu 5 Felder."
+    },
+    "115": {
+      "name": "Library",
+      "ability": "Wirf ein <seal/>-Plättchen ab, gib so viele <coin/> aus, wie es wert ist, und erhalte 1 SP pro erzählte Geschichte."
+    },
+    "116": {
+      "name": "The Scarlet Dragon",
+      "ability": "Erzähle eine oder mehrere Geschichten mit einem gesamten Erzählwert von höchstens 3: 3 SP + 2 SP + 1 SP."
+    },
+    "201": {
+      "name": "Jade statue",
+      "immediate": "Erhalte 1 <force>Stärke</force> oder 1 <magic>Magie</magic>.",
+      "score": "5 SP."
+    },
+    "202": {
+      "name": "Tommy",
+      "ability": "Erschöpfe diese Karte, um deinen <adventurer>Abenteurer</adventurer> bis zu 1 Feld zu bewegen, oder erschöpfe sie und gib 1 <villager>Dorfbewohner</villager> aus, um ihn bis zu 2 Felder zu bewegen.",
+      "score": "1 SP."
+    },
+    "203": {
+      "name": "Hundred-league boots",
+      "immediate": "Wirf das <seal/>-Plättchen ab und erhalte so viele SP, wie es wert ist.",
+      "ability": "Erschöpfe diese Karte und wirf sie ab, um deinen <adventurer>Abenteurer</adventurer> bis zu 5 Felder zu bewegen."
+    },
+    "204": {
+      "name": "Wizard's staff",
+      "immediate": "Erhalte 1 <magic>Magie</magic>.",
+      "ability": "Erschöpfe diese Karte und gib 1 <villager>Dorfbewohner</villager> aus, um 1 <magic>Magie</magic> zu erhalten.",
+      "score": "1 SP."
+    },
+    "205": {
+      "name": "Mysterious map",
+      "ability": "Erschöpfe diese Karte, um deinen <adventurer>Abenteurer</adventurer> bis zu 1 Feld zu bewegen, oder erschöpfe sie, gib 1 <villager>Dorfbewohner</villager> aus und wirf sie ab, um ihn bis zu 3 Felder zu bewegen.",
+      "score": "1 SP."
+    },
+    "206": {
+      "name": "Mana potion",
+      "immediate": "Wirf das <seal/>-Plättchen ab und erhalte so viele SP, wie es wert ist.",
+      "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte abwerfen, um deine Magie um 2 zu erhöhen. Diese Erhöhung ist vorübergehend und du bewegst deinen Magiemarker nicht: Du kannst diese Punkte also nicht ausgeben."
+    },
+    "207": {
+      "name": "Strength potion",
+      "immediate": "Wirf das <seal/>-Plättchen ab und erhalte so viele SP, wie es wert ist.",
+      "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte abwerfen, um deine Stärke um 2 zu erhöhen. Diese Erhöhung ist vorübergehend und du bewegst deinen Stärkemarker nicht: Du kannst diese Punkte also nicht ausgeben."
+    },
+    "208": {
+      "name": "Short sword",
+      "immediate": "Erhalte 1 <force>Stärke</force>.",
+      "ability": "Erschöpfe diese Karte und gib 1 <villager>Dorfbewohner</villager> aus, um 1 <force>Stärke</force> zu erhalten.",
+      "score": "1 SP."
+    },
+    "209": {
+      "name": "Gold statue",
+      "immediate": "Erhalte 1 <force>Stärke</force> oder 1 <magic>Magie</magic>.",
+      "score": "5 SP."
+    },
+    "210": {
+      "name": "Snowmane",
+      "ability": "Erschöpfe diese Karte und gib 1 oder 2 <villager>Dorfbewohner</villager> aus, um deinen <adventurer>Abenteurer</adventurer> bis zu 3 oder 5 Felder zu bewegen.",
+      "score": "2 SP."
+    },
+    "211": {
+      "name": "Horn",
+      "ability": "Erschöpfe diese Karte und gib 1 oder 2 <villager>Dorfbewohner</villager> aus, um 3 oder 5 SP zu erzielen.",
+      "score": "1 SP."
+    },
+    "212": {
+      "name": "Treasure map",
+      "ability": "Erschöpfe diese Karte, um deinen <adventurer>Abenteurer</adventurer> bis zu 2 Felder zu bewegen, oder erschöpfe sie, gib 1 <villager>Dorfbewohner</villager> aus und wirf sie ab, um ihn bis zu 4 Felder zu bewegen.",
+      "score": "1 SP."
+    },
+    "213": {
+      "name": "Charisma potion",
+      "immediate": "Wirf das <seal/>-Plättchen ab und erhalte so viele SP, wie es wert ist.",
+      "reaction": "Wenn du eine Geschichte erzählst, kannst du diese Karte abwerfen, damit der Erzählwert einer deiner Begegnungskarten 3 beträgt."
+    },
+    "214": {
+      "name": "Endurance potion",
+      "immediate": "Wirf das <seal/>-Plättchen ab und erhalte so viele SP, wie es wert ist.",
+      "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte abwerfen, um einen aktiven <villager>Dorfbewohner</villager> im Dorf zu platzieren."
+    },
+    "215": {
+      "name": "Flying potion",
+      "immediate": "Wirf das <seal/>-Plättchen ab und erhalte so viele SP, wie es wert ist.",
+      "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte abwerfen, um deine Stärke und deine Magie um 1 zu erhöhen. Diese Erhöhung ist vorübergehend und du bewegst deine Stärke- und Magiemarker nicht: Du kannst diese Punkte also nicht ausgeben."
+    },
+    "216": {
+      "name": "Bladechant",
+      "ability": "Erschöpfe diese Karte, um 1 <force>Stärke</force> oder 1 <magic>Magie</magic> zu erhalten, oder erschöpfe sie und gib 1 <villager>Dorfbewohner</villager> aus, um 1 <force>Stärke</force> und 1 <magic>Magie</magic> zu erhalten.",
+      "score": "1 SP."
+    },
+    "217": {
+      "name": "Invisibility potion",
+      "immediate": "Wirf das <seal/>-Plättchen ab und erhalte so viele SP, wie es wert ist.",
+      "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte abwerfen, um eine Voraussetzung einer Begegnungskarte zu ignorieren."
+    },
+    "218": {
+      "name": "Ruby statue",
+      "immediate": "Erhalte 1 <force>Stärke</force> oder 1 <magic>Magie</magic>.",
+      "score": "6 SP."
+    },
+    "219": {
+      "name": "Mandolin",
+      "ability": "Erschöpfe diese Karte und gib 1 <villager>Dorfbewohner</villager> aus, um 1 SP pro unerzählte Geschichte zu erzielen.",
+      "score": "5 SP."
+    },
+    "220": {
+      "name": "Bag of holding",
+      "ability": "Erschöpfe diese Karte und gib 1 <villager>Dorfbewohner</villager> aus, um 1 SP pro Gegenstand zu erhalten, den du besitzt.",
+      "permanent": "Deine Gegenstandsgrenze erhöht sich um 1. Dieser Effekt wirkt auch, wenn diese Karte erschöpft ist und wenn du deine Gegenstandsgrenze schon vor dem Erwerb erreicht hattest.",
+      "score": "4 SP."
+    },
+    "221": {
+      "name": "Philosopher stone",
+      "immediate": "Wirf das <seal/>-Plättchen ab und erhalte so viele SP, wie es wert ist.",
+      "ability": "Erschöpfe diese Karte und gib 1 <villager>Dorfbewohner</villager> aus, um 5 SP zu erhalten."
+    },
+    "222": {
+      "name": "Magic ring",
+      "score": "9 SP."
+    },
+    "301": {
+      "name": "Kael",
+      "role": "Krieger",
+      "immediate": "Erhalte 1 <villager>Dorfbewohner</villager>.",
+      "reaction": "Wenn du Stärke ausgeben musst, kannst du diese Karte erschöpfen, um 1 weniger auszugeben.",
+      "permanent": "Deine Gegenstandsgrenze erhöht sich um 1.",
+      "score": "1 SP pro Stufe <force>Stärke</force>."
+    },
+    "302": {
+      "name": "Elwen",
+      "role": "Bogenschütze",
+      "immediate": "Erhalte 1 <villager>Dorfbewohner</villager>.",
+      "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte erschöpfen, um deinen <adventurer>Abenteurer</adventurer> bis zu 2 zusätzliche Felder zu bewegen.",
+      "score": "1 SP pro Begegnungskarte mit einer Entfernung von 3 oder mehr vom Dorf (erzählt oder nicht)."
+    },
+    "303": {
+      "name": "Dorian",
+      "role": "Händler",
+      "immediate": "Erhalte 1 <villager>Dorfbewohner</villager>.",
+      "reaction": "Wenn du einen Gegenstand kaufst, kannst du diese Karte erschöpfen, um seine Kosten um 1 <coin/> zu senken und 1 SP zu erhalten.",
+      "permanent": "Deine Gegenstandsgrenze erhöht sich um 2.",
+      "score": "1 SP pro Gegenstand, den du besitzt."
+    },
+    "304": {
+      "name": "Ariok",
+      "role": "Magier",
+      "immediate": "Erhalte 1 <villager>Dorfbewohner</villager> und 1 <magic>Magie</magic>.",
+      "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte erschöpfen und 1 <magic>Magie</magic> ausgeben, um eine Voraussetzung einer Begegnungskarte zu ignorieren.",
+      "score": "1 SP pro Stufe <magic>Magie</magic>."
+    },
+    "305": {
+      "name": "Selia",
+      "role": "Alchemistin",
+      "immediate": "Erhalte 1 <villager>Dorfbewohner</villager>.",
+      "reaction": "Wenn du ein <seal/>-Plättchen aktivierst, kannst du diese Karte erschöpfen, um seinen Wert zu wählen (zwischen 1 und 3).",
+      "permanent": "Wenn du einen Trank nutzt, erschöpfe ihn, statt ihn abzuwerfen. Zur Erinnerung: Du kannst im selben Zug mehrere Tränke nutzen.",
+      "score": "2 SP pro Trank, den du besitzt."
+    },
+    "306": {
+      "name": "Neris",
+      "role": "Schurkin",
+      "immediate": "Erhalte 1 <villager>Dorfbewohner</villager>.",
+      "reaction": "Wenn du einen <villager>Dorfbewohner</villager> aus dem Dorf entfernst, kannst du diese Karte erschöpfen, um 2 zusätzliche <coin/> zu erhalten oder um die Zusatzkosten nicht zu bezahlen.",
+      "score": "1 SP pro 2 verbleibende <coin/>."
+    },
+    "307": {
+      "name": "Bran",
+      "role": "Wächter",
+      "immediate": "Erhalte 1 <villager>Dorfbewohner</villager>.",
+      "reaction": "Wenn du beim Aktivieren einer deiner Karten 1 oder mehr <villager>Dorfbewohner</villager> ausgeben musst, kannst du diese Karte erschöpfen, um diese Anzahl um 1 zu verringern.",
+      "score": "SP = Anzahl der <villager>Dorfbewohner</villager>, die dir zur Verfügung stehen, minus 2."
+    },
+    "308": {
+      "name": "Lucan",
+      "role": "Paladin",
+      "immediate": "Erhalte 1 <villager>Dorfbewohner</villager>.",
+      "reaction": "Wenn du Magie erhältst, kannst du diese Karte erschöpfen, um 1 <force>Stärke</force> zu erhalten (oder umgekehrt).",
+      "score": "SP = niedrigere Stufe von Stärke und Magie."
+    },
+    "309": {
+      "name": "Isandre",
+      "role": "Klerikerin",
+      "immediate": "Erhalte 1 <villager>Dorfbewohner</villager>.",
+      "reaction": "Wenn du eine deiner Karten erschöpfst, kannst du diese Karte erschöpfen, um jene bereit zu machen. Du kannst die gerade bereit gemachte Karte sofort erschöpfen, um ihren Effekt erneut auszulösen.",
+      "score": "2 SP pro Gefährte."
+    },
+    "310": {
+      "name": "Seren",
+      "role": "Barde",
+      "immediate": "Erhalte 1 <villager>Dorfbewohner</villager>.",
+      "reaction": "Wenn du eine Geschichte erzählst, kannst du diese Karte erschöpfen, damit der Erzählwert einer deiner Begegnungskarten 3 beträgt.",
+      "score": "1 SP pro erzählte Geschichte."
+    },
+    "311": {
+      "name": "Mira",
+      "role": "Späherin",
+      "immediate": "Erhalte 1 <villager>Dorfbewohner</villager>.",
+      "reaction": "Wenn du auf Abenteuer gehst (vor oder nach dem Abhandeln einer Begegnung), kannst du diese Karte erschöpfen, um 1 aktiven <villager>Dorfbewohner</villager> im Dorf zu platzieren.",
+      "score": "1 SP pro Begegnungskarte mit einem anderen Wappen (erzählt oder nicht)."
+    }
+  },
+  "encounter-card": {
+    "1": {
+      "name": "Valley",
+      "0": {
+        "requirement": "Mindestens 1 <force>Stärke</force> haben",
+        "reward": "Bewege deinen <adventurer>Abenteurer</adventurer> bis zu 2 Felder"
+      },
+      "1": {
+        "requirement": "Gib 1 <villager>Dorfbewohner</villager> aus",
+        "reward": "Erhalte 3 SP"
+      }
+    },
+    "2": {
+      "name": "Tiger",
+      "0": {
+        "requirement": "Gib 1 <villager>Dorfbewohner</villager> aus"
+      }
+    },
+    "3": {
+      "name": "Rocky pass",
+      "0": {
+        "reward": "Erhalte 1 <force>Stärke</force>"
+      }
+    },
+    "4": {
+      "name": "Sheep",
+      "0": {
+        "reward": "Nimm das Einkommensplättchen: 1 <coin/> sofort, dann ebenso viel in jedem Herbst"
+      }
+    },
+    "5": {
+      "name": "Mine",
+      "0": {
+        "requirement": "Gib 1 <villager>Dorfbewohner</villager> aus",
+        "reward": "Nimm das Einkommensplättchen: 2 <coin/> sofort, dann ebenso viel in jedem Herbst"
+      }
+    },
+    "6": {
+      "name": "Pack of wolves",
+      "0": {
+        "requirement": "Mindestens 2 <force>Stärke</force> haben",
+        "reward": "Erhalte 3 SP"
+      }
+    },
+    "7": {
+      "name": "Marauders",
+      "0": {
+        "requirement": "Insgesamt mindestens 2 <force>Stärke</force> und <magic>Magie</magic> haben",
+        "reward": "Erhalte 4 <coin/>"
+      }
+    },
+    "8": {
+      "name": "Initiation",
+      "0": {
+        "requirement": "Gib 4 <coin/> aus",
+        "reward": "Erhalte 1 <force>Stärke</force> und 1 <magic>Magie</magic>"
+      }
+    },
+    "9": {
+      "name": "Hermit",
+      "0": {
+        "requirement": "Mindestens 2 <force>Stärke</force> haben",
+        "reward": "Erhalte 1 <magic>Magie</magic>"
+      }
+    },
+    "10": {
+      "name": "Ambush",
+      "0": {
+        "requirement": "Mindestens 1 <magic>Magie</magic> haben",
+        "reward": "Nimm das Einkommensplättchen: 1 <coin/> sofort, dann ebenso viel in jedem Herbst"
+      }
+    },
+    "11": {
+      "name": "Cursed skull",
+      "0": {
+        "requirement": "Mindestens 2 <magic>Magie</magic> haben",
+        "reward": "Mache eine deiner Karten bereit"
+      }
+    },
+    "12": {
+      "name": "Circle of stones",
+      "0": {
+        "reward": "Erhalte 1 <magic>Magie</magic>"
+      }
+    },
+    "13": {
+      "name": "Camp",
+      "0": {
+        "requirement": "Insgesamt mindestens 1 <force>Stärke</force> und <magic>Magie</magic> haben",
+        "reward": "Erhalte 1 <villager>Dorfbewohner</villager>"
+      }
+    },
+    "14": {
+      "name": "Inn",
+      "0": {
+        "requirement": "Gib 2 <coin/> aus",
+        "reward": "Erhalte 1 <villager>Dorfbewohner</villager>"
+      }
+    },
+    "15": {
+      "name": "Bear",
+      "0": {
+        "requirement": "Mindestens 1 <force>Stärke</force> haben",
+        "reward": "Erhalte 2 SP"
+      },
+      "1": {
+        "requirement": "Mindestens 1 <magic>Magie</magic> haben",
+        "reward": "Erhalte 2 SP"
+      }
+    },
+    "16": {
+      "name": "World-tree",
+      "0": {
+        "reward": "Nimm das Einkommensplättchen: 1 SP sofort, dann ebenso viel in jedem Herbst"
+      }
+    },
+    "17": {
+      "name": "Treasure",
+      "0": {
+        "requirement": "Mindestens 3 <magic>Magie</magic> haben",
+        "reward": "Erhalte 3 <coin/>"
+      },
+      "1": {
+        "requirement": "Gib 1 <magic>Magie</magic> aus",
+        "reward": "Erhalte 4 <coin/>"
+      }
+    },
+    "18": {
+      "name": "Lone tower",
+      "0": {
+        "requirement": "Gib 1 <magic>Magie</magic> aus",
+        "reward": "Geh erneut auf Abenteuer — bewege deinen <adventurer>Abenteurer</adventurer> bis zu 3 Felder — und erhalte 3 SP"
+      }
+    },
+    "19": {
+      "name": "Witchcraft",
+      "0": {
+        "requirement": "Gib 4 <coin/> aus",
+        "reward": "Erhalte 2 <magic>Magie</magic>"
+      }
+    },
+    "20": {
+      "name": "Incantation",
+      "0": {
+        "requirement": "Gib 1 <villager>Dorfbewohner</villager> aus",
+        "reward": "Erhalte 1 <magic>Magie</magic>"
+      }
+    },
+    "21": {
+      "name": "Unicorn",
+      "0": {
+        "requirement": "Mindestens 3 <magic>Magie</magic> haben",
+        "reward": "Mache eine deiner Karten bereit und nimm das Einkommensplättchen: 1 SP sofort, dann ebenso viel in jedem Herbst"
+      }
+    },
+    "22": {
+      "name": "Joust",
+      "0": {
+        "requirement": "Gib 1 <villager>Dorfbewohner</villager> aus",
+        "reward": "Erhalte 3 SP"
+      },
+      "1": {
+        "requirement": "Mindestens 4 <force>Stärke</force> haben",
+        "reward": "Erhalte 4 SP"
+      }
+    },
+    "23": {
+      "name": "Diamond",
+      "0": {
+        "requirement": "Gib 1 <force>Stärke</force> aus",
+        "reward": "Erhalte 5 <coin/>"
+      }
+    },
+    "24": {
+      "name": "Farm",
+      "0": {
+        "reward": "Erhalte 1 <villager>Dorfbewohner</villager>"
+      }
+    },
+    "25": {
+      "name": "Demon",
+      "0": {
+        "requirement": "Mindestens 3 <force>Stärke</force> haben",
+        "reward": "Erhalte 3 SP"
+      },
+      "1": {
+        "requirement": "Mindestens 3 <magic>Magie</magic> haben",
+        "reward": "Erhalte 3 SP"
+      }
+    },
+    "26": {
+      "name": "Legendary sword",
+      "0": {
+        "requirement": "Gib 1 <villager>Dorfbewohner</villager> aus",
+        "reward": "Erhalte 3 SP"
+      }
+    },
+    "27": {
+      "name": "Coopery",
+      "0": {
+        "requirement": "Gib 4 <coin/> aus",
+        "reward": "Nimm das Einkommensplättchen: 2 SP sofort, dann ebenso viel in jedem Herbst"
+      }
+    },
+    "28": {
+      "name": "Training",
+      "0": {
+        "requirement": "Gib 4 <coin/> aus",
+        "reward": "Nimm das Einkommensplättchen: 1 <force>Stärke</force> sofort, dann ebenso viel in jedem Herbst"
+      }
+    },
+    "29": {
+      "name": "Vagabond",
+      "0": {
+        "requirement": "Insgesamt mindestens 4 <force>Stärke</force> und <magic>Magie</magic> haben",
+        "reward": "Erhalte 1 <villager>Dorfbewohner</villager>"
+      }
+    },
+    "30": {
+      "name": "Errant knight",
+      "0": {
+        "requirement": "Gib 2 <coin/> aus",
+        "reward": "Erhalte 1 <force>Stärke</force> und 2 SP"
+      }
+    },
+    "31": {
+      "name": "Caravan",
+      "0": {
+        "requirement": "Gib 2 <villager>Dorfbewohner</villager> aus",
+        "reward": "Nimm das Einkommensplättchen: 4 <coin/> sofort, dann ebenso viel in jedem Herbst"
+      }
+    },
+    "32": {
+      "name": "Brigands",
+      "0": {
+        "requirement": "Mindestens 3 <force>Stärke</force> haben",
+        "reward": "Erhalte 4 <coin/> und 2 SP"
+      }
+    },
+    "33": {
+      "name": "Archery",
+      "0": {
+        "requirement": "Gib 3 <coin/> aus",
+        "reward": "Erhalte 1 <force>Stärke</force> und 3 SP"
+      }
+    },
+    "34": {
+      "name": "Snowy pass",
+      "0": {
+        "requirement": "Mindestens 5 <force>Stärke</force> haben",
+        "reward": "Erhalte 5 <coin/> und 3 SP"
+      }
+    },
+    "35": {
+      "name": "Necromancer",
+      "0": {
+        "requirement": "Insgesamt mindestens 8 <force>Stärke</force> und <magic>Magie</magic> haben",
+        "reward": "Erhalte 9 SP"
+      }
+    },
+    "36": {
+      "name": "Gold mine",
+      "0": {
+        "requirement": "Gib 1 <villager>Dorfbewohner</villager> aus",
+        "reward": "Erhalte 7 <coin/>"
+      }
+    },
+    "37": {
+      "name": "Dragon",
+      "0": {
+        "requirement": "Mindestens 5 <force>Stärke</force> haben",
+        "reward": "Erhalte 4 SP"
+      },
+      "1": {
+        "requirement": "Mindestens 5 <magic>Magie</magic> haben",
+        "reward": "Erhalte 4 SP"
+      }
+    },
+    "38": {
+      "name": "Labyrinth",
+      "0": {
+        "requirement": "Gib 1 <villager>Dorfbewohner</villager> aus",
+        "reward": "Erhalte 4 SP"
+      },
+      "1": {
+        "requirement": "Gib 1 <villager>Dorfbewohner</villager> aus",
+        "reward": "Erhalte 4 SP"
+      }
+    },
+    "39": {
+      "name": "Relay",
+      "0": {
+        "requirement": "Gib 4 <coin/> aus",
+        "reward": "Geh erneut auf Abenteuer — bewege deinen <adventurer>Abenteurer</adventurer> bis zu 3 Felder — und erhalte 2 SP"
+      }
+    },
+    "40": {
+      "name": "Fairy ring",
+      "0": {
+        "requirement": "Gib 1 <villager>Dorfbewohner</villager> aus",
+        "reward": "Erhalte 1 <magic>Magie</magic> und 3 SP"
+      }
+    },
+    "41": {
+      "name": "Holy chalice",
+      "0": {
+        "requirement": "Mindestens 5 <magic>Magie</magic> haben",
+        "reward": "Mache eine deiner Karten bereit und erhalte 4 SP"
+      }
+    }
+  },
+  "event-tile": {
+    "1": {
+      "name": "Bankett",
+      "0": {
+        "reward": "Erhalte 3 <coin/>"
+      },
+      "1": {
+        "reward": "Mache eine deiner erschöpften Karten bereit"
+      }
+    },
+    "2": {
+      "name": "Fest"
+    },
+    "3": {
+      "name": "Großer Jahrmarkt",
+      "0": {
+        "requirement": "Gib 3 <coin/> aus",
+        "reward": "Erhalte 1 <force>Stärke</force> und 1 <magic>Magie</magic>"
+      }
+    },
+    "4": {
+      "name": "Zaubervorstellung",
+      "0": {
+        "requirement": "Gib 1 <magic>Magie</magic> aus",
+        "reward": "Bewege deinen <adventurer>Abenteurer</adventurer> bis zu 5 Felder"
+      }
+    },
+    "5": {
+      "name": "Versammlung",
+      "0": {
+        "requirement": "Gib 1 <force>Stärke</force> aus",
+        "reward": "Erhalte 1 <villager>Dorfbewohner</villager>"
+      },
+      "1": {
+        "requirement": "Gib 3 <coin/> aus",
+        "reward": "Erhalte 1 <villager>Dorfbewohner</villager>"
+      }
+    },
+    "6": {
+      "name": "Turnier",
+      "0": {
+        "requirement": "Gib 1 <force>Stärke</force> aus",
+        "reward": "Erhalte 6 <coin/>"
+      },
+      "1": {
+        "requirement": "Gib 1 <force>Stärke</force> aus",
+        "reward": "Erhalte 4 SP"
+      }
+    }
+  },
+  "quest-tile": {
+    "1": {
+      "name": "Riese",
+      "requirement": "Mindestens 4 <force>Stärke</force> haben"
+    },
+    "2": {
+      "name": "Drache",
+      "requirement": "Insgesamt mindestens 6 <force>Stärke</force> und <magic>Magie</magic> haben"
+    },
+    "3": {
+      "name": "Gespenster",
+      "requirement": "Mindestens 4 <magic>Magie</magic> haben"
+    },
+    "4": {
+      "name": "Bardenturnier",
+      "requirement": "Verschiebe 2 Begegnungskarten in den Bereich der erzählten Geschichten (unabhängig von ihrem Erzählwert)"
+    },
+    "5": {
+      "name": "Spende",
+      "requirement": "Wirf einen deiner Gegenstände ab"
+    },
+    "6": {
+      "name": "Untote",
+      "requirement": "Gib 1 <force>Stärke</force> und 1 <magic>Magie</magic> aus"
+    },
+    "7": {
+      "name": "Tödliche Falle",
+      "requirement": "Lege einen deiner verfügbaren <villager>Dorfbewohner</villager> in den Vorrat zurück"
+    },
+    "8": {
+      "name": "Lösegeld",
+      "requirement": "Gib 6 <coin/> aus"
+    },
+    "9": {
+      "name": "Hochzeit",
+      "requirement": "Gib 2 <villager>Dorfbewohner</villager> aus"
+    }
+  },
+  "tuto": {
+    "welcome": "Willkommen im Tutorial von <bold>Greylune</bold>!",
+    "goal": "In diesem Spiel verkörperst du einen <bold>Abenteurer</bold>.\nDein Ziel ist es, die angesehenste Persönlichkeit von Greylune zu werden, indem du am Ende der <bold>fünf Jahre</bold> die meisten Siegpunkte <vp/> gesammelt hast.",
+    "seasons": "Jedes Jahr ist in <bold>4 Jahreszeiten</bold> unterteilt. Der Winter <winter/> ist der Aufbau und läuft automatisch ab.",
+    "spring": "Du und dein Gegner seid im <bold>Frühling</bold> <spring/>.",
+    "villagers": "Im Frühling platzierst du deine <bold>Dorfbewohner</bold>. Du beginnst mit 3 Dorfbewohnern und kannst bis zu 4 weitere anwerben.",
+    "village": "Dorfbewohner können im <bold>Dorf</bold> zwischen 2 Karten platziert werden. Im Sommer kannst du so eine der 2 angrenzenden Karten nutzen.\n<italic>Das Spiel enthält zahlreiche Karten, alle einzigartig. Klicke auf Game Park auf ein Element, um die Spielhilfe zu öffnen!</italic>",
+    "place-first": "Platziere deinen ersten Dorfbewohner hier, neben <bold>Dorian</bold>.",
+    "opponent-turn": "Jetzt ist dein Gegner William am Zug.",
+    "place-second": "Platziere deinen zweiten Dorfbewohner hier, zwischen <bold>Tommy</bold> und <bold>The Riven Oak</bold>.",
+    "go-summer": "Du hast noch einen dritten Dorfbewohner, aber nichts zwingt dich, ihn zu platzieren. Entscheide dich, <bold>in den Sommer zu wechseln</bold> <summer/>.",
+    "summer": "Dein <bold>Jahreszeitenmarker</bold> wird in den Sommer versetzt. In dieser Jahreszeit kannst du keine Dorfbewohner mehr im Dorf platzieren.\n<italic>Dein Gegner bleibt im Frühling.</italic>",
+    "recruit": "Im Sommer kannst du einen im Dorf platzierten Dorfbewohner nutzen, um eine der 2 angrenzenden Karten zu <bold>aktivieren</bold>.\nZum Beispiel kann dieser Dorfbewohner diesen Gefährten, <bold>Dorian</bold>, für <bold>7 <coin/></bold> anwerben. Tu es.",
+    "starting-coins": "Du beginnst die Partie mit <bold>8 <coin/></bold>.\n<italic>Mit Münzen wirbst du Gefährten an, kaufst Gegenstände und aktivierst manche Gebäude, Ereignisse oder Begegnungen.</italic>",
+    "companions": "Deine <bold>Gefährten</bold> kommen hierhin. Du kannst höchstens 3 davon haben.",
+    "new-villager": "Außerdem erhältst du beim Anwerben eines Gefährten sofort einen neuen <bold>Dorfbewohner</bold> <villager/>.",
+    "opponent-guild": "Dein Gegner ist am Zug. Er wechselt in den Sommer und nutzt diesen Dorfbewohner, um <bold>Scouts' guild</bold> zu nutzen.",
+    "seal": "Dieses Gebäude trägt ein <bold>Siegel</bold> <seal/>: Sein Effekt hängt vom Wert dieses Siegels ab (zwischen 1 und 3). Hier kann William bis zu einer Entfernung von 1 auf Abenteuer gehen.\n<italic>Bei 3 oder 4 Spielern lägen hier 2 oder 3 Siegel.</italic>",
+    "camp": "Nach seiner Nutzung kommt der Dorfbewohner hierhin, ins <bold>Lager</bold>. Im nächsten Jahr ist er wieder verfügbar.",
+    "opponent-travel": "William <bold>geht auf Abenteuer</bold>: Er bewegt seinen <bold>Abenteurer</bold> <adventurer/>, hier höchstens ein Feld weit.",
+    "opponent-encounter": "An dieser Stelle kann William 1 <coin/> erhalten oder eine <bold>Begegnungskarte</bold> abhandeln. Er entscheidet sich, den <bold>Tiger</bold> abzuhandeln.",
+    "untold-stories": "Er schickt einen aktiven Dorfbewohner ins Lager, und der Tiger kommt zu seinen <bold>unerzählten Geschichten</bold>!",
+    "banquet": "Du bist am Zug. Jedes Jahr findet in Greylune ein <bold>Ereignis</bold> statt. In diesem Jahr ist es das <bold>Bankett</bold>.\nKlicke darauf, um seinen Effekt zu sehen, und schicke dann einen aktiven Dorfbewohner dorthin, um 3 <coin/> zu erhalten.",
+    "opponent-tavern": "William möchte nun <bold>The Riven Oak</bold> nutzen, um von seiner Begegnung mit dem Tiger zu erzählen!\nUm eine Dorfkarte zu aktivieren, muss man jedoch <bold>1 <coin/> für jeden anderen Dorfbewohner</bold> neben dieser Karte bezahlen … William bezahlt also 1 <coin/>.",
+    "tell-story": "Um <bold>eine Geschichte zu erzählen</bold>, muss William eine oder mehrere unerzählte Geschichten wählen und sie zu seinen erzählten Geschichten verschieben.",
+    "tavern-rewards": "William hat eine Geschichte mit Wert 3 erzählt: Er erhält also die 3 Boni der <bold>Taverne</bold>: 2 <vp/> + 1 <force/> + 1 <villager/>.",
+    "force": "William erhält 1 <bold>Stärke</bold> <force/>: Sein Stärkemarker steigt also. Stärke und <bold>Magie</bold> <magic/> sind oft Voraussetzungen, um Begegnungen und Quests abzuhandeln!",
+    "skills-score": "Bei Spielende erhältst du <bold>2 <vp/></bold>, wenn du mindestens 3 <force/> und 3 <magic/> hast, und <bold>5 <vp/></bold>, wenn du 5 <force/> und 5 <magic/> hast.\n<italic>Außerdem bringt jede über 5 hinaus erhaltene <force/> oder <magic/> sofort 1 <vp/>.</italic>",
+    "villager-actions": "Du bist am Zug. Im Sommer kann ein Dorfbewohner im Dorf 3 Dinge tun:\n• eine angrenzende Karte <bold>aktivieren</bold> (den Gefährten anwerben, den Gegenstand kaufen oder das Gebäude nutzen);\n• <bold>Münzen erhalten</bold>: so viele <coin/>, wie <bold>andere Dorfbewohner</bold> rund um eine der 2 angrenzenden Karten stehen (hier wären das 0 <coin/> …);\n• <bold>am Ereignis teilnehmen</bold>, nur einmal pro Jahr (hier kannst du das also nicht).",
+    "buy-tommy": "Nutze diesen Dorfbewohner, um <bold>Tommy zu kaufen</bold>.",
+    "reaction": "Manche Gefährten und manche Gegenstände können <bold>als Reaktion</bold> aktiviert werden. Wenn du zum Beispiel einen Gegenstand kaufst, kannst du <bold>Dorian</bold> erschöpfen, um seine Kosten um 1 <coin/> zu senken und 1 <vp/> zu erhalten. Tu es.",
+    "score-track": "Wenn du Siegpunkte erhältst, rückt dein Marker auf der <bold>Siegpunktleiste</bold> vor. Erreichst du 8 und dann 20 <vp/>, erhältst du sofort einen Bonus!",
+    "bonus-tokens": "Hier liegen deine 3 <bold>Bonusplättchen</bold>. Bei 8 <vp/> wählst du eines, erhältst, was es bietet, und wirfst es ab.\nBei 20 <vp/> wählst du ein zweites und wirfst das letzte ab.",
+    "items": "Deine <bold>Gegenstände</bold> kommen hierhin. Du kannst höchstens 3 davon haben, aber dank Dorian darfst du 2 weitere besitzen!\nDorian bringt dir bei Spielende außerdem 1 <vp/> pro Gegenstand in deinem Besitz.",
+    "tommy-score": "<bold>Tommy</bold> bringt dir bei Spielende ebenfalls 1 <vp/>.",
+    "opponent-banquet": "William hat seinen letzten aktiven Dorfbewohner genutzt, um am Ereignis teilzunehmen und 3 <coin/> zu erhalten.",
+    "special-action": "Im Sommer kannst du einmal pro Jahr einen Dorfbewohner nutzen, um deine <bold>Sonderaktion</bold> <special/> auszuführen: eine Geschichte erzählen, um 2 <coin/> + 1 <force/> + 2 <vp/> zu erhalten, ein Feld weit auf Abenteuer gehen <travel1/> oder 1 <magic/> erhalten.",
+    "use-tommy": "Im Sommer kannst du auch deine Gegenstände nutzen: <bold>Tommy</bold> zum Beispiel lässt dich auf Abenteuer gehen!\nErschöpfe ihn und gib einen aktiven Dorfbewohner aus, um deinen Abenteurer bis zu 2 Felder zu bewegen <travel2/>.",
+    "travel": "Bewege deinen <bold>Abenteurer</bold> hierhin.",
+    "sheep": "Hier hast du die Wahl, 1 <vp/> zu erhalten oder eine Begegnung abzuhandeln. Entscheide dich, die Begegnung <bold>Sheep</bold> abzuhandeln.",
+    "income-token": "Du hast dieses <bold>Einkommensplättchen</bold> erhalten: 1 <coin/> sofort, dann 1 <coin/> jedes Jahr.",
+    "opponent-autumn": "William hat keine Dorfbewohner mehr: Er wechselt in den <bold>Herbst</bold> <autumn/>. Sein Abenteurer kehrt nach Greylune zurück, er holt seine Dorfbewohner zurück und erhält 3 <coin/>.",
+    "autumn": "Du bist am Zug: Du hast keine Aktion mehr zur Verfügung, wechsle in den <bold>Herbst</bold> <autumn/>.",
+    "come-home": "Dein Abenteurer kehrt nach Greylune zurück, du holst deine <bold>Dorfbewohner</bold> zurück und machst deine Gefährten- und Gegenstandskarten wieder bereit.",
+    "income": "Außerdem erhältst du dein <bold>Einkommen</bold> <income/>: 3 <coin/>, minus 1 <coin/> pro Gefährte (Dorian kostet dich 1 <coin/>), plus deine Einkommensplättchen (1 <coin/> für Sheep).",
+    "end-of-year": "Im Herbst können die Spieler nicht mehr handeln und müssen warten, bis die anderen Spieler ihr Jahr beendet haben.\nSobald alle im Herbst sind, beginnt ein <bold>neues Jahr</bold>!",
+    "new-village": "Im <bold>Winter</bold> <winter/> werden die verbliebenen <bold>Dorfkarten</bold> durch 9 neue Dorfkarten ersetzt.",
+    "new-event": "Ein neues <bold>Ereignis</bold> wird aufgedeckt.",
+    "new-encounters": "5 neue <bold>Begegnungen</bold> ersetzen die vorherigen (Anzahl der Spieler + 3).",
+    "new-year": "Schließlich wechseln alle Spieler in den <bold>Frühling</bold> <spring/>, und das Startspielerplättchen geht an den nächsten Spieler: Ein neues Jahr kann beginnen!",
+    "periods": "In den Jahren 3 und 4 stammen die Dorf- und Begegnungskarten aus <bold>Periode II</bold> (stärker, aber mit mehr Voraussetzungen), und in Jahr 5 aus <bold>Periode III</bold>, um vor Spielende möglichst viele <vp/> zu erzielen!",
+    "quests": "Um viele <vp/> zu erhalten, kannst du auch die <bold>Heldenquests</bold> <quest/> erfüllen.\nGeh dazu auf Abenteuer und entscheide dich auf dem Feld einer Quest, sie statt einer Begegnung abzuhandeln.\n<italic>Die <vp/> der Quests werden bei Spielende gewertet.</italic>",
+    "first-quest": "Der <bold>erste Spieler</bold>, der eine Quest erfüllt, erhält 2 zusätzliche <vp/>!\n<italic>Du kannst jede Quest im Laufe der Partie nur einmal erfüllen.</italic>",
+    "final-score": "Zähle bei Spielende zu den bereits gesammelten <vp/> hinzu:\n• die <vp/> der Quests;\n• die <vp/> der Gefährten;\n• die <vp/> der Gegenstände;\n• 2 <vp/>, wenn du mindestens 3 <force/> und 3 <magic/> hast, oder 5 <vp/>, wenn du 5 <force/> und 5 <magic/> hast.",
+    "good-luck": "Der angesehenste Spieler am Ende des 5. Jahres gewinnt!\nNun liegt es an dir, dein Schicksal zu schmieden, edler Abenteurer!"
+  }
+}

@@ -1,1 +1,1157 @@
-{}
+{
+  "Place": "Colocar",
+  "Participate": "Participar",
+  "cancel": "Cancelar",
+  "ok": "Ok",
+  "gains": "<gain1/> y <gain2/>",
+  "action": {
+    "exploit": "Usar",
+    "exploit-price": "Usar ({price} <coin/>)",
+    "buy": "Comprar",
+    "buy-price": "Comprar ({price} <coin/>)",
+    "recruit": "Reclutar",
+    "recruit-price": "Reclutar ({price} <coin/>)",
+    "activate": "Activar",
+    "resolve": "Resolver",
+    "achieve": "Completar",
+    "tell": "Contar",
+    "end-story": "Terminar el relato",
+    "gain-force": "Ganar {count} de Fuerza",
+    "gain-magic": "Ganar {count} de Magia",
+    "gain-vp": "Ganar {count} PV",
+    "camp": "Ir al campamento",
+    "camp-coins": "Ganar {coins} <coin/>",
+    "travel": "Viajar",
+    "stay": "Quedarse en el sitio",
+    "summer": "Pasar al verano",
+    "autumn": "Pasar al otoño",
+    "special-action": "Acción especial",
+    "straighten": "Preparar una carta"
+  },
+  "header": {
+    "winter": "Nuevo año",
+    "spring": {
+      "you": "Coloca un <villager/> o <summer>pasa al verano <sun/></summer>",
+      "player": "{player} coloca un aldeano"
+    },
+    "summer": {
+      "you": "Activa un <villager/>, un objeto, o <autumn>pasa al otoño <leaf/></autumn>",
+      "player": "{player} realiza su acción de verano"
+    },
+    "activate-card": {
+      "you": "Elige una opción de la carta",
+      "player": "{player} activa una carta"
+    },
+    "must-react-card": {
+      "you": "Debes activar {card}",
+      "player": "{player} activa una carta"
+    },
+    "must-react": {
+      "you": "Debes activar un compañero",
+      "player": "{player} activa una carta"
+    },
+    "activate-seal": {
+      "you": "Activa una ficha de Sello",
+      "player": "{player} activa una ficha de Sello"
+    },
+    "seal-value": {
+      "you": "Elige el valor de la ficha de Sello",
+      "player": "{player} elige el valor de la ficha de Sello"
+    },
+    "discard-item": {
+      "you": "Descarta un objeto",
+      "player": "{player} descarta un objeto"
+    },
+    "travel": {
+      "you": "Mueve tu <adventurer/> hasta {count, plural, one {# casilla} other {# casillas}}",
+      "player": "{player} parte a la aventura"
+    },
+    "encounter": {
+      "you-none": "Resuelve un encuentro o <pass>pasa</pass>",
+      "you-coin": "Resuelve un encuentro o <take>toma 1 <coin/></take>",
+      "you-vp": "Resuelve un encuentro o <take>toma 1 <vp/></take>",
+      "you-quest": "Resuelve un encuentro, <quest>completa una misión <crown/></quest> o <pass>pasa</pass>",
+      "player": "{player} resuelve un encuentro",
+      "nothing": "Aquí no puedes resolver ni un encuentro ni una misión."
+    },
+    "outcome": {
+      "you": "Elige lo que pagas y lo que ganas",
+      "player": "{player} elige lo que paga y lo que gana"
+    },
+    "quest": {
+      "you": "Cuenta {count, plural, one {# historia} other {# historias}}",
+      "player": "{player} cuenta {count, plural, one {# historia} other {# historias}}"
+    },
+    "start-story": {
+      "you": "Cuenta una historia",
+      "player": "{player} cuenta una historia"
+    },
+    "tell-story": {
+      "you": "Cuenta una historia ({value}/{max}) o <end>termina tu relato</end>",
+      "player": "{player} cuenta una historia"
+    },
+    "straighten": {
+      "you": "Prepara una carta",
+      "player": "{player} prepara una carta"
+    },
+    "place-villager": {
+      "you": "Coloca un <villager/>",
+      "player": "{player} coloca un aldeano"
+    },
+    "event": {
+      "you": "Elige lo que te aporta el evento",
+      "player": "{player} participa en el evento"
+    },
+    "special-action": {
+      "you": "Elige lo que te aporta la acción especial",
+      "player": "{player} usa su acción especial"
+    },
+    "resolve-event": {
+      "you": "Resolución del evento",
+      "player": "{player} participa en el evento"
+    },
+    "autumn": {
+      "you": "Pasas al otoño",
+      "player": "{player} pasa al otoño"
+    },
+    "use-item": {
+      "you": "Usas un objeto",
+      "player": "{player} usa un objeto"
+    },
+    "resolve-effects": {
+      "you": "Resolución de tus ganancias",
+      "player": "Resolución de las ganancias de {player}"
+    },
+    "end-turn": {
+      "you": "<end>Terminar mi turno</end>",
+      "player": "{player} termina su turno"
+    },
+    "skill": {
+      "you": "Gana",
+      "player": "{player} elige Fuerza o Magia"
+    },
+    "bonus": {
+      "you": "Bonificación: gana",
+      "player": "{player} elige una ficha de Bonificación"
+    },
+    "reaction": {
+      "you": "Usa un compañero, una poción, o <pass>pasa</pass>",
+      "player": "{player} puede reaccionar"
+    },
+    "reaction-card": {
+      "you": "Activa {card} o <pass>pasa</pass>",
+      "player": "{player} puede reaccionar"
+    },
+    "scoring": {
+      "quests": "Fin de la partida: PV de las Misiones",
+      "companions": "Fin de la partida: PV de los Compañeros",
+      "items": "Fin de la partida: PV de los Objetos",
+      "skills": "Fin de la partida: PV de las habilidades"
+    },
+    "or": "o"
+  },
+  "scoring": {
+    "game": "PV acumulados durante la partida",
+    "quests": "Misiones",
+    "companions": "Compañeros",
+    "items": "Objetos",
+    "skills": "Habilidades",
+    "total": "Total"
+  },
+  "panel": {
+    "first-player": "Jugador inicial",
+    "show-player": "Mostrar a {player}"
+  },
+  "log": {
+    "new-year": "Año {year}",
+    "event-reveal": "Evento del año: <tile/>",
+    "first-player": "{player} recibe la ficha de Jugador inicial <token/>",
+    "summer": "{player} pasa al Verano <season/>",
+    "autumn": "{player} pasa al Otoño <season/>",
+    "place-villager": {
+      "between": "{player} coloca <villager/> entre <card1/> y <card2/>",
+      "beside": "{player} coloca <villager/> junto a <card/>"
+    },
+    "event": "{player} coloca <villager/> en el Evento <tile/>",
+    "special-action": "{player} coloca <villager/> en su acción especial",
+    "coins-around": "{player} gana monedas alrededor de <card/>",
+    "withdraw": "{player} envía un <villager/> al campamento <camp/>",
+    "activate": {
+      "1": "{player} usa <card/>",
+      "2": "{player} compra <card/>",
+      "3": "{player} recluta a <card/>"
+    },
+    "use-item": "{player} usa <card/>",
+    "reaction": "{player} reacciona con <card/>",
+    "seal": "{player} descarta la ficha de Sello <seal/>",
+    "seal-value": "{player} fija el valor de la ficha de Sello en <seal/>",
+    "travel": "{player} mueve su <adventurer/> a <area/>",
+    "travel-home": "{player} devuelve su <adventurer/> a la Aldea",
+    "stay": "{player} se queda en el sitio con su <adventurer/>",
+    "encounter": "{player} resuelve el Encuentro <card/>",
+    "skip-encounter": "{player} no resuelve ningún Encuentro",
+    "no-encounter": "{player} no puede resolver ningún Encuentro",
+    "quest": "{player} completa la Misión Heroica <quest/>",
+    "quest-first": "{player} es el primero en completar la Misión Heroica <quest/>",
+    "income-token": "{player} toma la ficha de Ingresos <token/>",
+    "tell-story": "{player} cuenta la historia <card/> <value/>",
+    "quest-story": "{player} mueve <card/> a las historias contadas",
+    "gain-coins": "{player} gana {count} <coin/>",
+    "pay-coins": "{player} gasta {count} <coin/>",
+    "gain-vp": "{player} gana {count} <vp/>",
+    "gain-force": "{player} gana {count} <force/>",
+    "spend-force": "{player} gasta {count} <force/>",
+    "gain-magic": "{player} gana {count} <magic/>",
+    "spend-magic": "{player} gasta {count} <magic/>",
+    "gain-villagers": "{player} gana {count} <villager/>",
+    "spend-villagers": "{player} gasta {count} <villager/>",
+    "return-villagers": "{player} devuelve {count} <villager/> a la reserva",
+    "straighten": "{player} prepara <card/>",
+    "discard-item": "{player} descarta <card/>",
+    "bonus-token": "{player} resuelve la ficha de Bonificación <token/>",
+    "scoring": {
+      "quests": "Fin de la partida: PV de las Misiones",
+      "companions": "Fin de la partida: PV de los Compañeros",
+      "items": "Fin de la partida: PV de los Objetos",
+      "skills": "Fin de la partida: PV de las habilidades"
+    },
+    "score": "{player} anota {count} <vp/>"
+  },
+  "help": {
+    "period": "Periodo {period}",
+    "cost": "Coste",
+    "surcharge": "Sobrecoste",
+    "immediate": "Efecto inmediato",
+    "ability": "Capacidad",
+    "reaction": "Reacción",
+    "permanent": "Efecto permanente",
+    "score": "PV de fin de partida",
+    "type": {
+      "1": {
+        "name": "Edificio",
+        "note": "Un Edificio no se puede comprar ni reclutar: permanece en la Aldea tras ser activado y podrá ser usado por otros Aldeanos vecinos, incluso por un jugador que ya lo haya activado. Puede activarse varias veces durante un mismo año."
+      },
+      "2": {
+        "name": "Objeto",
+        "note": "Un Objeto se compra y se coloca a la derecha de tu tablero personal. Salvo excepciones, estás limitado a 3 Objetos: si superas este límite al comprar un Objeto, descarta un Objeto de tu elección, agotado o no (incluido el que acabas de adquirir, después de anotar sus posibles PV inmediatos)."
+      },
+      "3": {
+        "name": "Compañero",
+        "note": "Reclutar un Compañero cuesta 7 <coin/>; se coloca a la izquierda de tu tablero personal. Te hace ganar 1 <villager>Aldeano</villager>, disponible de inmediato, pero reduce en una moneda tus ingresos en Otoño. Nunca puedes reclutar más de 3 Compañeros durante la partida."
+      }
+    },
+    "tavern": {
+      "name": "Taberna"
+    },
+    "tell-story": {
+      "name": "Contar una historia",
+      "note": "Cuenta una historia usando una o varias cartas de Encuentro resueltas previamente, sin superar un valor narrativo máximo de 3 — excepción: 2 historias de valor 2 cada una solo cuentan como una historia de valor 3. Las ganancias son acumulativas: con un valor narrativo total de 1, gana solo la primera bonificación; con 2, las dos primeras; con 3, todas las bonificaciones."
+    },
+    "potion": {
+      "name": "Poción",
+      "note": "Poción: debe descartarse tras su uso y devolverse a la caja — salvo que Selia te permita agotarla en lugar de descartarla."
+    },
+    "seals": {
+      "label": "Sellos",
+      "none": "ninguno",
+      "spent": "No queda ninguna ficha de <seal/> en esta carta: ya no puede activarse este año.",
+      "note-players": "Al revelarse, esta carta recibe un número de fichas de <seal/> igual al número de jugadores menos 1. Cada activación usa una, que después se descarta.",
+      "note-one": "Al revelarse, esta carta recibe una sola ficha de <seal/>, sea cual sea el número de jugadores."
+    },
+    "village-deck": {
+      "name": "Mazo de Aldea",
+      "left": "Cartas restantes",
+      "note": "Cada Invierno, se revelan las 9 primeras cartas del mazo de Aldea y se disponen en una cuadrícula de 3x3. El reverso indica el periodo: I para los 2 primeros años, II para los 2 siguientes, III para el último."
+    },
+    "distance": "Distancia",
+    "story": "Valor narrativo",
+    "income": "Ingresos",
+    "requirement": "Requisito",
+    "reward": "Recompensa",
+    "encounter": {
+      "name": "Encuentro",
+      "note": "Una carta de Encuentro se resuelve desde la casilla donde se ha detenido tu <adventurer>Aventurero</adventurer>, cumpliendo su requisito para ganar su recompensa. Después de resolverla, deslízala a la columna de historias no contadas de tu tablero personal.",
+      "both": "Este Encuentro tiene 2 requisitos y 2 recompensas: debes cumplir al menos uno de los 2 para resolverlo. Si solo cumples el requisito de la izquierda, solo ganas la recompensa de la izquierda; también puedes cumplir ambos requisitos para obtener ambas recompensas.",
+      "story-only": "Este Encuentro no tiene recompensa: solo aporta algo cuando lo cuentas.",
+      "untellable": "Valor narrativo 0: no puedes contar este Encuentro, salvo que consigas aumentar su valor (Charisma potion, Seren) o para completar la Misión Torneo de Bardos."
+    },
+    "income-token": {
+      "note": "Ficha de Ingresos: después de resolver un Encuentro que lleve una ficha de Ingresos, colócala en tu tablero personal y resuelve su efecto de inmediato. También la resolverás durante la fase de Ingresos, en Otoño. El número de fichas de Ingresos no está limitado."
+    },
+    "encounter-deck": {
+      "name": "Mazo de Encuentros",
+      "left": "Cartas restantes",
+      "note": "Cada Invierno, se revelan las 5/6/7 primeras cartas de Encuentro (con 2/3/4 jugadores) y se disponen a la derecha del tablero principal según su Distancia. El reverso indica el periodo: I para los 2 primeros años, II para los 2 siguientes, III para el último."
+    },
+    "options": "Opciones",
+    "vp": "{count} PV",
+    "event": {
+      "name": "Evento",
+      "note": "Una vez por año, en Primavera o en Verano, puedes participar en el Evento como acción: coloca uno de tus <villager>Aldeanos</villager> activos — o, en Verano, uno de los que están en la Aldea — en la loseta de Evento, siempre que puedas activarlo (pagando el coste si lo hay) para obtener sus beneficios.",
+      "festival": "Festival: elige una casilla libre de la loseta y gana las 2 bonificaciones adyacentes. Tu <villager>Aldeano</villager> permanece allí hasta el Otoño."
+    },
+    "event-pile": {
+      "name": "Pila de Eventos",
+      "left": "Losetas por venir",
+      "note": "Durante la preparación, se retira al azar una loseta de Evento y las otras 5 se barajan en secreto para formar la pila. Cada Invierno, se revela la primera loseta de la pila: es el Evento activo del año en curso."
+    },
+    "quest": {
+      "name": "Misión Heroica",
+      "first": "Al primero",
+      "others": "A los siguientes",
+      "note": "Una vez que tu <adventurer>Aventurero</adventurer> se ha detenido en la casilla de una Misión Heroica, puedes decidir no resolver un Encuentro para resolver la Misión en su lugar, si aún no la has hecho y cumples sus condiciones. Si eres el primer jugador en hacerlo, coloca uno de tus marcadores de Misión en el espacio que más PV aporta al final de la partida; si no, colócalo en el espacio contiguo: en ese espacio pueden encontrarse varios marcadores (de jugadores diferentes).",
+      "score": "Solo puedes resolver cada Misión una vez. Sus PV solo se suman al final de la partida, después del quinto año."
+    },
+    "player-board": {
+      "name": "Tablero personal",
+      "companions": {
+        "name": "Compañeros",
+        "text": "Tus Compañeros se colocan a la izquierda de tu tablero personal. Su capacidad de reacción, en la parte inferior de la carta, exige agotarlos; su capacidad permanente, en cambio, está activa tanto si el Compañero está agotado como si no."
+      },
+      "items": {
+        "name": "Objetos",
+        "text": "Tus Objetos se colocan a la derecha de tu tablero personal. La mayoría tiene una capacidad que exige gastar una acción en Verano para usarla, agotando la carta; las Pociones deben descartarse tras su uso. En Otoño, prepara todas tus cartas."
+      },
+      "stories": {
+        "name": "Historias",
+        "text": "Después de resolverla, desliza cada carta de Encuentro a la columna de historias no contadas de tu tablero personal. Una vez contada una historia, mueve la carta o las cartas hacia la derecha, a la zona de historias contadas: ya no podrás volver a contarlas durante el resto de la partida."
+      },
+      "income": {
+        "name": "Ingresos",
+        "text": "En Otoño, gana tus ingresos: 3 <coin/>, menos 1 <coin/> por Compañero, más las posibles ganancias de las fichas de Ingresos colocadas en tu tablero personal."
+      },
+      "skills": {
+        "name": "Fuerza y Magia",
+        "text": "El marcador rojo indica tu Fuerza y el azul tu Magia: ambos marcadores empiezan la partida en su espacio más bajo. Las cartas y las Misiones exigen unas veces tener al menos cierto nivel de Fuerza o de Magia, y otras veces gastarlo.",
+        "score": "Al final de la partida, anotas 2 PV si tienes al menos 3 de Fuerza y 3 de Magia, o 5 PV si tienes 5 de Fuerza y 5 de Magia."
+      },
+      "special-action": {
+        "name": "Acción especial",
+        "text": "Esta casilla especial, utilizable solo en Verano, te permite colocar 1 de tus <villager>Aldeanos</villager> activos para una de estas opciones, a elegir. Permanece allí hasta el Otoño.",
+        "0": "Contar una historia: 2 <coin/> + 1 de <force>Fuerza</force> + 2 <vp/>",
+        "1": "Mover tu <adventurer>Aventurero</adventurer> una casilla",
+        "2": "Ganar 1 de <magic>Magia</magic>"
+      },
+      "quests": {
+        "name": "Marcadores de Misión",
+        "text": "Durante la preparación, tus 3 marcadores de Misión Heroica se colocan en estos espacios. Cada vez que resuelves una Misión Heroica, colocas uno de ellos en uno de los espacios bajo su loseta, en el tablero principal: por tanto, no puedes resolver más de 3."
+      },
+      "villagers": {
+        "name": "Aldeanos activos",
+        "text": "Los Aldeanos que controlas al principio de cada año se consideran «activos» y se encuentran en esta zona de tu tablero personal, al igual que los que ganas durante el año. En Otoño, devuelve aquí tus Aldeanos del campamento, del Evento y de la casilla especial."
+      }
+    },
+    "main-board": {
+      "name": "Tablero principal",
+      "score": {
+        "name": "Marcador de puntuación",
+        "text": "Los <vp/> anotados durante la partida hacen avanzar tu marcador en el marcador de puntuación, que vuelve a empezar en 0 después de 24. Cuando alcances 25, 50, 75 y luego 100 PV, toma o da la vuelta a tus fichas de 25/50 y 75/100 PV.",
+        "note": "Al final del quinto año, suma a los PV acumulados durante la partida los PV de las Misiones, de los Compañeros y de los Objetos, y los de tus habilidades: 2 PV si tienes al menos 3 de Fuerza y 3 de Magia, 5 PV si tienes 5 de Fuerza y 5 de Magia."
+      },
+      "bonus": {
+        "name": "Fichas de Bonificación",
+        "text": "Cuando alcances 8 PV, elige una de tus 3 fichas de Bonificación, resuelve su efecto y descártala. Cuando alcances 20 PV, haz lo mismo con una de tus 2 fichas restantes."
+      },
+      "village": {
+        "name": "Aldea",
+        "text": "Durante la preparación, cada jugador coloca su <adventurer>Aventurero</adventurer> en la Aldea. Cuando partes a la aventura, tu Aventurero se mueve primero desde la Aldea; durante un mismo año, después se mueve desde la casilla en la que se detuvo. En Otoño, regresa a la Aldea."
+      },
+      "road": {
+        "name": "Partir a la aventura",
+        "text": "Cuando viajas, puedes mover tu <adventurer>Aventurero</adventurer> hasta el número de casillas indicado, en la dirección que elijas, o quedarte en el sitio. Varios Aventureros pueden estar en la misma casilla. El blasón de la esquina superior izquierda de cada carta de Encuentro indica dónde colocarla: a la derecha del tablero, junto a la casilla que lleva el mismo blasón."
+      },
+      "stops": {
+        "name": "Moneda y PV",
+        "text": "Una vez que tu <adventurer>Aventurero</adventurer> se ha detenido en la casilla marcada con una <coin/>, puedes decidir no resolver un Encuentro para ganar 1 <coin/>. En la casilla marcada con un <vp/>, puedes hacer lo mismo para ganar 1 <vp/>."
+      },
+      "quests": {
+        "name": "Misiones Heroicas",
+        "text": "Las 3 losetas de Misión Heroica de la partida se colocan bocarriba en los 3 espacios del tablero, cerca de las casillas más alejadas de la Aldea. Los PV que aportan al final de la partida están impresos bajo cada espacio: 7 y 5, 8 y 6, y luego 9 y 7 <vp/>, de la casilla más cercana a la más alejada."
+      },
+      "event": {
+        "name": "Evento",
+        "text": "La pila de Eventos se coloca bocabajo en este espacio. Cada Invierno, se descarta la loseta de Evento del año anterior y se revela la primera loseta de la pila: es el Evento activo del año en curso."
+      }
+    },
+    "season-board": {
+      "name": "Tablero de Estaciones",
+      "year": "Año",
+      "period": "Periodo",
+      "markers": {
+        "name": "Marcadores de Estación",
+        "text": "En tu turno, debes elegir una de las acciones permitidas por la estación en la que te encuentras: es lo que indica tu marcador de Estación. Algunos jugadores pueden estar en Verano o en Otoño mientras otros siguen en Primavera. Un jugador en Verano nunca puede volver a la Primavera durante un mismo año, y un año solo termina cuando todos los jugadores han llegado al Otoño."
+      },
+      "winter": {
+        "name": "Invierno",
+        "text": "El Invierno es la fase de preparación del año. Sáltala el primer año: ya se realizó durante la preparación.",
+        "0": "Coloca el marcador de Estación de cada jugador en la casilla de Primavera",
+        "1": "El jugador inicial pasa la ficha de Jugador inicial a su vecino de la izquierda",
+        "2": "Descarta las cartas de Aldea, las cartas de Encuentro y la loseta de Evento del año anterior, así como las fichas de Sello o de Ingresos que hubiera en ellas",
+        "3": "Revela las 9 primeras cartas del mazo de Aldea en una cuadrícula de 3x3, y coloca en ellas las fichas de <seal/> que requieran",
+        "4": "Revela la primera loseta de la pila de Eventos: es el Evento activo del año en curso",
+        "5": "Revela las 5/6/7 primeras cartas de Encuentro (con 2/3/4 jugadores) y disponlas a la derecha del tablero principal según su Distancia"
+      },
+      "spring": {
+        "name": "Primavera",
+        "0": "Colocar un Aldeano: toma uno de tus <villager>Aldeanos</villager> activos y colócalo en la Aldea, entre dos cartas vecinas o entre una carta y un espacio de carta vacío",
+        "1": "Participar en el Evento, una vez por año, con uno de tus <villager>Aldeanos</villager> activos",
+        "2": "Pasar al Verano y realizar de inmediato una acción de Verano"
+      },
+      "summer": {
+        "name": "Verano",
+        "0": "Ganar monedas: elige uno de tus <villager>Aldeanos</villager> en la Aldea y una carta adyacente a él, y gana 1 <coin/> por cada otro Aldeano adyacente a esa carta, sea cual sea su propietario",
+        "1": "Activar una carta: elige uno de tus <villager>Aldeanos</villager> en la Aldea y una carta vecina a él, y paga su precio más 1 <coin/> por cada otro Aldeano vecino de esa carta, sea cual sea su propietario",
+        "2": "Participar en el Evento, una vez por año, con uno de tus <villager>Aldeanos</villager> activos o uno de los que están en la Aldea",
+        "3": "Usar uno de tus Objetos preparados, agotándolo",
+        "4": "Usar la acción especial de tu tablero personal",
+        "5": "Pasar al Otoño y realizar de inmediato una acción de Otoño, solo si ya no te quedan <villager>Aldeanos</villager> en la Aldea"
+      },
+      "autumn": {
+        "name": "Otoño",
+        "text": "Una vez en Otoño, ya no puedes realizar acciones durante ese año, y resuelves de inmediato estos pasos, en este orden.",
+        "0": "Devuelve tu <adventurer>Aventurero</adventurer> a la Aldea",
+        "1": "Devuelve tus <villager>Aldeanos</villager> del campamento, del Evento y de la acción especial a la zona de Aldeanos activos de tu tablero personal",
+        "2": "Prepara todas tus cartas",
+        "3": "Gana tus ingresos: 3 <coin/>, menos 1 <coin/> por Compañero, más las posibles ganancias de tus fichas de Ingresos"
+      },
+      "camp": {
+        "name": "Campamento",
+        "text": "Cuando uno de tus <villager>Aldeanos</villager> se usa y queda inactivo, colócalo en el campamento para indicar que ya no puedes usarlo este año. Allí van también los Aldeanos que gastas, tomados de tu zona de Aldeanos activos. En Otoño, regresan a esa zona."
+      }
+    },
+    "villager-reserve": {
+      "name": "Reserva de Aldeanos",
+      "owned": "A tu disposición",
+      "text": "Durante la preparación, 4 de tus 7 <villager>Aldeanos</villager> se apartan y de momento no están disponibles: empiezas la partida con 3 Aldeanos activos. Cada vez que ganas un <villager>Aldeano</villager>, sale de aquí y se une a la zona de Aldeanos activos de tu tablero personal. La Misión Trampa mortal te obliga a devolver a esta reserva uno de tus Aldeanos disponibles."
+    },
+    "adventurer": {
+      "name": "Aventurero",
+      "travel": "Cuando viajas, puedes mover tu Aventurero hasta el número de casillas indicado, en la dirección que elijas (también puedes elegir quedarte en el sitio), y resolver un Encuentro en tu casilla de llegada, si es posible. Varios Aventureros pueden estar en la misma casilla."
+    },
+    "villager": {
+      "name": "Aldeano",
+      "active": "Los Aldeanos que controlas al principio de cada año se consideran «activos» y se encuentran siempre en la zona «Aldeanos activos» de tu tablero personal, al igual que los que ganas durante el año."
+    },
+    "bonus-token": {
+      "name": "Ficha de Bonificación"
+    },
+    "skill": {
+      "force": "Fuerza",
+      "magic": "Magia",
+      "level": "Nivel"
+    }
+  },
+  "village-card": {
+    "101": {
+      "name": "Travelers' guild",
+      "ability": "Mueve tu <adventurer>Aventurero</adventurer> hasta 2 casillas."
+    },
+    "102": {
+      "name": "Scouts' guild",
+      "ability": "Descarta una ficha de <seal/> y mueve tu <adventurer>Aventurero</adventurer> hasta un número de casillas igual al valor de la ficha."
+    },
+    "103": {
+      "name": "The Riven Oak",
+      "ability": "Cuenta una o varias historias cuyo valor narrativo total sea como máximo 3: 2 PV + 1 de <force>Fuerza</force> + 1 <villager>Aldeano</villager>."
+    },
+    "104": {
+      "name": "The Golden Lion",
+      "ability": "Cuenta una o varias historias cuyo valor narrativo total sea como máximo 3: 4 <coin/> + 1 PV + descarta una ficha de <seal/> y gana tantas <coin/> como su valor."
+    },
+    "105": {
+      "name": "Magical school",
+      "ability": "Descarta una ficha de <seal/>, gasta tantas <coin/> como su valor y gana 1 de <magic>Magia</magic>."
+    },
+    "106": {
+      "name": "Smithy",
+      "ability": "Gana 1 de <force>Fuerza</force>."
+    },
+    "107": {
+      "name": "Travelers' guild",
+      "ability": "Gasta 2 <coin/> y mueve tu <adventurer>Aventurero</adventurer> hasta 4 casillas."
+    },
+    "108": {
+      "name": "Scouts' guild",
+      "ability": "Descarta una ficha de <seal/> y mueve tu <adventurer>Aventurero</adventurer> hasta un número de casillas igual al valor de la ficha."
+    },
+    "109": {
+      "name": "Hall of the heroes",
+      "ability": "Gasta 1 de <force>Fuerza</force> para ganar 3 PV, y/o gasta 1 de <magic>Magia</magic> para ganar 4 PV."
+    },
+    "110": {
+      "name": "Town hall",
+      "ability": "Descarta una ficha de <seal/>, gasta tantas <coin/> como su valor y gana 1 de <force>Fuerza</force> y 1 de <magic>Magia</magic>."
+    },
+    "111": {
+      "name": "The Silver Wolf",
+      "ability": "Cuenta una o varias historias cuyo valor narrativo total sea como máximo 3: 4 <coin/> + descarta una ficha de <seal/> y gana tantos PV como su valor + prepara una de tus cartas."
+    },
+    "112": {
+      "name": "The Jolly Boar",
+      "ability": "Cuenta una o varias historias cuyo valor narrativo total sea como máximo 3: 3 PV + 2 <coin/> + 1 de <force>Fuerza</force> o 1 de <magic>Magia</magic>."
+    },
+    "113": {
+      "name": "Fortress",
+      "ability": "Descarta una ficha de <seal/>, gasta tantas <coin/> como su valor y gana 2 PV por cada Compañero que tengas."
+    },
+    "114": {
+      "name": "Travelers' guild",
+      "ability": "Gasta 2 <coin/> y mueve tu <adventurer>Aventurero</adventurer> hasta 5 casillas."
+    },
+    "115": {
+      "name": "Library",
+      "ability": "Descarta una ficha de <seal/>, gasta tantas <coin/> como su valor y gana 1 PV por cada historia contada."
+    },
+    "116": {
+      "name": "The Scarlet Dragon",
+      "ability": "Cuenta una o varias historias cuyo valor narrativo total sea como máximo 3: 3 PV + 2 PV + 1 PV."
+    },
+    "201": {
+      "name": "Jade statue",
+      "immediate": "Gana 1 de <force>Fuerza</force> o 1 de <magic>Magia</magic>.",
+      "score": "5 PV."
+    },
+    "202": {
+      "name": "Tommy",
+      "ability": "Agota esta carta para mover tu <adventurer>Aventurero</adventurer> hasta 1 casilla, o agótala y gasta 1 <villager>Aldeano</villager> para moverlo hasta 2 casillas.",
+      "score": "1 PV."
+    },
+    "203": {
+      "name": "Hundred-league boots",
+      "immediate": "Descarta la ficha de <seal/> y gana tantos PV como su valor.",
+      "ability": "Agota esta carta y descártala para mover tu <adventurer>Aventurero</adventurer> hasta 5 casillas."
+    },
+    "204": {
+      "name": "Wizard's staff",
+      "immediate": "Gana 1 de <magic>Magia</magic>.",
+      "ability": "Agota esta carta y gasta 1 <villager>Aldeano</villager> para ganar 1 de <magic>Magia</magic>.",
+      "score": "1 PV."
+    },
+    "205": {
+      "name": "Mysterious map",
+      "ability": "Agota esta carta para mover tu <adventurer>Aventurero</adventurer> hasta 1 casilla, o agótala, gasta 1 <villager>Aldeano</villager> y descártala para moverlo hasta 3 casillas.",
+      "score": "1 PV."
+    },
+    "206": {
+      "name": "Mana potion",
+      "immediate": "Descarta la ficha de <seal/> y gana tantos PV como su valor.",
+      "reaction": "Cuando partas a la aventura, puedes descartar esta carta para aumentar tu Magia en 2. Este aumento es temporal y no mueves tu marcador de Magia: por tanto, no puedes gastar esos puntos."
+    },
+    "207": {
+      "name": "Strength potion",
+      "immediate": "Descarta la ficha de <seal/> y gana tantos PV como su valor.",
+      "reaction": "Cuando partas a la aventura, puedes descartar esta carta para aumentar tu Fuerza en 2. Este aumento es temporal y no mueves tu marcador de Fuerza: por tanto, no puedes gastar esos puntos."
+    },
+    "208": {
+      "name": "Short sword",
+      "immediate": "Gana 1 de <force>Fuerza</force>.",
+      "ability": "Agota esta carta y gasta 1 <villager>Aldeano</villager> para ganar 1 de <force>Fuerza</force>.",
+      "score": "1 PV."
+    },
+    "209": {
+      "name": "Gold statue",
+      "immediate": "Gana 1 de <force>Fuerza</force> o 1 de <magic>Magia</magic>.",
+      "score": "5 PV."
+    },
+    "210": {
+      "name": "Snowmane",
+      "ability": "Agota esta carta y gasta 1 o 2 <villager>Aldeanos</villager> para mover tu <adventurer>Aventurero</adventurer> hasta 3 o 5 casillas.",
+      "score": "2 PV."
+    },
+    "211": {
+      "name": "Horn",
+      "ability": "Agota esta carta y gasta 1 o 2 <villager>Aldeanos</villager> para ganar 3 o 5 PV.",
+      "score": "1 PV."
+    },
+    "212": {
+      "name": "Treasure map",
+      "ability": "Agota esta carta para mover tu <adventurer>Aventurero</adventurer> hasta 2 casillas, o agótala, gasta 1 <villager>Aldeano</villager> y descártala para moverlo hasta 4 casillas.",
+      "score": "1 PV."
+    },
+    "213": {
+      "name": "Charisma potion",
+      "immediate": "Descarta la ficha de <seal/> y gana tantos PV como su valor.",
+      "reaction": "Cuando cuentes una historia, puedes descartar esta carta para que el valor narrativo de una de tus cartas de Encuentro sea 3."
+    },
+    "214": {
+      "name": "Endurance potion",
+      "immediate": "Descarta la ficha de <seal/> y gana tantos PV como su valor.",
+      "reaction": "Cuando partas a la aventura, puedes descartar esta carta para colocar un <villager>Aldeano</villager> activo en la Aldea."
+    },
+    "215": {
+      "name": "Flying potion",
+      "immediate": "Descarta la ficha de <seal/> y gana tantos PV como su valor.",
+      "reaction": "Cuando partas a la aventura, puedes descartar esta carta para aumentar tu Fuerza y tu Magia en 1. Este aumento es temporal y no mueves tus marcadores de Fuerza y de Magia: por tanto, no puedes gastar esos puntos."
+    },
+    "216": {
+      "name": "Bladechant",
+      "ability": "Agota esta carta para ganar 1 de <force>Fuerza</force> o 1 de <magic>Magia</magic>, o agótala y gasta 1 <villager>Aldeano</villager> para ganar 1 de <force>Fuerza</force> y 1 de <magic>Magia</magic>.",
+      "score": "1 PV."
+    },
+    "217": {
+      "name": "Invisibility potion",
+      "immediate": "Descarta la ficha de <seal/> y gana tantos PV como su valor.",
+      "reaction": "Cuando partas a la aventura, puedes descartar esta carta para ignorar un requisito de una carta de Encuentro."
+    },
+    "218": {
+      "name": "Ruby statue",
+      "immediate": "Gana 1 de <force>Fuerza</force> o 1 de <magic>Magia</magic>.",
+      "score": "6 PV."
+    },
+    "219": {
+      "name": "Mandolin",
+      "ability": "Agota esta carta y gasta 1 <villager>Aldeano</villager> para anotar 1 PV por cada historia no contada.",
+      "score": "5 PV."
+    },
+    "220": {
+      "name": "Bag of holding",
+      "ability": "Agota esta carta y gasta 1 <villager>Aldeano</villager> para ganar 1 PV por cada Objeto que tengas.",
+      "permanent": "Tu límite de Objetos aumenta en 1. Este efecto funciona aunque esta carta esté agotada y aunque hubieras alcanzado tu límite de Objetos antes de adquirirla.",
+      "score": "4 PV."
+    },
+    "221": {
+      "name": "Philosopher stone",
+      "immediate": "Descarta la ficha de <seal/> y gana tantos PV como su valor.",
+      "ability": "Agota esta carta y gasta 1 <villager>Aldeano</villager> para ganar 5 PV."
+    },
+    "222": {
+      "name": "Magic ring",
+      "score": "9 PV."
+    },
+    "301": {
+      "name": "Kael",
+      "role": "Guerrero",
+      "immediate": "Gana 1 <villager>Aldeano</villager>.",
+      "reaction": "Cuando debas gastar Fuerza, puedes agotar esta carta para gastar 1 menos.",
+      "permanent": "Tu límite de Objetos aumenta en 1.",
+      "score": "1 PV por nivel de <force>Fuerza</force>."
+    },
+    "302": {
+      "name": "Elwen",
+      "role": "Arquero",
+      "immediate": "Gana 1 <villager>Aldeano</villager>.",
+      "reaction": "Cuando partas a la aventura, puedes agotar esta carta para mover tu <adventurer>Aventurero</adventurer> hasta 2 casillas adicionales.",
+      "score": "1 PV por cada carta de Encuentro que esté a una distancia de 3 o más de la Aldea (contada o no)."
+    },
+    "303": {
+      "name": "Dorian",
+      "role": "Mercader",
+      "immediate": "Gana 1 <villager>Aldeano</villager>.",
+      "reaction": "Cuando compres un Objeto, puedes agotar esta carta para reducir su coste en 1 <coin/> y ganar 1 PV.",
+      "permanent": "Tu límite de Objetos aumenta en 2.",
+      "score": "1 PV por cada Objeto que tengas."
+    },
+    "304": {
+      "name": "Ariok",
+      "role": "Mago",
+      "immediate": "Gana 1 <villager>Aldeano</villager> y 1 de <magic>Magia</magic>.",
+      "reaction": "Cuando partas a la aventura, puedes agotar esta carta y gastar 1 de <magic>Magia</magic> para ignorar un requisito de una carta de Encuentro.",
+      "score": "1 PV por nivel de <magic>Magia</magic>."
+    },
+    "305": {
+      "name": "Selia",
+      "role": "Alquimista",
+      "immediate": "Gana 1 <villager>Aldeano</villager>.",
+      "reaction": "Cuando actives una ficha de <seal/>, puedes agotar esta carta para elegir su valor (entre 1 y 3).",
+      "permanent": "Cuando uses una Poción, agótala en lugar de descartarla. Recordatorio: puedes usar varias Pociones en el mismo turno.",
+      "score": "2 PV por cada Poción que tengas."
+    },
+    "306": {
+      "name": "Neris",
+      "role": "Pícara",
+      "immediate": "Gana 1 <villager>Aldeano</villager>.",
+      "reaction": "Cuando retires un <villager>Aldeano</villager> de la Aldea, puedes agotar esta carta para ganar 2 <coin/> adicionales, o para no pagar el sobrecoste.",
+      "score": "1 PV por cada 2 <coin/> restantes."
+    },
+    "307": {
+      "name": "Bran",
+      "role": "Guardián",
+      "immediate": "Gana 1 <villager>Aldeano</villager>.",
+      "reaction": "Cuando debas gastar 1 o más <villager>Aldeanos</villager> al activar una de tus cartas, puedes agotar esta carta para reducir ese número en 1.",
+      "score": "PV = número de <villager>Aldeanos</villager> a tu disposición menos 2."
+    },
+    "308": {
+      "name": "Lucan",
+      "role": "Paladín",
+      "immediate": "Gana 1 <villager>Aldeano</villager>.",
+      "reaction": "Cuando ganes Magia, puedes agotar esta carta para ganar 1 de <force>Fuerza</force> (o a la inversa).",
+      "score": "PV = el nivel más bajo entre tu Fuerza y tu Magia."
+    },
+    "309": {
+      "name": "Isandre",
+      "role": "Clériga",
+      "immediate": "Gana 1 <villager>Aldeano</villager>.",
+      "reaction": "Cuando agotes una de tus cartas, puedes agotar esta carta para prepararla. Puedes agotar de inmediato la carta que acabas de preparar para activar de nuevo su efecto.",
+      "score": "2 PV por Compañero."
+    },
+    "310": {
+      "name": "Seren",
+      "role": "Bardo",
+      "immediate": "Gana 1 <villager>Aldeano</villager>.",
+      "reaction": "Cuando cuentes una historia, puedes agotar esta carta para que el valor narrativo de una de tus cartas de Encuentro sea 3.",
+      "score": "1 PV por cada historia contada."
+    },
+    "311": {
+      "name": "Mira",
+      "role": "Exploradora",
+      "immediate": "Gana 1 <villager>Aldeano</villager>.",
+      "reaction": "Cuando partas a la aventura (antes o después de resolver un Encuentro), puedes agotar esta carta para colocar 1 <villager>Aldeano</villager> activo en la Aldea.",
+      "score": "1 PV por cada carta de Encuentro con un blasón diferente (contada o no)."
+    }
+  },
+  "encounter-card": {
+    "1": {
+      "name": "Valley",
+      "0": {
+        "requirement": "Tener al menos 1 de <force>Fuerza</force>",
+        "reward": "Mueve tu <adventurer>Aventurero</adventurer> hasta 2 casillas"
+      },
+      "1": {
+        "requirement": "Gasta 1 <villager>Aldeano</villager>",
+        "reward": "Gana 3 PV"
+      }
+    },
+    "2": {
+      "name": "Tiger",
+      "0": {
+        "requirement": "Gasta 1 <villager>Aldeano</villager>"
+      }
+    },
+    "3": {
+      "name": "Rocky pass",
+      "0": {
+        "reward": "Gana 1 de <force>Fuerza</force>"
+      }
+    },
+    "4": {
+      "name": "Sheep",
+      "0": {
+        "reward": "Toma la ficha de Ingresos: 1 <coin/> ahora, y lo mismo cada Otoño"
+      }
+    },
+    "5": {
+      "name": "Mine",
+      "0": {
+        "requirement": "Gasta 1 <villager>Aldeano</villager>",
+        "reward": "Toma la ficha de Ingresos: 2 <coin/> ahora, y lo mismo cada Otoño"
+      }
+    },
+    "6": {
+      "name": "Pack of wolves",
+      "0": {
+        "requirement": "Tener al menos 2 de <force>Fuerza</force>",
+        "reward": "Gana 3 PV"
+      }
+    },
+    "7": {
+      "name": "Marauders",
+      "0": {
+        "requirement": "Tener un total de <force>Fuerza</force> y <magic>Magia</magic> de al menos 2",
+        "reward": "Gana 4 <coin/>"
+      }
+    },
+    "8": {
+      "name": "Initiation",
+      "0": {
+        "requirement": "Gasta 4 <coin/>",
+        "reward": "Gana 1 de <force>Fuerza</force> y 1 de <magic>Magia</magic>"
+      }
+    },
+    "9": {
+      "name": "Hermit",
+      "0": {
+        "requirement": "Tener al menos 2 de <force>Fuerza</force>",
+        "reward": "Gana 1 de <magic>Magia</magic>"
+      }
+    },
+    "10": {
+      "name": "Ambush",
+      "0": {
+        "requirement": "Tener al menos 1 de <magic>Magia</magic>",
+        "reward": "Toma la ficha de Ingresos: 1 <coin/> ahora, y lo mismo cada Otoño"
+      }
+    },
+    "11": {
+      "name": "Cursed skull",
+      "0": {
+        "requirement": "Tener al menos 2 de <magic>Magia</magic>",
+        "reward": "Prepara una de tus cartas"
+      }
+    },
+    "12": {
+      "name": "Circle of stones",
+      "0": {
+        "reward": "Gana 1 de <magic>Magia</magic>"
+      }
+    },
+    "13": {
+      "name": "Camp",
+      "0": {
+        "requirement": "Tener un total de <force>Fuerza</force> y <magic>Magia</magic> de al menos 1",
+        "reward": "Gana 1 <villager>Aldeano</villager>"
+      }
+    },
+    "14": {
+      "name": "Inn",
+      "0": {
+        "requirement": "Gasta 2 <coin/>",
+        "reward": "Gana 1 <villager>Aldeano</villager>"
+      }
+    },
+    "15": {
+      "name": "Bear",
+      "0": {
+        "requirement": "Tener al menos 1 de <force>Fuerza</force>",
+        "reward": "Gana 2 PV"
+      },
+      "1": {
+        "requirement": "Tener al menos 1 de <magic>Magia</magic>",
+        "reward": "Gana 2 PV"
+      }
+    },
+    "16": {
+      "name": "World-tree",
+      "0": {
+        "reward": "Toma la ficha de Ingresos: 1 PV ahora, y lo mismo cada Otoño"
+      }
+    },
+    "17": {
+      "name": "Treasure",
+      "0": {
+        "requirement": "Tener al menos 3 de <magic>Magia</magic>",
+        "reward": "Gana 3 <coin/>"
+      },
+      "1": {
+        "requirement": "Gasta 1 de <magic>Magia</magic>",
+        "reward": "Gana 4 <coin/>"
+      }
+    },
+    "18": {
+      "name": "Lone tower",
+      "0": {
+        "requirement": "Gasta 1 de <magic>Magia</magic>",
+        "reward": "Vuelve a partir a la aventura — mueve tu <adventurer>Aventurero</adventurer> hasta 3 casillas — y gana 3 PV"
+      }
+    },
+    "19": {
+      "name": "Witchcraft",
+      "0": {
+        "requirement": "Gasta 4 <coin/>",
+        "reward": "Gana 2 de <magic>Magia</magic>"
+      }
+    },
+    "20": {
+      "name": "Incantation",
+      "0": {
+        "requirement": "Gasta 1 <villager>Aldeano</villager>",
+        "reward": "Gana 1 de <magic>Magia</magic>"
+      }
+    },
+    "21": {
+      "name": "Unicorn",
+      "0": {
+        "requirement": "Tener al menos 3 de <magic>Magia</magic>",
+        "reward": "Prepara una de tus cartas, y toma la ficha de Ingresos: 1 PV ahora, y lo mismo cada Otoño"
+      }
+    },
+    "22": {
+      "name": "Joust",
+      "0": {
+        "requirement": "Gasta 1 <villager>Aldeano</villager>",
+        "reward": "Gana 3 PV"
+      },
+      "1": {
+        "requirement": "Tener al menos 4 de <force>Fuerza</force>",
+        "reward": "Gana 4 PV"
+      }
+    },
+    "23": {
+      "name": "Diamond",
+      "0": {
+        "requirement": "Gasta 1 de <force>Fuerza</force>",
+        "reward": "Gana 5 <coin/>"
+      }
+    },
+    "24": {
+      "name": "Farm",
+      "0": {
+        "reward": "Gana 1 <villager>Aldeano</villager>"
+      }
+    },
+    "25": {
+      "name": "Demon",
+      "0": {
+        "requirement": "Tener al menos 3 de <force>Fuerza</force>",
+        "reward": "Gana 3 PV"
+      },
+      "1": {
+        "requirement": "Tener al menos 3 de <magic>Magia</magic>",
+        "reward": "Gana 3 PV"
+      }
+    },
+    "26": {
+      "name": "Legendary sword",
+      "0": {
+        "requirement": "Gasta 1 <villager>Aldeano</villager>",
+        "reward": "Gana 3 PV"
+      }
+    },
+    "27": {
+      "name": "Coopery",
+      "0": {
+        "requirement": "Gasta 4 <coin/>",
+        "reward": "Toma la ficha de Ingresos: 2 PV ahora, y lo mismo cada Otoño"
+      }
+    },
+    "28": {
+      "name": "Training",
+      "0": {
+        "requirement": "Gasta 4 <coin/>",
+        "reward": "Toma la ficha de Ingresos: 1 de <force>Fuerza</force> ahora, y lo mismo cada Otoño"
+      }
+    },
+    "29": {
+      "name": "Vagabond",
+      "0": {
+        "requirement": "Tener un total de <force>Fuerza</force> y <magic>Magia</magic> de al menos 4",
+        "reward": "Gana 1 <villager>Aldeano</villager>"
+      }
+    },
+    "30": {
+      "name": "Errant knight",
+      "0": {
+        "requirement": "Gasta 2 <coin/>",
+        "reward": "Gana 1 de <force>Fuerza</force> y 2 PV"
+      }
+    },
+    "31": {
+      "name": "Caravan",
+      "0": {
+        "requirement": "Gasta 2 <villager>Aldeanos</villager>",
+        "reward": "Toma la ficha de Ingresos: 4 <coin/> ahora, y lo mismo cada Otoño"
+      }
+    },
+    "32": {
+      "name": "Brigands",
+      "0": {
+        "requirement": "Tener al menos 3 de <force>Fuerza</force>",
+        "reward": "Gana 4 <coin/> y 2 PV"
+      }
+    },
+    "33": {
+      "name": "Archery",
+      "0": {
+        "requirement": "Gasta 3 <coin/>",
+        "reward": "Gana 1 de <force>Fuerza</force> y 3 PV"
+      }
+    },
+    "34": {
+      "name": "Snowy pass",
+      "0": {
+        "requirement": "Tener al menos 5 de <force>Fuerza</force>",
+        "reward": "Gana 5 <coin/> y 3 PV"
+      }
+    },
+    "35": {
+      "name": "Necromancer",
+      "0": {
+        "requirement": "Tener un total de <force>Fuerza</force> y <magic>Magia</magic> de al menos 8",
+        "reward": "Gana 9 PV"
+      }
+    },
+    "36": {
+      "name": "Gold mine",
+      "0": {
+        "requirement": "Gasta 1 <villager>Aldeano</villager>",
+        "reward": "Gana 7 <coin/>"
+      }
+    },
+    "37": {
+      "name": "Dragon",
+      "0": {
+        "requirement": "Tener al menos 5 de <force>Fuerza</force>",
+        "reward": "Gana 4 PV"
+      },
+      "1": {
+        "requirement": "Tener al menos 5 de <magic>Magia</magic>",
+        "reward": "Gana 4 PV"
+      }
+    },
+    "38": {
+      "name": "Labyrinth",
+      "0": {
+        "requirement": "Gasta 1 <villager>Aldeano</villager>",
+        "reward": "Gana 4 PV"
+      },
+      "1": {
+        "requirement": "Gasta 1 <villager>Aldeano</villager>",
+        "reward": "Gana 4 PV"
+      }
+    },
+    "39": {
+      "name": "Relay",
+      "0": {
+        "requirement": "Gasta 4 <coin/>",
+        "reward": "Vuelve a partir a la aventura — mueve tu <adventurer>Aventurero</adventurer> hasta 3 casillas — y gana 2 PV"
+      }
+    },
+    "40": {
+      "name": "Fairy ring",
+      "0": {
+        "requirement": "Gasta 1 <villager>Aldeano</villager>",
+        "reward": "Gana 1 de <magic>Magia</magic> y 3 PV"
+      }
+    },
+    "41": {
+      "name": "Holy chalice",
+      "0": {
+        "requirement": "Tener al menos 5 de <magic>Magia</magic>",
+        "reward": "Prepara una de tus cartas y gana 4 PV"
+      }
+    }
+  },
+  "event-tile": {
+    "1": {
+      "name": "Banquete",
+      "0": {
+        "reward": "Gana 3 <coin/>"
+      },
+      "1": {
+        "reward": "Prepara una de tus cartas agotadas"
+      }
+    },
+    "2": {
+      "name": "Festival"
+    },
+    "3": {
+      "name": "Gran feria",
+      "0": {
+        "requirement": "Gasta 3 <coin/>",
+        "reward": "Gana 1 de <force>Fuerza</force> y 1 de <magic>Magia</magic>"
+      }
+    },
+    "4": {
+      "name": "Espectáculo de magia",
+      "0": {
+        "requirement": "Gasta 1 de <magic>Magia</magic>",
+        "reward": "Mueve tu <adventurer>Aventurero</adventurer> hasta 5 casillas"
+      }
+    },
+    "5": {
+      "name": "Reunión",
+      "0": {
+        "requirement": "Gasta 1 de <force>Fuerza</force>",
+        "reward": "Gana 1 <villager>Aldeano</villager>"
+      },
+      "1": {
+        "requirement": "Gasta 3 <coin/>",
+        "reward": "Gana 1 <villager>Aldeano</villager>"
+      }
+    },
+    "6": {
+      "name": "Torneo",
+      "0": {
+        "requirement": "Gasta 1 de <force>Fuerza</force>",
+        "reward": "Gana 6 <coin/>"
+      },
+      "1": {
+        "requirement": "Gasta 1 de <force>Fuerza</force>",
+        "reward": "Gana 4 PV"
+      }
+    }
+  },
+  "quest-tile": {
+    "1": {
+      "name": "Gigante",
+      "requirement": "Tener al menos 4 de <force>Fuerza</force>"
+    },
+    "2": {
+      "name": "Dragón",
+      "requirement": "Tener un total de <force>Fuerza</force> y <magic>Magia</magic> de al menos 6"
+    },
+    "3": {
+      "name": "Espectros",
+      "requirement": "Tener al menos 4 de <magic>Magia</magic>"
+    },
+    "4": {
+      "name": "Torneo de Bardos",
+      "requirement": "Mueve 2 cartas de Encuentro a la zona de historias contadas (sea cual sea su valor narrativo)"
+    },
+    "5": {
+      "name": "Donación",
+      "requirement": "Descarta uno de tus Objetos"
+    },
+    "6": {
+      "name": "No muertos",
+      "requirement": "Gasta 1 de <force>Fuerza</force> y 1 de <magic>Magia</magic>"
+    },
+    "7": {
+      "name": "Trampa mortal",
+      "requirement": "Devuelve a la reserva uno de tus <villager>Aldeanos</villager> disponibles"
+    },
+    "8": {
+      "name": "Rescate",
+      "requirement": "Gasta 6 <coin/>"
+    },
+    "9": {
+      "name": "Boda",
+      "requirement": "Gasta 2 <villager>Aldeanos</villager>"
+    }
+  },
+  "tuto": {
+    "welcome": "¡Bienvenido al tutorial de <bold>Greylune</bold>!",
+    "goal": "En este juego, encarnas a un <bold>Aventurero</bold>.\nTu objetivo es convertirte en la figura más prestigiosa de Greylune acumulando el máximo de puntos de victoria <vp/> al cabo de los <bold>cinco años</bold> de juego.",
+    "seasons": "Cada año se divide en <bold>4 estaciones</bold>. El Invierno <winter/> es la preparación, automática.",
+    "spring": "Tu rival y tú estáis en <bold>Primavera</bold> <spring/>.",
+    "villagers": "En Primavera, colocas tus <bold>Aldeanos</bold>. Empiezas con 3 Aldeanos, y puedes reclutar hasta 4 más.",
+    "village": "Los Aldeanos pueden colocarse en la <bold>Aldea</bold>, entre 2 cartas. En Verano, eso te permitirá beneficiarte de una de las 2 cartas adyacentes.\n<italic>El juego tiene numerosas cartas, todas únicas. En Game Park, ¡haz clic en un elemento para abrir la ayuda de juego!</italic>",
+    "place-first": "Coloca tu primer Aldeano aquí, junto a <bold>Dorian</bold>.",
+    "opponent-turn": "Es el turno de tu rival, William.",
+    "place-second": "Coloca tu segundo Aldeano aquí, entre <bold>Tommy</bold> y <bold>The Riven Oak</bold>.",
+    "go-summer": "Te queda un tercer Aldeano, pero nada te obliga a colocarlo. Elige <bold>pasar al Verano</bold> <summer/>.",
+    "summer": "Tu <bold>marcador de Estación</bold> se mueve al Verano. En esta estación, ya no puedes colocar Aldeanos en la Aldea.\n<italic>Tu rival sigue en Primavera.</italic>",
+    "recruit": "En Verano, puedes usar un Aldeano colocado en la Aldea para <bold>activar</bold> una de las 2 cartas adyacentes.\nPor ejemplo, este Aldeano puede reclutar a este Compañero, <bold>Dorian</bold>, por <bold>7 <coin/></bold>. Hazlo.",
+    "starting-coins": "Empiezas la partida con <bold>8 <coin/></bold>.\n<italic>Las monedas sirven para reclutar Compañeros, comprar Objetos y activar algunos Edificios, Eventos o Encuentros.</italic>",
+    "companions": "Tus <bold>Compañeros</bold> van aquí. Puedes tener 3 como máximo.",
+    "new-villager": "Además, cuando reclutas un Compañero, ganas de inmediato un nuevo <bold>Aldeano</bold> <villager/>.",
+    "opponent-guild": "Le toca a tu rival. Pasa al Verano, y usa este Aldeano para usar <bold>Scouts' guild</bold>.",
+    "seal": "Este Edificio lleva un <bold>Sello</bold> <seal/>: su efecto depende del valor de este Sello (entre 1 y 3). Aquí, William puede partir a la aventura hasta una distancia de 1.\n<italic>Con 3 o 4 jugadores, habría 2 o 3 Sellos.</italic>",
+    "camp": "Una vez usado, el Aldeano va aquí, al <bold>campamento</bold>. Volverá a estar disponible el año que viene.",
+    "opponent-travel": "William <bold>parte a la aventura</bold>: mueve su <bold>Aventurero</bold> <adventurer/>, aquí una casilla como máximo.",
+    "opponent-encounter": "En este lugar, William puede ganar 1 <coin/> o resolver una carta de <bold>Encuentro</bold>. Elige resolver el Encuentro <bold>Tiger</bold>.",
+    "untold-stories": "Envía un Aldeano activo al campamento, ¡y Tiger va a sus <bold>historias no contadas</bold>!",
+    "banquet": "Te toca. Cada año, tiene lugar un <bold>Evento</bold> en Greylune. Este año, es el <bold>Banquete</bold>.\nHaz clic en él para conocer su efecto, y luego envía allí un Aldeano activo para ganar 3 <coin/>.",
+    "opponent-tavern": "¡William quiere ahora usar <bold>The Riven Oak</bold> para contar su encuentro con Tiger!\nSin embargo, para activar una carta de la Aldea, hay que pagar <bold>1 <coin/> por cada otro Aldeano</bold> adyacente a esa carta… Así que William paga 1 <coin/>.",
+    "tell-story": "Para <bold>contar una historia</bold>, William debe elegir una o varias historias no contadas y moverlas a sus historias contadas.",
+    "tavern-rewards": "William ha contado una historia de valor 3: gana por tanto las 3 bonificaciones de la <bold>Taberna</bold>: 2 <vp/> + 1 <force/> + 1 <villager/>.",
+    "force": "William va a ganar 1 de <bold>Fuerza</bold> <force/>: su marcador de Fuerza va a subir. ¡La Fuerza y la <bold>Magia</bold> <magic/> suelen ser requisitos para resolver Encuentros y Misiones!",
+    "skills-score": "Al final de la partida, ganas <bold>2 <vp/></bold> si tienes al menos 3 <force/> y 3 <magic/>, y <bold>5 <vp/></bold> si tienes 5 <force/> y 5 <magic/>.\n<italic>Además, cada <force/> o <magic/> ganada por encima de 5 aporta 1 <vp/> de inmediato.</italic>",
+    "villager-actions": "Te toca. En Verano, un Aldeano en la Aldea puede hacer 3 cosas:\n• <bold>activar</bold> una carta adyacente (reclutar al Compañero, comprar el Objeto o usar el Edificio);\n• <bold>ganar monedas</bold>: tantas <coin/> como <bold>otros Aldeanos</bold> haya alrededor de una de las 2 cartas adyacentes (aquí, serían 0 <coin/>…);\n• <bold>participar en el Evento</bold>, una sola vez por año (así que aquí no puedes hacerlo).",
+    "buy-tommy": "Usa este Aldeano para <bold>comprar a Tommy</bold>.",
+    "reaction": "Algunos Compañeros y algunos Objetos pueden activarse <bold>como reacción</bold>. Por ejemplo, cuando compras un Objeto, puedes agotar a <bold>Dorian</bold> para reducir su coste en 1 <coin/>, y ganar 1 <vp/>. Hazlo.",
+    "score-track": "Cuando ganas puntos de victoria, tu marcador avanza en el <bold>marcador de puntuación</bold>. ¡Cuando alcanzas 8 y luego 20 <vp/>, ganas de inmediato una bonificación!",
+    "bonus-tokens": "Tus 3 <bold>fichas de Bonificación</bold> están aquí. Con 8 <vp/>, eliges una, ganas lo que ofrece, y la descartas.\nCon 20 <vp/>, eliges una segunda, y descartas la última.",
+    "items": "Tus <bold>Objetos</bold> van aquí. Puedes tener 3 como máximo, ¡pero Dorian te permite tener 2 más!\nDorian también te hará ganar al final de la partida 1 <vp/> por cada Objeto que tengas.",
+    "tommy-score": "<bold>Tommy</bold> también te hará ganar 1 <vp/> al final de la partida.",
+    "opponent-banquet": "William ha usado su último Aldeano activo para participar en el Evento, y ganar 3 <coin/>.",
+    "special-action": "En Verano, una vez por año, puedes usar un Aldeano para realizar tu <bold>acción especial</bold> <special/>: contar una historia para ganar 2 <coin/> + 1 <force/> + 2 <vp/>, partir a la aventura una casilla <travel1/>, o ganar 1 <magic/>.",
+    "use-tommy": "En Verano, también puedes usar tus Objetos: ¡<bold>Tommy</bold>, por ejemplo, te permite partir a la aventura!\nAgótalo gastando un Aldeano activo para poder mover tu Aventurero hasta 2 casillas <travel2/>.",
+    "travel": "Mueve tu <bold>Aventurero</bold> aquí.",
+    "sheep": "Aquí puedes elegir entre ganar 1 <vp/> o resolver un Encuentro. Elige resolver el Encuentro <bold>Sheep</bold>.",
+    "income-token": "Has ganado esta <bold>ficha de Ingresos</bold>: 1 <coin/> de inmediato, y luego 1 <coin/> cada año.",
+    "opponent-autumn": "A William no le quedan Aldeanos: pasa al <bold>Otoño</bold> <autumn/>. Su Aventurero regresa a Greylune, recupera sus Aldeanos y gana 3 <coin/>.",
+    "autumn": "Te toca: ya no tienes ninguna acción posible, pasa al <bold>Otoño</bold> <autumn/>.",
+    "come-home": "Tu Aventurero regresa a Greylune, recuperas tus <bold>Aldeanos</bold>, y preparas tus cartas de Compañero y de Objeto.",
+    "income": "También ganas tus <bold>ingresos</bold> <income/>: 3 <coin/>, menos 1 <coin/> por Compañero (Dorian te cuesta 1 <coin/>), más tus fichas de Ingresos (1 <coin/> por Sheep).",
+    "end-of-year": "Una vez en Otoño, los jugadores ya no pueden actuar, y deben esperar a que los demás jugadores terminen su año.\n¡Una vez que todos están en Otoño, comienza un <bold>nuevo año</bold>!",
+    "new-village": "En <bold>Invierno</bold> <winter/>, las cartas de <bold>Aldea</bold> restantes se sustituyen por 9 nuevas cartas de Aldea.",
+    "new-event": "Se revela un nuevo <bold>Evento</bold>.",
+    "new-encounters": "5 nuevos <bold>Encuentros</bold> sustituyen a los anteriores (número de jugadores + 3).",
+    "new-year": "Por último, todos los jugadores pasan a la <bold>Primavera</bold> <spring/>, y la ficha de Jugador inicial pasa al siguiente jugador: ¡puede comenzar un nuevo año!",
+    "periods": "En los años 3 y 4, las cartas de Aldea y de Encuentro serán del <bold>periodo II</bold> (más poderosas, pero con más requisitos), y en el año 5, del <bold>periodo III</bold>, ¡para anotar el máximo de <vp/> antes del final de la partida!",
+    "quests": "Para ganar muchos <vp/>, también puedes completar las <bold>Misiones Heroicas</bold> <quest/>.\nPara ello, parte a la aventura, y una vez en la casilla de una Misión, elige resolverla en lugar de un Encuentro.\n<italic>Los <vp/> de las Misiones se anotan al final de la partida.</italic>",
+    "first-quest": "¡El <bold>primer jugador</bold> en resolver una Misión gana 2 <vp/> más!\n<italic>Solo puedes resolver cada Misión una vez durante la partida.</italic>",
+    "final-score": "Al final de la partida, suma a los <vp/> ya acumulados:\n• los <vp/> de las Misiones;\n• los <vp/> de los Compañeros;\n• los <vp/> de los Objetos;\n• 2 <vp/> si tienes al menos 3 <force/> y 3 <magic/>, o 5 <vp/> si tienes 5 <force/> y 5 <magic/>.",
+    "good-luck": "¡El jugador más prestigioso al final del 5.º año ganará la partida!\n¡Ahora te toca forjar tu destino, noble aventurero!"
+  }
+}
