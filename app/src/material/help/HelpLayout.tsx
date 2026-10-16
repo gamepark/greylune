@@ -1,4 +1,4 @@
-/* eslint-disable react-refresh/only-export-components */
+/* oxlint-disable react/only-export-components */
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Period } from '@gamepark/greylune/material/Period'
