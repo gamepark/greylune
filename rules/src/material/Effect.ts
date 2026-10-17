@@ -27,7 +27,10 @@ export enum GainType {
   Travel,
   /** One tilted card of the player is straightened. */
   Straighten,
-  /** One active Villager is placed in a gap of the Village. */
+  /**
+   * No longer queued: Mira and the Potion d'endurance, which alone placed a Villager, now do it the
+   * moment they go down (see `ReactionRule`). The value is kept so that the ones after it stay put.
+   */
   PlaceVillager,
   /** A Tavern is open: the player tells a story worth 3 at most and is paid by tiers. */
   TellStory,
@@ -94,7 +97,7 @@ export type Count = number | typeof SEAL
 
 export type Gain =
   | { type: GainType.Coins | GainType.Vp | GainType.Force | GainType.Magic | GainType.Skill | GainType.Villager | GainType.Travel; count: Count }
-  | { type: GainType.Straighten | GainType.PlaceVillager | GainType.BonusToken }
+  | { type: GainType.Straighten | GainType.BonusToken }
   | { type: GainType.TellStory; rewards: Gain[][] }
   | { type: GainType.Score; score: Score }
   | { type: GainType.Reaction; trigger: TriggerType }
@@ -108,7 +111,6 @@ export const skill = (count = 1): Gain => ({ type: GainType.Skill, count })
 export const villager = (count = 1): Gain => ({ type: GainType.Villager, count })
 export const travel = (count: Count): Gain => ({ type: GainType.Travel, count })
 export const straighten: Gain = { type: GainType.Straighten }
-export const placeVillager: Gain = { type: GainType.PlaceVillager }
 export const bonusToken: Gain = { type: GainType.BonusToken }
 export const tellStory = (...rewards: Gain[][]): Gain => ({ type: GainType.TellStory, rewards })
 

@@ -4,8 +4,6 @@ import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { MAX_SKILL } from '../Constants'
 import { TriggerType } from '../material/Reaction'
-import { villageGaps } from '../material/Village'
-import { cardsAroundGap } from '../material/Village'
 import { CustomMoveType } from './CustomMoveType'
 import { GreyluneMove, GreyluneRule, SkillMarker } from './GreyluneRule'
 import { RuleId } from './RuleId'
@@ -85,8 +83,6 @@ export class ResolveEffectsRule extends GreyluneRule {
         return this.openReactions([TriggerType.Travel], RuleId.Travel)
       case GainType.Straighten:
         return this.tiltedCards.length ? [this.startRule(RuleId.StraightenCard)] : []
-      case GainType.PlaceVillager:
-        return this.canPlaceVillager ? [this.startRule(RuleId.PlaceVillager)] : []
       case GainType.TellStory:
         this.memorize(Memory.StoryRewards, gain.rewards)
         this.memorize(Memory.StoryTold, [])
@@ -121,10 +117,5 @@ export class ResolveEffectsRule extends GreyluneRule {
 
   get bonusTokens() {
     return this.material(MaterialType.BonusToken).location(LocationType.BonusTokens).player(this.player)
-  }
-
-  /** A Villager can only be put back in the Village if there is one to place and a card to stand by. */
-  get canPlaceVillager(): boolean {
-    return this.activeVillagers.length > 0 && villageGaps.some((gap) => cardsAroundGap(this, gap).length > 0)
   }
 }

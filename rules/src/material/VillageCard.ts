@@ -355,7 +355,7 @@ export const villageCardData: Record<VillageCard, VillageCardData> = {
     seals: 1,
     potion: true,
     immediate: { requirements: [seal], gains: [vp(SEAL)] },
-    reaction: reaction([TriggerType.TravelDone], [discardCard], { type: ReactionType.PlaceVillager })
+    reaction: reaction([TriggerType.ResolveEncounter, TriggerType.TravelDone], [discardCard], { type: ReactionType.PlaceVillager })
   },
   [VillageCard.FlyingPotion]: {
     cost: 2,
@@ -474,7 +474,7 @@ export const villageCardData: Record<VillageCard, VillageCardData> = {
   }),
   /** The scout. */
   [VillageCard.Mira]: companion({
-    reaction: reaction([TriggerType.TravelDone], [tilt], { type: ReactionType.PlaceVillager }),
+    reaction: reaction([TriggerType.ResolveEncounter, TriggerType.TravelDone], [tilt], { type: ReactionType.PlaceVillager }),
     score: { vp: 1, per: Countable.DistinctBanner }
   })
 }

@@ -22,6 +22,9 @@ import { TellStoryRule } from './TellStoryRule'
  * the same journey — and it closes on its own the moment there is nothing, so nobody is ever asked
  * to pass on an empty hand.
  *
+ * The Villager Mira and the Potion d'endurance put in the Village is placed as soon as the card goes
+ * down, before anything else happens: the window steps aside for it, and opens again once it stands.
+ *
  * Five windows cannot be passed: the one opened on a card offered to a player who can only pay for it
  * with a Companion (see {@link ActivateCardRule}), the ones opened on an Event, a Quest or the Diamant
  * that only Kael can pay for (see {@link EventRule}, {@link ResolveQuestRule} and {@link ChooseOutcomeRule}), and the one opened on a story that only Seren or a
@@ -145,7 +148,11 @@ export class ReactionRule extends GreyluneRule {
     if (isCustomMoveType(CustomMoveType.Pass)(move)) return this.close()
     if (!isCustomMoveType(CustomMoveType.UseReaction)(move)) return super.onCustomMove(move)
     const { card, option } = move.data as { card: number; option: number }
-    return [...this.useReaction(card, option), this.startRule(RuleId.Reaction)]
+    const moves = this.useReaction(card, option)
+    if (this.reactionEffect(card, option).type === ReactionType.PlaceVillager && this.canPlaceVillager) {
+      return [...moves, this.startRule(RuleId.PlaceVillager)]
+    }
+    return [...moves, this.startRule(RuleId.Reaction)]
   }
 
   private close(): GreyluneMove[] {

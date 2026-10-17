@@ -1,4 +1,4 @@
-import { applyAutomaticMoves, getEnumValues, isCustomMoveType, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { applyAutomaticMoves, getEnumValues, isCustomMoveType, isMoveItemType, MaterialGame, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { GreyluneRules } from './GreyluneRules'
 import { GreyluneSetup } from './GreyluneSetup'
@@ -914,10 +914,15 @@ describe('A reaction answered twice through Isandre', () => {
     placeCard(VillageCard.Smithy, 0, 0)
     openWindow(TriggerType.TravelDone)
     useReaction(mira)
+    // Placed the moment the card goes down; Isandre answers the tilt once it stands.
+    expect(game.rule!.id).toBe(RuleId.PlaceVillager)
+    play(rules().getLegalMoves(BLUE)[0])
+    expect(game.rule!.id).toBe(RuleId.Reaction)
     useReaction(isandre)
     useReaction(mira)
     expect(game.rule!.id).toBe(RuleId.PlaceVillager)
-    expect(rules().remind(Memory.Gains)).toEqual([{ type: GainType.PlaceVillager }])
+    play(rules().getLegalMoves(BLUE)[0])
+    expect(items(MaterialType.Villager).filter((item) => item.location.type === LocationType.VillageGap)).toHaveLength(2)
   })
 
   describe('Ariok', () => {
@@ -1029,10 +1034,15 @@ describe('A reaction answered twice through Isandre', () => {
       placeCard(VillageCard.Smithy, 0, 0)
       openWindow(TriggerType.TravelDone)
       useReaction(potion)
+      // Placed the moment the card goes down; Isandre answers the tilt once it stands.
+      expect(game.rule!.id).toBe(RuleId.PlaceVillager)
+      play(rules().getLegalMoves(BLUE)[0])
+      expect(game.rule!.id).toBe(RuleId.Reaction)
       useReaction(isandre)
       useReaction(potion)
       expect(game.rule!.id).toBe(RuleId.PlaceVillager)
-      expect(rules().remind(Memory.Gains)).toEqual([{ type: GainType.PlaceVillager }])
+      play(rules().getLegalMoves(BLUE)[0])
+      expect(items(MaterialType.Villager).filter((item) => item.location.type === LocationType.VillageGap)).toHaveLength(2)
     })
 
     it('kept by Selia: a Charisma potion is not drunk again, as Seren is not tilted again', () => {
@@ -1076,6 +1086,8 @@ describe('Mira', () => {
     placeCard(VillageCard.Smithy, 0, 0)
     owe(travel(1))
     play(rules().getLegalMoves(BLUE)[0])
+    // Offered on arrival as well, and passed on there.
+    playCustom(CustomMoveType.Pass)
     playCustom(CustomMoveType.ChooseEncounter)
     expect(game.rule!.id).toBe(RuleId.Reaction)
     useReaction(mira)
@@ -1091,7 +1103,31 @@ describe('Mira', () => {
     play(rules().getLegalMoves(BLUE)[0])
     // The coin of the gold space rather than the Farm: turning an Encounter down is the only way to
     // resolve nothing where the space offers something (see {@link ResolveEncounterRule}).
+    playCustom(CustomMoveType.Pass)
     playCustom(CustomMoveType.SkipEncounter)
+    expect(game.rule!.id).toBe(RuleId.Reaction)
+    useReaction(mira)
+    expect(game.rule!.id).toBe(RuleId.PlaceVillager)
+  })
+
+  it('is offered on arrival too, so the Unicorn can stand her back up — and she answers the journey again', () => {
+    const mira = give(VillageCard.Mira)
+    setSkill(BLUE, 0, 3)
+    placeEncounter(EncounterCard.Unicorn, Area.Hammer)
+    placeCard(VillageCard.Smithy, 0, 0)
+    owe(travel(3))
+    play(rules().getLegalMoves(BLUE).find((move) => isMoveItemType(MaterialType.Adventurer)(move) && move.location.id === Area.Hammer)!)
+    expect(game.rule!.id).toBe(RuleId.Reaction)
+    useReaction(mira)
+    // The Villager is placed the moment she goes down, before the Encounter is even named.
+    expect(game.rule!.id).toBe(RuleId.PlaceVillager)
+    play(rules().getLegalMoves(BLUE)[0])
+    expect(game.rule!.id).toBe(RuleId.ResolveEncounter)
+    playCustom(CustomMoveType.ChooseEncounter)
+    expect(game.rule!.id).toBe(RuleId.StraightenCard)
+    play(rules().getLegalMoves(BLUE)[0])
+    expect(items(MaterialType.VillageCard)[mira].location.rotation).toBeFalsy()
+    // Stood back up, as Isandre would have: offered again once the road is behind.
     expect(game.rule!.id).toBe(RuleId.Reaction)
     useReaction(mira)
     expect(game.rule!.id).toBe(RuleId.PlaceVillager)

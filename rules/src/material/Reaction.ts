@@ -9,7 +9,8 @@ import { GainType, Requirement, RequirementType } from './Effect'
  * resolved, and nothing is learnt between leaving Greylune and arriving, so those are offered on
  * arrival, where the player sees what they are paying for. What Mira and the Potion d'endurance put
  * back in the Village may be a Villager the Encounter has just handed over, which the appendix says
- * in as many words, so those are offered once the road is behind. Elwen alone is answered at the
+ * in as many words, so those are offered once the road is behind — and on arrival too, since tilted
+ * before the Encounter they may be stood back up by it: the Unicorn's. Elwen alone is answered at the
  * departure, because the length of the road is what she changes.
  */
 export enum TriggerType {
@@ -19,8 +20,11 @@ export enum TriggerType {
    * The journey is over and everything it paid has been handed over: Mira and the Potion
    * d'endurance. Both are worded "when you go adventuring" and both put an active Villager in the
    * Village, and the appendix says which Villager that may be — one the Encounter has just handed
-   * over. So the window belongs to the departure and is only opened at the end of the road, where
-   * the player has everything the journey gave to choose from.
+   * over. So the window belongs to the departure and is opened at the end of the road, where the
+   * player has everything the journey gave to choose from. Both are also offered on arrival, with the
+   * Potions ({@link TriggerType.ResolveEncounter}): tilted there, the Unicorn may stand them back up.
+   * A card stood back up after answering on arrival may answer again at the end of the road, as it
+   * may when Isandre stands it back up.
    */
   TravelDone,
   /** An Encounter is being resolved: temporary skills and ignored conditions. */

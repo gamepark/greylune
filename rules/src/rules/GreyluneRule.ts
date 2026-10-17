@@ -2,7 +2,7 @@ import { CustomMove, getEnumValues, isCustomMoveType, Location, Material, Materi
 import { BONUS_TOKEN_SCORES, MAX_SKILL, SCORE_TRACK_SIZE } from '../Constants'
 import { Memory } from '../Memory'
 import { PlayerColor } from '../PlayerColor'
-import { bonusToken, Count, Gain, GainType, gathered, placeVillager, Requirement, RequirementType, SEAL, vp } from '../material/Effect'
+import { bonusToken, Count, Gain, GainType, gathered, Requirement, RequirementType, SEAL, vp } from '../material/Effect'
 import { EncounterCardId, encounterCardData } from '../material/EncounterCard'
 import { EventTile, eventTileData, isFestival } from '../material/EventTile'
 import { LocationType } from '../material/LocationType'
@@ -11,6 +11,7 @@ import { MaterialSource } from '../material/MaterialSource'
 import { activeVillagers, adventurerArea, keepsPotions, playerCoins, playerForce, playerMagic, playerSeason, playerVp, scoreValue, vpTokenTotal } from '../material/PlayerState'
 import { Reaction, ReactionEffect, ReactionType, SkillGain, TriggerType } from '../material/Reaction'
 import { Coin, coinUnits } from '../material/Tokens'
+import { cardsAroundGap, villageGaps } from '../material/Village'
 import { getVillagerPlayer, Villager } from '../material/Villager'
 import { isPotion, VillageCard, VillageCardId, villageCardData } from '../material/VillageCard'
 import { getVpToken, getVpTokenValue, VpToken, VpTokenValue } from '../material/VpToken'
@@ -137,6 +138,11 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
 
   get temporaryMagic(): number {
     return this.remind<number>(Memory.TemporaryMagic) ?? 0
+  }
+
+  /** A Villager can only be put back in the Village if there is one to place and a card to stand by. */
+  get canPlaceVillager(): boolean {
+    return this.activeVillagers.length > 0 && villageGaps.some((gap) => cardsAroundGap(this, gap).length > 0)
   }
 
   // ------------------------------------------------------------------ the Event of the year
@@ -600,7 +606,7 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
         this.memorize(Memory.TravelDistance, (this.remind<number>(Memory.TravelDistance) ?? 0) + effect.count)
         return []
       case ReactionType.PlaceVillager:
-        this.pushGains([placeVillager], true)
+        // Placed at once, by the window (see `ReactionRule`).
         return []
       case ReactionType.TemporarySkills:
         if (effect.force) this.memorize(Memory.TemporaryForce, this.temporaryForce + effect.force)

@@ -383,7 +383,6 @@ export class Assessment {
           value += TRAVEL_VALUES[Math.min(typeof gain.count === 'number' ? gain.count : 2, TRAVEL_VALUES.length - 1)]
           break
         case GainType.Straighten:
-        case GainType.PlaceVillager:
           value += 1
           break
         case GainType.TellStory:
@@ -724,8 +723,6 @@ export class Assessment {
       }
       case GainType.Straighten:
         return options.nested ? 1 : this.straightenValue()
-      case GainType.PlaceVillager:
-        return this.active > 0 && this.season !== Season.Autumn ? 1 : 0
       case GainType.TellStory:
         return options.nested ? 2 : (this.storyValue(gain.rewards, options.seal) ?? 0)
       case GainType.Score:

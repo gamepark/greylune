@@ -3,11 +3,15 @@ import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { cardsAroundGap, villageGaps } from '../material/Village'
 import { GreyluneMove, GreyluneRule } from './GreyluneRule'
+import { RuleId } from './RuleId'
 
 /**
  * An active Villager goes and stands in the Village, between two neighbouring cards or between a
  * card and an empty slot (rulebook p.6). A gap whose two cards have both been taken is worth
  * nothing to anybody, so nothing is ever placed there.
+ *
+ * Only Mira and the Potion d'endurance place one, the moment they go down: the window they were
+ * answered in opens again once it stands (see `ReactionRule`).
  */
 export class PlaceVillagerRule extends GreyluneRule {
   get gaps() {
@@ -20,6 +24,6 @@ export class PlaceVillagerRule extends GreyluneRule {
   }
 
   afterItemMove(move: ItemMove<number, MaterialType, LocationType>): GreyluneMove[] {
-    return move.itemType === MaterialType.Villager ? this.endOfAction() : []
+    return move.itemType === MaterialType.Villager ? [this.startRule(RuleId.Reaction)] : []
   }
 }
