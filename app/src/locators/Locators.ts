@@ -29,6 +29,7 @@ import {
   eventSpot,
   firstPlayerTokenSpot,
   incomeTokenSpot,
+  incomeTokensGap,
   itemsSpot,
   magicTrackSpot,
   mainBoardSpot,
@@ -238,9 +239,11 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
     getCoordinates: (location: Location) => questMarkerSpot(location.x ?? 0)
   }),
 
-  [LocationType.IncomeTokenSpace]: new Locator({
-    hide: hideOtherPlayers,
-    getCoordinates: (location: Location) => incomeTokenSpot(location.x ?? 0)
+  [LocationType.IncomeTokenSpace]: new ListLocator({
+    coordinates: incomeTokenSpot,
+    gap: incomeTokensGap,
+    maxCount: 3,
+    hide: hideOtherPlayers
   }),
 
   [LocationType.SpecialAction]: new CenteredListLocator({

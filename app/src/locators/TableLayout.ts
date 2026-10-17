@@ -751,7 +751,8 @@ export const strengthTrackSpot = (level: number) => onPlayerBoard(8.15, 11.26 - 
 export const magicTrackSpot = (level: number) => onPlayerBoard(10.58, 11.26 - 1.62 * level)
 
 export const questMarkerSpot = (index: number) => onPlayerBoard(12.44 + markerDrop.quest.x + 1.415 * index, 7.66 + markerDrop.quest.y)
-export const incomeTokenSpot = (index: number) => onPlayerBoard(4.83, 5.85 + 2.3 * index)
+export const incomeTokenSpot = onPlayerBoard(4.83, 5.85)
+export const incomeTokensGap: Partial<XYCoordinates> = { y: 2.3 }
 
 /**
  * The frame at the foot of the board, where the Villagers ready to be sent out stand: the middle of
