@@ -14,6 +14,7 @@ import { ResolveQuestRule } from './ResolveQuestRule'
 import { GreyluneMove, GreyluneRule, ReactionChoice } from './GreyluneRule'
 import { RuleId } from './RuleId'
 import { TellStoryRule } from './TellStoryRule'
+import { UseItemRule } from './UseItemRule'
 
 /**
  * The window a Companion or a Potion steps into.
@@ -25,8 +26,9 @@ import { TellStoryRule } from './TellStoryRule'
  * The Villager Mira and the Potion d'endurance put in the Village is placed as soon as the card goes
  * down, before anything else happens: the window steps aside for it, and opens again once it stands.
  *
- * Five windows cannot be passed: the one opened on a card offered to a player who can only pay for it
- * with a Companion (see {@link ActivateCardRule}), the ones opened on an Event, a Quest or the Diamant
+ * Six windows cannot be passed: the one opened on a card offered to a player who can only pay for it
+ * with a Companion (see {@link ActivateCardRule}), the one opened on an Object whose Villagers or Force
+ * only Bran or Kael can pay (see {@link UseItemRule}), the ones opened on an Event, a Quest or the Diamant
  * that only Kael can pay for (see {@link EventRule}, {@link ResolveQuestRule} and {@link ChooseOutcomeRule}), and the one opened on a story that only Seren or a
  * Charisma potion can make heard (see {@link TellStoryRule}). There, answering is the only way on,
  * and only the answers that bring the card or the story within reach are offered.
@@ -52,13 +54,15 @@ export class ReactionRule extends GreyluneRule {
   }
 
   /** The card being activated, the Event being joined, the Quest being achieved or the story about to be told, when nothing can go on without an answer. */
-  get blocked(): ActivateCardRule | EventRule | ResolveQuestRule | ChooseOutcomeRule | TellStoryRule | undefined {
+  get blocked(): ActivateCardRule | UseItemRule | EventRule | ResolveQuestRule | ChooseOutcomeRule | TellStoryRule | undefined {
     const next = this.pendingRule
     return next?.outOfReach ? next : undefined
   }
 
-  private get pendingRule(): ActivateCardRule | EventRule | ResolveQuestRule | ChooseOutcomeRule | TellStoryRule | undefined {
+  private get pendingRule(): ActivateCardRule | UseItemRule | EventRule | ResolveQuestRule | ChooseOutcomeRule | TellStoryRule | undefined {
     switch (this.resumeRule) {
+      case RuleId.UseItem:
+        return new UseItemRule(this.game)
       case RuleId.TellStory:
         return new TellStoryRule(this.game)
       case RuleId.Event:

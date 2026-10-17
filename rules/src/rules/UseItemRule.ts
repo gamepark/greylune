@@ -1,6 +1,6 @@
 import { Memory } from '../Memory'
-import { RequirementType } from '../material/Effect'
-import { TriggerType } from '../material/Reaction'
+import { Effect, RequirementType } from '../material/Effect'
+import { ReactionType, TriggerType } from '../material/Reaction'
 import { villageCardData } from '../material/VillageCard'
 import { GreyluneMove, GreyluneRule } from './GreyluneRule'
 import { RuleId } from './RuleId'
@@ -15,8 +15,27 @@ export class UseItemRule extends GreyluneRule {
     return this.remind<number>(Memory.ActivatedCard)
   }
 
+  get ability(): Effect {
+    return villageCardData[this.playerCard(this.card)].abilities![this.remind<number>(Memory.Ability)]
+  }
+
+  /**
+   * The Object is offered to a player who could only pay its Villagers with Bran, or its Force with
+   * Kael: the window opened before this rule cannot be passed then, and only they are offered in it.
+   */
+  get outOfReach(): boolean {
+    return !this.canPay(this.ability.requirements)
+  }
+
+  helps(card: number, option: number): boolean {
+    const type = this.reactionEffect(card, option).type
+    const asked =
+      type === ReactionType.ReduceVillagerCost ? RequirementType.SpendVillagers : type === ReactionType.ReduceForceCost ? RequirementType.SpendForce : undefined
+    return (this.ability.requirements ?? []).some((requirement) => requirement.type === asked && !this.canPay([requirement]))
+  }
+
   onRuleStart(): GreyluneMove[] {
-    const ability = villageCardData[this.playerCard(this.card)].abilities![this.remind<number>(Memory.Ability)]
+    const ability = this.ability
     const requirements = ability.requirements ?? []
     const moves: GreyluneMove[] = []
     let tilted = false

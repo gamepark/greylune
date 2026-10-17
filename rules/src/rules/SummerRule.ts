@@ -120,6 +120,7 @@ export class SummerRule extends SeasonRule {
 
   // ------------------------------------------------------------------ the cards of the player
 
+  /** An Object only Bran or Kael can pay for is offered all the same (see `UseItemRule.outOfReach`). */
   private useItemMoves(): GreyluneMove[] {
     return this.villageCards
       .location(LocationType.Items)
@@ -128,7 +129,9 @@ export class SummerRule extends SeasonRule {
       .getIndexes()
       .flatMap((card) =>
         (villageCardData[this.playerCard(card)].abilities ?? []).flatMap((ability, index) =>
-          this.canPay(ability.requirements) ? [this.customMove(CustomMoveType.UseItem, { card, ability: index })] : []
+          this.canPay(ability.requirements, this.potentialReduction(paymentTriggers(ability.requirements)))
+            ? [this.customMove(CustomMoveType.UseItem, { card, ability: index })]
+            : []
         )
       )
   }

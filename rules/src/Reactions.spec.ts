@@ -354,6 +354,21 @@ describe('Bran', () => {
     playCustom(CustomMoveType.ChooseEncounter)
     expect(villagers()).toBe(before - 1)
   })
+
+  it('lets an Object asking a Villager be used with none left, and must then be tilted', () => {
+    const bran = give(VillageCard.Bran)
+    const horn = give(VillageCard.Horn, LocationType.Items)
+    for (const item of items(MaterialType.Villager)) {
+      if (item.location.type === LocationType.ActiveVillagers && item.location.player === BLUE) item.location = { type: LocationType.Camp, player: BLUE }
+    }
+    items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+    game.rule = { id: RuleId.Summer, player: BLUE }
+    playCustom(CustomMoveType.UseItem, (data: { card: number; ability: number }) => data.card === horn && data.ability === 0)
+    expect(game.rule!.id).toBe(RuleId.Reaction)
+    expect(rules().getLegalMoves(BLUE)).toHaveLength(1)
+    useReaction(bran)
+    expect(playerVp(rules(), BLUE)).toBe(3)
+  })
 })
 
 describe('Neris', () => {
