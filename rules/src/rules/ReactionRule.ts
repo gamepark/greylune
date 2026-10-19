@@ -153,7 +153,7 @@ export class ReactionRule extends GreyluneRule {
     if (!isCustomMoveType(CustomMoveType.UseReaction)(move)) return super.onCustomMove(move)
     const { card, option } = move.data as { card: number; option: number }
     const moves = this.useReaction(card, option)
-    if (this.reactionEffect(card, option).type === ReactionType.PlaceVillager && this.canPlaceVillager) {
+    if (this.reactionEffect(card, option).type === ReactionType.PlaceVillager) {
       return [...moves, this.startRule(RuleId.PlaceVillager)]
     }
     return [...moves, this.startRule(RuleId.Reaction)]

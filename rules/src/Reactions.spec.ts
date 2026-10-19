@@ -1125,6 +1125,20 @@ describe('Mira', () => {
     expect(game.rule!.id).toBe(RuleId.PlaceVillager)
   })
 
+  it('is not offered without an active Villager to place', () => {
+    give(VillageCard.Mira)
+    for (const item of items(MaterialType.Villager)) {
+      if (item.location.type === LocationType.ActiveVillagers && item.location.player === BLUE) item.location = { type: LocationType.Camp, player: BLUE }
+    }
+    placeEncounter(EncounterCard.Farm, Area.Wand)
+    placeCard(VillageCard.Smithy, 0, 0)
+    owe(travel(1))
+    play(rules().getLegalMoves(BLUE)[0])
+    expect(game.rule!.id).toBe(RuleId.ResolveEncounter)
+    playCustom(CustomMoveType.SkipEncounter)
+    expect(game.rule!.id).not.toBe(RuleId.Reaction)
+  })
+
   it('is offered on arrival too, so the Unicorn can stand her back up — and she answers the journey again', () => {
     const mira = give(VillageCard.Mira)
     setSkill(BLUE, 0, 3)

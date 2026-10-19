@@ -445,7 +445,8 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
 
   /**
    * Whether an answer still changes anything. Lucan only gives Force for Magic gained, and Magic for
-   * Force.
+   * Force. Mira and the Potion d'endurance need an active Villager to place, and a card for it to
+   * stand by.
    *
    * The rest only matters once Isandre has stood a card back up, so that it may answer the same moment
    * a second time (see {@link ReactionType.StraightenTilted}): most cards then give twice what they
@@ -460,6 +461,8 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
     switch (effect.type) {
       case ReactionType.OtherSkill:
         return this.skillsGained.includes(otherSkill(effect.skill))
+      case ReactionType.PlaceVillager:
+        return this.canPlaceVillager
       case ReactionType.ChooseSealValue:
         return !this.costReduction.freeSealValue
       case ReactionType.StoryValue3:
