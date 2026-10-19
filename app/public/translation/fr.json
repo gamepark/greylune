@@ -82,6 +82,10 @@
       "you": "Racontez {count, plural, one {# histoire} other {# histoires}}",
       "player": "{player} raconte {count, plural, one {# histoire} other {# histoires}}"
     },
+    "quest-achieved": {
+      "you": "Vous accomplissez la Quête Héroïque",
+      "player": "{player} accomplit la Quête Héroïque"
+    },
     "start-story": {
       "you": "Racontez une histoire",
       "player": "{player} raconte une histoire"

@@ -82,6 +82,10 @@
       "you": "Erzähle {count, plural, one {# Geschichte} other {# Geschichten}}",
       "player": "{player} erzählt {count, plural, one {# Geschichte} other {# Geschichten}}"
     },
+    "quest-achieved": {
+      "you": "Du erfüllst die Heldenquest",
+      "player": "{player} erfüllt die Heldenquest"
+    },
     "start-story": {
       "you": "Erzähle eine Geschichte",
       "player": "{player} erzählt eine Geschichte"

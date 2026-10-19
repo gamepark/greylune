@@ -82,6 +82,10 @@
       "you": "Cuenta {count, plural, one {# historia} other {# historias}}",
       "player": "{player} cuenta {count, plural, one {# historia} other {# historias}}"
     },
+    "quest-achieved": {
+      "you": "Completas la Misión Heroica",
+      "player": "{player} completa la Misión Heroica"
+    },
     "start-story": {
       "you": "Cuenta una historia",
       "player": "{player} cuenta una historia"

@@ -82,6 +82,10 @@
       "you": "Расскажите {count, plural, one {# историю} few {# истории} many {# историй} other {# истории}}",
       "player": "{player} рассказывает {count, plural, one {# историю} few {# истории} many {# историй} other {# истории}}"
     },
+    "quest-achieved": {
+      "you": "Вы выполняете героический квест",
+      "player": "{player} выполняет героический квест"
+    },
     "start-story": {
       "you": "Расскажите историю",
       "player": "{player} рассказывает историю"

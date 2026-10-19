@@ -82,6 +82,10 @@
       "you": "Tell {count, plural, one {# story} other {# stories}}",
       "player": "{player} tells {count, plural, one {# story} other {# stories}}"
     },
+    "quest-achieved": {
+      "you": "You complete the Heroic Quest",
+      "player": "{player} completes the Heroic Quest"
+    },
     "start-story": {
       "you": "Tell a story",
       "player": "{player} tells a story"
