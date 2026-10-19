@@ -14,7 +14,8 @@ import { GainLabel } from '../components/Gains'
  * The choice is the marker moved up its track, but the tracks give no space to drop it on, so both
  * gains close the sentence: "Gagnez <force-up/> ou <magic-up/>". They are written as the gain they are
  * and carry no word at all (see {@link GainLabel}). A track already at 5 pays in victory points
- * instead, so its gain is written as those points, in its place in the sentence.
+ * instead, so its gain is written as those points, in its place in the sentence. A player without
+ * the choice — the one watching it — gets no gains at all, only the sentence naming who chooses.
  */
 export const ChooseSkillHeader = () => {
   const rules = useRules<GreyluneRules>()!
@@ -22,6 +23,7 @@ export const ChooseSkillHeader = () => {
   const magic = useLegalMove(isMoveItemType(MaterialType.MagicMarker))
   const points = useLegalMove(isCustomMoveType(CustomMoveType.GainVp))
   const count = new ChooseSkillRule(rules.game).count
+  if (!force && !magic && !points) return <HeaderText code="skill" />
   return (
     <>
       <HeaderText code="skill" />
