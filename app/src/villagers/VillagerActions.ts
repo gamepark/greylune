@@ -1,12 +1,16 @@
+import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialSource } from '@gamepark/greylune/material/MaterialSource'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { Slot, villagersAroundSlot } from '@gamepark/greylune/material/Village'
 import { getVillageCardType, VillageCard, VillageCardId, VillageCardType, villageCardData } from '@gamepark/greylune/material/VillageCard'
+import { Memory } from '@gamepark/greylune/Memory'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
+import { ChooseAbilityData } from '@gamepark/greylune/rules/ActivateCardRule'
 import { CustomMoveType } from '@gamepark/greylune/rules/CustomMoveType'
+import { RuleId } from '@gamepark/greylune/rules/RuleId'
 import { VillagerActionData } from '@gamepark/greylune/rules/SummerRule'
-import { CustomMove, isCustomMoveType, Location } from '@gamepark/rules-api'
+import { CustomMove, isCustomMoveType, Location, MaterialMove } from '@gamepark/rules-api'
 
 /**
  * The two things a Villager standing in the Village is spent on in Summer (see `SummerRule`): the
@@ -79,3 +83,14 @@ export const bestCoinsMove = (moves: CustomMove[], rules: MaterialSource): Custo
 
 /** The camp, everybody's: where a Villager taken back is going, and what it is dropped on. */
 export const camp: Location<PlayerColor, LocationType> = { type: LocationType.Camp }
+
+/** The options this card is offering, if it is the one being activated: one move per option the player can pay for. */
+export const cardAbilityMoves = (rules: GreyluneRules, legalMoves: MaterialMove[], card: number): CustomMove[] => {
+  if (rules.game.rule?.id !== RuleId.ActivateCard || rules.remind<number>(Memory.ActivatedCard) !== card) return []
+  return legalMoves.filter(
+    (move): move is CustomMove =>
+      isChooseAbility(move) && (move.data as ChooseAbilityData).ability !== undefined && (move.data as ChooseAbilityData).value === undefined
+  )
+}
+
+const isChooseAbility = isCustomMoveType(CustomMoveType.ChooseAbility)

@@ -4,13 +4,10 @@ import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { cardOnSlot } from '@gamepark/greylune/material/Village'
 import { VillageCard, villageCardData } from '@gamepark/greylune/material/VillageCard'
-import { Memory } from '@gamepark/greylune/Memory'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { ChooseAbilityData } from '@gamepark/greylune/rules/ActivateCardRule'
-import { CustomMoveType } from '@gamepark/greylune/rules/CustomMoveType'
-import { RuleId } from '@gamepark/greylune/rules/RuleId'
 import { LocationDescription, useLegalMoves, useRules } from '@gamepark/react-game'
-import { CustomMove, isCustomMoveType, Location, MaterialMove } from '@gamepark/rules-api'
+import { CustomMove, Location, MaterialMove } from '@gamepark/rules-api'
 import { HTMLAttributes, Ref } from 'react'
 import { Trans } from 'react-i18next'
 import { ActionArea } from '../components/ActionArea'
@@ -95,14 +92,3 @@ export const CardAbilityMenu = ({ front, moves }: { front: VillageCard; moves: C
 
 /** A little more than a button is tall, so that the options of one card stand clear of one another. */
 const abilityButtonStep = 2.4
-
-/** The options this card is offering, if it is the one being activated: one move per option the player can pay for. */
-export const cardAbilityMoves = (rules: GreyluneRules, legalMoves: MaterialMove[], card: number): CustomMove[] => {
-  if (rules.game.rule?.id !== RuleId.ActivateCard || rules.remind<number>(Memory.ActivatedCard) !== card) return []
-  return legalMoves.filter(
-    (move): move is CustomMove =>
-      isChooseAbility(move) && (move.data as ChooseAbilityData).ability !== undefined && (move.data as ChooseAbilityData).value === undefined
-  )
-}
-
-const isChooseAbility = isCustomMoveType(CustomMoveType.ChooseAbility)
