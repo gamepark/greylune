@@ -38,7 +38,7 @@ Les tuiles Événement et Quête (dos compris) et les 46 jetons ont été refait
 à l'ombre allégée. L'opacité d'origine n'était pas uniforme — 0,46 sur les jetons Revenu, 0,48 sur
 les Quêtes, 0,50 sur les Événements, 0,52 sur le jeton 1er joueur, 0,57 à 0,59 sur les Sceaux,
 pièces, PV et Bonus — elle a été ramenée à 0,28 pour tout le monde. Restent à 0,50 les `pawns`, les
-`boards` découpés, les `seasons` et les `icons`.
+`boards` découpés et les `icons`.
 
 La géométrie ne change pas d'une opacité à l'autre : même canevas, même position du découpage, donc
 les tailles déclarées dans `MaterialDescription` restent valables.
@@ -73,8 +73,7 @@ le magenta sur l'anneau extérieur de 2 px, nouveau contre courant. Sur les 56 p
 | `tiles` | `EventTile1-6` + `EventTileBack`, `QuestTile1-9` + `QuestTileBack` |
 | `tokens` | pièces, sceaux, jetons Revenu, jetons Bonus, jetons PV, jeton 1er joueur |
 | `pawns` | meeples et marqueurs, par couleur (`Blue`, `Orange`, `Red`, `Purple`) |
-| `seasons` | `Winter`, `Spring`, `Summer`, `Autumn` : bannières découpées dans `boards/SeasonBoard.png` |
-| `icons` | symboles isolés (`Gold`, `Magic(Up/Down)`, `Move`, `Move1-5`, `PotionDiscarded`, `Story`, `SpendVillager`, `Strength(Up/Down)`, `Tilt`, `VictoryPoint`, `Villager`, `FirstPlayer` — la lune du jeton 1er joueur, détourée seule sur un carré) — **provisoires** |
+| `icons` | symboles isolés (`Winter`, `Spring`, `Summer`, `Autumn` — pictos fournis par l'éditeur, `Gold`, `Magic(Up/Down)`, `Move`, `Move1-5`, `PotionDiscarded`, `Story`, `SpendVillager`, `Strength(Up/Down)`, `Tilt`, `VictoryPoint`, `Villager`, `FirstPlayer` — la lune du jeton 1er joueur, détourée seule sur un carré) — **provisoires** |
 
 Les `icons` sont la seule exception à la règle « une image = une pièce » : la Force, la Magie, les
 points de victoire et la route n'existent comme pièce nulle part, seulement comme symbole imprimé
@@ -125,12 +124,12 @@ en miroir sur les planches de punchboard.
   personnel et du plateau Saisons, et le socle du jeton 1er joueur. Ne pas les régénérer.
 - Pas de fond de table dédié : la cover (`app/public/cover-1920.jpg`) fait office de fond.
 - Les cartes n'existent qu'en **fr** et **en**.
-- Aucune icône isolée n'existe (saisons, Force, Magie, Sceau, pièce, récit, blasons de Distance,
+- Aucune icône isolée n'existe, hormis les saisons (Force, Magie, Sceau, pièce, récit, blasons de Distance,
   types de carte) : elles ne sont qu'incrustées dans les cartes et les plateaux. Il faudra les
   découper — voir la liste des découpages ci-dessous — ou les redemander.
-- `seasons/*` : premier découpage de ce genre, fait pour les `Headers` (bannières fleur, soleil et
-  feuille du plateau Saisons, fond parchemin rendu transparent au seuil de saturation). Les autres
-  icônes des `Headers` empruntent la pièce réelle qui dit la chose — `pawns/StrengthMarker` pour la
+- Les saisons (`icons/Winter`, `Spring`, `Summer`, `Autumn`) sont les pictos fournis par l'éditeur
+  (`ICONES/PICTO * GREY.png`), qui remplacent les bannières d'abord découpées dans le plateau Saisons.
+  Les autres icônes des `Headers` empruntent la pièce réelle qui dit la chose — `pawns/StrengthMarker` pour la
   Force, `pawns/MagicMarker` pour la Magie, `tokens/Coin1` pour une pièce, `pawns/ScoreMarker*` pour
   un PV, `pawns/Villager*1` pour un villageois, `tiles/QuestTileBack` pour une Quête héroïque. À
   remplacer par de vraies icônes quand on les aura.
@@ -153,6 +152,5 @@ en miroir sur les planches de punchboard.
   | `NextSeason` | `boards/SeasonBoard.png` | la flèche imprimée entre deux cases de la piste des saisons |
   | `Story1-3` | `cards/encounter/fr/Encounter5.jpg`, `Encounter3.jpg`, `Encounter2.jpg` | le livre de la valeur de récit, son chiffre imprimé dedans ; les 3 cartes le portent au même endroit (336-439 × 53-184) |
   | `SpendVillager` | `cards/encounter/fr/Encounter2.jpg` (Tigre) | le villageois à payer, son 1 découpé dedans ; le 1 creusé est laissé opaque (seul le fond relié au bord est retiré) |
-  | `seasons/Winter` | `boards/SeasonBoard.png` | le flocon de la colonne de l'Hiver, alpha progressif sur la saturation |
 - `pawns/*` : rendus vectoriels extraits de `MEEPLES GREYLUNE.ai` (fiche de fabrication).
   L'ombre portée directionnelle du gabarit est incrustée dans le dessin d'origine.
