@@ -23,10 +23,16 @@ import { ActivateSealButton } from '../village/ActivateSeal'
 import { chooseBonusMove } from '../bonus/BonusActions'
 import { ChooseBonusButton } from '../bonus/ChooseBonus'
 import { BonusTokenHelp } from './help/BonusTokenHelp'
+import { CoinHelp } from './help/CoinHelp'
+import { FirstPlayerTokenHelp } from './help/FirstPlayerTokenHelp'
+import { IncomeTokenHelp } from './help/IncomeTokenHelp'
+import { VpTokenHelp } from './help/ScoreHelp'
+import { SealHelp } from './help/SealHelp'
 
 export class CoinDescription extends MoneyDescription<PlayerColor, MaterialType, LocationType, Coin> {
   transparency = true
   images = coinImages
+  help = CoinHelp
 
   getSize(coin: Coin): ComponentSize {
     return coin === Coin.Five ? { width: 2.32, height: 2.31 } : { width: 1.82, height: 1.82 }
@@ -58,6 +64,7 @@ export class SealDescription extends TokenDescription<PlayerColor, MaterialType,
   transparency = true
   images = sealImages
   backImage = SealBack
+  help = SealHelp
 
   /** A Seal that can be spent says so as soon as it can, like the card it lies on. */
   isMenuAlwaysVisible(): boolean {
@@ -87,6 +94,7 @@ export class IncomeTokenDescription extends TokenDescription<PlayerColor, Materi
   transparency = true
   images = incomeTokenImages
   backImages = incomeTokenBacks
+  help = IncomeTokenHelp
 }
 
 export class BonusTokenDescription extends TokenDescription<PlayerColor, MaterialType, LocationType, BonusToken> {
@@ -119,6 +127,7 @@ export class VpTokenDescription extends TokenDescription<PlayerColor, MaterialTy
   transparency = true
   images = vpTokenImages
   backImages = vpTokenBacks
+  help = VpTokenHelp
 
   /** The 25 and the 75 are the sides a token starts on: `rotation` is it turned to 50 or 100. */
   isFlipped(item: Partial<MaterialItem<PlayerColor, LocationType>>): boolean {
@@ -131,4 +140,5 @@ export class FirstPlayerTokenDescription extends TokenDescription<PlayerColor, M
   height = 5.7
   transparency = true
   image = FirstPlayerToken
+  help = FirstPlayerTokenHelp
 }

@@ -280,6 +280,7 @@
       "untellable": "Valeur de récit 0 : vous ne pouvez pas raconter cette Rencontre, sauf si vous réussissez à en augmenter la valeur (Potion de charisme, Seren) ou pour valider la Quête Tournoi des Bardes."
     },
     "income-token": {
+      "name": "Jeton Revenu",
       "note": "Jeton Revenu : après avoir résolu une Rencontre qui porte un jeton Revenu, placez-le sur votre plateau personnel et résolvez immédiatement son effet. Vous le résoudrez également lors de la phase de Revenu, en Automne. Le nombre de jetons Revenu n'est pas limité."
     },
     "encounter-deck": {
@@ -438,6 +439,38 @@
     },
     "bonus-token": {
       "name": "Jeton Bonus"
+    },
+    "season-marker": {
+      "name": "Marqueur Saison",
+      "season": "Saison",
+      "change": "Changer de saison"
+    },
+    "score-marker": {
+      "name": "Marqueur de score",
+      "vp": "Score"
+    },
+    "vp-token": {
+      "name": "Jeton PV",
+      "side": "Face visible"
+    },
+    "quest-marker": {
+      "name": "Marqueur Quête Héroïque"
+    },
+    "coin": {
+      "name": "Pièces",
+      "owned": "Total",
+      "text": "Chaque joueur démarre la partie avec 8 pièces. Les pièces forment une réserve générale et sont considérées illimitées."
+    },
+    "seal": {
+      "name": "Jeton Sceau",
+      "value": "Valeur",
+      "building": "Le coût ou l'effet de certains Bâtiments dépend de la valeur d'un jeton Sceau. Vous ne pouvez exploiter un tel Bâtiment que s'il reste au moins un jeton sur la carte. Dans ce cas, choisissez l'un des jetons, utilisez sa valeur pour l'activation, et défaussez-le. Une carte Bâtiment reste au Village même s'il n'y a plus de jetons dessus.",
+      "item": "Si vous achetez un Objet sur lequel est placé un jeton Sceau représentant une valeur de PV, ceux-ci sont marqués immédiatement.",
+      "stack": "Les jetons Sceau sont placés face cachée près du plateau principal. S'il n'y a plus assez de jetons, mélangez la défausse et formez une nouvelle pile face cachée."
+    },
+    "first-player": {
+      "name": "Jeton 1er joueur",
+      "text": "Les joueurs effectuent leurs actions une par une et à tour de rôle en sens horaire, à partir du 1er joueur de chaque année, jusqu'à ce qu'ils soient tous arrivés en Automne."
     },
     "skill": {
       "force": "Force",

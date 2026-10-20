@@ -280,6 +280,7 @@
       "untellable": "Valore narrativo 0: non potete raccontare questo Incontro, a meno che non riusciate ad aumentarne il valore (Charisma potion, Seren) o per completare la Missione Torneo dei Bardi."
     },
     "income-token": {
+      "name": "Segnalino Rendita",
       "note": "Segnalino Rendita: dopo aver risolto un Incontro che porta un segnalino Rendita, collocatelo sulla vostra plancia personale e risolvetene subito l'effetto. Lo risolverete di nuovo durante la fase di Rendita, in Autunno. Il numero di segnalini Rendita non è limitato."
     },
     "encounter-deck": {
@@ -438,6 +439,38 @@
     },
     "bonus-token": {
       "name": "Segnalino Bonus"
+    },
+    "season-marker": {
+      "name": "Segnalino Stagione",
+      "season": "Stagione",
+      "change": "Cambiare stagione"
+    },
+    "score-marker": {
+      "name": "Segnalino punteggio",
+      "vp": "Punteggio"
+    },
+    "vp-token": {
+      "name": "Segnalino PV",
+      "side": "Faccia visibile"
+    },
+    "quest-marker": {
+      "name": "Segnalino Missione Eroica"
+    },
+    "coin": {
+      "name": "Monete",
+      "owned": "Totale",
+      "text": "Ogni giocatore inizia la partita con 8 monete. Le monete formano una riserva generale e sono considerate illimitate."
+    },
+    "seal": {
+      "name": "Segnalino Sigillo",
+      "value": "Valore",
+      "building": "Il costo o l'effetto di alcuni Edifici dipende dal valore di un segnalino Sigillo. Potete sfruttare un Edificio di questo tipo solo se sulla carta resta almeno un segnalino. In tal caso, scegliete uno dei segnalini, usatene il valore per l'attivazione e scartatelo. Una carta Edificio resta nel Villaggio anche se non vi restano più segnalini.",
+      "item": "Se acquistate un Oggetto su cui è piazzato un segnalino Sigillo che rappresenta un valore in PV, questi vengono segnati immediatamente.",
+      "stack": "I segnalini Sigillo vengono piazzati a faccia in giù vicino al tabellone principale. Se non ci sono più abbastanza segnalini, mescolate gli scarti e formate una nuova pila a faccia in giù."
+    },
+    "first-player": {
+      "name": "Segnalino 1° giocatore",
+      "text": "I giocatori svolgono le loro azioni una alla volta, a turno e in senso orario, a partire dal 1° giocatore di ogni anno, finché non hanno tutti raggiunto l'Autunno."
     },
     "skill": {
       "force": "Forza",

@@ -280,6 +280,7 @@
       "untellable": "Valor narrativo 0: no puedes contar este Encuentro, salvo que consigas aumentar su valor (Charisma potion, Seren) o para completar la Misión Torneo de Bardos."
     },
     "income-token": {
+      "name": "Ficha de Ingresos",
       "note": "Ficha de Ingresos: después de resolver un Encuentro que lleve una ficha de Ingresos, colócala en tu tablero personal y resuelve su efecto de inmediato. También la resolverás durante la fase de Ingresos, en Otoño. El número de fichas de Ingresos no está limitado."
     },
     "encounter-deck": {
@@ -438,6 +439,38 @@
     },
     "bonus-token": {
       "name": "Ficha de Bonificación"
+    },
+    "season-marker": {
+      "name": "Marcador de Estación",
+      "season": "Estación",
+      "change": "Cambiar de estación"
+    },
+    "score-marker": {
+      "name": "Marcador de puntuación",
+      "vp": "Puntuación"
+    },
+    "vp-token": {
+      "name": "Ficha de PV",
+      "side": "Cara visible"
+    },
+    "quest-marker": {
+      "name": "Marcador de Misión Heroica"
+    },
+    "coin": {
+      "name": "Monedas",
+      "owned": "Total",
+      "text": "Cada jugador empieza la partida con 8 monedas. Las monedas forman una reserva general y se consideran ilimitadas."
+    },
+    "seal": {
+      "name": "Ficha de Sello",
+      "value": "Valor",
+      "building": "El coste o el efecto de algunos Edificios depende del valor de una ficha de Sello. Solo puedes explotar un Edificio así si queda al menos una ficha en la carta. En ese caso, elige una de las fichas, usa su valor para la activación y descártala. Una carta de Edificio permanece en la Aldea aunque ya no le queden fichas.",
+      "item": "Si compras un Objeto sobre el que hay una ficha de Sello que representa un valor de PV, estos se anotan inmediatamente.",
+      "stack": "Las fichas de Sello se colocan boca abajo cerca del tablero principal. Si no quedan suficientes fichas, baraja el descarte y forma una nueva pila boca abajo."
+    },
+    "first-player": {
+      "name": "Ficha de Jugador inicial",
+      "text": "Los jugadores realizan sus acciones de una en una y por turnos en el sentido de las agujas del reloj, empezando por el jugador inicial de cada año, hasta que todos hayan llegado al Otoño."
     },
     "skill": {
       "force": "Fuerza",

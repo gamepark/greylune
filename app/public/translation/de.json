@@ -280,6 +280,7 @@
       "untellable": "Erzählwert 0: Du kannst diese Begegnung nicht erzählen, es sei denn, du erhöhst ihren Wert (Charisma potion, Seren) oder um die Quest Bardenturnier zu erfüllen."
     },
     "income-token": {
+      "name": "Einkommensplättchen",
       "note": "Einkommensplättchen: Nachdem du eine Begegnung mit einem Einkommensplättchen abgehandelt hast, lege es auf dein Spielertableau und handle seinen Effekt sofort ab. Du handelst ihn zudem in der Einkommensphase im Herbst erneut ab. Die Anzahl der Einkommensplättchen ist nicht begrenzt."
     },
     "encounter-deck": {
@@ -438,6 +439,38 @@
     },
     "bonus-token": {
       "name": "Bonusplättchen"
+    },
+    "season-marker": {
+      "name": "Jahreszeitenmarker",
+      "season": "Jahreszeit",
+      "change": "Jahreszeit wechseln"
+    },
+    "score-marker": {
+      "name": "Siegpunktmarker",
+      "vp": "Punktestand"
+    },
+    "vp-token": {
+      "name": "SP-Plättchen",
+      "side": "Sichtbare Seite"
+    },
+    "quest-marker": {
+      "name": "Heldenquest-Marker"
+    },
+    "coin": {
+      "name": "Münzen",
+      "owned": "Gesamt",
+      "text": "Jeder Spieler beginnt die Partie mit 8 Münzen. Die Münzen bilden einen allgemeinen Vorrat und gelten als unbegrenzt."
+    },
+    "seal": {
+      "name": "Siegelplättchen",
+      "value": "Wert",
+      "building": "Die Kosten oder der Effekt mancher Gebäude hängen vom Wert eines Siegelplättchens ab. Du kannst ein solches Gebäude nur nutzen, wenn noch mindestens ein Plättchen auf der Karte liegt. Wähle in diesem Fall eines der Plättchen, nutze seinen Wert für die Aktivierung und wirf es ab. Eine Gebäudekarte bleibt im Dorf, auch wenn keine Plättchen mehr darauf liegen.",
+      "item": "Kaufst du einen Gegenstand, auf dem ein Siegelplättchen mit einem SP-Wert liegt, werden diese SP sofort gewertet.",
+      "stack": "Die Siegelplättchen werden verdeckt neben den Spielplan gelegt. Sind nicht mehr genug Plättchen vorhanden, mische den Ablagestapel und bilde daraus einen neuen verdeckten Stapel."
+    },
+    "first-player": {
+      "name": "Startspielerplättchen",
+      "text": "Die Spieler führen ihre Aktionen nacheinander im Uhrzeigersinn aus, beginnend mit dem Startspieler des jeweiligen Jahres, bis alle den Herbst erreicht haben."
     },
     "skill": {
       "force": "Stärke",

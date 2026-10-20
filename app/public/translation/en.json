@@ -280,6 +280,7 @@
       "untellable": "Storytelling value 0: you may not tell this Encounter, unless you increase its value (Charisma potion, Seren) or to complete the Bards' Tournament Quest."
     },
     "income-token": {
+      "name": "Income token",
       "note": "Income token: after resolving an Encounter card with an Income token, place it on your player board and immediately resolve its effect. You also resolve it again during the Income step in Autumn. The number of Income tokens is not limited."
     },
     "encounter-deck": {
@@ -438,6 +439,38 @@
     },
     "bonus-token": {
       "name": "Bonus token"
+    },
+    "season-marker": {
+      "name": "Season marker",
+      "season": "Season",
+      "change": "Change season"
+    },
+    "score-marker": {
+      "name": "Score marker",
+      "vp": "Score"
+    },
+    "vp-token": {
+      "name": "VP token",
+      "side": "Face up"
+    },
+    "quest-marker": {
+      "name": "Heroic Quest marker"
+    },
+    "coin": {
+      "name": "Coins",
+      "owned": "Total",
+      "text": "Each player starts the game with 8 coins. The coins form a general supply and are considered unlimited."
+    },
+    "seal": {
+      "name": "Seal token",
+      "value": "Value",
+      "building": "The cost or effect of some Buildings depends on the value of a Seal token. You can only exploit such a Building if at least one token remains on the card. In that case, choose one of the tokens, use its value for the activation, and discard it. A Building card stays in the Village even if there are no tokens left on it.",
+      "item": "If you buy an Item on which a Seal token showing a VP value is placed, those VP are scored immediately.",
+      "stack": "The Seal tokens are placed face down near the main board. If there are not enough tokens left, shuffle the discard pile to form a new face-down pile."
+    },
+    "first-player": {
+      "name": "1st Player token",
+      "text": "Players take their actions one at a time, in turn and clockwise, starting with the 1st player of each year, until they have all reached Autumn."
     },
     "skill": {
       "force": "Strength",

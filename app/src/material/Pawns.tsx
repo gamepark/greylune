@@ -27,6 +27,9 @@ import { camp, isActivateCard, isGainCoinsAround, slotOfCard, villagerActionData
 import { SelectedVillager } from '../villagers/SelectedVillager'
 import { adventurerImages, MagicMarker, questMarkerImages, scoreMarkerImages, seasonMarkerImages, StrengthMarker, villagerImages } from '../images/PawnImages'
 import { AdventurerHelp } from './help/AdventurerHelp'
+import { QuestMarkerHelp } from './help/QuestMarkerHelp'
+import { ScoreMarkerHelp } from './help/ScoreHelp'
+import { SeasonMarkerHelp } from './help/SeasonMarkerHelp'
 import { MagicMarkerHelp, StrengthMarkerHelp } from './help/SkillMarkerHelp'
 import { VillagerHelp } from './help/VillagerHelp'
 
@@ -173,6 +176,7 @@ export class SeasonMarkerDescription extends TokenDescription<PlayerColor, Mater
   borderRadius = 1
   transparency = true
   images = seasonMarkerImages
+  help = SeasonMarkerHelp
   soundKit = SoundKit.Wood
 
   /** The pawn is aimed at to be walked, so the offer it wears has to be read without taking it. */
@@ -204,6 +208,7 @@ export class ScoreMarkerDescription extends TokenDescription<PlayerColor, Materi
   height = 1.95
   transparency = true
   images = scoreMarkerImages
+  help = ScoreMarkerHelp
   soundKit = SoundKit.Wood
 }
 
@@ -212,6 +217,7 @@ export class QuestMarkerDescription extends TokenDescription<PlayerColor, Materi
   height = 1.65
   transparency = true
   images = questMarkerImages
+  help = QuestMarkerHelp
   soundKit = SoundKit.Wood
 }
 
