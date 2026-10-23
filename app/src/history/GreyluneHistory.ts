@@ -157,8 +157,11 @@ export class GreyluneHistory implements LogDescription<GreyluneMove, PlayerColor
       case CustomMoveType.UseItem:
         return this.entry(UseItemLog, player)
       // Selia names the value of the Seal: nothing on the table says it, the token being in the discard.
-      case CustomMoveType.ChooseAbility:
-        return (move.data as ChooseAbilityData).value !== undefined ? this.entry(SealValueLog, player, 1) : undefined
+      // The Seal an Object is bought with is named with its printed value, and logged as it is discarded.
+      case CustomMoveType.ChooseAbility: {
+        const data = move.data as ChooseAbilityData
+        return data.value !== undefined && data.seal === undefined ? this.entry(SealValueLog, player, 1) : undefined
+      }
       case CustomMoveType.ChooseEncounter:
         return this.entry(EncounterLog, player, 1)
       case CustomMoveType.SkipEncounter:

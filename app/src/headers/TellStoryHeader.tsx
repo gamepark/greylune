@@ -19,7 +19,7 @@ export const TellStoryHeader = () => {
   const rules = useRules<GreyluneRules>()!
   const end = useLegalMove(isCustomMoveType(CustomMoveType.Pass))
   const rule = new TellStoryRule(rules.game)
-  if (rule.sealSpent) return <SealValueHeader />
+  if (rule.sealSpent && rule.costReduction.freeSealValue) return <SealValueHeader />
   if (rule.over) return <HeaderText code="activate-seal" />
   if (!rule.told.length) return <HeaderText code="start-story" />
   return (

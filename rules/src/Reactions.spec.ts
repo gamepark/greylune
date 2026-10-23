@@ -571,7 +571,42 @@ describe('Selia', () => {
     expect(playerCoins(rules(), BLUE)).toBe(0)
     expect(playerMagic(rules(), BLUE)).toBe(1)
   })
+
+  it('answers the Seal an Object is bought with, and lets the player name the points it is worth', () => {
+    const selia = give(VillageCard.Selia)
+    const { potion, seal } = buyCharismaPotion(Seal.One)
+    expect(sealLocation(seal)).toBe(LocationType.SealDiscard)
+    expect(game.rule!.id).toBe(RuleId.Reaction)
+    useReaction(selia)
+    expect(game.rule!.id).toBe(RuleId.ActivateCard)
+    playCustom(CustomMoveType.ChooseAbility, (data: { value: number }) => data.value === 3)
+    expect(playerCoins(rules(), BLUE)).toBe(0)
+    expect(playerVp(rules(), BLUE)).toBe(3)
+    expect(items(MaterialType.VillageCard)[potion].location.type).toBe(LocationType.Items)
+    expect(items(MaterialType.VillageCard)[selia].location.rotation).toBe(true)
+  })
+
+  it('leaves the Seal of an Object at its printed value when the player passes', () => {
+    const selia = give(VillageCard.Selia)
+    const { potion } = buyCharismaPotion(Seal.Two)
+    playCustom(CustomMoveType.Pass)
+    expect(playerVp(rules(), BLUE)).toBe(2)
+    expect(items(MaterialType.VillageCard)[potion].location.type).toBe(LocationType.Items)
+    expect(items(MaterialType.VillageCard)[selia].location.rotation).toBeFalsy()
+  })
 })
+
+/** Charisma potion, alone in the Village with a Villager of Blue beside it and 3 coins to buy it with. */
+const buyCharismaPotion = (value: Seal): { potion: number; seal: number } => {
+  const potion = placeCard(VillageCard.CharismaPotion, 0, 0)
+  const [seal] = laySeals(potion, value)
+  const villager = standVillager(BLUE, 0.5, 0)
+  setCoins(BLUE, 3)
+  items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+  game.rule = { id: RuleId.Summer, player: BLUE }
+  playCustom(CustomMoveType.ActivateCard, (data: { villager: number }) => data.villager === villager)
+  return { potion, seal }
+}
 
 describe('The Potions', () => {
   it('lends 2 Force for the length of an adventure, and is emptied for good', () => {

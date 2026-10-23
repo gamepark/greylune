@@ -40,6 +40,10 @@ export type ChooseAbilityData = { ability?: number; seal?: number; value?: numbe
  * p.8), so that is the move: the token goes from the card to the discard, and the rest follows. Selia
  * answers that move and not the choice before it — her card reads "when you activate a Seal token" —
  * so her window opens once the token is gone, and the activation comes back here to finish.
+ *
+ * An Object that carries a Seal spends it on being bought, and Selia answers that Seal too. When she
+ * can, the purchase takes the Seal to the discard on its own first, so that her window opens on it the
+ * way it does on a Building's, and the purchase is finished once the window has closed.
  */
 export class ActivateCardRule extends GreyluneRule {
   get card(): number {
@@ -100,7 +104,12 @@ export class ActivateCardRule extends GreyluneRule {
     return this.isBuilding ? (this.data.abilities ?? []).findIndex((ability) => usesSeal(ability.requirements)) : -1
   }
 
-  /** The Seal of the Building has left the card: the activation is past choosing, and is finishing. */
+  /** What the Seal is spent on: the option of a Building, or the purchase of an Object, which has none. */
+  private get sealOption(): ChooseAbilityData {
+    return this.isBuilding ? { ability: this.sealAbility } : {}
+  }
+
+  /** The Seal has left the card: the activation is past choosing, and is finishing. */
   get sealSpent(): boolean {
     return this.remind<number>(Memory.SealValue) !== undefined
   }
@@ -109,7 +118,7 @@ export class ActivateCardRule extends GreyluneRule {
    * Back from Selia's window, or with nothing left to choose: the activation goes on without a click.
    */
   onRuleStart(): GreyluneMove[] {
-    if (this.sealSpent) return this.costReduction.freeSealValue ? this.onlyValue() : this.activate({ ability: this.sealAbility })
+    if (this.sealSpent) return this.costReduction.freeSealValue ? this.onlyValue() : this.activate(this.sealOption)
     const moves = this.abilityMoves()
     return moves.length === 1 ? moves : []
   }
@@ -148,9 +157,9 @@ export class ActivateCardRule extends GreyluneRule {
       .moveItems({ type: LocationType.SealDiscard })
   }
 
-  /** Whether the option of the Building is still within reach with its Seal spent at that value. */
+  /** Whether the option of the Building, or the Object, is still within reach with its Seal spent at that value. */
   private canPaySealAt(value: Seal): boolean {
-    const requirements = this.data.abilities?.[this.sealAbility]?.requirements ?? []
+    const requirements = (this.isBuilding ? this.data.abilities?.[this.sealAbility]?.requirements : this.data.immediate?.requirements) ?? []
     const needsCoins = requirements.some((requirement) => requirement.type === RequirementType.SealCoins)
     return !needsCoins || this.coins - this.price >= value
   }
@@ -159,7 +168,7 @@ export class ActivateCardRule extends GreyluneRule {
   private sealValueMoves(): GreyluneMove[] {
     return [Seal.One, Seal.Two, Seal.Three]
       .filter((value) => this.canPaySealAt(value))
-      .map((value) => this.customMove(CustomMoveType.ChooseAbility, { ability: this.sealAbility, value }))
+      .map((value) => this.customMove(CustomMoveType.ChooseAbility, { ...this.sealOption, value }))
   }
 
   /** A value is only named for the player when it is the only one they can pay. */
@@ -168,13 +177,17 @@ export class ActivateCardRule extends GreyluneRule {
     return moves.length === 1 ? moves : []
   }
 
-  /** An Object is dealt a single Seal and it goes with the Object, spent at the value printed on it. */
-  private purchaseVariants(): { seal?: number; value?: number }[] {
+  /**
+   * An Object is dealt a single Seal and it goes with the Object, spent at the value printed on it. When
+   * Selia can answer it, no value is named yet: the Seal is spent on its own (see {@link afterItemMove}).
+   */
+  private purchaseVariants(): ChooseAbilityData[] {
     if (!usesSeal(this.data.immediate?.requirements)) return [{}]
+    const selia = this.reactionChoices([TriggerType.ActivateSeal]).length > 0
     return this.seals
       .limit(1)
       .getIndexes()
-      .map((seal) => ({ seal, value: this.material(MaterialType.Seal).getItem<Seal>(seal).id }))
+      .map((seal) => (selia ? { seal } : { seal, value: this.material(MaterialType.Seal).getItem<Seal>(seal).id }))
   }
 
   /**
@@ -206,23 +219,31 @@ export class ActivateCardRule extends GreyluneRule {
   }
 
   onCustomMove(move: CustomMove): GreyluneMove[] {
-    if (isCustomMoveType(CustomMoveType.ChooseAbility)(move)) return this.activate(move.data as ChooseAbilityData)
+    if (isCustomMoveType(CustomMoveType.ChooseAbility)(move)) {
+      const data = move.data as ChooseAbilityData
+      if (data.seal !== undefined && data.value === undefined) {
+        return [this.material(MaterialType.Seal).index(data.seal).moveItem({ type: LocationType.SealDiscard })]
+      }
+      return this.activate(data)
+    }
     return super.onCustomMove(move)
   }
 
   /**
-   * The Seal of a Building has just been taken off it: it is spent at the value printed on it, unless
-   * Selia steps in. When that value is more than the player can pay, the Seal could only have been
-   * offered because of her (see {@link sealMoves}), so she is tilted without asking.
+   * The Seal of a Building, or of an Object Selia can answer, has just been taken off it: it is spent
+   * at the value printed on it, unless Selia steps in. When that value is more than the player can pay,
+   * the Seal could only have been offered because of her (see {@link sealMoves}), so she is tilted
+   * without asking. The Seal of an Object bought at its printed value goes with the purchase, its value
+   * already named.
    */
   afterItemMove(move: ItemMove): GreyluneMove[] {
     if (isMoveItemType(MaterialType.VillageCard)(move) && move.itemIndex === this.card) return this.afterTake()
-    if (!isMoveItemType(MaterialType.Seal)(move) || move.location.type !== LocationType.SealDiscard || !this.isBuilding) return []
+    if (!isMoveItemType(MaterialType.Seal)(move) || move.location.type !== LocationType.SealDiscard || this.sealSpent) return []
     const value = this.material(MaterialType.Seal).getItem<Seal>(move.itemIndex).id
     this.memorize(Memory.SealValue, value)
     const selia = this.reactionChoices([TriggerType.ActivateSeal])
     if (!this.canPaySealAt(value)) return [...this.useReaction(selia[0].card, selia[0].option), ...this.onlyValue()]
-    if (!selia.length) return this.activate({ ability: this.sealAbility })
+    if (!selia.length) return this.activate(this.sealOption)
     return this.openReactions([TriggerType.ActivateSeal], RuleId.ActivateCard)
   }
 

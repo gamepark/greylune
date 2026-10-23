@@ -23,7 +23,7 @@ const names = (value: Seal) => (move: MaterialMove) =>
 export const ActivateCardHeader = () => {
   const rules = useRules<GreyluneRules>()!
   const rule = new ActivateCardRule(rules.game)
-  if (rule.sealSpent) return <SealValueHeader />
+  if (rule.sealSpent && rule.costReduction.freeSealValue) return <SealValueHeader />
   return <HeaderText code={rule.sealAbility >= 0 ? 'activate-seal' : 'activate-card'} />
 }
 
