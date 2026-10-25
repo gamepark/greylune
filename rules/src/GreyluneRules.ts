@@ -13,7 +13,7 @@ import {
 } from '@gamepark/rules-api'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
-import { playerVp } from './material/PlayerState'
+import { activeVillagers, playerSeason, playerVp, villagersInVillage } from './material/PlayerState'
 import { PlayerColor } from './PlayerColor'
 import { ActivateCardRule } from './rules/ActivateCardRule'
 import { AutumnRule } from './rules/AutumnRule'
@@ -38,6 +38,7 @@ import { TellStoryRule } from './rules/TellStoryRule'
 import { TravelRule } from './rules/TravelRule'
 import { UseItemRule } from './rules/UseItemRule'
 import { WinterRule } from './rules/WinterRule'
+import { Season } from './Season'
 
 /**
  * The Event tile of the current year is the one on top of the pile, turned face up: nothing is moved
@@ -199,7 +200,17 @@ export class GreyluneRules
     return playerVp(this, player) + scoreStillToCount(this, player, this.game.rule?.id)
   }
 
-  giveTime(): number {
-    return 60
+  /**
+   * The platform adds time when a player becomes active, and the last player out of Autumn never stops
+   * being active: the turn keeps coming back to them until the year is over. So the time of all their
+   * remaining turns is given at once, when they become that last player — 30 seconds for each action a
+   * Villager still has to make: an active one is placed in Spring and taken back in Summer, one
+   * already standing in the Village only has to be taken back.
+   */
+  giveTime(player: PlayerColor): number {
+    const stillPlaying = this.game.players.filter((other) => playerSeason(this, other) !== Season.Autumn)
+    const alone = stillPlaying.length === 1 && stillPlaying[0] === player
+    if (!alone) return 60
+    return 60 + 30 * (2 * activeVillagers(this, player).length + villagersInVillage(this, player).length)
   }
 }
