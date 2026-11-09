@@ -143,7 +143,8 @@ const notes = (data: VillageCardData, type: VillageCardType): string[] => {
   const keys = [`help.type.${type}.note`]
   if (isTavern(data)) keys.push('help.tell-story.note')
   if (data.potion) keys.push('help.potion.note')
-  if (data.seals === PLAYERS_MINUS_ONE) keys.push('help.seals.note-players')
+  if (data.seals !== undefined && isTavern(data)) keys.push('help.seals.note-tavern')
+  else if (data.seals === PLAYERS_MINUS_ONE) keys.push('help.seals.note-players')
   else if (data.seals !== undefined) keys.push('help.seals.note-one')
   return keys
 }

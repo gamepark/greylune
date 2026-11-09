@@ -233,7 +233,7 @@
     "type": {
       "1": {
         "name": "Gebäude",
-        "note": "Ein Gebäude kann weder gekauft noch angeworben werden: Es bleibt nach seiner Aktivierung im Dorf und kann von anderen benachbarten Dorfbewohnern genutzt werden, auch von einem Spieler, der es bereits aktiviert hat. Es kann im Laufe eines Jahres mehrmals aktiviert werden."
+        "note": "Ein Gebäude bleibt nach seiner Aktivierung im Dorf und kann von anderen benachbarten Dorfbewohnern genutzt werden, auch von einem Spieler, der es bereits aktiviert hat. Es kann mehrmals aktiviert werden."
       },
       "2": {
         "name": "Gegenstand",
@@ -241,7 +241,7 @@
       },
       "3": {
         "name": "Gefährte",
-        "note": "Einen Gefährten anzuwerben kostet 7 <coin/>; er wird links neben dein Spielertableau gelegt. Er bringt dir 1 <villager>Dorfbewohner</villager>, der sofort verfügbar ist, verringert aber dein Einkommen im Herbst um eine Münze. Du kannst im Laufe der Partie nie mehr als 3 Gefährten anwerben."
+        "note": "Einen Gefährten anzuwerben kostet 7 <coin/>; er wird links neben dein Spielertableau gelegt. Er bringt dir 1 aktiven <villager>Dorfbewohner</villager>, verringert aber dein Einkommen im Herbst um eine Münze. Du kannst im Laufe der Partie nie mehr als 3 Gefährten anwerben."
       }
     },
     "tavern": {
@@ -249,7 +249,7 @@
     },
     "tell-story": {
       "name": "Eine Geschichte erzählen",
-      "note": "Erzähle eine Geschichte mithilfe einer oder mehrerer zuvor abgehandelter Begegnungskarten, ohne einen Erzählwert von höchstens 3 zu überschreiten — Ausnahme: 2 Geschichten mit einem Erzählwert von je 2 zählen nur als eine Geschichte mit Wert 3. Die Belohnungen sind kumulativ: Bei einem gesamten Erzählwert von 1 erhältst du nur den ersten Bonus, bei 2 die ersten beiden, bei 3 alle Boni."
+      "note": "Erzähle eine Geschichte mithilfe einer oder mehrerer zuvor abgehandelter Begegnungskarten, ohne einen Erzählwert von höchstens 3 zu überschreiten. Erzählst du eine Geschichte mit mehreren Begegnungskarten, müssen alle Karten zur Belohnung beitragen: Karten mit Wert 3 können nur allein verwendet werden, aber du darfst zwei Karten mit Wert 2 für einen Erzählwert von 3 verwenden. Die Belohnungen sind kumulativ: Bei einem gesamten Erzählwert von 1 erhältst du nur den ersten Bonus, bei 2 die ersten beiden, bei 3 alle Boni."
     },
     "potion": {
       "name": "Trank",
@@ -258,8 +258,9 @@
     "seals": {
       "label": "Siegel",
       "none": "keine",
-      "spent": "Auf dieser Karte liegt kein <seal/>-Plättchen mehr: Sie kann in diesem Jahr nicht mehr aktiviert werden.",
+      "spent": "Auf dieser Karte liegt kein <seal/>-Plättchen mehr: Sie kann nicht mehr aktiviert werden.",
       "note-players": "Beim Aufdecken erhält diese Karte so viele <seal/>-Plättchen, wie Spieler teilnehmen, minus 1. Jede Aktivierung verbraucht eines davon, das danach abgeworfen wird.",
+      "note-tavern": "Beim Aufdecken erhält diese Taverne so viele <seal/>-Plättchen, wie Spieler teilnehmen, minus 1. Wird der Erzählwert der <seal/>-Belohnung erreicht, wirf ein Plättchen ab und erhalte so viele SP oder <coin/>, wie es wert ist. Liegen keine Plättchen mehr auf diesem Gebäude, kannst du die Taverne trotzdem nutzen, um die anderen Belohnungen zu erhalten.",
       "note-one": "Beim Aufdecken erhält diese Karte unabhängig von der Spielerzahl nur ein <seal/>-Plättchen."
     },
     "village-deck": {
@@ -275,9 +276,9 @@
     "encounter": {
       "name": "Begegnung",
       "note": "Eine Begegnungskarte wird auf dem Feld abgehandelt, auf dem dein <adventurer>Abenteurer</adventurer> stehen geblieben ist, indem du ihre Voraussetzung erfüllst, um ihre Belohnung zu erhalten. Schiebe sie danach in die Spalte der unerzählten Geschichten deines Spielertableaus.",
-      "both": "Diese Begegnung hat 2 Voraussetzungen und 2 Belohnungen: Du musst mindestens eine der beiden erfüllen, um sie abzuhandeln. Erfüllst du nur die linke Voraussetzung, erhältst du nur die linke Belohnung; du kannst auch beide Voraussetzungen erfüllen, um beide Belohnungen zu erhalten.",
+      "both": "Diese Begegnung hat 2 Voraussetzungen und 2 Belohnungen: Du musst mindestens eine der beiden erfüllen, um sie abzuhandeln und die entsprechende Belohnung zu erhalten (die linke für die linke Voraussetzung, die rechte für die rechte). Lege zu Beginn der Begegnung fest, welche Voraussetzung(en) du erfüllen willst: Um beide Belohnungen zu erhalten, musst du beide Voraussetzungen schon zu Beginn der Begegnung erfüllen, und du kannst keine Belohnung nutzen, um die andere Voraussetzung zu erfüllen. Ariok und der Invisibility potion können nur eine der beiden Voraussetzungen ignorieren.",
       "story-only": "Diese Begegnung hat keine Belohnung: Sie bringt nur etwas, wenn du sie erzählst.",
-      "untellable": "Erzählwert 0: Du kannst diese Begegnung nicht erzählen, es sei denn, du erhöhst ihren Wert (Charisma potion, Seren) oder um die Quest Bardenturnier zu erfüllen."
+      "untellable": "Erzählwert 0: Du kannst diese Begegnung nicht erzählen, es sei denn, du erhöhst ihren Wert (Charisma potion, Seren). Für die Quest Bardenturnier kann sie trotzdem verwendet werden."
     },
     "income-token": {
       "name": "Einkommensplättchen",
@@ -293,7 +294,7 @@
     "event": {
       "name": "Ereignis",
       "note": "Einmal pro Jahr, im Frühling oder im Sommer, kannst du als Aktion am Ereignis teilnehmen: Platziere einen deiner aktiven <villager>Dorfbewohner</villager> — oder im Sommer einen von denen, die sich im Dorf befinden — auf das Ereignisplättchen; du musst es aktivieren können (ggf. die Kosten bezahlen), um seine Vorteile zu erhalten.",
-      "festival": "Fest: Wähle ein freies Feld des Plättchens und erhalte die 2 angrenzenden Boni. Dein <villager>Dorfbewohner</villager> bleibt dort bis zum Herbst."
+      "festival": "Fest: Stelle deinen <villager>Dorfbewohner</villager> auf ein freies Feld des Plättchens und erhalte die 2 angrenzenden Boni. Wenn du auf Abenteuer gehst, handle zuerst den anderen Effekt ab. Dein Dorfbewohner bleibt dort bis zum Herbst: Ein im Herbst frei gewordenes Feld kann von einem anderen Spieler erneut genutzt werden."
     },
     "event-pile": {
       "name": "Ereignisstapel",
@@ -304,18 +305,18 @@
       "name": "Heldenquest",
       "first": "Für den Ersten",
       "others": "Für die Folgenden",
-      "note": "Ist dein <adventurer>Abenteurer</adventurer> auf dem Feld einer Heldenquest stehen geblieben, kannst du beschließen, keine Begegnung abzuhandeln, um stattdessen die Quest zu erfüllen, sofern du sie noch nicht erfüllt hast und ihre Bedingungen erfüllst. Bist du der erste Spieler, der dies tut, lege einen deiner Questmarker auf den Platz, der bei Spielende die meisten SP bringt; andernfalls lege ihn auf den Platz daneben: Auf diesem Platz können mehrere Marker (verschiedener Spieler) liegen.",
+      "note": "Ist dein <adventurer>Abenteurer</adventurer> auf dem Feld einer Heldenquest stehen geblieben, kannst du beschließen, keine Begegnung abzuhandeln, um stattdessen die Quest zu erfüllen, sofern du sie noch nicht erfüllt hast und ihre Voraussetzungen erfüllst. Bist du der erste Spieler, der dies tut, lege einen deiner Questmarker auf den linken Platz, der bei Spielende die meisten SP bringt; andernfalls lege ihn auf den Platz daneben: Auf diesem Platz können mehrere Marker (verschiedener Spieler) liegen. Du kannst eine Quest wählen, ob Begegnungen verfügbar sind oder nicht.",
       "score": "Du kannst jede Quest nur einmal erfüllen. Ihre SP werden erst bei Spielende, nach dem fünften Jahr, hinzugezählt."
     },
     "player-board": {
       "name": "Spielertableau",
       "companions": {
         "name": "Gefährten",
-        "text": "Deine Gefährten werden links neben dein Spielertableau gelegt. Ihre Reaktionsfähigkeit unten auf der Karte erfordert, sie zu erschöpfen; ihre dauerhafte Fähigkeit ist dagegen aktiv, ob der Gefährte erschöpft ist oder nicht."
+        "text": "Deine Gefährten werden links neben dein Spielertableau gelegt. Ihre Reaktionsfähigkeit unten auf der Karte erfordert, sie zu erschöpfen; eine Reaktion ist keine eigene Aktion. Ihre dauerhafte Fähigkeit ist dagegen aktiv, ob der Gefährte erschöpft ist oder nicht."
       },
       "items": {
         "name": "Gegenstände",
-        "text": "Deine Gegenstände werden rechts neben dein Spielertableau gelegt. Die meisten haben eine Fähigkeit, deren Nutzung eine Sommeraktion erfordert und bei der die Karte erschöpft wird; Tränke müssen nach Gebrauch abgeworfen werden. Mache im Herbst alle deine Karten wieder bereit."
+        "text": "Deine Gegenstände werden rechts neben dein Spielertableau gelegt. Die meisten haben eine Fähigkeit, die als Sommeraktion genutzt werden kann, indem die Karte erschöpft wird; Tränke werden nach Gebrauch abgeworfen. Mache im Herbst alle deine Karten wieder bereit."
       },
       "stories": {
         "name": "Geschichten",
@@ -327,7 +328,7 @@
       },
       "skills": {
         "name": "Stärke und Magie",
-        "text": "Die rote Leiste zeigt deine Stärke, die blaue deine Magie: Beide Marker beginnen die Partie auf ihrem untersten Feld. Karten und Quests verlangen mal, mindestens eine bestimmte Stufe an Stärke oder Magie zu haben, mal, sie auszugeben.",
+        "text": "Die rote Leiste zeigt deine Stärke, die blaue deine Magie: Beide Marker beginnen die Partie auf ihrem untersten Feld. Karten und Quests verlangen mal, mindestens eine bestimmte Stufe an Stärke oder Magie zu haben, mal, sie auszugeben. Müsstest du deinen Stärke- oder Magiemarker nach oben bewegen, obwohl er bereits auf 5 steht, erhältst du stattdessen sofort 1 SP.",
         "score": "Bei Spielende erhältst du 2 SP, wenn du mindestens 3 Stärke und 3 Magie hast, oder 5 SP, wenn du 5 Stärke und 5 Magie hast."
       },
       "special-action": {
@@ -355,7 +356,7 @@
       },
       "bonus": {
         "name": "Bonusplättchen",
-        "text": "Erreichst du 8 SP, wähle eines deiner 3 Bonusplättchen, handle seinen Effekt ab und wirf es ab. Erreichst du 20 SP, tue dasselbe mit einem deiner 2 verbleibenden Plättchen."
+        "text": "Erreichst du 8 SP, wähle eines deiner 3 Bonusplättchen, handle seinen Effekt ab und wirf es ab. Erreichst du 20 SP, tue dasselbe mit einem deiner 2 verbleibenden Plättchen. Nicht genutzte Bonusplättchen werden vor der Schlusswertung abgeworfen und können nicht mehr erhalten werden, wenn du während der Schlusswertung 8 oder 20 SP erreichst."
       },
       "village": {
         "name": "Dorf",
@@ -367,7 +368,7 @@
       },
       "stops": {
         "name": "Münze und SP",
-        "text": "Ist dein <adventurer>Abenteurer</adventurer> auf dem mit einer <coin/> markierten Feld stehen geblieben, kannst du beschließen, keine Begegnung abzuhandeln, um 1 <coin/> zu erhalten. Auf dem mit einem <vp/> markierten Feld kannst du dasselbe tun, um 1 <vp/> zu erhalten."
+        "text": "Ist dein <adventurer>Abenteurer</adventurer> auf dem mit einer <coin/> markierten Feld stehen geblieben, kannst du beschließen, keine Begegnung abzuhandeln, um 1 <coin/> zu erhalten. Auf dem mit einem <vp/> markierten Feld kannst du dasselbe tun, um 1 <vp/> zu erhalten. Du kannst diese Belohnungen wählen, ob Begegnungen verfügbar sind oder nicht."
       },
       "quests": {
         "name": "Heldenquests",
@@ -413,7 +414,7 @@
       },
       "autumn": {
         "name": "Herbst",
-        "text": "Bist du im Herbst, kannst du in diesem Jahr keine Aktionen mehr ausführen und handelst sofort diese Schritte in dieser Reihenfolge ab.",
+        "text": "Bist du im Herbst, kannst du in diesem Jahr keine Aktionen mehr ausführen und handelst sofort diese Schritte in dieser Reihenfolge ab. Der Herbst findet auch im letzten Jahr der Partie statt.",
         "0": "Schicke deinen <adventurer>Abenteurer</adventurer> ins Dorf zurück",
         "1": "Lege deine <villager>Dorfbewohner</villager> aus dem Lager, vom Ereignis und von der Sonderaktion in den Bereich der aktiven Dorfbewohner deines Spielertableaus zurück",
         "2": "Mache alle deine Karten wieder bereit",
@@ -421,7 +422,7 @@
       },
       "camp": {
         "name": "Lager",
-        "text": "Wird einer deiner <villager>Dorfbewohner</villager> genutzt und dadurch inaktiv, stelle ihn ins Lager, um anzuzeigen, dass du ihn in diesem Jahr nicht mehr nutzen kannst. Dorthin kommen auch die Dorfbewohner, die du aus deinem Bereich der aktiven Dorfbewohner ausgibst. Im Herbst kehren sie in diesen Bereich zurück."
+        "text": "Wird einer deiner <villager>Dorfbewohner</villager> aus dem Dorf entfernt oder ausgegeben, wird er inaktiv und muss ins Lager gestellt werden, um anzuzeigen, dass er in diesem Jahr nicht mehr genutzt werden kann. Ein ausgegebener Dorfbewohner wird aus deinem Bereich der aktiven Dorfbewohner genommen. Im Herbst kehren sie in diesen Bereich zurück."
       }
     },
     "villager-reserve": {
@@ -465,7 +466,7 @@
       "name": "Siegelplättchen",
       "value": "Wert",
       "building": "Die Kosten oder der Effekt mancher Gebäude hängen vom Wert eines Siegelplättchens ab. Du kannst ein solches Gebäude nur nutzen, wenn noch mindestens ein Plättchen auf der Karte liegt. Wähle in diesem Fall eines der Plättchen, nutze seinen Wert für die Aktivierung und wirf es ab. Eine Gebäudekarte bleibt im Dorf, auch wenn keine Plättchen mehr darauf liegen.",
-      "item": "Kaufst du einen Gegenstand, auf dem ein Siegelplättchen mit einem SP-Wert liegt, werden diese SP sofort gewertet.",
+      "item": "Kaufst du einen Gegenstand, auf dem ein Siegelplättchen mit einem SP-Wert liegt, werden diese SP sofort gewertet und das Plättchen wird abgeworfen.",
       "stack": "Die Siegelplättchen werden verdeckt neben den Spielplan gelegt. Sind nicht mehr genug Plättchen vorhanden, mische den Ablagestapel und bilde daraus einen neuen verdeckten Stapel."
     },
     "first-player": {
@@ -537,7 +538,7 @@
     },
     "115": {
       "name": "Library",
-      "ability": "Wirf ein <seal/>-Plättchen ab, gib so viele <coin/> aus, wie es wert ist, und erhalte 1 SP pro erzählte Geschichte."
+      "ability": "Wirf ein <seal/>-Plättchen ab, gib so viele <coin/> aus, wie es wert ist, und erhalte 1 SP pro Karte in deinem Bereich der erzählten Geschichten (unabhängig von ihrem Wert)."
     },
     "116": {
       "name": "The Scarlet Dragon",
@@ -572,12 +573,12 @@
     "206": {
       "name": "Mana potion",
       "immediate": "Wirf das <seal/>-Plättchen ab und erhalte so viele SP, wie es wert ist.",
-      "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte abwerfen, um deine Magie um 2 zu erhöhen. Diese Erhöhung ist vorübergehend und du bewegst deinen Magiemarker nicht: Du kannst diese Punkte also nicht ausgeben."
+      "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte abwerfen, um deine Magie vorübergehend um 2 zu erhöhen (bis zum Ende der Begegnung oder Quest). Du bewegst deinen Marker nicht und kannst diese Magie nicht ausgeben. Deine Magie kann vorübergehend über 5 liegen (du erhältst dafür aber keine SP)."
     },
     "207": {
       "name": "Strength potion",
       "immediate": "Wirf das <seal/>-Plättchen ab und erhalte so viele SP, wie es wert ist.",
-      "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte abwerfen, um deine Stärke um 2 zu erhöhen. Diese Erhöhung ist vorübergehend und du bewegst deinen Stärkemarker nicht: Du kannst diese Punkte also nicht ausgeben."
+      "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte abwerfen, um deine Stärke vorübergehend um 2 zu erhöhen (bis zum Ende der Begegnung oder Quest). Du bewegst deinen Marker nicht und kannst diese Stärke nicht ausgeben. Deine Stärke kann vorübergehend über 5 liegen (du erhältst dafür aber keine SP)."
     },
     "208": {
       "name": "Short sword",
@@ -618,7 +619,7 @@
     "215": {
       "name": "Flying potion",
       "immediate": "Wirf das <seal/>-Plättchen ab und erhalte so viele SP, wie es wert ist.",
-      "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte abwerfen, um deine Stärke und deine Magie um 1 zu erhöhen. Diese Erhöhung ist vorübergehend und du bewegst deine Stärke- und Magiemarker nicht: Du kannst diese Punkte also nicht ausgeben."
+      "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte abwerfen, um deine Stärke und deine Magie vorübergehend um je 1 zu erhöhen (bis zum Ende der Begegnung oder Quest). Du bewegst deine Marker nicht und kannst diese Stärke und Magie nicht ausgeben. Deine Stärke und Magie können vorübergehend über 5 liegen (du erhältst dafür aber keine SP)."
     },
     "216": {
       "name": "Bladechant",
@@ -637,7 +638,7 @@
     },
     "219": {
       "name": "Mandolin",
-      "ability": "Erschöpfe diese Karte und gib 1 <villager>Dorfbewohner</villager> aus, um 1 SP pro unerzählte Geschichte zu erzielen.",
+      "ability": "Erschöpfe diese Karte und gib 1 <villager>Dorfbewohner</villager> aus, um 1 SP pro Karte in deinem Bereich der unerzählten Geschichten zu erzielen (unabhängig von ihrem Wert).",
       "score": "5 SP."
     },
     "220": {
@@ -668,7 +669,7 @@
       "role": "Bogenschütze",
       "immediate": "Erhalte 1 <villager>Dorfbewohner</villager>.",
       "reaction": "Wenn du auf Abenteuer gehst, kannst du diese Karte erschöpfen, um deinen <adventurer>Abenteurer</adventurer> bis zu 2 zusätzliche Felder zu bewegen.",
-      "score": "1 SP pro Begegnungskarte mit einer Entfernung von 3 oder mehr vom Dorf (erzählt oder nicht)."
+      "score": "1 SP pro Begegnungskarte auf deinem Spielertableau mit einem der abgebildeten Wappen (erzählt oder nicht)."
     },
     "303": {
       "name": "Dorian",
@@ -697,7 +698,7 @@
       "name": "Neris",
       "role": "Schurkin",
       "immediate": "Erhalte 1 <villager>Dorfbewohner</villager>.",
-      "reaction": "Wenn du einen <villager>Dorfbewohner</villager> aus dem Dorf entfernst, kannst du diese Karte erschöpfen, um 2 zusätzliche <coin/> zu erhalten oder um die Zusatzkosten nicht zu bezahlen.",
+      "reaction": "Wenn du einen <villager>Dorfbewohner</villager> entfernst, um „Münzen zu erhalten“, kannst du diese Karte erschöpfen, um 2 zusätzliche <coin/> zu erhalten. Wenn du einen <villager>Dorfbewohner</villager> entfernst, um „eine Karte zu aktivieren“, kannst du diese Karte erschöpfen, um die Zusatzkosten zu ignorieren.",
       "score": "1 SP pro 2 verbleibende <coin/>."
     },
     "307": {
@@ -718,8 +719,8 @@
       "name": "Isandre",
       "role": "Klerikerin",
       "immediate": "Erhalte 1 <villager>Dorfbewohner</villager>.",
-      "reaction": "Wenn du eine deiner Karten erschöpfst, kannst du diese Karte erschöpfen, um jene bereit zu machen. Du kannst die gerade bereit gemachte Karte sofort erschöpfen, um ihren Effekt erneut auszulösen.",
-      "score": "2 SP pro Gefährte."
+      "reaction": "Wenn du eine deiner Karten erschöpfst, kannst du diese Karte erschöpfen, um jene bereit zu machen. Hat die bereit gemachte Karte einen Reaktionseffekt, kannst du sie erneut erschöpfen, um ihren Effekt erneut auszulösen.",
+      "score": "2 SP pro Gefährte, einschließlich dieser Karte."
     },
     "310": {
       "name": "Seren",
@@ -741,7 +742,7 @@
       "name": "Valley",
       "0": {
         "requirement": "Mindestens 1 <force>Stärke</force> haben",
-        "reward": "Bewege deinen <adventurer>Abenteurer</adventurer> bis zu 2 Felder"
+        "reward": "Bewege deinen <adventurer>Abenteurer</adventurer> bis zu 2 Felder (erhältst du auch die andere Belohnung, handle sie vor der Bewegung ab)"
       },
       "1": {
         "requirement": "Gib 1 <villager>Dorfbewohner</villager> aus",
@@ -783,7 +784,7 @@
     "7": {
       "name": "Marauders",
       "0": {
-        "requirement": "Insgesamt mindestens 2 <force>Stärke</force> und <magic>Magie</magic> haben",
+        "requirement": "Mindestens 2 <force>Stärke</force> oder 2 <magic>Magie</magic> oder zusammen mindestens 2 <force>Stärke</force>+<magic>Magie</magic> haben",
         "reward": "Erhalte 4 <coin/>"
       }
     },
@@ -824,7 +825,7 @@
     "13": {
       "name": "Camp",
       "0": {
-        "requirement": "Insgesamt mindestens 1 <force>Stärke</force> und <magic>Magie</magic> haben",
+        "requirement": "Mindestens 1 <force>Stärke</force> oder 1 <magic>Magie</magic> haben",
         "reward": "Erhalte 1 <villager>Dorfbewohner</villager>"
       }
     },
@@ -867,7 +868,7 @@
       "name": "Lone tower",
       "0": {
         "requirement": "Gib 1 <magic>Magie</magic> aus",
-        "reward": "Geh erneut auf Abenteuer — bewege deinen <adventurer>Abenteurer</adventurer> bis zu 3 Felder — und erhalte 3 SP"
+        "reward": "Erhalte 3 SP, dann geh erneut auf Abenteuer und bewege deinen <adventurer>Abenteurer</adventurer> bis zu 3 Felder"
       }
     },
     "19": {
@@ -950,7 +951,7 @@
     "29": {
       "name": "Vagabond",
       "0": {
-        "requirement": "Insgesamt mindestens 4 <force>Stärke</force> und <magic>Magie</magic> haben",
+        "requirement": "Mindestens 4 <force>Stärke</force> oder 4 <magic>Magie</magic> oder zusammen mindestens 4 <force>Stärke</force>+<magic>Magie</magic> haben",
         "reward": "Erhalte 1 <villager>Dorfbewohner</villager>"
       }
     },
@@ -992,7 +993,7 @@
     "35": {
       "name": "Necromancer",
       "0": {
-        "requirement": "Insgesamt mindestens 8 <force>Stärke</force> und <magic>Magie</magic> haben",
+        "requirement": "Insgesamt mindestens 8 <force>Stärke</force> + <magic>Magie</magic> haben",
         "reward": "Erhalte 9 SP"
       }
     },
@@ -1029,7 +1030,7 @@
       "name": "Relay",
       "0": {
         "requirement": "Gib 4 <coin/> aus",
-        "reward": "Geh erneut auf Abenteuer — bewege deinen <adventurer>Abenteurer</adventurer> bis zu 3 Felder — und erhalte 2 SP"
+        "reward": "Erhalte 2 SP, dann geh erneut auf Abenteuer und bewege deinen <adventurer>Abenteurer</adventurer> bis zu 3 Felder"
       }
     },
     "40": {
@@ -1103,8 +1104,8 @@
       "requirement": "Mindestens 4 <force>Stärke</force> haben"
     },
     "2": {
-      "name": "Drache",
-      "requirement": "Insgesamt mindestens 6 <force>Stärke</force> und <magic>Magie</magic> haben"
+      "name": "Feuerdrache",
+      "requirement": "Insgesamt mindestens 6 <force>Stärke</force> + <magic>Magie</magic> haben"
     },
     "3": {
       "name": "Gespenster",
@@ -1112,14 +1113,14 @@
     },
     "4": {
       "name": "Bardenturnier",
-      "requirement": "Verschiebe 2 Begegnungskarten in den Bereich der erzählten Geschichten (unabhängig von ihrem Erzählwert)"
+      "requirement": "Verschiebe 2 Begegnungskarten in den Bereich der erzählten Geschichten (unabhängig von ihrem Erzählwert, auch 0)"
     },
     "5": {
       "name": "Spende",
       "requirement": "Wirf einen deiner Gegenstände ab"
     },
     "6": {
-      "name": "Untote",
+      "name": "Untoter",
       "requirement": "Gib 1 <force>Stärke</force> und 1 <magic>Magie</magic> aus"
     },
     "7": {

@@ -233,7 +233,7 @@
     "type": {
       "1": {
         "name": "Edificio",
-        "note": "Un Edificio non può essere né acquistato né reclutato: resta al Villaggio dopo essere stato attivato e potrà essere sfruttato da altri Paesani vicini, anche da un giocatore che lo ha già attivato. Può essere attivato più volte nel corso dello stesso anno."
+        "note": "Un Edificio resta al Villaggio dopo essere stato attivato e potrà essere sfruttato da altri Paesani vicini, anche da un giocatore che lo ha già attivato. Può essere attivato più volte."
       },
       "2": {
         "name": "Oggetto",
@@ -241,7 +241,7 @@
       },
       "3": {
         "name": "Compagno",
-        "note": "Un Compagno costa 7 <coin/> da reclutare e si colloca a sinistra della vostra plancia personale. Vi fa ottenere 1 <villager>Paesano</villager>, subito disponibile, ma riduce di una moneta la vostra rendita in Autunno. Non potete mai reclutare più di 3 Compagni nel corso della partita."
+        "note": "Un Compagno costa 7 <coin/> da reclutare e si colloca a sinistra della vostra plancia personale. Vi fa ottenere 1 <villager>Paesano</villager> attivo, ma riduce di una moneta la vostra rendita in Autunno. Non potete mai reclutare più di 3 Compagni nel corso della partita."
       }
     },
     "tavern": {
@@ -249,7 +249,7 @@
     },
     "tell-story": {
       "name": "Raccontare una storia",
-      "note": "Raccontate una storia usando una o più carte Incontro risolte in precedenza, senza superare un valore narrativo massimo di 3 — eccezione: 2 storie di valore 2 ciascuna contano solo come una storia di valore 3. I guadagni sono cumulativi: per un valore narrativo totale di 1, ottenete solo il primo bonus; per 2, i primi due; per 3, tutti i bonus."
+      "note": "Raccontate una storia usando una o più carte Incontro risolte in precedenza, senza superare un valore narrativo massimo di 3. Per raccontare una storia con più carte Incontro, tutte le carte devono contribuire alla ricompensa: le carte di valore 3 si possono usare solo da sole, ma è permesso usare due carte di valore 2 per un valore narrativo di 3. I guadagni sono cumulativi: per un valore narrativo totale di 1, ottenete solo il primo bonus; per 2, i primi due; per 3, tutti i bonus."
     },
     "potion": {
       "name": "Pozione",
@@ -258,8 +258,9 @@
     "seals": {
       "label": "Sigilli",
       "none": "nessuno",
-      "spent": "Su questa carta non resta alcun segnalino <seal/>: non può più essere attivata quest'anno.",
+      "spent": "Su questa carta non resta alcun segnalino <seal/>: non può più essere attivata.",
       "note-players": "Quando viene rivelata, questa carta riceve un numero di segnalini <seal/> pari al numero di giocatori meno 1. Ogni attivazione ne usa uno, che viene poi scartato.",
+      "note-tavern": "Quando viene rivelata, questa Taverna riceve un numero di segnalini <seal/> pari al numero di giocatori meno 1. Se il valore narrativo corrispondente alla ricompensa <seal/> viene raggiunto, scartate un segnalino e ricevete tanti PV o <coin/> quanto il suo valore. Se su questo Edificio non restano segnalini, potete usare la Taverna per ottenere le altre ricompense.",
       "note-one": "Quando viene rivelata, questa carta riceve un solo segnalino <seal/>, indipendentemente dal numero di giocatori."
     },
     "village-deck": {
@@ -275,9 +276,9 @@
     "encounter": {
       "name": "Incontro",
       "note": "Una carta Incontro si risolve dalla casella in cui il vostro <adventurer>Avventuriero</adventurer> si è fermato, soddisfacendone il requisito per ottenerne la ricompensa. Dopo averla risolta, fatela scorrere nella colonna delle storie non raccontate della vostra plancia personale.",
-      "both": "Questo Incontro ha 2 requisiti e 2 ricompense: dovete soddisfarne almeno uno per risolverlo. Se soddisfate solo il requisito di sinistra, ottenete solo la ricompensa di sinistra; potete anche soddisfare entrambi i requisiti per ottenere entrambe le ricompense.",
+      "both": "Questo Incontro ha 2 requisiti e 2 ricompense: dovete soddisfarne almeno uno per risolverlo e ottenere la ricompensa corrispondente (quella di sinistra per il requisito di sinistra, quella di destra per il requisito di destra). All'inizio dell'Incontro, precisate quale o quali requisiti intendete soddisfare: per ottenere entrambe le ricompense, dovete soddisfare entrambi i requisiti fin dall'inizio dell'Incontro, e non potete usare una ricompensa per completare l'altro requisito. Ariok e la Invisibility potion possono ignorare solo uno dei due requisiti.",
       "story-only": "Questo Incontro non ha ricompensa: frutta solo quando lo raccontate.",
-      "untellable": "Valore narrativo 0: non potete raccontare questo Incontro, a meno che non riusciate ad aumentarne il valore (Charisma potion, Seren) o per completare la Missione Torneo dei Bardi."
+      "untellable": "Valore narrativo 0: non potete raccontare questo Incontro, a meno che non riusciate ad aumentarne il valore (Charisma potion, Seren). Può comunque servire per la Missione Torneo dei Bardi."
     },
     "income-token": {
       "name": "Segnalino Rendita",
@@ -293,7 +294,7 @@
     "event": {
       "name": "Evento",
       "note": "Una volta all'anno, in Primavera o in Estate, potete partecipare all'Evento come azione: piazzate uno dei vostri <villager>Paesani</villager> attivi — o, in Estate, uno di quelli che si trovano al Villaggio — sulla tessera Evento, a condizione di poterlo attivare (pagando l'eventuale costo) per ottenerne i benefici.",
-      "festival": "Festival: scegliete una casella libera della tessera e ottenete i 2 bonus adiacenti. Il vostro <villager>Paesano</villager> vi resta fino all'Autunno."
+      "festival": "Festival: piazzate il vostro <villager>Paesano</villager> su una casella libera della tessera e ottenete i 2 bonus adiacenti. Se partite all'avventura, risolvete prima l'altro effetto. Il vostro Paesano vi resta fino all'Autunno: una casella liberata in Autunno può essere riutilizzata da un altro giocatore."
     },
     "event-pile": {
       "name": "Pila degli Eventi",
@@ -304,18 +305,18 @@
       "name": "Missione Eroica",
       "first": "Al primo",
       "others": "Ai successivi",
-      "note": "Una volta che il vostro <adventurer>Avventuriero</adventurer> si è fermato sulla casella di una Missione Eroica, potete decidere di non risolvere un Incontro per risolvere invece la Missione, se non l'avete ancora fatta e ne soddisfate le condizioni. Se siete il primo giocatore a farlo, piazzate uno dei vostri segnalini Missione sullo spazio che frutta più PV a fine partita; altrimenti, piazzatelo sullo spazio accanto: su questo spazio possono trovarsi più segnalini (di giocatori diversi).",
+      "note": "Una volta che il vostro <adventurer>Avventuriero</adventurer> si è fermato sulla casella di una Missione Eroica, potete decidere di non risolvere un Incontro per risolvere invece la Missione, se non l'avete ancora fatta e ne soddisfate i requisiti. Se siete il primo giocatore a farlo, piazzate uno dei vostri segnalini Missione sullo spazio di sinistra, che frutta più PV a fine partita; altrimenti, piazzatelo sullo spazio accanto: su questo spazio possono trovarsi più segnalini (di giocatori diversi). Potete scegliere una Missione che ci siano Incontri disponibili o no.",
       "score": "Potete risolvere ogni Missione una sola volta. I suoi PV vengono aggiunti solo a fine partita, dopo il quinto anno."
     },
     "player-board": {
       "name": "Plancia personale",
       "companions": {
         "name": "Compagni",
-        "text": "I vostri Compagni si collocano a sinistra della vostra plancia personale. La loro capacità di reazione, in fondo alla carta, richiede di esaurirli; la loro capacità permanente, invece, è attiva che il Compagno sia esaurito o no."
+        "text": "I vostri Compagni si collocano a sinistra della vostra plancia personale. La loro capacità di reazione, in fondo alla carta, richiede di esaurirli; una reazione non costituisce un'azione di per sé. La loro capacità permanente, invece, è attiva che il Compagno sia esaurito o no."
       },
       "items": {
         "name": "Oggetti",
-        "text": "I vostri Oggetti si collocano a destra della vostra plancia personale. La maggior parte possiede una capacità che richiede di spendere un'azione in Estate per essere usata, esaurendo la carta; le Pozioni devono essere scartate dopo l'uso. In Autunno, ripristinate tutte le vostre carte."
+        "text": "I vostri Oggetti si collocano a destra della vostra plancia personale. La maggior parte possiede una capacità utilizzabile come azione d'Estate, esaurendo la carta; le Pozioni vengono scartate dopo l'uso. In Autunno, ripristinate tutte le vostre carte."
       },
       "stories": {
         "name": "Storie",
@@ -327,7 +328,7 @@
       },
       "skills": {
         "name": "Forza e Magia",
-        "text": "Il tracciato rosso è quello della vostra Forza, quello blu della vostra Magia: entrambi i segnalini iniziano la partita sullo spazio più basso. Carte e Missioni richiedono a volte di avere almeno un certo livello di Forza o di Magia, a volte di spenderne.",
+        "text": "Il tracciato rosso è quello della vostra Forza, quello blu della vostra Magia: entrambi i segnalini iniziano la partita sullo spazio più basso. Carte e Missioni richiedono a volte di avere almeno un certo livello di Forza o di Magia, a volte di spenderne. Se dovete spostare in su il vostro segnalino Forza o Magia quando è già sul 5, ottenete invece subito 1 PV.",
         "score": "A fine partita, segnate 2 PV se avete almeno 3 Forza e 3 Magia, o 5 PV se avete 5 Forza e 5 Magia."
       },
       "special-action": {
@@ -355,7 +356,7 @@
       },
       "bonus": {
         "name": "Segnalini Bonus",
-        "text": "Quando raggiungete 8 PV, scegliete uno dei vostri 3 segnalini Bonus, risolvetene l'effetto e scartatelo. Quando raggiungete 20 PV, fate lo stesso con uno dei 2 segnalini rimasti."
+        "text": "Quando raggiungete 8 PV, scegliete uno dei vostri 3 segnalini Bonus, risolvetene l'effetto e scartatelo. Quando raggiungete 20 PV, fate lo stesso con uno dei 2 segnalini rimasti. Ogni segnalino Bonus non usato viene scartato prima del conteggio finale, e non può essere ottenuto se raggiungete 8 o 20 PV durante il conteggio finale."
       },
       "village": {
         "name": "Villaggio",
@@ -367,7 +368,7 @@
       },
       "stops": {
         "name": "Moneta e PV",
-        "text": "Una volta che il vostro <adventurer>Avventuriero</adventurer> si è fermato sulla casella contrassegnata da una <coin/>, potete decidere di non risolvere un Incontro per ottenere 1 <coin/>. Sulla casella contrassegnata da un <vp/>, potete fare lo stesso per ottenere 1 <vp/>."
+        "text": "Una volta che il vostro <adventurer>Avventuriero</adventurer> si è fermato sulla casella contrassegnata da una <coin/>, potete decidere di non risolvere un Incontro per ottenere 1 <coin/>. Sulla casella contrassegnata da un <vp/>, potete fare lo stesso per ottenere 1 <vp/>. Potete scegliere queste ricompense che ci siano Incontri disponibili o no."
       },
       "quests": {
         "name": "Missioni Eroiche",
@@ -413,7 +414,7 @@
       },
       "autumn": {
         "name": "Autunno",
-        "text": "Una volta in Autunno, non potete più effettuare azioni nel corso di quell'anno, e risolvete subito questi passaggi, in quest'ordine.",
+        "text": "Una volta in Autunno, non potete più effettuare azioni nel corso di quell'anno, e risolvete subito questi passaggi, in quest'ordine. L'Autunno ha luogo anche durante l'ultimo anno di gioco.",
         "0": "Riportate il vostro <adventurer>Avventuriero</adventurer> al Villaggio",
         "1": "Rimettete i vostri <villager>Paesani</villager> dell'accampamento, dell'Evento e dell'azione speciale nella zona dei Paesani attivi della vostra plancia personale",
         "2": "Ripristinate tutte le vostre carte",
@@ -421,7 +422,7 @@
       },
       "camp": {
         "name": "Accampamento",
-        "text": "Quando uno dei vostri <villager>Paesani</villager> viene usato e diventa inattivo, piazzatelo nell'accampamento per indicare che non potete più usarlo quest'anno. È lì che vanno anche i Paesani che spendete, presi dalla vostra zona dei Paesani attivi. In Autunno, tornano in quella zona."
+        "text": "Quando uno dei vostri <villager>Paesani</villager> viene ritirato dal Villaggio o speso, diventa inattivo e deve essere piazzato nell'accampamento per indicare che non può più essere usato quest'anno. Un Paesano speso viene preso dalla vostra zona dei Paesani attivi. In Autunno, tornano in quella zona."
       }
     },
     "villager-reserve": {
@@ -465,7 +466,7 @@
       "name": "Segnalino Sigillo",
       "value": "Valore",
       "building": "Il costo o l'effetto di alcuni Edifici dipende dal valore di un segnalino Sigillo. Potete sfruttare un Edificio di questo tipo solo se sulla carta resta almeno un segnalino. In tal caso, scegliete uno dei segnalini, usatene il valore per l'attivazione e scartatelo. Una carta Edificio resta nel Villaggio anche se non vi restano più segnalini.",
-      "item": "Se acquistate un Oggetto su cui è piazzato un segnalino Sigillo che rappresenta un valore in PV, questi vengono segnati immediatamente.",
+      "item": "Se acquistate un Oggetto su cui è piazzato un segnalino Sigillo che rappresenta un valore in PV, questi vengono segnati immediatamente e il segnalino viene scartato.",
       "stack": "I segnalini Sigillo vengono piazzati a faccia in giù vicino al tabellone principale. Se non ci sono più abbastanza segnalini, mescolate gli scarti e formate una nuova pila a faccia in giù."
     },
     "first-player": {
@@ -537,7 +538,7 @@
     },
     "115": {
       "name": "Library",
-      "ability": "Scartate un segnalino <seal/>, spendete tante <coin/> quanto il suo valore e ottenete 1 PV per ogni storia raccontata."
+      "ability": "Scartate un segnalino <seal/>, spendete tante <coin/> quanto il suo valore e ottenete 1 PV per ogni carta nella vostra zona delle storie raccontate (qualunque sia il suo valore)."
     },
     "116": {
       "name": "The Scarlet Dragon",
@@ -572,12 +573,12 @@
     "206": {
       "name": "Mana potion",
       "immediate": "Scartate il segnalino <seal/> e ottenete tanti PV quanto il suo valore.",
-      "reaction": "Quando partite all'avventura, potete scartare questa carta per aumentare la vostra Magia di 2. Questo aumento è temporaneo e non muovete il vostro segnalino Magia: non potete quindi spendere questi punti."
+      "reaction": "Quando partite all'avventura, potete scartare questa carta per aumentare temporaneamente la vostra Magia di 2 (fino alla fine dell'Incontro o della Missione). Non muovete il vostro segnalino e non potete spendere questa Magia. La vostra Magia può superare temporaneamente 5 (ma non ottenete PV)."
     },
     "207": {
       "name": "Strength potion",
       "immediate": "Scartate il segnalino <seal/> e ottenete tanti PV quanto il suo valore.",
-      "reaction": "Quando partite all'avventura, potete scartare questa carta per aumentare la vostra Forza di 2. Questo aumento è temporaneo e non muovete il vostro segnalino Forza: non potete quindi spendere questi punti."
+      "reaction": "Quando partite all'avventura, potete scartare questa carta per aumentare temporaneamente la vostra Forza di 2 (fino alla fine dell'Incontro o della Missione). Non muovete il vostro segnalino e non potete spendere questa Forza. La vostra Forza può superare temporaneamente 5 (ma non ottenete PV)."
     },
     "208": {
       "name": "Short sword",
@@ -618,7 +619,7 @@
     "215": {
       "name": "Flying potion",
       "immediate": "Scartate il segnalino <seal/> e ottenete tanti PV quanto il suo valore.",
-      "reaction": "Quando partite all'avventura, potete scartare questa carta per aumentare la vostra Forza e la vostra Magia di 1. Questo aumento è temporaneo e non muovete i vostri segnalini Forza e Magia: non potete quindi spendere questi punti."
+      "reaction": "Quando partite all'avventura, potete scartare questa carta per aumentare temporaneamente la vostra Forza e la vostra Magia di 1 ciascuna (fino alla fine dell'Incontro o della Missione). Non muovete i vostri segnalini e non potete spendere né questa Forza né questa Magia. La vostra Forza e la vostra Magia possono superare temporaneamente 5 (ma non ottenete PV)."
     },
     "216": {
       "name": "Bladechant",
@@ -637,7 +638,7 @@
     },
     "219": {
       "name": "Mandolin",
-      "ability": "Esaurite questa carta e spendete 1 <villager>Paesano</villager> per segnare 1 PV per ogni storia non raccontata.",
+      "ability": "Esaurite questa carta e spendete 1 <villager>Paesano</villager> per segnare 1 PV per ogni carta nella vostra zona delle storie non raccontate (qualunque sia il suo valore).",
       "score": "5 PV."
     },
     "220": {
@@ -668,7 +669,7 @@
       "role": "Arciere",
       "immediate": "Ottenete 1 <villager>Paesano</villager>.",
       "reaction": "Quando partite all'avventura, potete esaurire questa carta per muovere il vostro <adventurer>Avventuriero</adventurer> fino a 2 caselle aggiuntive.",
-      "score": "1 PV per ogni carta Incontro che si trova a una distanza di 3 o più dal Villaggio (raccontata o no)."
+      "score": "1 PV per ogni carta Incontro della vostra plancia personale che reca uno degli stemmi indicati (raccontata o no)."
     },
     "303": {
       "name": "Dorian",
@@ -697,7 +698,7 @@
       "name": "Neris",
       "role": "Ladra",
       "immediate": "Ottenete 1 <villager>Paesano</villager>.",
-      "reaction": "Quando ritirate un <villager>Paesano</villager> dal Villaggio, potete esaurire questa carta per ottenere 2 <coin/> aggiuntive, o per non pagare il sovrapprezzo.",
+      "reaction": "Quando ritirate un <villager>Paesano</villager> per «Ottenere monete», potete esaurire questa carta per ottenere 2 <coin/> aggiuntive. Quando ritirate un <villager>Paesano</villager> per «Attivare una carta», potete esaurire questa carta per ignorare il sovrapprezzo.",
       "score": "1 PV ogni 2 <coin/> rimaste."
     },
     "307": {
@@ -718,8 +719,8 @@
       "name": "Isandre",
       "role": "Chierica",
       "immediate": "Ottenete 1 <villager>Paesano</villager>.",
-      "reaction": "Quando esaurite una delle vostre carte, potete esaurire questa carta per ripristinarla. Potete esaurire subito la carta appena ripristinata per attivarne di nuovo l'effetto.",
-      "score": "2 PV per Compagno."
+      "reaction": "Quando esaurite una delle vostre carte, potete esaurire questa carta per ripristinarla. Se la carta ripristinata ha un effetto di reazione, potete esaurirla di nuovo per attivarne di nuovo l'effetto.",
+      "score": "2 PV per Compagno, questa carta inclusa."
     },
     "310": {
       "name": "Seren",
@@ -741,7 +742,7 @@
       "name": "Valley",
       "0": {
         "requirement": "Avere almeno 1 <force>Forza</force>",
-        "reward": "Muovete il vostro <adventurer>Avventuriero</adventurer> fino a 2 caselle"
+        "reward": "Muovete il vostro <adventurer>Avventuriero</adventurer> fino a 2 caselle (se ottenete l'altra ricompensa, risolvetela prima dello spostamento)"
       },
       "1": {
         "requirement": "Spendete 1 <villager>Paesano</villager>",
@@ -783,7 +784,7 @@
     "7": {
       "name": "Marauders",
       "0": {
-        "requirement": "Avere un totale di <force>Forza</force> e <magic>Magia</magic> di almeno 2",
+        "requirement": "Avere almeno 2 <force>Forza</force> o 2 <magic>Magia</magic> o una somma <force>Forza</force>+<magic>Magia</magic> di almeno 2",
         "reward": "Ottenete 4 <coin/>"
       }
     },
@@ -824,7 +825,7 @@
     "13": {
       "name": "Camp",
       "0": {
-        "requirement": "Avere un totale di <force>Forza</force> e <magic>Magia</magic> di almeno 1",
+        "requirement": "Avere almeno 1 <force>Forza</force> o 1 <magic>Magia</magic>",
         "reward": "Ottenete 1 <villager>Paesano</villager>"
       }
     },
@@ -867,7 +868,7 @@
       "name": "Lone tower",
       "0": {
         "requirement": "Spendete 1 <magic>Magia</magic>",
-        "reward": "Ripartite all'avventura — muovete il vostro <adventurer>Avventuriero</adventurer> fino a 3 caselle — e ottenete 3 PV"
+        "reward": "Ottenete 3 PV, poi ripartite all'avventura e muovete il vostro <adventurer>Avventuriero</adventurer> fino a 3 caselle"
       }
     },
     "19": {
@@ -950,7 +951,7 @@
     "29": {
       "name": "Vagabond",
       "0": {
-        "requirement": "Avere un totale di <force>Forza</force> e <magic>Magia</magic> di almeno 4",
+        "requirement": "Avere almeno 4 <force>Forza</force> o 4 <magic>Magia</magic> o una somma <force>Forza</force>+<magic>Magia</magic> di almeno 4",
         "reward": "Ottenete 1 <villager>Paesano</villager>"
       }
     },
@@ -992,7 +993,7 @@
     "35": {
       "name": "Necromancer",
       "0": {
-        "requirement": "Avere un totale di <force>Forza</force> e <magic>Magia</magic> di almeno 8",
+        "requirement": "Avere una somma di <force>Forza</force> + <magic>Magia</magic> di almeno 8",
         "reward": "Ottenete 9 PV"
       }
     },
@@ -1029,7 +1030,7 @@
       "name": "Relay",
       "0": {
         "requirement": "Spendete 4 <coin/>",
-        "reward": "Ripartite all'avventura — muovete il vostro <adventurer>Avventuriero</adventurer> fino a 3 caselle — e ottenete 2 PV"
+        "reward": "Ottenete 2 PV, poi ripartite all'avventura e muovete il vostro <adventurer>Avventuriero</adventurer> fino a 3 caselle"
       }
     },
     "40": {
@@ -1103,8 +1104,8 @@
       "requirement": "Avere almeno 4 <force>Forza</force>"
     },
     "2": {
-      "name": "Drago",
-      "requirement": "Avere un totale di <force>Forza</force> e <magic>Magia</magic> di almeno 6"
+      "name": "Drago di fuoco",
+      "requirement": "Avere una somma di <force>Forza</force> + <magic>Magia</magic> di almeno 6"
     },
     "3": {
       "name": "Spettri",
@@ -1112,14 +1113,14 @@
     },
     "4": {
       "name": "Torneo dei Bardi",
-      "requirement": "Spostate 2 carte Incontro nella zona delle storie raccontate (qualunque sia il loro valore narrativo)"
+      "requirement": "Spostate 2 carte Incontro nella zona delle storie raccontate (qualunque sia il loro valore narrativo, anche 0)"
     },
     "5": {
       "name": "Donazione",
       "requirement": "Scartate uno dei vostri Oggetti"
     },
     "6": {
-      "name": "Non morti",
+      "name": "Non morto",
       "requirement": "Spendete 1 <force>Forza</force> e 1 <magic>Magia</magic>"
     },
     "7": {

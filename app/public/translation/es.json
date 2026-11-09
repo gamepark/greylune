@@ -233,7 +233,7 @@
     "type": {
       "1": {
         "name": "Edificio",
-        "note": "Un Edificio no se puede comprar ni reclutar: permanece en la Aldea tras ser activado y podrá ser usado por otros Aldeanos vecinos, incluso por un jugador que ya lo haya activado. Puede activarse varias veces durante un mismo año."
+        "note": "Un Edificio permanece en la Aldea tras ser activado y podrá ser usado por otros Aldeanos vecinos, incluso por un jugador que ya lo haya activado. Puede activarse varias veces."
       },
       "2": {
         "name": "Objeto",
@@ -241,7 +241,7 @@
       },
       "3": {
         "name": "Compañero",
-        "note": "Reclutar un Compañero cuesta 7 <coin/>; se coloca a la izquierda de tu tablero personal. Te hace ganar 1 <villager>Aldeano</villager>, disponible de inmediato, pero reduce en una moneda tus ingresos en Otoño. Nunca puedes reclutar más de 3 Compañeros durante la partida."
+        "note": "Reclutar un Compañero cuesta 7 <coin/>; se coloca a la izquierda de tu tablero personal. Te hace ganar 1 <villager>Aldeano</villager> activo, pero reduce en una moneda tus ingresos en Otoño. Nunca puedes reclutar más de 3 Compañeros durante la partida."
       }
     },
     "tavern": {
@@ -249,7 +249,7 @@
     },
     "tell-story": {
       "name": "Contar una historia",
-      "note": "Cuenta una historia usando una o varias cartas de Encuentro resueltas previamente, sin superar un valor narrativo máximo de 3 — excepción: 2 historias de valor 2 cada una solo cuentan como una historia de valor 3. Las ganancias son acumulativas: con un valor narrativo total de 1, gana solo la primera bonificación; con 2, las dos primeras; con 3, todas las bonificaciones."
+      "note": "Cuenta una historia usando una o varias cartas de Encuentro resueltas previamente, sin superar un valor narrativo máximo de 3. Para contar una historia con varias cartas de Encuentro, todas las cartas deben contribuir a la recompensa: las cartas de valor 3 solo pueden usarse solas, pero está permitido usar dos cartas de valor 2 para un valor narrativo de 3. Las ganancias son acumulativas: con un valor narrativo total de 1, gana solo la primera bonificación; con 2, las dos primeras; con 3, todas las bonificaciones."
     },
     "potion": {
       "name": "Poción",
@@ -258,8 +258,9 @@
     "seals": {
       "label": "Sellos",
       "none": "ninguno",
-      "spent": "No queda ninguna ficha de <seal/> en esta carta: ya no puede activarse este año.",
+      "spent": "No queda ninguna ficha de <seal/> en esta carta: ya no puede activarse.",
       "note-players": "Al revelarse, esta carta recibe un número de fichas de <seal/> igual al número de jugadores menos 1. Cada activación usa una, que después se descarta.",
+      "note-tavern": "Al revelarse, esta Taberna recibe un número de fichas de <seal/> igual al número de jugadores menos 1. Si se alcanza el valor narrativo correspondiente a la recompensa <seal/>, descarta una ficha y recibe tantos PV o <coin/> como su valor. Si ya no quedan fichas en este Edificio, puedes usar la Taberna para ganar las demás recompensas.",
       "note-one": "Al revelarse, esta carta recibe una sola ficha de <seal/>, sea cual sea el número de jugadores."
     },
     "village-deck": {
@@ -275,9 +276,9 @@
     "encounter": {
       "name": "Encuentro",
       "note": "Una carta de Encuentro se resuelve desde la casilla donde se ha detenido tu <adventurer>Aventurero</adventurer>, cumpliendo su requisito para ganar su recompensa. Después de resolverla, deslízala a la columna de historias no contadas de tu tablero personal.",
-      "both": "Este Encuentro tiene 2 requisitos y 2 recompensas: debes cumplir al menos uno de los 2 para resolverlo. Si solo cumples el requisito de la izquierda, solo ganas la recompensa de la izquierda; también puedes cumplir ambos requisitos para obtener ambas recompensas.",
+      "both": "Este Encuentro tiene 2 requisitos y 2 recompensas: debes cumplir al menos uno de los 2 para resolverlo y obtener la recompensa correspondiente (la de la izquierda para el requisito de la izquierda, la de la derecha para el de la derecha). Al principio del Encuentro, indica qué requisito(s) vas a cumplir: para ganar las dos recompensas, debes cumplir ambos requisitos desde el principio del Encuentro, y no puedes usar una recompensa para completar el otro requisito. Ariok y la Invisibility potion solo pueden ignorar uno de los dos requisitos.",
       "story-only": "Este Encuentro no tiene recompensa: solo aporta algo cuando lo cuentas.",
-      "untellable": "Valor narrativo 0: no puedes contar este Encuentro, salvo que consigas aumentar su valor (Charisma potion, Seren) o para completar la Misión Torneo de Bardos."
+      "untellable": "Valor narrativo 0: no puedes contar este Encuentro, salvo que consigas aumentar su valor (Charisma potion, Seren). Aun así, puede servir para la Misión Torneo de Bardos."
     },
     "income-token": {
       "name": "Ficha de Ingresos",
@@ -293,7 +294,7 @@
     "event": {
       "name": "Evento",
       "note": "Una vez por año, en Primavera o en Verano, puedes participar en el Evento como acción: coloca uno de tus <villager>Aldeanos</villager> activos — o, en Verano, uno de los que están en la Aldea — en la loseta de Evento, siempre que puedas activarlo (pagando el coste si lo hay) para obtener sus beneficios.",
-      "festival": "Festival: elige una casilla libre de la loseta y gana las 2 bonificaciones adyacentes. Tu <villager>Aldeano</villager> permanece allí hasta el Otoño."
+      "festival": "Festival: coloca tu <villager>Aldeano</villager> en una casilla libre de la loseta y gana las 2 bonificaciones adyacentes. Si partes a la aventura, resuelve primero el otro efecto. Tu Aldeano permanece allí hasta el Otoño: una casilla liberada en Otoño puede ser reutilizada por otro jugador."
     },
     "event-pile": {
       "name": "Pila de Eventos",
@@ -304,18 +305,18 @@
       "name": "Misión Heroica",
       "first": "Al primero",
       "others": "A los siguientes",
-      "note": "Una vez que tu <adventurer>Aventurero</adventurer> se ha detenido en la casilla de una Misión Heroica, puedes decidir no resolver un Encuentro para resolver la Misión en su lugar, si aún no la has hecho y cumples sus condiciones. Si eres el primer jugador en hacerlo, coloca uno de tus marcadores de Misión en el espacio que más PV aporta al final de la partida; si no, colócalo en el espacio contiguo: en ese espacio pueden encontrarse varios marcadores (de jugadores diferentes).",
+      "note": "Una vez que tu <adventurer>Aventurero</adventurer> se ha detenido en la casilla de una Misión Heroica, puedes decidir no resolver un Encuentro para resolver la Misión en su lugar, si aún no la has hecho y cumples sus requisitos. Si eres el primer jugador en hacerlo, coloca uno de tus marcadores de Misión en el espacio de la izquierda, que es el que más PV aporta al final de la partida; si no, colócalo en el espacio contiguo: en ese espacio pueden encontrarse varios marcadores (de jugadores diferentes). Puedes elegir una Misión tanto si hay Encuentros disponibles como si no.",
       "score": "Solo puedes resolver cada Misión una vez. Sus PV solo se suman al final de la partida, después del quinto año."
     },
     "player-board": {
       "name": "Tablero personal",
       "companions": {
         "name": "Compañeros",
-        "text": "Tus Compañeros se colocan a la izquierda de tu tablero personal. Su capacidad de reacción, en la parte inferior de la carta, exige agotarlos; su capacidad permanente, en cambio, está activa tanto si el Compañero está agotado como si no."
+        "text": "Tus Compañeros se colocan a la izquierda de tu tablero personal. Su capacidad de reacción, en la parte inferior de la carta, exige agotarlos; una reacción no constituye una acción en sí misma. Su capacidad permanente, en cambio, está activa tanto si el Compañero está agotado como si no."
       },
       "items": {
         "name": "Objetos",
-        "text": "Tus Objetos se colocan a la derecha de tu tablero personal. La mayoría tiene una capacidad que exige gastar una acción en Verano para usarla, agotando la carta; las Pociones deben descartarse tras su uso. En Otoño, prepara todas tus cartas."
+        "text": "Tus Objetos se colocan a la derecha de tu tablero personal. La mayoría tiene una capacidad utilizable como acción de Verano, agotando la carta; las Pociones se descartan tras su uso. En Otoño, prepara todas tus cartas."
       },
       "stories": {
         "name": "Historias",
@@ -327,7 +328,7 @@
       },
       "skills": {
         "name": "Fuerza y Magia",
-        "text": "El marcador rojo indica tu Fuerza y el azul tu Magia: ambos marcadores empiezan la partida en su espacio más bajo. Las cartas y las Misiones exigen unas veces tener al menos cierto nivel de Fuerza o de Magia, y otras veces gastarlo.",
+        "text": "El marcador rojo indica tu Fuerza y el azul tu Magia: ambos marcadores empiezan la partida en su espacio más bajo. Las cartas y las Misiones exigen unas veces tener al menos cierto nivel de Fuerza o de Magia, y otras veces gastarlo. Si debes subir tu marcador de Fuerza o de Magia cuando ya está en el 5, gana inmediatamente 1 PV en su lugar.",
         "score": "Al final de la partida, anotas 2 PV si tienes al menos 3 de Fuerza y 3 de Magia, o 5 PV si tienes 5 de Fuerza y 5 de Magia."
       },
       "special-action": {
@@ -355,7 +356,7 @@
       },
       "bonus": {
         "name": "Fichas de Bonificación",
-        "text": "Cuando alcances 8 PV, elige una de tus 3 fichas de Bonificación, resuelve su efecto y descártala. Cuando alcances 20 PV, haz lo mismo con una de tus 2 fichas restantes."
+        "text": "Cuando alcances 8 PV, elige una de tus 3 fichas de Bonificación, resuelve su efecto y descártala. Cuando alcances 20 PV, haz lo mismo con una de tus 2 fichas restantes. Toda ficha de Bonificación no usada se descarta antes del recuento final, y no puede ganarse si alcanzas 8 o 20 PV durante el recuento final."
       },
       "village": {
         "name": "Aldea",
@@ -367,7 +368,7 @@
       },
       "stops": {
         "name": "Moneda y PV",
-        "text": "Una vez que tu <adventurer>Aventurero</adventurer> se ha detenido en la casilla marcada con una <coin/>, puedes decidir no resolver un Encuentro para ganar 1 <coin/>. En la casilla marcada con un <vp/>, puedes hacer lo mismo para ganar 1 <vp/>."
+        "text": "Una vez que tu <adventurer>Aventurero</adventurer> se ha detenido en la casilla marcada con una <coin/>, puedes decidir no resolver un Encuentro para ganar 1 <coin/>. En la casilla marcada con un <vp/>, puedes hacer lo mismo para ganar 1 <vp/>. Puedes elegir estas recompensas tanto si hay Encuentros disponibles como si no."
       },
       "quests": {
         "name": "Misiones Heroicas",
@@ -413,7 +414,7 @@
       },
       "autumn": {
         "name": "Otoño",
-        "text": "Una vez en Otoño, ya no puedes realizar acciones durante ese año, y resuelves de inmediato estos pasos, en este orden.",
+        "text": "Una vez en Otoño, ya no puedes realizar acciones durante ese año, y resuelves de inmediato estos pasos, en este orden. El Otoño también tiene lugar durante el último año de la partida.",
         "0": "Devuelve tu <adventurer>Aventurero</adventurer> a la Aldea",
         "1": "Devuelve tus <villager>Aldeanos</villager> del campamento, del Evento y de la acción especial a la zona de Aldeanos activos de tu tablero personal",
         "2": "Prepara todas tus cartas",
@@ -421,7 +422,7 @@
       },
       "camp": {
         "name": "Campamento",
-        "text": "Cuando uno de tus <villager>Aldeanos</villager> se usa y queda inactivo, colócalo en el campamento para indicar que ya no puedes usarlo este año. Allí van también los Aldeanos que gastas, tomados de tu zona de Aldeanos activos. En Otoño, regresan a esa zona."
+        "text": "Cuando uno de tus <villager>Aldeanos</villager> se retira de la Aldea o se gasta, queda inactivo y debe colocarse en el campamento para indicar que ya no puede usarse este año. Un Aldeano gastado se toma de tu zona de Aldeanos activos. En Otoño, regresan a esa zona."
       }
     },
     "villager-reserve": {
@@ -465,7 +466,7 @@
       "name": "Ficha de Sello",
       "value": "Valor",
       "building": "El coste o el efecto de algunos Edificios depende del valor de una ficha de Sello. Solo puedes explotar un Edificio así si queda al menos una ficha en la carta. En ese caso, elige una de las fichas, usa su valor para la activación y descártala. Una carta de Edificio permanece en la Aldea aunque ya no le queden fichas.",
-      "item": "Si compras un Objeto sobre el que hay una ficha de Sello que representa un valor de PV, estos se anotan inmediatamente.",
+      "item": "Si compras un Objeto sobre el que hay una ficha de Sello que representa un valor de PV, estos se anotan inmediatamente y la ficha se descarta.",
       "stack": "Las fichas de Sello se colocan boca abajo cerca del tablero principal. Si no quedan suficientes fichas, baraja el descarte y forma una nueva pila boca abajo."
     },
     "first-player": {
@@ -537,7 +538,7 @@
     },
     "115": {
       "name": "Library",
-      "ability": "Descarta una ficha de <seal/>, gasta tantas <coin/> como su valor y gana 1 PV por cada historia contada."
+      "ability": "Descarta una ficha de <seal/>, gasta tantas <coin/> como su valor y gana 1 PV por cada carta de tu zona de historias contadas (sea cual sea su valor)."
     },
     "116": {
       "name": "The Scarlet Dragon",
@@ -572,12 +573,12 @@
     "206": {
       "name": "Mana potion",
       "immediate": "Descarta la ficha de <seal/> y gana tantos PV como su valor.",
-      "reaction": "Cuando partas a la aventura, puedes descartar esta carta para aumentar tu Magia en 2. Este aumento es temporal y no mueves tu marcador de Magia: por tanto, no puedes gastar esos puntos."
+      "reaction": "Cuando partas a la aventura, puedes descartar esta carta para aumentar temporalmente tu Magia en 2 (hasta el final del Encuentro o la Misión). No mueves tu marcador y no puedes gastar esta Magia. Tu Magia puede superar temporalmente 5 (pero no ganas PV)."
     },
     "207": {
       "name": "Strength potion",
       "immediate": "Descarta la ficha de <seal/> y gana tantos PV como su valor.",
-      "reaction": "Cuando partas a la aventura, puedes descartar esta carta para aumentar tu Fuerza en 2. Este aumento es temporal y no mueves tu marcador de Fuerza: por tanto, no puedes gastar esos puntos."
+      "reaction": "Cuando partas a la aventura, puedes descartar esta carta para aumentar temporalmente tu Fuerza en 2 (hasta el final del Encuentro o la Misión). No mueves tu marcador y no puedes gastar esta Fuerza. Tu Fuerza puede superar temporalmente 5 (pero no ganas PV)."
     },
     "208": {
       "name": "Short sword",
@@ -618,7 +619,7 @@
     "215": {
       "name": "Flying potion",
       "immediate": "Descarta la ficha de <seal/> y gana tantos PV como su valor.",
-      "reaction": "Cuando partas a la aventura, puedes descartar esta carta para aumentar tu Fuerza y tu Magia en 1. Este aumento es temporal y no mueves tus marcadores de Fuerza y de Magia: por tanto, no puedes gastar esos puntos."
+      "reaction": "Cuando partas a la aventura, puedes descartar esta carta para aumentar temporalmente tu Fuerza y tu Magia en 1 cada una (hasta el final del Encuentro o la Misión). No mueves tus marcadores y no puedes gastar ni esta Fuerza ni esta Magia. Tu Fuerza y tu Magia pueden superar temporalmente 5 (pero no ganas PV)."
     },
     "216": {
       "name": "Bladechant",
@@ -637,7 +638,7 @@
     },
     "219": {
       "name": "Mandolin",
-      "ability": "Agota esta carta y gasta 1 <villager>Aldeano</villager> para anotar 1 PV por cada historia no contada.",
+      "ability": "Agota esta carta y gasta 1 <villager>Aldeano</villager> para anotar 1 PV por cada carta de tu zona de historias no contadas (sea cual sea su valor).",
       "score": "5 PV."
     },
     "220": {
@@ -668,7 +669,7 @@
       "role": "Arquero",
       "immediate": "Gana 1 <villager>Aldeano</villager>.",
       "reaction": "Cuando partas a la aventura, puedes agotar esta carta para mover tu <adventurer>Aventurero</adventurer> hasta 2 casillas adicionales.",
-      "score": "1 PV por cada carta de Encuentro que esté a una distancia de 3 o más de la Aldea (contada o no)."
+      "score": "1 PV por cada carta de Encuentro de tu tablero personal que tenga uno de los blasones indicados (contada o no)."
     },
     "303": {
       "name": "Dorian",
@@ -697,7 +698,7 @@
       "name": "Neris",
       "role": "Pícara",
       "immediate": "Gana 1 <villager>Aldeano</villager>.",
-      "reaction": "Cuando retires un <villager>Aldeano</villager> de la Aldea, puedes agotar esta carta para ganar 2 <coin/> adicionales, o para no pagar el sobrecoste.",
+      "reaction": "Cuando retires un <villager>Aldeano</villager> para «Ganar monedas», puedes agotar esta carta para ganar 2 <coin/> adicionales. Cuando retires un <villager>Aldeano</villager> para «Activar una carta», puedes agotar esta carta para ignorar el sobrecoste.",
       "score": "1 PV por cada 2 <coin/> restantes."
     },
     "307": {
@@ -718,8 +719,8 @@
       "name": "Isandre",
       "role": "Clériga",
       "immediate": "Gana 1 <villager>Aldeano</villager>.",
-      "reaction": "Cuando agotes una de tus cartas, puedes agotar esta carta para prepararla. Puedes agotar de inmediato la carta que acabas de preparar para activar de nuevo su efecto.",
-      "score": "2 PV por Compañero."
+      "reaction": "Cuando agotes una de tus cartas, puedes agotar esta carta para prepararla. Si la carta preparada tiene un efecto de reacción, puedes volver a agotarla para activar de nuevo su efecto.",
+      "score": "2 PV por Compañero, incluida esta carta."
     },
     "310": {
       "name": "Seren",
@@ -741,7 +742,7 @@
       "name": "Valley",
       "0": {
         "requirement": "Tener al menos 1 de <force>Fuerza</force>",
-        "reward": "Mueve tu <adventurer>Aventurero</adventurer> hasta 2 casillas"
+        "reward": "Mueve tu <adventurer>Aventurero</adventurer> hasta 2 casillas (si ganas la otra recompensa, resuélvela antes del movimiento)"
       },
       "1": {
         "requirement": "Gasta 1 <villager>Aldeano</villager>",
@@ -783,7 +784,7 @@
     "7": {
       "name": "Marauders",
       "0": {
-        "requirement": "Tener un total de <force>Fuerza</force> y <magic>Magia</magic> de al menos 2",
+        "requirement": "Tener al menos 2 de <force>Fuerza</force> o 2 de <magic>Magia</magic> o una suma de <force>Fuerza</force>+<magic>Magia</magic> de al menos 2",
         "reward": "Gana 4 <coin/>"
       }
     },
@@ -824,7 +825,7 @@
     "13": {
       "name": "Camp",
       "0": {
-        "requirement": "Tener un total de <force>Fuerza</force> y <magic>Magia</magic> de al menos 1",
+        "requirement": "Tener al menos 1 de <force>Fuerza</force> o 1 de <magic>Magia</magic>",
         "reward": "Gana 1 <villager>Aldeano</villager>"
       }
     },
@@ -867,7 +868,7 @@
       "name": "Lone tower",
       "0": {
         "requirement": "Gasta 1 de <magic>Magia</magic>",
-        "reward": "Vuelve a partir a la aventura — mueve tu <adventurer>Aventurero</adventurer> hasta 3 casillas — y gana 3 PV"
+        "reward": "Gana 3 PV y luego vuelve a partir a la aventura y mueve tu <adventurer>Aventurero</adventurer> hasta 3 casillas"
       }
     },
     "19": {
@@ -950,7 +951,7 @@
     "29": {
       "name": "Vagabond",
       "0": {
-        "requirement": "Tener un total de <force>Fuerza</force> y <magic>Magia</magic> de al menos 4",
+        "requirement": "Tener al menos 4 de <force>Fuerza</force> o 4 de <magic>Magia</magic> o una suma de <force>Fuerza</force>+<magic>Magia</magic> de al menos 4",
         "reward": "Gana 1 <villager>Aldeano</villager>"
       }
     },
@@ -992,7 +993,7 @@
     "35": {
       "name": "Necromancer",
       "0": {
-        "requirement": "Tener un total de <force>Fuerza</force> y <magic>Magia</magic> de al menos 8",
+        "requirement": "Tener una suma de <force>Fuerza</force> + <magic>Magia</magic> de al menos 8",
         "reward": "Gana 9 PV"
       }
     },
@@ -1029,7 +1030,7 @@
       "name": "Relay",
       "0": {
         "requirement": "Gasta 4 <coin/>",
-        "reward": "Vuelve a partir a la aventura — mueve tu <adventurer>Aventurero</adventurer> hasta 3 casillas — y gana 2 PV"
+        "reward": "Gana 2 PV y luego vuelve a partir a la aventura y mueve tu <adventurer>Aventurero</adventurer> hasta 3 casillas"
       }
     },
     "40": {
@@ -1103,8 +1104,8 @@
       "requirement": "Tener al menos 4 de <force>Fuerza</force>"
     },
     "2": {
-      "name": "Dragón",
-      "requirement": "Tener un total de <force>Fuerza</force> y <magic>Magia</magic> de al menos 6"
+      "name": "Dragón de fuego",
+      "requirement": "Tener una suma de <force>Fuerza</force> + <magic>Magia</magic> de al menos 6"
     },
     "3": {
       "name": "Espectros",
@@ -1112,14 +1113,14 @@
     },
     "4": {
       "name": "Torneo de Bardos",
-      "requirement": "Mueve 2 cartas de Encuentro a la zona de historias contadas (sea cual sea su valor narrativo)"
+      "requirement": "Mueve 2 cartas de Encuentro a la zona de historias contadas (sea cual sea su valor narrativo, incluso 0)"
     },
     "5": {
       "name": "Donación",
       "requirement": "Descarta uno de tus Objetos"
     },
     "6": {
-      "name": "No muertos",
+      "name": "No muerto",
       "requirement": "Gasta 1 de <force>Fuerza</force> y 1 de <magic>Magia</magic>"
     },
     "7": {
