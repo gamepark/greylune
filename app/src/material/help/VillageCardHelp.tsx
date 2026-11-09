@@ -3,7 +3,6 @@ import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import { GainType, usesSeal } from '@gamepark/greylune/material/Effect'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
-import { Period } from '@gamepark/greylune/material/Period'
 import { Seal } from '@gamepark/greylune/material/Tokens'
 import { villagersAroundSlot } from '@gamepark/greylune/material/Village'
 import {
@@ -22,7 +21,9 @@ import { MaterialItem } from '@gamepark/rules-api'
 import { ReactNode } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { CoinIcon, SealIcon } from '../../components/Icons'
-import { cardInk, colors } from '../../theme/colors'
+import { cardInk } from '../../theme/colors'
+import { VillageDeckHelp } from './DeckHelp'
+import { HelpCatalogLink } from './HelpCatalog'
 import { HelpFact, HelpFacts, helpDialogCss, helpTexts, HelpNote, HelpSection, HelpTitle, HelpWarning, romanNumeral } from './HelpLayout'
 
 /**
@@ -43,7 +44,8 @@ import { HelpFact, HelpFacts, helpDialogCss, helpTexts, HelpNote, HelpSection, H
  */
 export const VillageCardHelp = ({ item, itemIndex }: MaterialHelpProps<PlayerColor, MaterialType, LocationType>) => {
   const front = (item.id as VillageCardId | undefined)?.front
-  if (front === undefined) return <VillageDeckHelp back={(item.id as VillageCardId | undefined)?.back} />
+  /** A card nobody has seen yet is a card of the deck, which only its deck can speak for. */
+  if (front === undefined) return <VillageDeckHelp />
   return <VillageCardDetails card={front} item={item} itemIndex={itemIndex} />
 }
 
@@ -112,6 +114,8 @@ const VillageCardDetails = ({ card, item, itemIndex }: { card: VillageCard; item
           <Trans i18nKey={key} components={helpTexts} />
         </HelpNote>
       ))}
+
+      <HelpCatalogLink pile={LocationType.VillageDeck}>{t('help.all-cards')}</HelpCatalogLink>
     </div>
   )
 }
@@ -147,22 +151,4 @@ const notes = (data: VillageCardData, type: VillageCardType): string[] => {
   else if (data.seals === PLAYERS_MINUS_ONE) keys.push('help.seals.note-players')
   else if (data.seals !== undefined) keys.push('help.seals.note-one')
   return keys
-}
-
-/** A card nobody has seen yet: its back says which period it belongs to, and nothing else. */
-const VillageDeckHelp = ({ back }: { back?: Period }) => {
-  const { t } = useTranslation()
-  const rules = useRules<GreyluneRules>()
-  const left = rules?.material(MaterialType.VillageCard).location(LocationType.VillageDeck).length ?? 0
-  return (
-    <div css={helpDialogCss}>
-      <HelpTitle accent={colors.gold} name={t('help.village-deck.name')} aside={back ? t('help.period', { period: romanNumeral[back] }) : undefined} />
-      <HelpFacts>
-        <HelpFact label={t('help.village-deck.left')}>{left}</HelpFact>
-      </HelpFacts>
-      <p>
-        <Trans i18nKey="help.village-deck.note" components={helpTexts} />
-      </p>
-    </div>
-  )
 }

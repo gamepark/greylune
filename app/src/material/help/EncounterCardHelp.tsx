@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import {
   EncounterCard,
   EncounterCardData,
@@ -11,12 +10,13 @@ import {
 } from '@gamepark/greylune/material/EncounterCard'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
-import { Period } from '@gamepark/greylune/material/Period'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
-import { MaterialHelpProps, useRules } from '@gamepark/react-game'
+import { MaterialHelpProps } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
 import { IncomeTokenIcon } from '../../components/Icons'
 import { cardInk } from '../../theme/colors'
+import { EncounterDeckHelp } from './DeckHelp'
+import { HelpCatalogLink } from './HelpCatalog'
 import { HelpFact, HelpFacts, HelpNote, HelpOutcome, HelpOutcomes, HelpTitle, helpDialogCss, helpTexts, romanNumeral } from './HelpLayout'
 
 /**
@@ -33,7 +33,8 @@ import { HelpFact, HelpFacts, HelpNote, HelpOutcome, HelpOutcomes, HelpTitle, he
  */
 export const EncounterCardHelp = ({ item }: MaterialHelpProps<PlayerColor, MaterialType, LocationType>) => {
   const id = item.id as EncounterCardId | undefined
-  if (id?.front === undefined) return <EncounterDeckHelp back={id?.back} />
+  /** A card nobody has seen yet is a card of the deck, which only its deck can speak for. */
+  if (id?.front === undefined) return <EncounterDeckHelp />
   return <EncounterCardDetails card={id.front} />
 }
 
@@ -77,6 +78,8 @@ const EncounterCardDetails = ({ card }: { card: EncounterCard }) => {
           <Trans i18nKey={key} components={helpTexts} />
         </HelpNote>
       ))}
+
+      <HelpCatalogLink pile={LocationType.EncounterDeck}>{t('help.all-cards')}</HelpCatalogLink>
     </div>
   )
 }
@@ -89,22 +92,4 @@ const notes = (data: EncounterCardData, hasIncome: boolean): string[] => {
   if (!data.story) keys.push('help.encounter.untellable')
   if (hasIncome) keys.push('help.income-token.note')
   return keys
-}
-
-/** A card nobody has seen yet: its back says which period it belongs to, and nothing else. */
-const EncounterDeckHelp = ({ back }: { back?: Period }) => {
-  const { t } = useTranslation()
-  const rules = useRules<GreyluneRules>()
-  const left = rules?.material(MaterialType.EncounterCard).location(LocationType.EncounterDeck).length ?? 0
-  return (
-    <div css={helpDialogCss}>
-      <HelpTitle accent={cardInk.encounter} name={t('help.encounter-deck.name')} aside={back ? t('help.period', { period: romanNumeral[back] }) : undefined} />
-      <HelpFacts>
-        <HelpFact label={t('help.encounter-deck.left')}>{left}</HelpFact>
-      </HelpFacts>
-      <p>
-        <Trans i18nKey="help.encounter-deck.note" components={helpTexts} />
-      </p>
-    </div>
-  )
 }

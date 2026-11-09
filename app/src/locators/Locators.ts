@@ -12,6 +12,7 @@ import { AreaLocator } from './AreaLocator'
 import { CampLocator } from './CampLocator'
 import { cardHoverTransform } from './CardHover'
 import { CenteredListLocator } from './CenteredListLocator'
+import { encounterDeckDescription, eventPileDescription, villageDeckDescription } from './DeckDescriptions'
 import { EncounterRowLocator } from './EncounterRowLocator'
 import { EventSpaceLocator } from './EventSpaceLocator'
 import { playerPanelLocator } from './PlayerPanelLocator'
@@ -86,7 +87,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
 
   // ---------------------------------------------------------------- Village cards
 
-  [LocationType.VillageDeck]: new DeckLocator({ coordinates: villageDeckSpot }),
+  [LocationType.VillageDeck]: new DeckLocator({ coordinates: villageDeckSpot, locationDescription: villageDeckDescription }),
 
   /** The cards themselves, and the buttons laid over the ones a Villager may be spent on. */
   [LocationType.VillageGrid]: new VillageGridLocator(),
@@ -105,7 +106,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
 
   // ---------------------------------------------------------------- Encounter cards
 
-  [LocationType.EncounterDeck]: new DeckLocator({ coordinates: encounterDeckSpot }),
+  [LocationType.EncounterDeck]: new DeckLocator({ coordinates: encounterDeckSpot, locationDescription: encounterDeckDescription }),
 
   /** A line of 3 hanging off the notch the Area is dealt into, and the cards past the third under it. */
   [LocationType.EncounterRow]: new EncounterRowLocator(),
@@ -131,7 +132,7 @@ export const Locators: Partial<Record<LocationType, Locator<PlayerColor, Materia
    * asks and what it pays, in a size the table cannot spare. Only the tile of the year grows — the
    * ones under it are hidden, so the framework leaves a face-down item where it lies.
    */
-  [LocationType.EventPile]: new DeckLocator({ coordinates: eventSpot, getHoverTransform: cardHoverTransform }),
+  [LocationType.EventPile]: new DeckLocator({ coordinates: eventSpot, getHoverTransform: cardHoverTransform, locationDescription: eventPileDescription }),
 
   [LocationType.QuestTileSpace]: new Locator({
     getCoordinates: (location: Location) => questTileSpots[location.id as HeroicQuestArea]

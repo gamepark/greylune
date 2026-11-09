@@ -223,6 +223,8 @@
   },
   "help": {
     "period": "Periode {period}",
+    "cards": "{count, plural, one {# Karte} other {# Karten}}",
+    "all-cards": "Alle Karten",
     "cost": "Kosten",
     "surcharge": "Zusatzkosten",
     "immediate": "Sofortiger Effekt",
@@ -266,6 +268,7 @@
     "village-deck": {
       "name": "Dorfstapel",
       "left": "Verbleibende Karten",
+      "setup": "Spielaufbau: Entferne zufällig 2 Karten der Periode I und 2 Karten der Periode II, ohne sie anzusehen. Mische die Karten und lege die 9 Karten der Periode III nach unten, darauf 18 Karten der Periode II, dann ganz oben 18 Karten der Periode I. Lege diesen Stapel verdeckt neben den Spielplan.",
       "note": "In jedem Winter werden die obersten 9 Karten des Dorfstapels aufgedeckt und in einem 3x3-Raster ausgelegt. Die Rückseite zeigt die Periode: I für die ersten 2 Jahre, II für die nächsten 2, III für das letzte."
     },
     "distance": "Entfernung",
@@ -287,6 +290,7 @@
     "encounter-deck": {
       "name": "Begegnungsstapel",
       "left": "Verbleibende Karten",
+      "setup": "Spielaufbau: Bei 2/3/4 Spielern mischst du und legst 5/6/7 Karten der Periode III nach unten, darauf 10/12/14 Karten der Periode II, dann ganz oben 10/12/14 Karten der Periode I (lege die nicht benutzten Karten unbesehen in die Schachtel zurück). Lege diesen Stapel verdeckt neben den Spielplan.",
       "note": "In jedem Winter werden die obersten 5/6/7 Begegnungskarten (bei 2/3/4 Spielern) aufgedeckt und entsprechend ihrer Entfernung rechts neben den Spielplan gelegt. Die Rückseite zeigt die Periode: I für die ersten 2 Jahre, II für die nächsten 2, III für das letzte."
     },
     "options": "Optionen",
@@ -299,6 +303,8 @@
     "event-pile": {
       "name": "Ereignisstapel",
       "left": "Kommende Plättchen",
+      "all": "Die 6 Ereignisplättchen",
+      "see-all": "Alle Ereignisse ansehen",
       "note": "Beim Spielaufbau wird ein Ereignisplättchen zufällig entfernt und die 5 übrigen werden verdeckt gemischt, um den Stapel zu bilden. In jedem Winter wird das oberste Plättchen des Stapels aufgedeckt: Es ist das aktive Ereignis des laufenden Jahres."
     },
     "quest": {

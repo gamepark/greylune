@@ -1,14 +1,15 @@
 /** @jsxImportSource @emotion/react */
-import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import { EventTile, eventTileData, isFestival } from '@gamepark/greylune/material/EventTile'
 import { LocationType } from '@gamepark/greylune/material/LocationType'
 import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
-import { MaterialHelpProps, useRules } from '@gamepark/react-game'
+import { MaterialHelpProps } from '@gamepark/react-game'
 import { Trans, useTranslation } from 'react-i18next'
 import { GainsLabel } from '../../components/Gains'
 import { cardInk } from '../../theme/colors'
-import { HelpFact, HelpFacts, HelpList, HelpListItem, HelpNote, HelpOutcome, HelpOutcomes, HelpTitle, helpDialogCss, helpTexts } from './HelpLayout'
+import { EventPileHelp } from './DeckHelp'
+import { HelpCatalogLink } from './HelpCatalog'
+import { HelpList, HelpListItem, HelpNote, HelpOutcome, HelpOutcomes, HelpTitle, helpDialogCss, helpTexts } from './HelpLayout'
 
 /**
  * What the Event of the year offers, for a tile that carries no title.
@@ -24,6 +25,9 @@ import { HelpFact, HelpFacts, HelpList, HelpListItem, HelpNote, HelpOutcome, Hel
  * The Festival is the one tile whose options are written by nobody: each of its 5 is a pair of
  * amounts, and a figure and a symbol say a pair of amounts in every language at once (see
  * {@link GainsLabel}).
+ *
+ * A tile face down is a tile of the pile, which only the pile can speak for; and the dialog of any
+ * tile ends on the way back to the pile's, where the 6 tiles of the box are listed.
  */
 export const EventTileHelp = ({ item }: MaterialHelpProps<PlayerColor, MaterialType, LocationType>) => {
   const tile = item.id as EventTile | undefined
@@ -73,31 +77,8 @@ const EventTileDetails = ({ tile }: { tile: EventTile }) => {
           <Trans i18nKey="help.event.festival" components={helpTexts} />
         </HelpNote>
       )}
+      <HelpCatalogLink pile={LocationType.EventPile}>{t('help.event-pile.see-all')}</HelpCatalogLink>
     </div>
   )
 }
 
-/**
- * The tiles still face down under the one turned over. One year of the game is never played: a tile
- * goes back in the box unseen at setup, so the pile is always one short of the years left.
- */
-const EventPileHelp = () => {
-  const { t } = useTranslation()
-  const rules = useRules<GreyluneRules>()
-  const hidden =
-    rules
-      ?.material(MaterialType.EventTile)
-      .location(LocationType.EventPile)
-      .filter((item) => !item.location.rotation).length ?? 0
-  return (
-    <div css={helpDialogCss}>
-      <HelpTitle accent={cardInk.event} name={t('help.event-pile.name')} />
-      <HelpFacts>
-        <HelpFact label={t('help.event-pile.left')}>{hidden}</HelpFact>
-      </HelpFacts>
-      <p>
-        <Trans i18nKey="help.event-pile.note" components={helpTexts} />
-      </p>
-    </div>
-  )
-}

@@ -223,6 +223,8 @@
   },
   "help": {
     "period": "Periodo {period}",
+    "cards": "{count, plural, one {# carta} other {# carte}}",
+    "all-cards": "Tutte le carte",
     "cost": "Costo",
     "surcharge": "Sovrapprezzo",
     "immediate": "Effetto immediato",
@@ -266,6 +268,7 @@
     "village-deck": {
       "name": "Mazzo Villaggio",
       "left": "Carte rimanenti",
+      "setup": "Preparazione: rimuovete a caso 2 carte del periodo I e 2 carte del periodo II senza guardarle. Mescolate e mettete le 9 carte del periodo III in fondo, poi sopra 18 carte del periodo II, poi in cima 18 carte del periodo I. Mettete questo mazzo a faccia in giù vicino al tabellone principale.",
       "note": "Ogni Inverno, le prime 9 carte del mazzo Villaggio vengono rivelate e disposte in una griglia 3x3. Il dorso indica il periodo: I per i primi 2 anni, II per i 2 successivi, III per l'ultimo."
     },
     "distance": "Distanza",
@@ -287,6 +290,7 @@
     "encounter-deck": {
       "name": "Mazzo Incontri",
       "left": "Carte rimanenti",
+      "setup": "Preparazione: con 2/3/4 giocatori rispettivamente, mescolate e mettete 5/6/7 carte del periodo III in fondo, poi sopra 10/12/14 carte del periodo II, poi in cima 10/12/14 carte del periodo I (rimettete le carte inutilizzate nella scatola senza guardarle). Mettete questo mazzo a faccia in giù vicino al tabellone principale.",
       "note": "Ogni Inverno, le prime 5/6/7 carte Incontro (con 2/3/4 giocatori) vengono rivelate e disposte a destra del tabellone principale in base alla loro Distanza. Il dorso indica il periodo: I per i primi 2 anni, II per i 2 successivi, III per l'ultimo."
     },
     "options": "Opzioni",
@@ -299,6 +303,8 @@
     "event-pile": {
       "name": "Pila degli Eventi",
       "left": "Tessere in arrivo",
+      "all": "Le 6 tessere Evento",
+      "see-all": "Vedi tutti gli Eventi",
       "note": "Durante la preparazione, una tessera Evento viene rimossa a caso e le altre 5 vengono mescolate segretamente per formare la pila. Ogni Inverno, la prima tessera della pila viene rivelata: è l'Evento attivo per l'anno in corso."
     },
     "quest": {

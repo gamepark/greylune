@@ -223,6 +223,8 @@
   },
   "help": {
     "period": "Periodo {period}",
+    "cards": "{count, plural, one {# carta} other {# cartas}}",
+    "all-cards": "Todas las cartas",
     "cost": "Coste",
     "surcharge": "Sobrecoste",
     "immediate": "Efecto inmediato",
@@ -266,6 +268,7 @@
     "village-deck": {
       "name": "Mazo de Aldea",
       "left": "Cartas restantes",
+      "setup": "Preparación: retira al azar 2 cartas del periodo I y 2 cartas del periodo II sin mirarlas. Baraja y coloca las 9 cartas del periodo III abajo, luego 18 cartas del periodo II encima y, por último, 18 cartas del periodo I arriba del todo. Coloca este mazo bocabajo junto al tablero principal.",
       "note": "Cada Invierno, se revelan las 9 primeras cartas del mazo de Aldea y se disponen en una cuadrícula de 3x3. El reverso indica el periodo: I para los 2 primeros años, II para los 2 siguientes, III para el último."
     },
     "distance": "Distancia",
@@ -287,6 +290,7 @@
     "encounter-deck": {
       "name": "Mazo de Encuentros",
       "left": "Cartas restantes",
+      "setup": "Preparación: con 2/3/4 jugadores respectivamente, baraja y coloca 5/6/7 cartas del periodo III abajo, luego 10/12/14 cartas del periodo II encima y, por último, 10/12/14 cartas del periodo I arriba del todo (devuelve las cartas no utilizadas a la caja sin mirarlas). Coloca este mazo bocabajo junto al tablero principal.",
       "note": "Cada Invierno, se revelan las 5/6/7 primeras cartas de Encuentro (con 2/3/4 jugadores) y se disponen a la derecha del tablero principal según su Distancia. El reverso indica el periodo: I para los 2 primeros años, II para los 2 siguientes, III para el último."
     },
     "options": "Opciones",
@@ -299,6 +303,8 @@
     "event-pile": {
       "name": "Pila de Eventos",
       "left": "Losetas por venir",
+      "all": "Las 6 losetas de Evento",
+      "see-all": "Ver todos los Eventos",
       "note": "Durante la preparación, se retira al azar una loseta de Evento y las otras 5 se barajan en secreto para formar la pila. Cada Invierno, se revela la primera loseta de la pila: es el Evento activo del año en curso."
     },
     "quest": {

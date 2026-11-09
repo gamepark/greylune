@@ -7,7 +7,7 @@ import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { CustomMoveType } from '@gamepark/greylune/rules/CustomMoveType'
 import { ResolveEncounterRule } from '@gamepark/greylune/rules/ResolveEncounterRule'
 import { ItemContext, TokenDescription } from '@gamepark/react-game'
-import { CustomMove, isCustomMoveType, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { CustomMove, isCustomMoveType, MaterialItem, MaterialMove, MaterialMoveBuilder } from '@gamepark/rules-api'
 import { AchieveQuestButton } from '../encounters/AchieveQuest'
 import { eventOptions, joinEventMoves } from '../event/EventMoves'
 import { EventTileMenu } from '../event/EventTileMenu'
@@ -24,6 +24,12 @@ export class EventTileDescription extends TokenDescription<PlayerColor, Material
   images = eventTileImages
   backImage = EventTileBack
   help = EventTileHelp
+
+  /** A tile still face down is only a tile of the pile: the pile's dialog lists what it may be (see {@link EventPileHelp}). */
+  displayHelp(item: MaterialItem<PlayerColor, LocationType, EventTile>, context: ItemContext<PlayerColor, MaterialType, LocationType>) {
+    if (item.id === undefined) return MaterialMoveBuilder.displayLocationHelp({ type: LocationType.EventPile })
+    return super.displayHelp(item, context)
+  }
 
   /** The Event asks to be pressed, not picked up: its buttons are there as soon as they are due. */
   isMenuAlwaysVisible(): boolean {

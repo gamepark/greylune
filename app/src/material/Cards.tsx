@@ -6,7 +6,7 @@ import { MaterialType } from '@gamepark/greylune/material/MaterialType'
 import { VillageCardId } from '@gamepark/greylune/material/VillageCard'
 import { PlayerColor } from '@gamepark/greylune/PlayerColor'
 import { CardDescription, ItemContext } from '@gamepark/react-game'
-import { MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { MaterialItem, MaterialMove, MaterialMoveBuilder } from '@gamepark/rules-api'
 import { encounterMoves, endStoryMove, isLastToldStory, tellStoryMove } from '../encounters/EncounterActions'
 import { EncounterCardMenu } from '../encounters/ResolveEncounter'
 import { EndStoryButton, TellStoryButton } from '../encounters/TellStory'
@@ -40,6 +40,12 @@ export class VillageCardDescription extends CardDescription<PlayerColor, Materia
   images = villageCardImagesEn
   backImages = villageCardBacks
   help = VillageCardHelp
+
+  /** A card of the deck shows nothing but its period: the dialog of the deck says what it may be (see {@link VillageDeckHelp}). */
+  displayHelp(item: MaterialItem<PlayerColor, LocationType, VillageCardId>, context: ItemContext<PlayerColor, MaterialType, LocationType>) {
+    if (item.id?.front === undefined) return MaterialMoveBuilder.displayLocationHelp({ type: LocationType.VillageDeck })
+    return super.displayHelp(item, context)
+  }
 
   /** A card of the Village asks to be pressed, not picked up: its offer is there as soon as it is due. */
   isMenuAlwaysVisible(): boolean {
@@ -111,6 +117,12 @@ export class EncounterCardDescription extends CardDescription<PlayerColor, Mater
   images = encounterCardImagesEn
   backImages = encounterCardBacks
   help = EncounterCardHelp
+
+  /** A card of the deck shows nothing but its period: the dialog of the deck says what it may be (see {@link EncounterDeckHelp}). */
+  displayHelp(item: MaterialItem<PlayerColor, LocationType, EncounterCardId>, context: ItemContext<PlayerColor, MaterialType, LocationType>) {
+    if (item.id?.front === undefined) return MaterialMoveBuilder.displayLocationHelp({ type: LocationType.EncounterDeck })
+    return super.displayHelp(item, context)
+  }
 
   /** Like a card of the Village: what it offers is there to be read, not to be uncovered. */
   isMenuAlwaysVisible(): boolean {

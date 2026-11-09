@@ -223,6 +223,8 @@
   },
   "help": {
     "period": "Period {period}",
+    "cards": "{count, plural, one {# card} other {# cards}}",
+    "all-cards": "All cards",
     "cost": "Cost",
     "surcharge": "Extra cost",
     "immediate": "Immediate effect",
@@ -266,6 +268,7 @@
     "village-deck": {
       "name": "Village deck",
       "left": "Cards left",
+      "setup": "Setup: randomly remove 2 period I cards and 2 period II cards without looking at them. Shuffle the 9 period III cards and place them at the bottom, then shuffle the 18 period II cards and place them on top, then shuffle the 18 period I cards and place them on top. Place this deck face down near the main board.",
       "note": "Each Winter, the top 9 cards of the Village deck are revealed and laid out in a 3×3 grid. The back shows the period: I for the first 2 years, II for the next 2, III for the last one."
     },
     "distance": "Distance",
@@ -287,6 +290,7 @@
     "encounter-deck": {
       "name": "Encounter deck",
       "left": "Cards left",
+      "setup": "Setup: for 2/3/4 players respectively, place 5/6/7 period III cards at the bottom, then 10/12/14 period II cards on top, then 10/12/14 period I cards on top (return the unused cards to the box without looking at them). Place this deck face down near the main board.",
       "note": "Each Winter, the top 5/6/7 Encounter cards (2/3/4 players) are revealed and laid out to the right of the main board according to their Distance. The back shows the period: I for the first 2 years, II for the next 2, III for the last one."
     },
     "options": "Options",
@@ -299,6 +303,8 @@
     "event-pile": {
       "name": "Event stack",
       "left": "Upcoming tiles",
+      "all": "The 6 Event tiles",
+      "see-all": "See all Events",
       "note": "During setup, one Event tile is removed at random and the remaining 5 tiles are secretly shuffled to form the stack. Each Winter, the top tile of the stack is revealed: this is the active Event for the current year."
     },
     "quest": {

@@ -223,6 +223,8 @@
   },
   "help": {
     "period": "Période {period}",
+    "cards": "{count, plural, one {# carte} other {# cartes}}",
+    "all-cards": "Toutes les cartes",
     "cost": "Coût",
     "surcharge": "Surcoût",
     "immediate": "Effet immédiat",
@@ -266,6 +268,7 @@
     "village-deck": {
       "name": "Deck Village",
       "left": "Cartes restantes",
+      "setup": "Mise en place : retirez aléatoirement 2 cartes de la période I et 2 cartes de la période II sans les regarder. Mélangez puis placez les 9 cartes de la période III en bas, puis 18 cartes de la période II par-dessus, puis 18 cartes de la période I tout en haut. Placez ce deck face cachée près du plateau principal.",
       "note": "Chaque Hiver, les 9 premières cartes du deck Village sont révélées et disposées en grille de 3x3. Le dos indique la période : I pour les 2 premières années, II pour les 2 suivantes, III pour la dernière."
     },
     "distance": "Distance",
@@ -287,6 +290,7 @@
     "encounter-deck": {
       "name": "Deck Rencontre",
       "left": "Cartes restantes",
+      "setup": "Mise en place : à 2/3/4 joueurs respectivement, mélangez puis placez 5/6/7 cartes de la période III en bas, puis 10/12/14 cartes de la période II par-dessus, puis 10/12/14 cartes de la période I tout en haut (remettez les cartes inutilisées dans la boîte sans les regarder). Placez ce deck face cachée près du plateau principal.",
       "note": "Chaque Hiver, les 5/6/7 premières cartes Rencontre (à 2/3/4 joueurs) sont révélées et disposées à droite du plateau principal en fonction de leur Distance. Le dos indique la période : I pour les 2 premières années, II pour les 2 suivantes, III pour la dernière."
     },
     "options": "Options",
@@ -299,6 +303,8 @@
     "event-pile": {
       "name": "Pile d'Événements",
       "left": "Tuiles à venir",
+      "all": "Les 6 tuiles Événement",
+      "see-all": "Voir tous les événements",
       "note": "À la mise en place, une tuile Événement est retirée au hasard et les 5 autres sont mélangées secrètement pour former la pile. Chaque Hiver, la première tuile de la pile est révélée : c'est l'Événement actif pour l'année en cours."
     },
     "quest": {
