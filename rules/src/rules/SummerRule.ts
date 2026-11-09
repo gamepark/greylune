@@ -15,6 +15,7 @@ import { CustomMoveType } from './CustomMoveType'
 import { CostReduction, GreyluneMove } from './GreyluneRule'
 import { RuleId } from './RuleId'
 import { SeasonRule } from './SeasonRule'
+import { tiltsItself } from './UseItemRule'
 
 /** What a move that takes a Villager out of the Village says: which Villager, and which card. */
 export type VillagerActionData = { villager: number; card?: number }
@@ -193,13 +194,18 @@ export class SummerRule extends SeasonRule {
   /**
    * The option is already named here, so the window is opened on what that very option asks to be
    * paid and on nothing else: Bran answers the Villagers the Object spends, and Kael is not called
-   * to an Object that spends no Force. What the tilt itself may be answered with comes later, in the
-   * window `UseItemRule` opens once the card is down.
+   * to an Object that spends no Force. The Object goes down first, so the same window holds its tilt:
+   * Isandre may stand it back up there, or stand back up the Bran tilted for its Villager.
    */
   private startUseItem(data: { card: number; ability: number }): GreyluneMove[] {
     this.memorize(Memory.ActivatedCard, data.card)
     this.memorize(Memory.Ability, data.ability)
     const ability = villageCardData[this.playerCard(data.card)].abilities![data.ability]
-    return this.openReactions(paymentTriggers(ability.requirements), RuleId.UseItem)
+    if (!tiltsItself(ability)) return this.openReactions(paymentTriggers(ability.requirements), RuleId.UseItem)
+    this.rememberTilted(data.card)
+    return [
+      this.villageCards.index(data.card).rotateItem(true),
+      ...this.openReactions([...paymentTriggers(ability.requirements), TriggerType.TiltCard], RuleId.UseItem)
+    ]
   }
 }

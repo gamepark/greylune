@@ -146,6 +146,14 @@
       "you": "Aktiviere {card} oder <pass>passe</pass>",
       "player": "{player} kann reagieren"
     },
+    "reaction-straighten": {
+      "you": "Aktiviere {reactor}, um {cards} bereit zu machen, oder <pass>passe</pass>",
+      "player": "{player} kann reagieren"
+    },
+    "straighten-tilted": {
+      "you": "Mache {cards} bereit",
+      "player": "{player} macht eine Karte bereit"
+    },
     "scoring": {
       "quests": "Spielende: SP der Quests",
       "companions": "Spielende: SP der Gefährten",

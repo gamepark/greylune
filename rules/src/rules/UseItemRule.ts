@@ -1,14 +1,24 @@
 import { Memory } from '../Memory'
 import { Effect, RequirementType } from '../material/Effect'
-import { ReactionType, TriggerType } from '../material/Reaction'
+import { ReactionType } from '../material/Reaction'
 import { villageCardData } from '../material/VillageCard'
 import { GreyluneMove, GreyluneRule } from './GreyluneRule'
-import { RuleId } from './RuleId'
+
+/**
+ * Whether using an Object leaves it tilted, which is when Isandre may stand it back up. An Object the
+ * effect asks to be given up goes back in the box instead, even one printing a tilt beside it.
+ */
+export const tiltsItself = (ability: Effect): boolean => {
+  const requirements = ability.requirements ?? []
+  return requirements.some((requirement) => requirement.type === RequirementType.Tilt) && !requirements.some((requirement) => requirement.type === RequirementType.DiscardCard)
+}
 
 /**
  * One of the player's Objects is used (rulebook p.7). The card goes down, and only comes back up
- * next Autumn — unless Isandre stands it up again, which is why the tilt opens a window of its own.
- * A card the effect asks to be given up goes back in the box instead.
+ * next Autumn — unless Isandre stands it up again. It goes down the moment it is used, before the rest
+ * of its price is settled (see `SummerRule`), so that the window opened on that price is also the one
+ * Isandre answers the tilt in: a player tilting Tommy and Bran for Tommy's Villager picks which of
+ * the two she stands back up. A card the effect asks to be given up goes back in the box here.
  */
 export class UseItemRule extends GreyluneRule {
   get card(): number {
@@ -36,22 +46,14 @@ export class UseItemRule extends GreyluneRule {
 
   onRuleStart(): GreyluneMove[] {
     const ability = this.ability
-    const requirements = ability.requirements ?? []
     const moves: GreyluneMove[] = []
-    let tilted = false
-    for (const requirement of requirements) {
-      if (requirement.type === RequirementType.Tilt) {
-        moves.push(this.villageCards.index(this.card).rotateItem(true))
-        tilted = true
-      } else if (requirement.type === RequirementType.DiscardCard) {
-        moves.push(this.villageCards.index(this.card).deleteItem())
-        tilted = false
-      } else {
-        moves.push(...this.payRequirements([requirement]))
-      }
+    for (const requirement of ability.requirements ?? []) {
+      // The tilt was paid the moment the Object was used.
+      if (requirement.type === RequirementType.Tilt) continue
+      if (requirement.type === RequirementType.DiscardCard) moves.push(this.villageCards.index(this.card).deleteItem())
+      else moves.push(...this.payRequirements([requirement]))
     }
     this.pushGains(ability.gains ?? [])
-    if (tilted) this.memorize(Memory.LastTilted, this.card)
-    return [...moves, ...(tilted ? this.openReactions([TriggerType.TiltCard], RuleId.ResolveEffects) : this.endOfAction())]
+    return [...moves, ...this.endOfAction()]
   }
 }

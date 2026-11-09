@@ -173,5 +173,12 @@ export enum RuleId {
   QuestsScoring,
   CompanionsScoring,
   ItemsScoring,
-  SkillsScoring
+  SkillsScoring,
+
+  /**
+   * Isandre has gone down in a window where more than one card had gone down before her — an Object
+   * and the Companion that paid its price — and the player names the one she stands back up. Then
+   * the window opens again. Last of the list only because it came after the game was released.
+   */
+  StraightenTilted
 }

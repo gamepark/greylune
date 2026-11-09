@@ -8,7 +8,7 @@ import { ChooseSkillHeader } from './ChooseSkillHeader'
 import { EndTurnHeader } from './EndTurnHeader'
 import { EventHeader } from './EventHeader'
 import { VillagerIcon } from '../components/Icons'
-import { ReactionHeader } from './ReactionHeader'
+import { ReactionHeader, StraightenTiltedHeader } from './ReactionHeader'
 import { ResolveEncounterHeader } from './ResolveEncounterHeader'
 import { ResolveQuestHeader } from './ResolveQuestHeader'
 import { SpringHeader } from './SpringHeader'
@@ -60,6 +60,7 @@ export const Headers: Record<RuleId, ComponentType> = {
   [RuleId.ResolveQuest]: ResolveQuestHeader,
   [RuleId.TellStory]: TellStoryHeader,
   [RuleId.StraightenCard]: () => <HeaderText code="straighten" />,
+  [RuleId.StraightenTilted]: StraightenTiltedHeader,
   [RuleId.PlaceVillager]: () => <HeaderText code="place-villager" components={{ villager: <VillagerIcon /> }} />,
   [RuleId.Event]: EventHeader,
   [RuleId.SpecialAction]: () => <HeaderText code="special-action" />,

@@ -759,6 +759,44 @@ describe('The Potions', () => {
 })
 
 describe('Isandre', () => {
+  describe('on Tommy paid with Bran', () => {
+    /** Tommy's 2 spaces, for a tilt and a Villager the player does not have: Bran must pay it. */
+    const useTommy = () => {
+      const tommy = give(VillageCard.Tommy, LocationType.Items)
+      for (const item of items(MaterialType.Villager)) {
+        if (item.location.type === LocationType.ActiveVillagers && item.location.player === BLUE) item.location = { type: LocationType.Camp, player: BLUE }
+      }
+      items(MaterialType.SeasonMarker).find((entry) => entry.id === BLUE)!.location.id = Season.Summer
+      game.rule = { id: RuleId.Summer, player: BLUE }
+      playCustom(CustomMoveType.UseItem, (data: { card: number; ability: number }) => data.card === tommy && data.ability === 1)
+      return tommy
+    }
+
+    it('tilts Tommy at once, then asks for Bran alone, then lets Isandre stand back up either', () => {
+      const isandre = give(VillageCard.Isandre)
+      const bran = give(VillageCard.Bran)
+      const tommy = useTommy()
+      expect(items(MaterialType.VillageCard)[tommy].location.rotation).toBe(true)
+      expect(reactionsOffered()).toEqual([{ card: bran, option: 0 }])
+      expect(rules().getLegalMoves(BLUE).some((move) => isCustomMoveType(CustomMoveType.Pass)(move))).toBe(false)
+      useReaction(bran)
+      expect(reactionsOffered()).toEqual([{ card: isandre, option: 0 }])
+      useReaction(isandre)
+      expect(game.rule!.id).toBe(RuleId.StraightenTilted)
+      const offered = rules()
+        .getLegalMoves(BLUE)
+        .map((move) => (isMoveItemType(MaterialType.VillageCard)(move) ? move.itemIndex : undefined))
+      expect(offered.sort()).toEqual([tommy, bran].sort())
+      play(rules().getLegalMoves(BLUE).find((move) => isMoveItemType(MaterialType.VillageCard)(move) && move.itemIndex === tommy)!)
+      expect(items(MaterialType.VillageCard)[tommy].location.rotation).toBe(false)
+      expect(items(MaterialType.VillageCard)[bran].location.rotation).toBe(true)
+      expect(items(MaterialType.VillageCard)[isandre].location.rotation).toBe(true)
+      // Nothing left to answer with: the journey goes on, 2 spaces long.
+      expect(game.rule!.id).toBe(RuleId.Travel)
+      expect(rules().remind(Memory.TravelDistance)).toBe(2)
+    })
+  })
+
   it('stands back up the card that has just gone down', () => {
     const isandre = give(VillageCard.Isandre)
     // Cor: 3 victory points for a tilt and a Villager.
@@ -832,6 +870,12 @@ describe('A reaction answered twice through Isandre', () => {
 
   const isTilted = (card: number) => items(MaterialType.VillageCard)[card].location.rotation === true
 
+  /** The Horn and Bran have both gone down: Isandre stands back up the one the player names. */
+  const straightenBack = (card: number) => {
+    expect(game.rule!.id).toBe(RuleId.StraightenTilted)
+    play(rules().getLegalMoves(BLUE).find((move) => isMoveItemType(MaterialType.VillageCard)(move) && move.itemIndex === card)!)
+  }
+
   it('Elwen: 4 more spaces of road', () => {
     const elwen = give(VillageCard.Elwen)
     const isandre = give(VillageCard.Isandre)
@@ -896,6 +940,7 @@ describe('A reaction answered twice through Isandre', () => {
     blowHorn(1)
     useReaction(bran)
     useReaction(isandre)
+    straightenBack(bran)
     expect(reactionsOffered()).toEqual([{ card: bran, option: 0 }])
     useReaction(bran)
     expect(activeVillagers()).toBe(before)
@@ -908,6 +953,7 @@ describe('A reaction answered twice through Isandre', () => {
     blowHorn(0)
     useReaction(bran)
     useReaction(isandre)
+    straightenBack(bran)
     expect(game.rule!.id).not.toBe(RuleId.Reaction)
     expect(isTilted(bran)).toBe(false)
     expect(playerVp(rules(), BLUE)).toBe(3)
@@ -1221,7 +1267,7 @@ describe('Every Companion', () => {
       game.memory[Memory.Resume] = RuleId.ResolveEffects
       // Opened on every trigger at once: what matters is that the card knows how to answer.
       game.memory[Memory.Trigger] = getEnumValues(TriggerType)
-      game.memory[Memory.LastTilted] = give(VillageCard.Horn, LocationType.Items)
+      game.memory[Memory.Tilted] = [give(VillageCard.Horn, LocationType.Items)]
       game.memory[Memory.SkillsGained] = [GainType.Force, GainType.Magic]
       // An Encounter printing a condition where the Adventurer stands, for Ariok to wave away.
       placeEncounter(EncounterCard.PackOfWolves, Area.Wand)

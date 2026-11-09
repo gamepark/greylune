@@ -33,6 +33,7 @@ import { RuleId } from './rules/RuleId'
 import { SpecialActionRule } from './rules/SpecialActionRule'
 import { SpringRule } from './rules/SpringRule'
 import { StraightenCardRule } from './rules/StraightenCardRule'
+import { StraightenTiltedRule } from './rules/StraightenTiltedRule'
 import { SummerRule } from './rules/SummerRule'
 import { TellStoryRule } from './rules/TellStoryRule'
 import { TravelRule } from './rules/TravelRule'
@@ -71,6 +72,7 @@ export class GreyluneRules
     [RuleId.ResolveQuest]: ResolveQuestRule,
     [RuleId.TellStory]: TellStoryRule,
     [RuleId.StraightenCard]: StraightenCardRule,
+    [RuleId.StraightenTilted]: StraightenTiltedRule,
     [RuleId.PlaceVillager]: PlaceVillagerRule,
     [RuleId.ChooseSkill]: ChooseSkillRule,
     [RuleId.BonusToken]: BonusTokenRule,

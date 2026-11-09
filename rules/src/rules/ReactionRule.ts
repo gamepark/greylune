@@ -25,6 +25,8 @@ import { UseItemRule } from './UseItemRule'
  *
  * The Villager Mira and the Potion d'endurance put in the Village is placed as soon as the card goes
  * down, before anything else happens: the window steps aside for it, and opens again once it stands.
+ * So does Isandre, when more than one card has gone down in the window: the player names the one she
+ * stands back up (see `StraightenTiltedRule`).
  *
  * Six windows cannot be passed: the one opened on a card offered to a player who can only pay for it
  * with a Companion (see {@link ActivateCardRule}), the one opened on an Object whose Villagers or Force
@@ -153,13 +155,16 @@ export class ReactionRule extends GreyluneRule {
     if (!isCustomMoveType(CustomMoveType.UseReaction)(move)) return super.onCustomMove(move)
     const { card, option } = move.data as { card: number; option: number }
     const moves = this.useReaction(card, option)
-    if (this.reactionEffect(card, option).type === ReactionType.PlaceVillager) {
-      return [...moves, this.startRule(RuleId.PlaceVillager)]
+    const type = this.reactionEffect(card, option).type
+    if (type === ReactionType.PlaceVillager) return [...moves, this.startRule(RuleId.PlaceVillager)]
+    if (type === ReactionType.StraightenTilted && this.straightenableBy(card).length > 1) {
+      return [...moves, this.startRule(RuleId.StraightenTilted)]
     }
     return [...moves, this.startRule(RuleId.Reaction)]
   }
 
   private close(): GreyluneMove[] {
+    this.forget(Memory.Tilted)
     return [this.startRule(this.resumeRule)]
   }
 }

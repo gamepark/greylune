@@ -146,6 +146,14 @@
       "you": "Активируйте {card} или <pass>пасуйте</pass>",
       "player": "{player} может отреагировать"
     },
+    "reaction-straighten": {
+      "you": "Активируйте {reactor}, чтобы развернуть {cards}, или <pass>пасуйте</pass>",
+      "player": "{player} может отреагировать"
+    },
+    "straighten-tilted": {
+      "you": "Разверните {cards}",
+      "player": "{player} разворачивает карту"
+    },
     "scoring": {
       "quests": "Конец игры: ПО за квесты",
       "companions": "Конец игры: ПО за спутников",

@@ -146,6 +146,14 @@
       "you": "Attivate {card} o <pass>passate</pass>",
       "player": "{player} può reagire"
     },
+    "reaction-straighten": {
+      "you": "Attivate {reactor} per ripristinare {cards}, o <pass>passate</pass>",
+      "player": "{player} può reagire"
+    },
+    "straighten-tilted": {
+      "you": "Ripristinate {cards}",
+      "player": "{player} ripristina una carta"
+    },
     "scoring": {
       "quests": "Fine partita: PV delle Missioni",
       "companions": "Fine partita: PV dei Compagni",

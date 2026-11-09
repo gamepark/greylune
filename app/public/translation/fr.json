@@ -146,6 +146,14 @@
       "you": "Activez {card} ou <pass>passez</pass>",
       "player": "{player} peut réagir"
     },
+    "reaction-straighten": {
+      "you": "Activez {reactor} pour redresser {cards}, ou <pass>passez</pass>",
+      "player": "{player} peut réagir"
+    },
+    "straighten-tilted": {
+      "you": "Redressez {cards}",
+      "player": "{player} redresse une carte"
+    },
     "scoring": {
       "quests": "Fin de partie : PV des Quêtes",
       "companions": "Fin de partie : PV des Compagnons",

@@ -27,8 +27,11 @@ export enum Memory {
   /** The Encounter the Adventurer has just designated, while the sides it is paid for are chosen. */
   ResolvedEncounter,
 
-  /** The last card of the player to have gone down, which is the one Isandre stands back up. */
-  LastTilted,
+  /**
+   * The cards of the player that have gone down in the reaction window open — or for the Object
+   * whose price it was opened on — and are still down: the ones Isandre may stand back up.
+   */
+  Tilted,
 
   /** Which option of the card being used, when it offers more than one. */
   Ability,

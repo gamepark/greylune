@@ -146,6 +146,14 @@
       "you": "Activate {card} or <pass>pass</pass>",
       "player": "{player} may react"
     },
+    "reaction-straighten": {
+      "you": "Activate {reactor} to ready {cards}, or <pass>pass</pass>",
+      "player": "{player} may react"
+    },
+    "straighten-tilted": {
+      "you": "Ready {cards}",
+      "player": "{player} readies a card"
+    },
     "scoring": {
       "quests": "End of the game: VP from Quests",
       "companions": "End of the game: VP from Companions",

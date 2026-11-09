@@ -504,7 +504,31 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
       if (!this.canPayOne(requirement)) return false
     }
     // Isandre may not answer her own tilting: she would straighten herself, over and over.
-    return !(reaction.triggers.includes(TriggerType.TiltCard) && this.remind<number>(Memory.LastTilted) === card)
+    return !reaction.triggers.includes(TriggerType.TiltCard) || this.straightenableBy(card).length > 0
+  }
+
+  /** The cards that have gone down in the window open, and are still down (see {@link Memory.Tilted}). */
+  get tilted(): number[] {
+    return this.remind<number[]>(Memory.Tilted) ?? []
+  }
+
+  /** What Isandre may stand back up: every card gone down in this window but herself. */
+  straightenableBy(isandre: number): number[] {
+    return this.tilted.filter((card) => card !== isandre)
+  }
+
+  /** A card goes down in the window open, or just before it opens: Isandre may stand it back up. */
+  rememberTilted(card: number): void {
+    this.memorize(Memory.Tilted, [...this.tilted.filter((tilted) => tilted !== card), card])
+  }
+
+  /** A card stands back up: it is no longer one Isandre may answer. */
+  straighten(card: number): GreyluneMove {
+    this.memorize(
+      Memory.Tilted,
+      this.tilted.filter((tilted) => tilted !== card)
+    )
+    return this.villageCards.index(card).rotateItem(false)
   }
 
   get playerCards(): GreyluneMaterial {
@@ -547,7 +571,10 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
   }
 
   openReactions(triggers: TriggerType[], next: RuleId): GreyluneMove[] {
-    if (!triggers.length || !this.reactionChoices(triggers).length) return [this.startRule(next)]
+    if (!triggers.length || !this.reactionChoices(triggers).length) {
+      this.forget(Memory.Tilted)
+      return [this.startRule(next)]
+    }
     this.memorize(Memory.Trigger, triggers)
     this.memorize(Memory.Resume, next)
     return [this.startRule(RuleId.Reaction)]
@@ -567,8 +594,7 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
    * has none left over until something stands her back up.
    */
   useReaction(card: number, option: number): GreyluneMove[] {
-    const tiltedBefore = this.remind<number>(Memory.LastTilted)
-    return [...this.payReactionCost(card), ...this.applyReaction(card, option, tiltedBefore)]
+    return [...this.payReactionCost(card), ...this.applyReaction(card, option)]
   }
 
   private payReactionCost(card: number): GreyluneMove[] {
@@ -595,14 +621,14 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
       }
     }
     if (tilted) {
-      this.memorize(Memory.LastTilted, card)
+      this.rememberTilted(card)
       const triggers = this.remind<TriggerType[]>(Memory.Trigger) ?? []
       if (!triggers.includes(TriggerType.TiltCard)) this.memorize(Memory.Trigger, [...triggers, TriggerType.TiltCard])
     }
     return moves
   }
 
-  private applyReaction(card: number, option: number, tiltedBefore?: number): GreyluneMove[] {
+  private applyReaction(card: number, option: number): GreyluneMove[] {
     const effect = this.reactionEffect(card, option)
     switch (effect.type) {
       case ReactionType.ExtraTravel:
@@ -644,12 +670,16 @@ export abstract class GreyluneRule extends PlayerTurnRule<PlayerColor, MaterialT
         this.pushGains([{ type: effect.skill, count: 1 }], true)
         return []
       case ReactionType.StraightenTilted:
-        // Isandre: the card that had just gone down stands up again — never the one she went down for.
-        // A Companion or a Potion kept by Selia stands up in the window it answered, which is still
-        // open on the same moment, so it may at once answer it again. An Object stands up once its
-        // effect has been queued, so it is ready for another action and not used twice in this one:
-        // the authors rule that the second sentence of her card is about reactions only.
-        return tiltedBefore === undefined ? [] : [this.villageCards.index(tiltedBefore).rotateItem(false)]
+        // Isandre: a card gone down in this window stands up again — never the one she went down for.
+        // With several to choose from, the player names it (see `StraightenTiltedRule`). A Companion
+        // or a Potion kept by Selia stands up in the window it answered, which is still open on the
+        // same moment, so it may at once answer it again. An Object stands up ready for another
+        // action, and is not used twice in this one: its effect is the one already chosen, and the
+        // authors rule that the second sentence of her card is about reactions only.
+        {
+          const straightenable = this.straightenableBy(card)
+          return straightenable.length === 1 ? [this.straighten(straightenable[0])] : []
+        }
     }
   }
 

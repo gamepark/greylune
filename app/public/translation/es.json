@@ -146,6 +146,14 @@
       "you": "Activa {card} o <pass>pasa</pass>",
       "player": "{player} puede reaccionar"
     },
+    "reaction-straighten": {
+      "you": "Activa {reactor} para preparar {cards}, o <pass>pasa</pass>",
+      "player": "{player} puede reaccionar"
+    },
+    "straighten-tilted": {
+      "you": "Prepara {cards}",
+      "player": "{player} prepara una carta"
+    },
     "scoring": {
       "quests": "Fin de la partida: PV de las Misiones",
       "companions": "Fin de la partida: PV de los Compañeros",
