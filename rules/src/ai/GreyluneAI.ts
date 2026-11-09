@@ -183,7 +183,7 @@ const villagerPlace = (rules: GreyluneRules, index: number): string => {
   return JSON.stringify([type, x, y, parent])
 }
 
-const moveKey = (rules: GreyluneRules, move: GreyluneMove): string => {
+export const moveKey = (rules: GreyluneRules, move: GreyluneMove): string => {
   if (isMoveItemType(MaterialType.Villager)(move)) {
     return JSON.stringify(['villager', villagerPlace(rules, move.itemIndex), move.location])
   }

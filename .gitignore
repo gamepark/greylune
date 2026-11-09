@@ -40,3 +40,5 @@ tmpclaude-*
 
 # Visual Studio Code
 .vscode
+# Arena records
+/rules/arena-results/

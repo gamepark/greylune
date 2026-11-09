@@ -62,8 +62,6 @@ const LEVEL_VALUES = [1.7, 1.6, 1.5, 1.3, 1.1]
 /** What one more Villager is worth for every year still to come, the first ones being the most useful. */
 const VILLAGER_YEAR_VALUES = [3, 3, 3, 2.6, 2.3, 2, 1.7]
 
-/** What a journey is worth when the Encounters it will find are not known yet, by distance. */
-const TRAVEL_VALUES = [0, 1.8, 2.6, 3.2, 3.6, 4, 4.2, 4.4, 4.5]
 
 /** What a point of story waiting under the personal board is worth, as long as there is a Tavern to come. */
 const STORY_POINT_VALUE = 1.2
@@ -71,8 +69,24 @@ const STORY_POINT_VALUE = 1.2
 /** How a card of the Village the bot has its eye on may be gone by the time its Villager gets to it. */
 const SPRING_PLACEMENT = 0.9
 
-/** What an active Villager is worth at the very least while it can still be placed (see `Assessment.springFloor`). */
-export const evaluationSettings = { springFloor: 1.5, lastSpringFloor: 0.6 }
+/**
+ * `springFloor`, `lastSpringFloor`: what an active Villager is worth at the very least while it can
+ * still be placed (see `Assessment.springFloor`).
+ *
+ * `shareJourneys`: the journeys of a year take their Encounters from the same row (see
+ * `Assessment.journeyTaken`). Off, each one counts the best Encounter as if it were alone, as the bot
+ * did before: kept so that the arena can set one against the other.
+ *
+ * `travelValues`: what a journey is worth when the Encounters it will find are not known yet, by
+ * distance — a journey of a year to come, or the road an Encounter opens beyond the first. Read off
+ * the 99 games of the platform that replay: at every Summer turn, the best the Adventurer could find
+ * was worth on average 4 for 1 space, 5.6 for 2, 6.5 for 3, 6.8 for 4 and 6.9 beyond. The table is 80%
+ * of that, the share that beat the bot in the arena (+3.7 points over 200 games at 2 players, where
+ * the full measure only gained 2). It used to be half of it: the bot then priced this year's journeys
+ * and the years to come on two scales, found Tommy and the Mysterious map hardly worth their price,
+ * and left them to the other player.
+ */
+export const evaluationSettings = { springFloor: 1.5, lastSpringFloor: 0.6, shareJourneys: true, travelValues: [0, 3.2, 4.5, 5.2, 5.4, 5.5, 5.5, 5.6, 5.6] }
 
 /**
  * How likely a card of the 5th year is to be within the player's reach, by number of players: all 9
@@ -92,9 +106,24 @@ const POTION_VALUES: Partial<Record<VillageCard, number>> = {
 /** Duplicates: a second way to go on the road is worth less than the first, a fifth hardly anything. */
 const TRAVEL_DUPLICATES = [1, 0.7, 0.5, 0.35, 0.25, 0.2]
 
-type Use = { value: number; villager?: number; slots?: number; key?: string; capacity?: number; keys?: string[]; coins?: number; label?: string }
+type Use = {
+  value: number
+  villager?: number
+  slots?: number
+  key?: string
+  capacity?: number
+  keys?: string[]
+  coins?: number
+  label?: string
+  /** The Encounter or Heroic Quest the use would take on its journey, and how to price it again once another use has taken that one. */
+  target?: string
+  reprice?: () => Target
+}
 
 type Crowd = { mine: number; others: number; arrivals: number }
+
+/** What a journey finds, and the Encounter or Heroic Quest it takes, which no other journey of the year can take after it. */
+type Target = { value: number; target?: string }
 
 type QuestInfo = { area: HeroicQuestArea; tile: QuestTile; firstTaken: boolean }
 
@@ -151,11 +180,23 @@ export class Assessment {
   readonly lastYearCards: Set<VillageCard>
   readonly base: number
 
-  private readonly travelCache = new Map<string, number>()
-  private readonly areaCache = new Map<string, number>()
-  private readonly activationCache = new Map<string, { value: number; coins: number } | undefined>()
+  private readonly travelCache = new Map<string, Target>()
+  private readonly areaCache = new Map<string, Target>()
+  private readonly activationCache = new Map<string, { value: number; coins: number; target?: string } | undefined>()
   private storyCache = new Map<string, number | undefined>()
   private tellingChancesCache?: number
+
+  /**
+   * The Encounters and Heroic Quests already promised to a journey of this year: a journey takes an
+   * Encounter off the row, and the next one has to make do with what is left. Without it, the special
+   * action and a Treasure map both count the same Lone tower, so taking it with either one looks like
+   * a loss — and the bot turns down the Encounter it stands on, keeping it for a journey to come.
+   */
+  private journeyTaken = new Set<string>()
+  /** The Encounter or Heroic Quest the last journey priced would take, if it takes one. */
+  private lastTarget?: string
+  /** The one the action under way is heading for: {@link pendingValue} sets it, and the other journeys of the year leave it alone. */
+  private pendingTarget?: string
 
   constructor(
     readonly game: GreyluneGame,
@@ -205,7 +246,8 @@ export class Assessment {
   /** The worth of the position: what the player holds, what their Villagers promise, and what the action under way still owes. */
   evaluate(): number {
     if (this.final) return this.base
-    return this.base + this.thisYearPotential() + this.pendingValue()
+    const pending = this.pendingValue()
+    return this.base + this.thisYearPotential() + pending
   }
 
   /** The same worth, term by term: what a test or a trace reads to tell why a move was preferred. */
@@ -225,8 +267,8 @@ export class Assessment {
         stories: this.storiesValue(model),
         quests: this.questsValue(model),
         lastYear: this.lastYearValue(model),
-        thisYear: this.thisYearPotential(),
-        pending: this.pendingValue()
+        pending: this.pendingValue(),
+        thisYear: this.thisYearPotential()
       })
     }
     for (const key of Object.keys(terms)) terms[key] = round(terms[key])
@@ -380,7 +422,7 @@ export class Assessment {
           value += 2
           break
         case GainType.Travel:
-          value += TRAVEL_VALUES[Math.min(typeof gain.count === 'number' ? gain.count : 2, TRAVEL_VALUES.length - 1)]
+          value += evaluationSettings.travelValues[Math.min(typeof gain.count === 'number' ? gain.count : 2, evaluationSettings.travelValues.length - 1)]
           break
         case GainType.Straighten:
           value += 1
@@ -719,7 +761,7 @@ export class Assessment {
         const distance = amount(gain.count)
         if (!options.nested) return this.travelValue(distance, model)
         if (options.origin !== undefined && !options.deep) return this.travelValue(distance, model, options.origin, true)
-        return TRAVEL_VALUES[Math.min(distance, TRAVEL_VALUES.length - 1)]
+        return evaluationSettings.travelValues[Math.min(distance, evaluationSettings.travelValues.length - 1)]
       }
       case GainType.Straighten:
         return options.nested ? 1 : this.straightenValue()
@@ -768,53 +810,74 @@ export class Assessment {
 
   // ------------------------------------------------------------------ the road
 
-  /** The best the Adventurer can find within that many spaces of where it stands. */
   /**
    * The best the Adventurer can find within that many spaces of where it stands. `base` is what the
    * player holds when setting off: an effect that spends Magic to go on the road must not meet the
-   * Encounters at the end of it with the Magic it has just spent.
+   * Encounters at the end of it with the Magic it has just spent. A journey that is not the road of an
+   * Encounter leaves the Encounter or the Heroic Quest it takes in {@link lastTarget}.
    */
   travelValue(distance: number, base: PlayerModel = this.model, origin: Area = this.area, deep = false): number {
-    const key = `${distance}:${origin}:${deep}:${signature(base)}`
-    const cached = this.travelCache.get(key)
-    if (cached !== undefined) return cached
-    let value = this.reachValue(distance, base, origin, deep)
-    const elwen = base.companions.find((card) => card.front === VillageCard.Elwen && !card.tilted)
-    if (elwen) value = Math.max(value, this.reachValue(distance + 2, base, origin, deep) - 0.8)
-    this.travelCache.set(key, value)
-    return value
+    const key = `${distance}:${origin}:${deep}:${signature(base)}:${this.takenKey}`
+    let best = this.travelCache.get(key)
+    if (best === undefined) {
+      best = this.reachValue(distance, base, origin, deep)
+      const elwen = base.companions.find((card) => card.front === VillageCard.Elwen && !card.tilted)
+      if (elwen) {
+        const further = this.reachValue(distance + 2, base, origin, deep)
+        if (further.value - 0.8 > best.value) best = { value: further.value - 0.8, target: further.target }
+      }
+      this.travelCache.set(key, best)
+    }
+    if (!deep) this.lastTarget = best.target
+    return best.value
   }
 
-  private reachValue(distance: number, base: PlayerModel, origin: Area, deep: boolean): number {
-    let value = 0
+  private get takenKey(): string {
+    return [...this.journeyTaken].join()
+  }
+
+  private reachValue(distance: number, base: PlayerModel, origin: Area, deep: boolean): Target {
+    let best: Target = { value: 0 }
     for (let area = Math.max(Area.Wand, origin - distance); area <= Math.min(Area.Edge, origin + distance); area++) {
-      value = Math.max(value, this.areaValue(area, base, deep))
+      const found = this.areaTarget(area, base, deep)
+      if (found.value > best.value) best = found
     }
-    return value
+    return best
   }
 
   /** What stopping in an area is worth: its best Encounter, the coin or the point it pays instead, or its Heroic Quest. */
   areaValue(area: Area, base: PlayerModel = this.model, deep = false): number {
-    const key = `${area}:${deep}:${signature(base)}`
+    return this.areaTarget(area, base, deep).value
+  }
+
+  /**
+   * The same, and the Encounter or the Heroic Quest it comes from — none for the coin or the point
+   * paid instead, which any journey can have. What another journey of the year has taken is left out.
+   */
+  areaTarget(area: Area, base: PlayerModel = this.model, deep = false): Target {
+    const key = `${area}:${deep}:${signature(base)}:${this.takenKey}`
     const cached = this.areaCache.get(key)
     if (cached !== undefined) return cached
-    let value = 0
-    const skip =
+    let best: Target = { value: 0 }
+    const consider = (value: number | undefined, target?: string) => {
+      if (value !== undefined && value > best.value && !(target && this.journeyTaken.has(target))) best = { value, target }
+    }
+    consider(
       area === Area.Wand
         ? this.effectValue([], [{ type: GainType.Coins, count: 1 }], {}, base)
         : area === Area.Bow
           ? this.effectValue([], [vp(1)], {}, base)
           : undefined
-    if (skip !== undefined) value = Math.max(value, skip)
+    )
     for (const card of this.rules.material(MaterialType.EncounterCard).location(LocationType.EncounterRow).locationId(area).getIndexes()) {
-      value = Math.max(value, this.encounterValue(card, base, deep) ?? 0)
+      consider(this.encounterValue(card, base, deep), `encounter${card}`)
     }
     const quest = this.quests.find((entry) => entry.area === area)
     if (quest && base.markers && !base.questsDone.includes(quest.area)) {
-      value = Math.max(value, this.effectValue(questRequirements[quest.tile], [], { quest: quest.area, nested: true }, base) ?? 0)
+      consider(this.effectValue(questRequirements[quest.tile], [], { quest: quest.area, nested: true }, base), `quest${area}`)
     }
-    this.areaCache.set(key, value)
-    return value
+    this.areaCache.set(key, best)
+    return best
   }
 
   /** The best way to resolve an Encounter of the row, its story and its Income token included. */
@@ -885,15 +948,23 @@ export class Assessment {
   }
 
   /** The abilities of an Object, each with the Villagers it takes. */
-  itemUses(front: VillageCard): { value: number; slots: number }[] {
+  itemUses(front: VillageCard): { value: number; slots: number; target?: string; reprice: () => Target }[] {
     const data = villageCardData[front]
     if (data.potion) return []
     return (data.abilities ?? []).flatMap((ability) => {
       const requirements = ability.requirements ?? []
       const slots = requirements.filter((requirement) => requirement.type === RequirementType.SpendVillagers).reduce((total, r) => total + (r.count ?? 1), 0)
-      const value = this.effectValue(requirements, ability.gains, { villagersFree: true, discard: discardsCard(requirements) ? front : undefined })
-      return value === undefined ? [] : [{ value, slots }]
+      const reprice = () => this.targeted(() => this.effectValue(requirements, ability.gains, { villagersFree: true, discard: discardsCard(requirements) ? front : undefined }))
+      const { value, target } = reprice()
+      return Number.isNaN(value) ? [] : [{ value, slots, target, reprice }]
     })
+  }
+
+  /** A value, and the Encounter or Heroic Quest the journey it counts would take: NaN when there is no value at all. */
+  private targeted(price: () => number | undefined): Target {
+    this.lastTarget = undefined
+    const value = price()
+    return { value: value ?? NaN, target: this.lastTarget }
   }
 
   // ------------------------------------------------------------------ the Village
@@ -916,10 +987,12 @@ export class Assessment {
    * What activating a card of the Village would bring, the price paid, and the coins it takes. The
    * crowd is the number of other Villagers standing around the card.
    */
-  activationValue(card: number, crowd: number): { value: number; coins: number } | undefined {
-    const key = `${card}:${crowd}`
+  activationValue(card: number, crowd: number): { value: number; coins: number; target?: string } | undefined {
+    const key = `${card}:${crowd}:${this.takenKey}`
     if (this.activationCache.has(key)) return this.activationCache.get(key)
-    const result = this.computeActivation(card, crowd)
+    this.lastTarget = undefined
+    const computed = this.computeActivation(card, crowd)
+    const result = computed && { ...computed, target: this.lastTarget }
     this.activationCache.set(key, result)
     return result
   }
@@ -1018,6 +1091,11 @@ export class Assessment {
    */
   thisYearPotential(explain?: string[]): number {
     if (this.season === Season.Autumn) return 0
+    // Every use is priced with the Encounter of the journey under way already taken; the others are
+    // handed out below, and a use whose journey finds its Encounter gone is priced again without it.
+    const saved = this.journeyTaken
+    const taken = new Set<string>(this.pendingTarget && evaluationSettings.shareJourneys ? [this.pendingTarget] : [])
+    this.journeyTaken = taken
     const uses: Use[] = []
     const name = (card: number) => VillageCard[this.grid.getItem<VillageCardId>(card).id.front!]
     let expectedCoins = 0
@@ -1028,10 +1106,13 @@ export class Assessment {
       const coins = (crowd.others + crowd.arrivals) * 0.75 + crowd.mine / 2
       const how = entry.villager === undefined ? 'place:' : ''
       uses.push({ ...entry, label: `${how}coins@${name(card)}`, value: this.coinsAroundValue(coins) * factor })
-      const activation = this.activationValue(card, Math.round(crowd.others + (crowd.arrivals + crowd.mine) * 0.5))
-      if (activation) {
-        const value = activation.value * (1 - this.risk(card, crowd)) * factor
-        uses.push({ ...entry, ...this.cardKey(card), label: `${how}${name(card)}`, coins: activation.coins, value })
+      const price = (): Target & { coins?: number } => {
+        const activation = this.activationValue(card, Math.round(crowd.others + (crowd.arrivals + crowd.mine) * 0.5))
+        return activation ? { value: activation.value * (1 - this.risk(card, crowd)) * factor, target: activation.target, coins: activation.coins } : { value: NaN }
+      }
+      const activation = price()
+      if (!Number.isNaN(activation.value)) {
+        uses.push({ ...entry, ...this.cardKey(card), label: `${how}${name(card)}`, ...activation, reprice: price })
       }
       return coins
     }
@@ -1056,12 +1137,14 @@ export class Assessment {
       }
     }
     if (!this.eventUsed) {
-      const event = this.eventValue()
-      if (event !== undefined) uses.push({ slots: 1, key: 'event', label: 'event', capacity: 1, value: event * (this.season === Season.Spring ? 0.95 : 1) })
+      const reprice = () => this.scaled(this.targeted(() => this.eventValue()), this.season === Season.Spring ? 0.95 : 1)
+      const event = reprice()
+      if (!Number.isNaN(event.value)) uses.push({ slots: 1, key: 'event', label: 'event', capacity: 1, ...event, reprice })
     }
     if (!this.specialActionUsed) {
-      const special = this.specialActionValue()
-      if (special !== undefined) uses.push({ slots: 1, key: 'special', label: 'special', capacity: 1, value: special * (this.season === Season.Spring ? 0.9 : 1) })
+      const reprice = () => this.scaled(this.targeted(() => this.specialActionValue()), this.season === Season.Spring ? 0.9 : 1)
+      const special = reprice()
+      if (!Number.isNaN(special.value)) uses.push({ slots: 1, key: 'special', label: 'special', capacity: 1, ...special, reprice })
     }
     // The Magic the special action gives may be what the Event asks for: the Magic show sends the
     // Adventurer 5 spaces away for one. Counted as one use of both, or the bot would only see it once
@@ -1078,7 +1161,7 @@ export class Assessment {
     this.model.items.forEach((card, index) => {
       if (card.tilted) return
       for (const use of this.itemUses(card.front)) {
-        uses.push({ slots: use.slots, key: `item${index}`, label: `${VillageCard[card.front]}/${use.slots}`, capacity: 1, value: use.value })
+        uses.push({ slots: use.slots, key: `item${index}`, label: `${VillageCard[card.front]}/${use.slots}`, capacity: 1, value: use.value, target: use.target, reprice: use.reprice })
       }
     })
     let total = 0
@@ -1090,7 +1173,17 @@ export class Assessment {
     let active = this.active
     let coins = this.model.coins + expectedCoins
     const floor = this.springFloor
-    for (const use of uses) {
+    while (uses.length) {
+      const use = uses.shift()!
+      if (use.target && taken.has(use.target) && evaluationSettings.shareJourneys) {
+        const again = use.reprice?.()
+        if (again && !Number.isNaN(again.value)) {
+          const repriced = { ...use, ...again }
+          const at = uses.findIndex((other) => other.value < repriced.value)
+          uses.splice(at < 0 ? uses.length : at, 0, repriced)
+        }
+        continue
+      }
       if (use.villager !== undefined && busy.has(use.villager)) continue
       if ((use.slots ?? 0) > active) continue
       if (use.slots && use.value < floor * use.slots) continue
@@ -1105,8 +1198,14 @@ export class Assessment {
       if (use.key) keys.set(use.key, (keys.get(use.key) ?? 0) + 1)
       for (const key of use.keys ?? []) keys.set(key, 1)
       coins -= use.coins ?? 0
+      if (use.target && evaluationSettings.shareJourneys) taken.add(use.target)
     }
+    this.journeyTaken = saved
     return total + active * (this.season === Season.Spring ? Math.max(floor, 0.4) : 0.25)
+  }
+
+  private scaled({ value, target }: Target, factor: number): Target {
+    return { value: value * factor, target }
   }
 
   /**
@@ -1196,8 +1295,10 @@ export class Assessment {
    * about to be chosen. Only read when the search stops before the action is over.
    */
   pendingValue(): number {
+    this.pendingTarget = undefined
     const rule = this.game.rule
     if (!rule || rule.player !== this.player) return 0
+    this.lastTarget = undefined
     const seal = this.memory[Memory.SealValue] as number | undefined
     const gains = (this.memory[Memory.Gains] as Gain[] | undefined) ?? []
     let value = gains.length ? (this.effectValue([], gains, { seal }) ?? 0) : 0
@@ -1209,9 +1310,12 @@ export class Assessment {
         value += this.travelValue(distance ?? 0)
         break
       case RuleId.ResolveEncounter:
-      case RuleId.ChooseOutcome:
-        value += this.areaValue(this.area)
+      case RuleId.ChooseOutcome: {
+        const found = this.areaTarget(this.area)
+        value += found.value
+        this.lastTarget = found.target
         break
+      }
       case RuleId.ChooseSkill:
         value += Math.max(this.nextLevels(this.model.force, 1), this.nextLevels(this.model.magic, 1))
         break
@@ -1224,6 +1328,7 @@ export class Assessment {
         break
       }
     }
+    this.pendingTarget = this.lastTarget
     return value
   }
 }
