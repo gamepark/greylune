@@ -38,6 +38,10 @@
       "you": "Activez un <villager/>, un objet, ou <autumn>passez à l'automne <leaf/></autumn>",
       "player": "{player} joue son action d'été"
     },
+    "summer-locked": {
+      "you": "Vous devez activer un <villager/> ou un objet",
+      "player": "{player} joue son action d'été"
+    },
     "activate-card": {
       "you": "Choisissez une option de la carte",
       "player": "{player} active une carte"
@@ -230,6 +234,11 @@
     "score": "{player} marque {count} <vp/>"
   },
   "help": {
+    "autumn-condition": {
+      "name": "Passer en Automne",
+      "text": "Un joueur peut passer en Automne uniquement s'il n'a plus de <villager>Villageois</villager> dans le Village.",
+      "camp": "Lorsqu'un de vos <villager>Villageois</villager> est retiré du Village ou dépensé, il devient inactif et doit être placé dans le campement, pour signifier qu'il ne peut plus être utilisé cette année."
+    },
     "period": "Période {period}",
     "cards": "{count, plural, one {# carte} other {# cartes}}",
     "all-cards": "Toutes les cartes",

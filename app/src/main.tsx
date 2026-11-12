@@ -2,11 +2,13 @@ import { GreyluneAI } from '@gamepark/greylune/ai/GreyluneAI'
 import { GreyluneOptionsSpecV2 } from '@gamepark/greylune/GreyluneOptions'
 import { GreyluneRules } from '@gamepark/greylune/GreyluneRules'
 import { GreyluneSetup } from '@gamepark/greylune/GreyluneSetup'
+import { RuleId } from '@gamepark/greylune/rules/RuleId'
 import { GameProvider } from '@gamepark/react-game'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { gameAnimations } from './animations/GameAnimations'
 import { App } from './App'
+import { SummerRulesHelp } from './headers/SummerRulesHelp'
 import { GreyluneHistory } from './history/GreyluneHistory'
 import { Locators } from './locators/Locators'
 import { Material, MaterialI18n } from './material/Material'
@@ -30,6 +32,7 @@ createRoot(document.getElementById('root')!).render(
       scoring={new GreyluneScoring()}
       logs={new GreyluneHistory()}
       tutorial={new Tutorial()}
+      rulesHelp={{ [RuleId.Summer]: SummerRulesHelp }}
     >
       <App />
     </GameProvider>

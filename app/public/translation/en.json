@@ -38,6 +38,10 @@
       "you": "Activate a <villager/>, an Item, or <autumn>move to Autumn <leaf/></autumn>",
       "player": "{player} takes their Summer action"
     },
+    "summer-locked": {
+      "you": "You must activate a <villager/> or an Item",
+      "player": "{player} takes their Summer action"
+    },
     "activate-card": {
       "you": "Choose one of the card's options",
       "player": "{player} activates a card"
@@ -230,6 +234,11 @@
     "score": "{player} scores {count} <vp/>"
   },
   "help": {
+    "autumn-condition": {
+      "name": "Move to Autumn",
+      "text": "A player may move to Autumn only if they no longer have any of their <villager>Villagers</villager> left in the Village.",
+      "camp": "Whenever one of your <villager>Villagers</villager> is removed from the Village or spent, it becomes inactive and must be placed in the Campsite to indicate it cannot be used any more this year."
+    },
     "period": "Period {period}",
     "cards": "{count, plural, one {# card} other {# cards}}",
     "all-cards": "All cards",

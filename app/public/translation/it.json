@@ -38,6 +38,10 @@
       "you": "Attivate un <villager/>, un oggetto, o <autumn>passate all'autunno <leaf/></autumn>",
       "player": "{player} svolge la sua azione estiva"
     },
+    "summer-locked": {
+      "you": "Dovete attivare un <villager/> o un oggetto",
+      "player": "{player} svolge la sua azione estiva"
+    },
     "activate-card": {
       "you": "Scegliete un'opzione della carta",
       "player": "{player} attiva una carta"
@@ -230,6 +234,11 @@
     "score": "{player} segna {count} <vp/>"
   },
   "help": {
+    "autumn-condition": {
+      "name": "Passare all'Autunno",
+      "text": "Un giocatore può passare all'Autunno solo se non ha più <villager>Paesani</villager> al Villaggio.",
+      "camp": "Quando uno dei vostri <villager>Paesani</villager> viene ritirato dal Villaggio o speso, diventa inattivo e deve essere piazzato nell'accampamento per indicare che non può più essere usato quest'anno."
+    },
     "period": "Periodo {period}",
     "cards": "{count, plural, one {# carta} other {# carte}}",
     "all-cards": "Tutte le carte",

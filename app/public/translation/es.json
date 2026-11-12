@@ -38,6 +38,10 @@
       "you": "Activa un <villager/>, un objeto, o <autumn>pasa al otoño <leaf/></autumn>",
       "player": "{player} realiza su acción de verano"
     },
+    "summer-locked": {
+      "you": "Debes activar un <villager/> o un objeto",
+      "player": "{player} realiza su acción de verano"
+    },
     "activate-card": {
       "you": "Elige una opción de la carta",
       "player": "{player} activa una carta"
@@ -230,6 +234,11 @@
     "score": "{player} anota {count} <vp/>"
   },
   "help": {
+    "autumn-condition": {
+      "name": "Pasar al Otoño",
+      "text": "Un jugador solo puede pasar al Otoño si ya no le quedan <villager>Aldeanos</villager> en la Aldea.",
+      "camp": "Cuando uno de tus <villager>Aldeanos</villager> se retira de la Aldea o se gasta, queda inactivo y debe colocarse en el campamento para indicar que ya no puede usarse este año."
+    },
     "period": "Periodo {period}",
     "cards": "{count, plural, one {# carta} other {# cartas}}",
     "all-cards": "Todas las cartas",

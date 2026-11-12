@@ -38,6 +38,10 @@
       "you": "Aktiviere einen <villager/>, einen Gegenstand oder <autumn>wechsle in den Herbst <leaf/></autumn>",
       "player": "{player} führt eine Sommeraktion aus"
     },
+    "summer-locked": {
+      "you": "Du musst einen <villager/> oder einen Gegenstand aktivieren",
+      "player": "{player} führt eine Sommeraktion aus"
+    },
     "activate-card": {
       "you": "Wähle eine Option der Karte",
       "player": "{player} aktiviert eine Karte"
@@ -230,6 +234,11 @@
     "score": "{player} erzielt {count} <vp/>"
   },
   "help": {
+    "autumn-condition": {
+      "name": "In den Herbst wechseln",
+      "text": "Ein Spieler darf nur in den Herbst wechseln, wenn er keine <villager>Dorfbewohner</villager> mehr im Dorf hat.",
+      "camp": "Wird einer deiner <villager>Dorfbewohner</villager> aus dem Dorf entfernt oder ausgegeben, wird er inaktiv und muss ins Lager gestellt werden, um anzuzeigen, dass er in diesem Jahr nicht mehr genutzt werden kann."
+    },
     "period": "Periode {period}",
     "cards": "{count, plural, one {# Karte} other {# Karten}}",
     "all-cards": "Alle Karten",
