@@ -320,9 +320,9 @@ export const encounterRowSpot = (area: EncounterRowArea): Coordinates => onMainB
 export const encounterRowGap = 5.8
 
 /**
- * How many Encounters a row lays side by side. Every row is given 3, which is what the table is made
- * wide enough for. A year deals 7 cards at most over the 5 rows, and never more than 5 to one Area, so
- * a row is a line of 3 and 2 cards over.
+ * How many Encounters the 3 rows that start at the right edge of the board lay side by side, which is
+ * what the table is made wide enough for. A year deals 7 cards at most over the 5 rows, and never more
+ * than 5 to one Area, so such a row is a line of 3 and 2 cards over.
  */
 const encounterRowLine = 3
 
@@ -352,12 +352,31 @@ export const encounterRowNeighbours = (area: EncounterRowArea): EncounterRowArea
 const encounterRowLift = 0.05
 
 /**
- * Where the Encounter of rank `index` lies in the row of an Area. The first 3 make the line, left to
- * right from the notch the Area is dealt into; the fourth goes over the third and the fifth over the
- * second — the borrowed line filled backwards, so the card that has just landed is always the one
- * nearest the board — and `over` is the neighbouring row whose line they are laid on.
+ * The Black and the Gold row start well to the left of the other 3, and lay 4 Encounters side by side
+ * at the usual gap. A fifth closes the line up rather than borrowing another: those 2 rows have no
+ * neighbour on their outer side, and the length of 4 cards is room they always have.
  */
-export const encounterRowSlot = (area: EncounterRowArea, index: number, over?: EncounterRowArea): Coordinates => {
+const encounterEdgeRowLine = 4
+
+const isEdgeRow = (area: EncounterRowArea) => area === Area.Edge || area === Area.Wand
+
+/**
+ * Where the Encounter of rank `index` lies in the row of an Area that holds `count` of them.
+ *
+ * The Black and the Gold row are a single line, left to right from their notch, closed up once it
+ * holds more than {@link encounterEdgeRowLine} cards.
+ *
+ * In the 3 other rows, the first 3 make the line, left to right from the notch the Area is dealt into;
+ * the fourth goes over the third and the fifth over the second — the borrowed line filled backwards, so
+ * the card that has just landed is always the one nearest the board — and `over` is the neighbouring
+ * row whose line they are laid on.
+ */
+export const encounterRowSlot = (area: EncounterRowArea, index: number, count: number, over?: EncounterRowArea): Coordinates => {
+  if (isEdgeRow(area)) {
+    const { x, y } = encounterRowSpot(area)
+    const gap = count > encounterEdgeRowLine ? ((encounterEdgeRowLine - 1) * encounterRowGap) / (count - 1) : encounterRowGap
+    return { x: x + index * gap, y, z: encounterRowLift + index * 0.01 }
+  }
   const extra = index >= encounterRowLine
   const column = extra ? Math.max(0, 2 * encounterRowLine - 1 - index) : index
   const { x } = encounterRowSpot(area)

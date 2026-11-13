@@ -26,8 +26,9 @@ const borrowedRow = (area: EncounterRowArea, context: Context): EncounterRowArea
 
 /**
  * The Encounters revealed for the year, one row per Area, each hanging off the notch its cards are
- * slotted into: a line of 3 and, on the rare year that deals a fourth to the same Area, 2 cards laid
- * on the line of a neighbouring row (see {@link encounterRowSlot}).
+ * slotted into. The Black and the Gold row are a single line of 4, closed up past that; the 3 others
+ * are a line of 3 and, on the rare year that deals a fourth to the same Area, 2 cards laid on the line
+ * of a neighbouring row (see {@link encounterRowSlot}).
  *
  * The rank of a card in its row is its `x`, which the sequence strategy hands out, so a card keeps its
  * place whatever happens to the others.
@@ -35,17 +36,22 @@ const borrowedRow = (area: EncounterRowArea, context: Context): EncounterRowArea
 export class EncounterRowLocator extends Locator<PlayerColor, MaterialType, LocationType> {
   getCoordinates(location: Location<PlayerColor, LocationType>, context: Context): Coordinates {
     const area = encounterRowArea(location)
-    return encounterRowSlot(area, location.x ?? 0, borrowedRow(area, context))
+    return encounterRowSlot(area, location.x ?? 0, countRow(area, context), borrowedRow(area, context))
   }
 
   getItemCoordinates(item: MaterialItem<PlayerColor, LocationType>, context: ItemContext<PlayerColor, MaterialType, LocationType>): Coordinates {
     const area = encounterRowArea(item.location)
-    return encounterRowSlot(area, this.getItemIndex(item, context), borrowedRow(area, context))
+    return encounterRowSlot(area, this.getItemIndex(item, context), countRow(area, context), borrowedRow(area, context))
   }
 
-  /** Where the cards past the third land depends on what the rows around them hold, and on nothing else. */
+  /**
+   * Where a card lands depends on how many its own row holds (the Black and the Gold row close up past
+   * their fourth) and on what the rows around it hold (the 3 others lay their fourth and fifth over the
+   * emptier neighbour), and on nothing else.
+   */
   getPositionDependencies(location: Location<PlayerColor, LocationType>, context: Context): unknown {
-    return encounterRowNeighbours(encounterRowArea(location)).map((row) => countRow(row, context))
+    const area = encounterRowArea(location)
+    return [area, ...encounterRowNeighbours(area)].map((row) => countRow(row, context))
   }
 
   getHoverTransform(item: MaterialItem<PlayerColor, LocationType>, context: ItemContext<PlayerColor, MaterialType, LocationType>): string[] {
