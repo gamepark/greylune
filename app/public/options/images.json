@@ -1,0 +1,22 @@
+{
+  "identities.1": {
+    "src": "/options/blue.webp",
+    "width": 400,
+    "height": 400
+  },
+  "identities.2": {
+    "src": "/options/orange.webp",
+    "width": 400,
+    "height": 400
+  },
+  "identities.3": {
+    "src": "/options/red.webp",
+    "width": 400,
+    "height": 400
+  },
+  "identities.4": {
+    "src": "/options/purple.webp",
+    "width": 400,
+    "height": 400
+  }
+}
